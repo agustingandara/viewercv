@@ -381,7 +381,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
         /////////////////////////////////////////////////////////////
         if (_mode > 0) {
             Mat luv(hdr.rows, hdr.cols, CV_32FC3);
-            cvtColor(hdr, luv, CV_BGR2YCrCb);
+            cvtColor(hdr, luv, CV_RGB2YCrCb);
 
             vector<Mat> lplanes;
             split(luv, lplanes);
@@ -436,8 +436,55 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
         }
         /////////////////////////////////////////////////////////////
         else {
-            hdr *= 4;
-            hdr.convertTo(*img, img->type()); // display hdr
+
+#if 0
+            Mat xyz(hdr.rows, hdr.cols, CV_32FC3);
+            cvtColor(hdr, xyz, CV_RGB2XYZ);
+
+            vector<Mat> lplanes;
+            split(xyz, lplanes);
+            Mat X(hdr.rows, hdr.cols, CV_32FC1);
+            Mat Y(hdr.rows, hdr.cols, CV_32FC1);
+            Mat Z(hdr.rows, hdr.cols, CV_32FC1);
+            lplanes[0].convertTo(X, CV_32FC1);
+            lplanes[1].convertTo(Y, CV_32FC1);
+            lplanes[2].convertTo(Z, CV_32FC1);
+
+            /////////////////////////
+
+            float bias = 0.85;  // 0.85;
+            int width = hdr.cols;
+            int height = hdr.rows;
+            Mat L(hdr.rows, hdr.cols, CV_32FC1);
+            float* fY = (float*)Y.data;
+            float* fL = (float*)L.data;
+
+            MSG("tonemapping...");
+
+            tmo_drago03(width, height,
+                        fY,
+                        fL,
+                        bias);
+
+            Mat scale(hdr.rows, hdr.cols, CV_32FC1);
+            divide(L, Y, scale);
+            multiply(X, scale, X);
+            multiply(Y, scale, Y);
+            multiply(Z, scale, Z);
+
+            Mat rgb[] = {X, Y, Z};
+            merge(rgb, 3, hdr);
+            cvtColor(hdr, hdr, CV_XYZ2RGB);
+            hdr *= 255;
+
+            MSG("done.");
+            X.release();
+            Y.release();
+            Z.release();
+#else
+            hdr*=15;
+            hdr.convertTo(*img, img->type());
+#endif
         }
 
     } else {

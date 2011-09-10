@@ -77,13 +77,13 @@ public class MainActivity extends Activity {
             String s = "Mode: " + proc_mode + "\n";
             if (CURR_VIEW == DIALOG_HDR) {
                 if (proc_mode == 0) {
-                    s = s + "raw HDRi";
+                    s = s + "Drago -luminance mapping";
                 }
                 if (proc_mode == 1) {
-                    s = s + "contrast mapping";
+                    s = s + "Mantiuk -contrast mapping";
                 }
                 if (proc_mode == 2) {
-                    s = s + "contrast equalization";
+                    s = s + "Mantiuk -contrast equalization";
                 }
             }
             Toast.makeText(this, s, Toast.LENGTH_SHORT).show();

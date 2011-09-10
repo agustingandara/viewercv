@@ -5,19 +5,20 @@ Dependencies:
 * MOTODEV Studio (optional)
 
 
-These instructions assume everything is in the "~/workspace" directory...
+These instructions assume everything is in the "~/workspace/viewercv/" directory...
 
 Example:
     $(HOME)/
         workspace/
-            ViewerCV/
             android-ndk-r4b-crystax/
-            android-opencv/
             android-sdk-linux_x86/
+            viewercv/
+                ViewerCV/
+                android-opencv/
 
 
 Compile android-opencv project:
-- cd ~/workspace/android-opencv/
+- cd ~/workspace/viewercv/android-opencv/opencv/
 - sh build.sh
 - <wait...>
 
@@ -34,9 +35,9 @@ Configure MOTODEV Studio:
 
 
 Add Projects to Eclipse:
-* Import > Existing projects   > ~/workspace/android-opencv/android > Finish
+* Import > Existing projects   > ~/workspace/viewercv/android-opencv/opencv/android > Finish
 * Right-click OpenCV projcet   > Properties > Android > check "Is Library"
-* Import > Existing projects   > ~/workspace/ViewerCV > Finish
+* Import > Existing projects   > ~/workspace/viewercv/ViewerCV > Finish
 * Right-click ViewerCV project > Properties > Android > selcet Android version
 
 
