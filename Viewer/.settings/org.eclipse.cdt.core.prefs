@@ -1,0 +1,7 @@
+#Sun Jan 23 17:35:29 EST 2011
+eclipse.preferences.version=1
+environment/project/com.android.toolchain.gcc.1053247468/PATH/delimiter=\:
+environment/project/com.android.toolchain.gcc.1053247468/PATH/operation=replace
+environment/project/com.android.toolchain.gcc.1053247468/PATH/value=/media/STORAGE/workspace/android-ndk-r5\:/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/games
+environment/project/com.android.toolchain.gcc.1053247468/append=true
+environment/project/com.android.toolchain.gcc.1053247468/appendContributed=true

@@ -1,0 +1,75 @@
+Dependencies:
+* android-opencv
+* android-ndk-r4b-crystax
+* android-sdk-<OS>
+* MOTODEV Studio (optional)
+
+
+These instructions assume everything is in the "~/workspace" directory...
+
+Example:
+    $(HOME)/
+        workspace/
+            ViewerCV/
+            android-ndk-r4b-crystax/
+            android-opencv/
+            android-sdk-linux_x86/
+
+
+Compile android-opencv project:
+- cd ~/workspace/android-opencv/
+- sh build.sh
+- <wait...>
+
+
+Install "MOTODEV Studio for Android":
+* Install Android packages (2.3.3 currently)
+* Try compiling/running an Android Java example 
+
+
+Configure MOTODEV Studio:
+* Set SDK Path: Window > Preferences > Android > SDK Location
+* Enable Native support: MOTODEV > Download Components > Native Support
+* Set NDK Path: Window > Preferences > Android > Native Development > NDK Location
+
+
+Add Projects to Eclipse:
+* Import > Existing projects   > ~/workspace/android-opencv/android > Finish
+* Right-click OpenCV projcet   > Properties > Android > check "Is Library"
+* Import > Existing projects   > ~/workspace/ViewerCV > Finish
+* Right-click ViewerCV project > Properties > Android > selcet Android version
+
+
+'OpenCV_src' folder troubles:
+* Make sure OpenCV_src folder points to
+   - android-opencv/opencv/android/src/
+* Check: Projcet properties > Java build path > Source
+
+
+Required changes to android-opencv NativePreviewer.java:
+(or comment out the offending lines in MainActivity.java)
+
+ /**
+ * Exposure control 
+ */
+ public void setExposureValue(int ev){
+     if(mCamera==null) return;
+     Camera.Parameters parameters = mCamera.getParameters();
+     parameters.setExposureCompensation(ev);
+     mCamera.setParameters(parameters);
+ }
+ /**
+ * Exposure control 
+ */
+ public int getExposureValue(){
+     if(mCamera==null) return 0;
+     return mCamera.getParameters().getExposureCompensation();
+ }
+
+
+Other troubleshooting:
+* Make sure you compiled the android-opencv project, and it's imported into Eclipse
+* The newer opencv android (from willowgarage) isn't supported, yet.
+* Check the paths are correct in the following files:
+   - default.properties, local.env.mk, local.properties
+
