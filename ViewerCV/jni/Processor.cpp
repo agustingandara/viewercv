@@ -354,8 +354,8 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
         return;
     }
 
-    imgbuff[imgcnt] = Mat::zeros(img->size().height / 2, img->size().width / 2, CV_32FC3);
-    img->convertTo(imgbuff[imgcnt], CV_32FC3, 0.5); // queue up 3 images
+    imgbuff[imgcnt] = Mat::zeros(img->size().height , img->size().width , CV_32FC3);
+    img->convertTo(imgbuff[imgcnt], CV_32FC3); // queue up 3 images
 
     ++imgcnt;
 
@@ -405,11 +405,11 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             // tonemapping params
             bool bcg = false;
             int itmax = 200; // higher = looks better but runs slower
-            float tol = 1e-2;
+            float tol = 2e-3;
             int cols = hdr.cols;
             int rows = hdr.rows;
-            float contrast = (_mode == 2) ? -0.11 : 0.11; // contrast control
-            float saturation = 1; // color control
+            float contrast = (_mode == 2) ? -0.20 : 0.20; // contrast control
+            float saturation = 1.0; // color control
             float detail = 2; // texture control
 
             float* fR = (float*) R.data;
@@ -425,7 +425,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             // combine channels
             Mat rgb[] = { R, G, B };
             merge(rgb, 3, hdr);
-            hdr *= 255;
+            hdr *= 245;
 
             MSG("done.");
             R.release();
@@ -452,7 +452,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
 
             /////////////////////////
 
-            float bias = 0.85;  // 0.85;
+            float bias = 0.95;  // 0.85;
             int width = hdr.cols;
             int height = hdr.rows;
             Mat L(hdr.rows, hdr.cols, CV_32FC1);
@@ -475,16 +475,16 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             Mat rgb[] = {X, Y, Z};
             merge(rgb, 3, hdr);
             cvtColor(hdr, hdr, CV_XYZ2RGB);
-            hdr *= 255;
+            hdr *= 245;
 
             MSG("done.");
             X.release();
             Y.release();
             Z.release();
 #else
-            hdr*=15;
-            hdr.convertTo(*img, img->type());
+            hdr *= 2;
 #endif
+            hdr.convertTo(*img, img->type());
         }
 
     } else {
