@@ -98,4 +98,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>OpenCV_src</name>
+			<type>2</type>
+			<locationURI>_android_OpenCV_8d28b05d/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

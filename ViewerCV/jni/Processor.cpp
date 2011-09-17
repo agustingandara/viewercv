@@ -245,11 +245,9 @@ void Processor::detectAndDrawContours(int input_idx, image_pool* pool) {
         return;
     }
 
-    {
-        vector < vector<Point> > squares;
-        findSquares(*img, squares);
-        draw_contours(*img, squares);
-    }
+    vector < vector<Point> > squares;
+    findSquares(*img, squares);
+    draw_contours(*img, squares);
 
     saveJpg(*img);
 }
@@ -291,13 +289,11 @@ void Processor::runSobel(int input_idx, image_pool* pool) {
         return;
     }
 
-    {
-        Mat temp(img->size(), CV_8UC1);
-        uchar* in = (uchar*) gray.data;
-        uchar* out = (uchar*) temp.data;
-        _sobelFilter(in, img->cols, img->rows, out, _mode);
-        cvtColor(temp, *img, CV_GRAY2RGB); // 3 channel for display
-    }
+    Mat temp(img->size(), CV_8UC1);
+    uchar* in = (uchar*) gray.data;
+    uchar* out = (uchar*) temp.data;
+    _sobelFilter(in, img->cols, img->rows, out, _mode);
+    cvtColor(temp, *img, CV_GRAY2RGB); // 3 channel for display
 
     saveJpg(*img);
 }
@@ -313,10 +309,8 @@ void Processor::runHistEq(int input_idx, image_pool* pool) {
         return;
     }
 
-    {
-        if (_mode == 0) { equalizeHist(gray, gray); }
-        cvtColor(gray, *img, CV_GRAY2RGB); // 3 channel for display
-    }
+    if (_mode == 0) { equalizeHist(gray, gray); }
+    cvtColor(gray, *img, CV_GRAY2RGB); // 3 channel for display
 
     saveJpg(*img);
 }
@@ -362,8 +356,6 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
     if (imgcnt > 2) {
         imgcnt = 0;
 
-        /////////////////////////
-
         Mat hdr = Mat::zeros(img->size(), CV_32FC3);
 #if 1
         // 3 hdr
@@ -389,8 +381,6 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             Mat Y(hdr.rows, hdr.cols, CV_32FC1);
             lplanes[0].convertTo(Y, CV_32FC1);
 
-            /////////////////////////
-
             vector<Mat> cplanes;
             split(hdr, cplanes);
             Mat R(hdr.rows, hdr.cols, CV_32FC1);
@@ -400,8 +390,6 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             Mat B(hdr.rows, hdr.cols, CV_32FC1);
             cplanes[2].convertTo(B, CV_32FC1);
 
-            /////////////////////////
-
             // tonemapping params
             bool bcg = false;
             int itmax = 200; // higher = looks better but runs slower
@@ -409,7 +397,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             int cols = hdr.cols;
             int rows = hdr.rows;
             float contrast = (_mode == 2) ? -0.20 : 0.20; // contrast control
-            float saturation = 1.0; // color control
+            float saturation = 1.1; // color control
             float detail = 2; // texture control
 
             float* fR = (float*) R.data;
@@ -429,15 +417,14 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
 
             MSG("done.");
             R.release();
-            B.release();
+            G.release();
             B.release();
 
             hdr.convertTo(*img, img->type()); // display hdr
-        }
-        /////////////////////////////////////////////////////////////
-        else {
 
-#if 0
+        }  else {
+
+            cv::exp(hdr, hdr);
             Mat xyz(hdr.rows, hdr.cols, CV_32FC3);
             cvtColor(hdr, xyz, CV_RGB2XYZ);
 
@@ -450,9 +437,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             lplanes[1].convertTo(Y, CV_32FC1);
             lplanes[2].convertTo(Z, CV_32FC1);
 
-            /////////////////////////
-
-            float bias = 0.95;  // 0.85;
+            float bias = 0.975;  // 0.85;
             int width = hdr.cols;
             int height = hdr.rows;
             Mat L(hdr.rows, hdr.cols, CV_32FC1);
@@ -474,16 +459,14 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
 
             Mat rgb[] = {X, Y, Z};
             merge(rgb, 3, hdr);
-            cvtColor(hdr, hdr, CV_XYZ2RGB);
-            hdr *= 245;
+            hdr = hdr * 245;
+            cv::min(hdr, 255, hdr);
 
             MSG("done.");
             X.release();
             Y.release();
             Z.release();
-#else
-            hdr *= 2;
-#endif
+
             hdr.convertTo(*img, img->type());
         }
 
@@ -497,8 +480,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
 
 
 void Processor::runNEON(int input_idx, image_pool* pool, int var) {
-    Mat gray;
-    pool->getGrey(input_idx, gray);
+
     Mat* img;
     img = pool->getImage(input_idx);
 
@@ -509,6 +491,7 @@ void Processor::runNEON(int input_idx, image_pool* pool, int var) {
     Mat temp = *img;
     cv::morphologyEx(temp, temp, cv::MORPH_GRADIENT, cv::Mat());
     temp *= (_mode + 1);
+
     temp.convertTo(*img, img->type());
 
     saveJpg(*img);

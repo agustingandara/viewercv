@@ -250,10 +250,10 @@ void matrix_upsample_full(const int outCols, const int outRows, const float* con
             const int ix1 = (x   * inCols) / outCols;
             const int ix2 = imin(((x + 1) * inCols) / outCols, inCols - 1);
 
-            out[x + y * outCols] = (((ix1 + 1) - sx) * ((iy1 + 1 - sy)) * in[ix1 + iy1 * inCols] +
-                                    ((ix1 + 1) - sx) * (sy + dy - (iy1 + 1)) * in[ix1 + iy2 * inCols] +
-                                    (sx + dx - (ix1 + 1)) * ((iy1 + 1 - sy)) * in[ix2 + iy1 * inCols] +
-                                    (sx + dx - (ix1 + 1)) * (sy + dx - (iy1 + 1)) * in[ix2 + iy2 * inCols]) * factor;
+            out[x + y* outCols] = (((ix1 + 1) - sx) * ((iy1 + 1 - sy)) * in[ix1 + iy1 * inCols] +
+                                   ((ix1 + 1) - sx) * (sy + dy - (iy1 + 1)) * in[ix1 + iy2 * inCols] +
+                                   (sx + dx - (ix1 + 1)) * ((iy1 + 1 - sy)) * in[ix2 + iy1 * inCols] +
+                                   (sx + dx - (ix1 + 1)) * (sy + dx - (iy1 + 1)) * in[ix2 + iy2 * inCols]) * factor;
         }
     }
 }
@@ -336,7 +336,7 @@ void matrix_downsample_full(const int inCols, const int inRows, const float*   d
                 }
             }
 
-            res[x + y * outCols] = pixVal * normalize;  // Normalize by the area of the new pixel
+            res[x + y* outCols] = pixVal * normalize;   // Normalize by the area of the new pixel
         }
     }
 }
@@ -453,7 +453,7 @@ inline void matrix_zero(int n, float* m) {
 // Davide Anastasia <davideanastasia@users.sourceforge.net> (2010 08 31)
 // calculate divergence of two gradient maps (Gx and Gy)
 // divG(x,y) = Gx(x,y) - Gx(x-1,y) + Gy(x,y) - Gy(x,y-1)
- void calculate_and_add_divergence(const int COLS, const int ROWS, const float*   Gx, const float*   Gy, float*   divG) {
+void calculate_and_add_divergence(const int COLS, const int ROWS, const float*   Gx, const float*   Gy, float*   divG) {
     float divGx, divGy;
     //#pragma omp parallel sections private(divGx, divGy)
     {
@@ -476,13 +476,13 @@ inline void matrix_zero(int n, float* m) {
                 // kx = 0
                 divGx = Gx[ky * COLS];
                 divGy = Gy[ky * COLS] - Gy[ky * COLS - COLS];
-                divG[ky * COLS] += divGx + divGy;             // OUT
+                divG[ky* COLS] += divGx + divGy;              // OUT
 
                 // kx > 0
                 for (int kx = 1; kx < COLS; kx++) {
                     divGx = Gx[kx + ky * COLS] - Gx[kx + ky * COLS - 1];
                     divGy = Gy[kx + ky * COLS] - Gy[kx + ky * COLS - COLS];
-                    divG[kx + ky * COLS] += divGx + divGy;      // OUT
+                    divG[kx + ky* COLS] += divGx + divGy;       // OUT
                 }
             }
         }
@@ -668,8 +668,8 @@ inline void calculate_gradient(const int COLS, const int ROWS, const float* cons
     }
 
     // last row & last col = last element
-    Gx[ROWS * COLS - 1] = 0.0f;
-    Gy[ROWS * COLS - 1] = 0.0f;
+    Gx[ROWS* COLS - 1] = 0.0f;
+    Gy[ROWS* COLS - 1] = 0.0f;
 }
 
 void swap_pointers(float* &pOne, float* &pTwo) {
@@ -1288,7 +1288,7 @@ inline void pyramid_gradient_multiply(pyramid_t* pyramid, const float val) {
 
 
 int sort_float(const void* const v1, const void* const v2) {
-    if (*((float*)v1) < * ((float*)v2))
+    if (*((float*)v1) < *((float*)v2))
         { return -1; }
 
     if ((*((float*)v1) > *((float*)v2)))
@@ -1575,7 +1575,7 @@ int tmo_mantiuk06_contmap(int c, int r, float* R, float* G, float* B, float* Y,
 #define FAST 0
 
 inline float biasFunc(float b, float x) {
-    return pow(x, b);		// pow(x, log(bias)/log(0.5)
+    return powf(x, b);		// pow(x, log(bias)/log(0.5)
 }
 
 //-------------------------------------------
@@ -1607,7 +1607,7 @@ void tmo_drago03(unsigned int width, unsigned int height,
     maxLum /= avLum;	   // normalize maximum luminance by average luminance
 
     float divider = log10(maxLum + 1.0f);
-    float biasP = log(bias) / LOG05;
+    float biasP = logf(bias) / LOG05;
 
 #if !FAST
     // Normal tone mapping of every pixel
@@ -1618,8 +1618,8 @@ void tmo_drago03(unsigned int width, unsigned int height,
         // }
         for (int x = 0 ; x < ncols; x++) {
             float Yw = Y[x + y * width] / avLum;
-            float interpol = log(2.0f + biasFunc(biasP, Yw / maxLum) * 8.0f);
-            L[x + y * width] = (log(Yw + 1.0f) / interpol) / divider;
+            float interpol = logf(2.0f + biasFunc(biasP, Yw / maxLum) * 8.0f);
+            L[x + y* width] = (logf(Yw + 1.0f) / interpol) / divider;
         }
     }
 #else
