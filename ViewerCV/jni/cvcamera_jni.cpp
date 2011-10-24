@@ -289,6 +289,18 @@ extern "C" {
     }
 
 
+    SWIGEXPORT jint JNICALL Java_com_viewercv_cvcamera_jni_cvcameraJNI_DETECT_1Vivid_1get(JNIEnv* jenv, jclass jcls) {
+        jint jresult = 0 ;
+        int result;
+
+        (void)jenv;
+        (void)jcls;
+        result = (int) DETECT_VIVID;
+        jresult = (jint)result;
+        return jresult;
+    }
+
+
     SWIGEXPORT jlong JNICALL Java_com_viewercv_cvcamera_jni_cvcameraJNI_new_1Processor(JNIEnv* jenv, jclass jcls) {
         jlong jresult = 0 ;
         Processor* result = 0 ;
@@ -456,6 +468,22 @@ extern "C" {
         (arg1)->runNEON(arg2, arg3, arg4);
     }
 
+    SWIGEXPORT void JNICALL Java_com_viewercv_cvcamera_jni_cvcameraJNI_Processor_1runVivid(JNIEnv* jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jint jarg4) {
+        Processor* arg1 = (Processor*) 0 ;
+        int arg2 ;
+        image_pool* arg3 = (image_pool*) 0 ;
+        int arg4;
+
+        (void)jenv;
+        (void)jcls;
+        (void)jarg1_;
+        (void)jarg3_;
+        arg1 = *(Processor**)&jarg1;
+        arg2 = (int)jarg2;
+        arg3 = *(image_pool**)&jarg3;
+        arg4 = (int)jarg4;
+        (arg1)->runVivid(arg2, arg3, arg4);
+    }
 
 #ifdef __cplusplus
 }

@@ -77,4 +77,7 @@ public class Processor {
         cvcameraJNI.Processor_runNEON(swigCPtr, this, idx, image_pool.getCPtr(pool), pool, var);
     }
 
+    public void runVivid(int idx, image_pool pool, int var) {
+        cvcameraJNI.Processor_runVivid(swigCPtr, this, idx, image_pool.getCPtr(pool), pool, var);
+    }
 }

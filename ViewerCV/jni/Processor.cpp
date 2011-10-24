@@ -493,8 +493,31 @@ void Processor::runNEON(int input_idx, image_pool* pool, int var) {
     temp *= (_mode + 1);
 
     temp.convertTo(*img, img->type());
-
     saveJpg(*img);
 }
+
+
+void Processor::runVivid(int input_idx, image_pool* pool, int var) {
+
+    Mat* img;
+    img = pool->getImage(input_idx);
+
+    if (!img) {
+        return;
+    }
+
+    Mat temp = *img;
+    Mat blurred; double sigma = 7, threshold = 0, amount = (_mode + 1);
+    GaussianBlur(temp, blurred, Size(), sigma, sigma);
+    Mat sharpened = temp * (1 + amount) + blurred * (-amount);
+    Mat diff = abs(temp - blurred);
+    Mat lowContrastMask; inRange(diff, -255, -1, lowContrastMask);
+    temp.copyTo(sharpened, lowContrastMask);
+    temp = sharpened;
+
+    temp.convertTo(*img, img->type());
+    saveJpg(*img);
+}
+
 
 

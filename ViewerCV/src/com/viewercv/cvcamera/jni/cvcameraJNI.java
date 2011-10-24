@@ -39,5 +39,6 @@ class cvcameraJNI {
     public final static native void Processor_snapPic(long jarg1, Processor jarg1_);
     public final static native void Processor_runHDR(long jarg1, Processor jarg1_, int jarg2, long jarg3, image_pool jarg3_, int jarg4);
     public final static native void Processor_runNEON(long jarg1, Processor jarg1_, int jarg2, long jarg3, image_pool jarg3_, int jarg4);
+    public final static native void Processor_runVivid(long jarg1, Processor jarg1_, int jarg2, long jarg3, image_pool jarg3_, int jarg4);
 
 }

@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
     private static final int    DIALOG_SETTINGS = 9;
     private static final int    DIALOG_SNAP     = 10;
     private static final int    DIALOG_NEON     = 11;
+    private static final int    DIALOG_VIVID     = 12;
 
     private static int          CURR_VIEW       = 1;
 
@@ -68,10 +69,10 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "Detecting and Displaying Squares", Toast.LENGTH_LONG).show();
             break;
         case DIALOG_SOBEL:
-            Toast.makeText(this, "Running Sobel Filter", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Sobel Filter", Toast.LENGTH_LONG).show();
             break;
         case DIALOG_HISTEQ:
-            Toast.makeText(this, "Running Histogram Equalization", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Histogram Equalization", Toast.LENGTH_LONG).show();
             break;
         case DIALOG_MODE:
             String s = "Mode: " + proc_mode + "\n";
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
             Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             break;
         case DIALOG_HDR:
-            Toast.makeText(this, "Running in HDR Mode", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "HDR Mode", Toast.LENGTH_SHORT).show();
             break;
         case DIALOG_SETTINGS:
             selectResDiv();
@@ -102,7 +103,10 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "Snap!", Toast.LENGTH_SHORT).show();
             break;
         case DIALOG_NEON:
-            Toast.makeText(this, "Running NEON", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Color Sobel Filter", Toast.LENGTH_SHORT).show();
+            break;
+        case DIALOG_VIVID:
+            Toast.makeText(this, "Contrast Enhancement", Toast.LENGTH_SHORT).show();
             break;
         default:
             break;
@@ -268,6 +272,13 @@ public class MainActivity extends Activity {
         }
     }
 
+    class VividProcessor implements NativeProcessor.PoolCallback {
+        @Override
+        public void process(int idx, image_pool pool, long timestamp, NativeProcessor nativeProcessor) {
+            processor.runVivid(idx, pool, 0);
+        }
+    }
+
     /* ================================================================ */
 
     @Override
@@ -276,6 +287,7 @@ public class MainActivity extends Activity {
         menu.add("Squares");
         menu.add("Sobel");
         menu.add("NEON");
+        menu.add("Vivid");
         menu.add("HistEq");
         menu.add("HDR");
         menu.add("Settings");
@@ -311,6 +323,10 @@ public class MainActivity extends Activity {
             CURR_VIEW = DIALOG_NEON;
             toasts(DIALOG_NEON);
             defaultcallbackstack.addFirst(new NEONProcessor());
+        } else if (item.getTitle().equals("Vivid")) {
+            CURR_VIEW = DIALOG_VIVID;
+            toasts(DIALOG_VIVID);
+            defaultcallbackstack.addFirst(new VividProcessor());
         } else if (item.getTitle().equals("Settings")) {
             toasts(DIALOG_SETTINGS);
         } else if (item.getTitle().equals("About")) {

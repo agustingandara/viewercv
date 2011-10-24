@@ -26,6 +26,7 @@
 #define DETECT_HDR      5
 #define DETECT_HISTEQ   6
 #define DETECT_NEON     7
+#define DETECT_VIVID     8
 
 class Processor {
 
@@ -65,6 +66,8 @@ public:
     void saveJpg(Mat& img);
 
     void runNEON(int input_idx, image_pool* pool, int var);
+
+    void runVivid(int input_idx, image_pool* pool, int var);
 
 };
 
