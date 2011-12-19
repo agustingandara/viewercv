@@ -38,32 +38,32 @@ namespace cvflann {
 const char FLANN_SIGNATURE[] = "FLANN_INDEX";
 
 void save_header(FILE* stream, const NNIndex& index) {
-	IndexHeader header;
-	memset(header.signature, 0 , sizeof(header.signature));
-	strcpy(header.signature, FLANN_SIGNATURE);
-	header.flann_version = (int)FLANN_VERSION;
-	header.index_type = index.getType();
-	header.rows = index.size();
-	header.cols = index.veclen();
+    IndexHeader header;
+    memset(header.signature, 0 , sizeof(header.signature));
+    strcpy(header.signature, FLANN_SIGNATURE);
+    header.flann_version = (int)FLANN_VERSION;
+    header.index_type = index.getType();
+    header.rows = index.size();
+    header.cols = index.veclen();
 
-	std::fwrite(&header, sizeof(header), 1, stream);
+    std::fwrite(&header, sizeof(header), 1, stream);
 }
 
 
 
 IndexHeader load_header(FILE* stream) {
-	IndexHeader header;
-	int read_size = fread(&header, sizeof(header), 1, stream);
+    IndexHeader header;
+    int read_size = fread(&header, sizeof(header), 1, stream);
 
-	if (read_size != 1) {
-		throw FLANNException("Invalid index file, cannot read");
-	}
+    if (read_size != 1) {
+        throw FLANNException("Invalid index file, cannot read");
+    }
 
-	if (strcmp(header.signature, FLANN_SIGNATURE) != 0) {
-		throw FLANNException("Invalid index file, wrong signature");
-	}
+    if (strcmp(header.signature, FLANN_SIGNATURE) != 0) {
+        throw FLANNException("Invalid index file, wrong signature");
+    }
 
-	return header;
+    return header;
 
 }
 

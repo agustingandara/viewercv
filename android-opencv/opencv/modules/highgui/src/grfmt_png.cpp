@@ -63,178 +63,178 @@ namespace cv {
 /////////////////////// PngDecoder ///////////////////
 
 PngDecoder::PngDecoder() {
-	m_signature = "\x89\x50\x4e\x47\xd\xa\x1a\xa";
-	m_color_type = 0;
-	m_png_ptr = 0;
-	m_info_ptr = m_end_info = 0;
-	m_f = 0;
-	m_buf_supported = true;
-	m_buf_pos = 0;
+    m_signature = "\x89\x50\x4e\x47\xd\xa\x1a\xa";
+    m_color_type = 0;
+    m_png_ptr = 0;
+    m_info_ptr = m_end_info = 0;
+    m_f = 0;
+    m_buf_supported = true;
+    m_buf_pos = 0;
 }
 
 
 PngDecoder::~PngDecoder() {
-	close();
+    close();
 }
 
 ImageDecoder PngDecoder::newDecoder() const {
-	return new PngDecoder;
+    return new PngDecoder;
 }
 
 void  PngDecoder::close() {
-	if ( m_f ) {
-		fclose( m_f );
-		m_f = 0;
-	}
+    if (m_f) {
+        fclose(m_f);
+        m_f = 0;
+    }
 
-	if ( m_png_ptr ) {
-		png_structp png_ptr = (png_structp)m_png_ptr;
-		png_infop info_ptr = (png_infop)m_info_ptr;
-		png_infop end_info = (png_infop)m_end_info;
-		png_destroy_read_struct( &png_ptr, &info_ptr, &end_info );
-		m_png_ptr = m_info_ptr = m_end_info = 0;
-	}
+    if (m_png_ptr) {
+        png_structp png_ptr = (png_structp)m_png_ptr;
+        png_infop info_ptr = (png_infop)m_info_ptr;
+        png_infop end_info = (png_infop)m_end_info;
+        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+        m_png_ptr = m_info_ptr = m_end_info = 0;
+    }
 }
 
 
-void  PngDecoder::readDataFromBuf( void* _png_ptr, uchar* dst, size_t size ) {
-	png_structp png_ptr = (png_structp)_png_ptr;
-	PngDecoder* decoder = (PngDecoder*)(png_ptr->io_ptr);
-	CV_Assert( decoder );
-	const Mat& buf = decoder->m_buf;
-	if ( decoder->m_buf_pos + size > buf.cols * buf.rows * buf.elemSize() ) {
-		png_error(png_ptr, "PNG input buffer is incomplete");
-		return;
-	}
-	memcpy( dst, &decoder->m_buf.data[decoder->m_buf_pos], size );
-	decoder->m_buf_pos += size;
+void  PngDecoder::readDataFromBuf(void* _png_ptr, uchar* dst, size_t size) {
+    png_structp png_ptr = (png_structp)_png_ptr;
+    PngDecoder* decoder = (PngDecoder*)(png_ptr->io_ptr);
+    CV_Assert(decoder);
+    const Mat& buf = decoder->m_buf;
+    if (decoder->m_buf_pos + size > buf.cols * buf.rows * buf.elemSize()) {
+        png_error(png_ptr, "PNG input buffer is incomplete");
+        return;
+    }
+    memcpy(dst, &decoder->m_buf.data[decoder->m_buf_pos], size);
+    decoder->m_buf_pos += size;
 }
 
 bool  PngDecoder::readHeader() {
-	bool result = false;
-	close();
+    bool result = false;
+    close();
 
-	png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 0, 0, 0 );
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
 
-	if ( png_ptr ) {
-		png_infop info_ptr = png_create_info_struct( png_ptr );
-		png_infop end_info = png_create_info_struct( png_ptr );
+    if (png_ptr) {
+        png_infop info_ptr = png_create_info_struct(png_ptr);
+        png_infop end_info = png_create_info_struct(png_ptr);
 
-		m_png_ptr = png_ptr;
-		m_info_ptr = info_ptr;
-		m_end_info = end_info;
-		m_buf_pos = 0;
+        m_png_ptr = png_ptr;
+        m_info_ptr = info_ptr;
+        m_end_info = end_info;
+        m_buf_pos = 0;
 
-		if ( info_ptr && end_info ) {
-			if ( setjmp( png_ptr->jmpbuf ) == 0 ) {
-				if ( !m_buf.empty() ) {
-					png_set_read_fn(png_ptr, this, (png_rw_ptr)readDataFromBuf );
-				} else {
-					m_f = fopen( m_filename.c_str(), "rb" );
-					if ( m_f ) {
-						png_init_io( png_ptr, m_f );
-					}
-				}
+        if (info_ptr && end_info) {
+            if (setjmp(png_ptr->jmpbuf) == 0) {
+                if (!m_buf.empty()) {
+                    png_set_read_fn(png_ptr, this, (png_rw_ptr)readDataFromBuf);
+                } else {
+                    m_f = fopen(m_filename.c_str(), "rb");
+                    if (m_f) {
+                        png_init_io(png_ptr, m_f);
+                    }
+                }
 
-				if ( !m_buf.empty() || m_f ) {
-					png_uint_32 width, height;
-					int bit_depth, color_type;
+                if (!m_buf.empty() || m_f) {
+                    png_uint_32 width, height;
+                    int bit_depth, color_type;
 
-					png_read_info( png_ptr, info_ptr );
+                    png_read_info(png_ptr, info_ptr);
 
-					png_get_IHDR( png_ptr, info_ptr, &width, &height,
-								  &bit_depth, &color_type, 0, 0, 0 );
+                    png_get_IHDR(png_ptr, info_ptr, &width, &height,
+                                 &bit_depth, &color_type, 0, 0, 0);
 
-					m_width = (int)width;
-					m_height = (int)height;
-					m_color_type = color_type;
-					m_bit_depth = bit_depth;
+                    m_width = (int)width;
+                    m_height = (int)height;
+                    m_color_type = color_type;
+                    m_bit_depth = bit_depth;
 
-					if ( bit_depth <= 8 || bit_depth == 16 ) {
-						m_type = color_type == PNG_COLOR_TYPE_RGB ||
-								 color_type == PNG_COLOR_TYPE_RGB_ALPHA ||
-								 color_type == PNG_COLOR_TYPE_PALETTE ? CV_8UC3 : CV_8UC1;
-						if ( bit_depth == 16 ) {
-							m_type = CV_MAKETYPE(CV_16U, CV_MAT_CN(m_type));
-						}
-						result = true;
-					}
-				}
-			}
-		}
-	}
+                    if (bit_depth <= 8 || bit_depth == 16) {
+                        m_type = color_type == PNG_COLOR_TYPE_RGB ||
+                                 color_type == PNG_COLOR_TYPE_RGB_ALPHA ||
+                                 color_type == PNG_COLOR_TYPE_PALETTE ? CV_8UC3 : CV_8UC1;
+                        if (bit_depth == 16) {
+                            m_type = CV_MAKETYPE(CV_16U, CV_MAT_CN(m_type));
+                        }
+                        result = true;
+                    }
+                }
+            }
+        }
+    }
 
-	if ( !result ) {
-		close();
-	}
+    if (!result) {
+        close();
+    }
 
-	return result;
+    return result;
 }
 
 
-bool  PngDecoder::readData( Mat& img ) {
-	bool result = false;
-	AutoBuffer<uchar*> _buffer(m_height);
-	uchar** buffer = _buffer;
-	int color = img.channels() > 1;
-	uchar* data = img.data;
-	int step = img.step;
+bool  PngDecoder::readData(Mat& img) {
+    bool result = false;
+    AutoBuffer<uchar*> _buffer(m_height);
+    uchar** buffer = _buffer;
+    int color = img.channels() > 1;
+    uchar* data = img.data;
+    int step = img.step;
 
-	if ( m_png_ptr && m_info_ptr && m_end_info && m_width && m_height ) {
-		png_structp png_ptr = (png_structp)m_png_ptr;
-		png_infop info_ptr = (png_infop)m_info_ptr;
-		png_infop end_info = (png_infop)m_end_info;
+    if (m_png_ptr && m_info_ptr && m_end_info && m_width && m_height) {
+        png_structp png_ptr = (png_structp)m_png_ptr;
+        png_infop info_ptr = (png_infop)m_info_ptr;
+        png_infop end_info = (png_infop)m_end_info;
 
-		if ( setjmp(png_ptr->jmpbuf) == 0 ) {
-			int y;
+        if (setjmp(png_ptr->jmpbuf) == 0) {
+            int y;
 
-			if ( img.depth() == CV_8U && m_bit_depth == 16 ) {
-				png_set_strip_16( png_ptr );
-			} else if ( !isBigEndian() ) {
-				png_set_swap( png_ptr );
-			}
+            if (img.depth() == CV_8U && m_bit_depth == 16) {
+                png_set_strip_16(png_ptr);
+            } else if (!isBigEndian()) {
+                png_set_swap(png_ptr);
+            }
 
-			/* observation: png_read_image() writes 400 bytes beyond
-			 * end of data when reading a 400x118 color png
-			 * "mpplus_sand.png".  OpenCV crashes even with demo
-			 * programs.  Looking at the loaded image I'd say we get 4
-			 * bytes per pixel instead of 3 bytes per pixel.  Test
-			 * indicate that it is a good idea to always ask for
-			 * stripping alpha..  18.11.2004 Axel Walthelm
-			 */
-			png_set_strip_alpha( png_ptr );
+            /* observation: png_read_image() writes 400 bytes beyond
+             * end of data when reading a 400x118 color png
+             * "mpplus_sand.png".  OpenCV crashes even with demo
+             * programs.  Looking at the loaded image I'd say we get 4
+             * bytes per pixel instead of 3 bytes per pixel.  Test
+             * indicate that it is a good idea to always ask for
+             * stripping alpha..  18.11.2004 Axel Walthelm
+             */
+            png_set_strip_alpha(png_ptr);
 
-			if ( m_color_type == PNG_COLOR_TYPE_PALETTE ) {
-				png_set_palette_to_rgb( png_ptr );
-			}
+            if (m_color_type == PNG_COLOR_TYPE_PALETTE) {
+                png_set_palette_to_rgb(png_ptr);
+            }
 
-			if ( m_color_type == PNG_COLOR_TYPE_GRAY && m_bit_depth < 8 ) {
-				png_set_gray_1_2_4_to_8( png_ptr );
-			}
+            if (m_color_type == PNG_COLOR_TYPE_GRAY && m_bit_depth < 8) {
+                png_set_gray_1_2_4_to_8(png_ptr);
+            }
 
-			if ( CV_MAT_CN(m_type) > 1 && color ) {
-				png_set_bgr( png_ptr );    // convert RGB to BGR
-			} else if ( color ) {
-				png_set_gray_to_rgb( png_ptr );    // Gray->RGB
-			} else {
-				png_set_rgb_to_gray( png_ptr, 1, -1, -1 );    // RGB->Gray
-			}
+            if (CV_MAT_CN(m_type) > 1 && color) {
+                png_set_bgr(png_ptr);      // convert RGB to BGR
+            } else if (color) {
+                png_set_gray_to_rgb(png_ptr);      // Gray->RGB
+            } else {
+                png_set_rgb_to_gray(png_ptr, 1, -1, -1);      // RGB->Gray
+            }
 
-			png_read_update_info( png_ptr, info_ptr );
+            png_read_update_info(png_ptr, info_ptr);
 
-			for ( y = 0; y < m_height; y++ ) {
-				buffer[y] = data + y * step;
-			}
+            for (y = 0; y < m_height; y++) {
+                buffer[y] = data + y * step;
+            }
 
-			png_read_image( png_ptr, buffer );
-			png_read_end( png_ptr, end_info );
+            png_read_image(png_ptr, buffer);
+            png_read_end(png_ptr, end_info);
 
-			result = true;
-		}
-	}
+            result = true;
+        }
+    }
 
-	close();
-	return result;
+    close();
+    return result;
 }
 
 
@@ -242,8 +242,8 @@ bool  PngDecoder::readData( Mat& img ) {
 
 
 PngEncoder::PngEncoder() {
-	m_description = "Portable Network Graphics files (*.png)";
-	m_buf_supported = true;
+    m_description = "Portable Network Graphics files (*.png)";
+    m_buf_supported = true;
 }
 
 
@@ -251,110 +251,110 @@ PngEncoder::~PngEncoder() {
 }
 
 
-bool  PngEncoder::isFormatSupported( int depth ) const {
-	return depth == CV_8U || depth == CV_16U;
+bool  PngEncoder::isFormatSupported(int depth) const {
+    return depth == CV_8U || depth == CV_16U;
 }
 
 ImageEncoder PngEncoder::newEncoder() const {
-	return new PngEncoder;
+    return new PngEncoder;
 }
 
 
 void PngEncoder::writeDataToBuf(void* _png_ptr, uchar* src, size_t size) {
-	if ( size == 0 ) {
-		return;
-	}
-	png_structp png_ptr = (png_structp)_png_ptr;
-	PngEncoder* encoder = (PngEncoder*)(png_ptr->io_ptr);
-	CV_Assert( encoder && encoder->m_buf );
-	size_t cursz = encoder->m_buf->size();
-	encoder->m_buf->resize(cursz + size);
-	memcpy( &(*encoder->m_buf)[cursz], src, size );
+    if (size == 0) {
+        return;
+    }
+    png_structp png_ptr = (png_structp)_png_ptr;
+    PngEncoder* encoder = (PngEncoder*)(png_ptr->io_ptr);
+    CV_Assert(encoder && encoder->m_buf);
+    size_t cursz = encoder->m_buf->size();
+    encoder->m_buf->resize(cursz + size);
+    memcpy(&(*encoder->m_buf)[cursz], src, size);
 }
 
 
 void PngEncoder::flushBuf(void*) {
 }
 
-bool  PngEncoder::write( const Mat& img, const vector<int>& params ) {
-	int compression_level = 0;
+bool  PngEncoder::write(const Mat& img, const vector<int>& params) {
+    int compression_level = 0;
 
-	for ( size_t i = 0; i < params.size(); i += 2 ) {
-		if ( params[i] == CV_IMWRITE_PNG_COMPRESSION ) {
-			compression_level = params[i+1];
-			compression_level = MIN(MAX(compression_level, 0), MAX_MEM_LEVEL);
-		}
-	}
+    for (size_t i = 0; i < params.size(); i += 2) {
+        if (params[i] == CV_IMWRITE_PNG_COMPRESSION) {
+            compression_level = params[i + 1];
+            compression_level = MIN(MAX(compression_level, 0), MAX_MEM_LEVEL);
+        }
+    }
 
-	png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 0, 0, 0 );
-	png_infop info_ptr = 0;
-	FILE* f = 0;
-	int y, width = img.cols, height = img.rows;
-	int depth = img.depth(), channels = img.channels();
-	bool result = false;
-	AutoBuffer<uchar*> buffer;
+    png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+    png_infop info_ptr = 0;
+    FILE* f = 0;
+    int y, width = img.cols, height = img.rows;
+    int depth = img.depth(), channels = img.channels();
+    bool result = false;
+    AutoBuffer<uchar*> buffer;
 
-	if ( depth != CV_8U && depth != CV_16U ) {
-		return false;
-	}
+    if (depth != CV_8U && depth != CV_16U) {
+        return false;
+    }
 
-	if ( png_ptr ) {
-		info_ptr = png_create_info_struct( png_ptr );
+    if (png_ptr) {
+        info_ptr = png_create_info_struct(png_ptr);
 
-		if ( info_ptr ) {
-			if ( setjmp( png_ptr->jmpbuf ) == 0 ) {
-				if ( m_buf ) {
-					png_set_write_fn(png_ptr, this,
-									 (png_rw_ptr)writeDataToBuf, (png_flush_ptr)flushBuf);
-				} else {
-					f = fopen( m_filename.c_str(), "wb" );
-					if ( f ) {
-						png_init_io( png_ptr, f );
-					}
-				}
+        if (info_ptr) {
+            if (setjmp(png_ptr->jmpbuf) == 0) {
+                if (m_buf) {
+                    png_set_write_fn(png_ptr, this,
+                                     (png_rw_ptr)writeDataToBuf, (png_flush_ptr)flushBuf);
+                } else {
+                    f = fopen(m_filename.c_str(), "wb");
+                    if (f) {
+                        png_init_io(png_ptr, f);
+                    }
+                }
 
-				if ( m_buf || f ) {
-					if ( compression_level > 0 ) {
-						png_set_compression_mem_level( png_ptr, compression_level );
-					} else {
-						// tune parameters for speed
-						// (see http://wiki.linuxquestions.org/wiki/Libpng)
-						png_set_filter(png_ptr, PNG_FILTER_TYPE_BASE, PNG_FILTER_SUB);
-						png_set_compression_level(png_ptr, Z_BEST_SPEED);
-					}
-					png_set_compression_strategy(png_ptr, Z_HUFFMAN_ONLY);
+                if (m_buf || f) {
+                    if (compression_level > 0) {
+                        png_set_compression_mem_level(png_ptr, compression_level);
+                    } else {
+                        // tune parameters for speed
+                        // (see http://wiki.linuxquestions.org/wiki/Libpng)
+                        png_set_filter(png_ptr, PNG_FILTER_TYPE_BASE, PNG_FILTER_SUB);
+                        png_set_compression_level(png_ptr, Z_BEST_SPEED);
+                    }
+                    png_set_compression_strategy(png_ptr, Z_HUFFMAN_ONLY);
 
-					png_set_IHDR( png_ptr, info_ptr, width, height, depth == CV_8U ? 8 : 16,
-								  channels == 1 ? PNG_COLOR_TYPE_GRAY :
-								  channels == 3 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGBA,
-								  PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
-								  PNG_FILTER_TYPE_DEFAULT );
+                    png_set_IHDR(png_ptr, info_ptr, width, height, depth == CV_8U ? 8 : 16,
+                                 channels == 1 ? PNG_COLOR_TYPE_GRAY :
+                                 channels == 3 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGBA,
+                                 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+                                 PNG_FILTER_TYPE_DEFAULT);
 
-					png_write_info( png_ptr, info_ptr );
+                    png_write_info(png_ptr, info_ptr);
 
-					png_set_bgr( png_ptr );
-					if ( !isBigEndian() ) {
-						png_set_swap( png_ptr );
-					}
+                    png_set_bgr(png_ptr);
+                    if (!isBigEndian()) {
+                        png_set_swap(png_ptr);
+                    }
 
-					buffer.allocate(height);
-					for ( y = 0; y < height; y++ ) {
-						buffer[y] = img.data + y * img.step;
-					}
+                    buffer.allocate(height);
+                    for (y = 0; y < height; y++) {
+                        buffer[y] = img.data + y * img.step;
+                    }
 
-					png_write_image( png_ptr, buffer );
-					png_write_end( png_ptr, info_ptr );
+                    png_write_image(png_ptr, buffer);
+                    png_write_end(png_ptr, info_ptr);
 
-					result = true;
-				}
-			}
-		}
-	}
+                    result = true;
+                }
+            }
+        }
+    }
 
-	png_destroy_write_struct( &png_ptr, &info_ptr );
-	if (f) { fclose( f ); }
+    png_destroy_write_struct(&png_ptr, &info_ptr);
+    if (f) { fclose(f); }
 
-	return result;
+    return result;
 }
 
 }

@@ -560,36 +560,36 @@ extern "C" { __declspec(dllexport) unsigned int __lc_codepage = 0; }
 #include "cap_ffmpeg.cpp"
 
 void cvReleaseCapture_FFMPEG(CvCapture** capture) {
-	if ( capture && *capture ) {
-		delete *capture;
-		*capture = 0;
-	}
+    if (capture && *capture) {
+        delete *capture;
+        *capture = 0;
+    }
 }
 
 int cvSetCaptureProperty_FFMPEG(CvCapture* capture, int prop_id, double value) {
-	return capture->setProperty(prop_id, value);
+    return capture->setProperty(prop_id, value);
 }
 
 double cvGetCaptureProperty_FFMPEG(CvCapture* capture, int prop_id) {
-	return capture->getProperty(prop_id);
+    return capture->getProperty(prop_id);
 }
 
 int cvGrabFrame_FFMPEG(CvCapture* capture) {
-	return capture->grabFrame();
+    return capture->grabFrame();
 }
 
 IplImage* cvRetrieveFrame_FFMPEG(CvCapture* capture, int streamIdx) {
-	return capture->retrieveFrame(streamIdx);
+    return capture->retrieveFrame(streamIdx);
 }
 
-void cvReleaseVideoWriter_FFMPEG( CvVideoWriter** writer ) {
-	if ( writer && *writer ) {
-		delete *writer;
-		*writer = 0;
-	}
+void cvReleaseVideoWriter_FFMPEG(CvVideoWriter** writer) {
+    if (writer && *writer) {
+        delete *writer;
+        *writer = 0;
+    }
 }
 
-int cvWriteFrame_FFMPEG( CvVideoWriter* writer, const IplImage* image ) {
-	return writer->writeFrame(image);
+int cvWriteFrame_FFMPEG(CvVideoWriter* writer, const IplImage* image) {
+    return writer->writeFrame(image);
 }
 

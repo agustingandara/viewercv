@@ -44,112 +44,112 @@
 // in later times, use this file as a dispatcher to implementations like cvcap.cpp
 
 CV_IMPL void cvSetWindowProperty(const char* name, int prop_id, double prop_value) {
-	switch (prop_id) {
-	case CV_WND_PROP_FULLSCREEN://accept CV_WINDOW_NORMAL or CV_WINDOW_FULLSCREEN
+    switch (prop_id) {
+    case CV_WND_PROP_FULLSCREEN://accept CV_WINDOW_NORMAL or CV_WINDOW_FULLSCREEN
 
-		if (!name || (prop_value != CV_WINDOW_NORMAL && prop_value != CV_WINDOW_FULLSCREEN)) { //bag argument
-			break;
-		}
+        if (!name || (prop_value != CV_WINDOW_NORMAL && prop_value != CV_WINDOW_FULLSCREEN)) { //bag argument
+            break;
+        }
 
 #if   defined WIN32 || defined _WIN32
-		cvChangeMode_W32(name, prop_value);
+        cvChangeMode_W32(name, prop_value);
 #elif defined (HAVE_GTK)
-		cvChangeMode_GTK(name, prop_value);
+        cvChangeMode_GTK(name, prop_value);
 #elif defined (HAVE_CARBON)
-		cvChangeMode_QT(name, prop_value);
+        cvChangeMode_QT(name, prop_value);
 #endif
-		break;
+        break;
 
-	case CV_WND_PROP_AUTOSIZE:
+    case CV_WND_PROP_AUTOSIZE:
 
-		break;
+        break;
 
-	default:;
-	}
+    default:;
+    }
 }
 
 /* return -1 if error */
 CV_IMPL double cvGetWindowProperty(const char* name, int prop_id) {
-	switch (prop_id) {
-	case CV_WND_PROP_FULLSCREEN:
+    switch (prop_id) {
+    case CV_WND_PROP_FULLSCREEN:
 
-		if (!name) { //bad argument
-			return -1;
-		}
+        if (!name) { //bad argument
+            return -1;
+        }
 
 #if   defined WIN32 || defined _WIN32
-		return cvGetMode_W32(name);
+        return cvGetMode_W32(name);
 #elif defined (HAVE_GTK)
-		return cvGetMode_GTK(name);
+        return cvGetMode_GTK(name);
 #elif defined (HAVE_CARBON)
-		return cvGetMode_QT(name);
+        return cvGetMode_QT(name);
 #else
-		return -1;
+        return -1;
 #endif
 
-	case CV_WND_PROP_AUTOSIZE:
+    case CV_WND_PROP_AUTOSIZE:
 
-		if (!name) { //bad argument
-			return -1;
-		}
+        if (!name) { //bad argument
+            return -1;
+        }
 
-		return -1;
+        return -1;
 
-	default:
-		return -1;
-	}
+    default:
+        return -1;
+    }
 }
 
 namespace cv {
 
-void namedWindow( const string& winname, int flags ) {
-	cvNamedWindow( winname.c_str(), flags );
+void namedWindow(const string& winname, int flags) {
+    cvNamedWindow(winname.c_str(), flags);
 }
 
-void destroyWindow( const string& winname ) {
-	cvDestroyWindow( winname.c_str() );
+void destroyWindow(const string& winname) {
+    cvDestroyWindow(winname.c_str());
 }
 
 //YV
 void setWindowProperty(const string& winname, int prop_id, double prop_value) {
-	cvSetWindowProperty( winname.c_str(), prop_id, prop_value);
+    cvSetWindowProperty(winname.c_str(), prop_id, prop_value);
 }
 
 //YV
 double getWindowProperty(const string& winname, int prop_id) {
-	return  cvGetWindowProperty(winname.c_str(), prop_id);
+    return  cvGetWindowProperty(winname.c_str(), prop_id);
 }
 
-void imshow( const string& winname, const Mat& img ) {
-	CvMat _img = img;
-	cvShowImage( winname.c_str(), &_img );
+void imshow(const string& winname, const Mat& img) {
+    CvMat _img = img;
+    cvShowImage(winname.c_str(), &_img);
 }
 
 int waitKey(int delay) {
-	return cvWaitKey(delay);
+    return cvWaitKey(delay);
 }
 
 int createTrackbar(const string& trackbarName, const string& winName,
-				   int* value, int count, TrackbarCallback callback,
-				   void* userdata) {
-	return cvCreateTrackbar2(trackbarName.c_str(), winName.c_str(),
-							 value, count, callback, userdata);
+                   int* value, int count, TrackbarCallback callback,
+                   void* userdata) {
+    return cvCreateTrackbar2(trackbarName.c_str(), winName.c_str(),
+                             value, count, callback, userdata);
 }
 
-void setTrackbarPos( const string& trackbarName, const string& winName, int value ) {
-	cvSetTrackbarPos(trackbarName.c_str(), winName.c_str(), value );
+void setTrackbarPos(const string& trackbarName, const string& winName, int value) {
+    cvSetTrackbarPos(trackbarName.c_str(), winName.c_str(), value);
 }
 
-int getTrackbarPos( const string& trackbarName, const string& winName ) {
-	return cvGetTrackbarPos(trackbarName.c_str(), winName.c_str());
+int getTrackbarPos(const string& trackbarName, const string& winName) {
+    return cvGetTrackbarPos(trackbarName.c_str(), winName.c_str());
 }
 
-void setMouseCallback( const string& windowName, MouseCallback onMouse, void* param) {
-	cvSetMouseCallback(windowName.c_str(), onMouse, param);
+void setMouseCallback(const string& windowName, MouseCallback onMouse, void* param) {
+    cvSetMouseCallback(windowName.c_str(), onMouse, param);
 }
 
 int startWindowThread() {
-	return cvStartWindowThread();
+    return cvStartWindowThread();
 }
 
 }
@@ -178,87 +178,87 @@ int startWindowThread() {
     __FILE__, __LINE__ )
 
 
-CV_IMPL int cvNamedWindow( const char*, int ) {
-	CV_NO_GUI_ERROR("cvNamedWindow");
-	return -1;
+CV_IMPL int cvNamedWindow(const char*, int) {
+    CV_NO_GUI_ERROR("cvNamedWindow");
+    return -1;
 }
 
-CV_IMPL void cvDestroyWindow( const char* ) {
-	CV_NO_GUI_ERROR( "cvDestroyWindow" );
-}
-
-CV_IMPL void
-cvDestroyAllWindows( void ) {
-	CV_NO_GUI_ERROR( "cvDestroyAllWindows" );
+CV_IMPL void cvDestroyWindow(const char*) {
+    CV_NO_GUI_ERROR("cvDestroyWindow");
 }
 
 CV_IMPL void
-cvShowImage( const char*, const CvArr* ) {
-	CV_NO_GUI_ERROR( "cvShowImage" );
+cvDestroyAllWindows(void) {
+    CV_NO_GUI_ERROR("cvDestroyAllWindows");
 }
 
-CV_IMPL void cvResizeWindow( const char*, int, int ) {
-	CV_NO_GUI_ERROR( "cvResizeWindow" );
+CV_IMPL void
+cvShowImage(const char*, const CvArr*) {
+    CV_NO_GUI_ERROR("cvShowImage");
 }
 
-CV_IMPL void cvMoveWindow( const char*, int, int ) {
-	CV_NO_GUI_ERROR( "cvMoveWindow" );
+CV_IMPL void cvResizeWindow(const char*, int, int) {
+    CV_NO_GUI_ERROR("cvResizeWindow");
+}
+
+CV_IMPL void cvMoveWindow(const char*, int, int) {
+    CV_NO_GUI_ERROR("cvMoveWindow");
 }
 
 CV_IMPL int
-cvCreateTrackbar( const char*, const char*,
-				  int*, int, CvTrackbarCallback ) {
-	CV_NO_GUI_ERROR( "cvCreateTrackbar" );
-	return -1;
+cvCreateTrackbar(const char*, const char*,
+                 int*, int, CvTrackbarCallback) {
+    CV_NO_GUI_ERROR("cvCreateTrackbar");
+    return -1;
 }
 
 CV_IMPL int
-cvCreateTrackbar2( const char* trackbar_name, const char* window_name,
-				   int* val, int count, CvTrackbarCallback2 on_notify2,
-				   void* userdata ) {
-	CV_NO_GUI_ERROR( "cvCreateTrackbar2" );
-	return -1;
+cvCreateTrackbar2(const char* trackbar_name, const char* window_name,
+                  int* val, int count, CvTrackbarCallback2 on_notify2,
+                  void* userdata) {
+    CV_NO_GUI_ERROR("cvCreateTrackbar2");
+    return -1;
 }
 
 CV_IMPL void
-cvSetMouseCallback( const char*, CvMouseCallback, void* ) {
-	CV_NO_GUI_ERROR( "cvSetMouseCallback" );
+cvSetMouseCallback(const char*, CvMouseCallback, void*) {
+    CV_NO_GUI_ERROR("cvSetMouseCallback");
 }
 
-CV_IMPL int cvGetTrackbarPos( const char*, const char* ) {
-	CV_NO_GUI_ERROR( "cvGetTrackbarPos" );
-	return -1;
+CV_IMPL int cvGetTrackbarPos(const char*, const char*) {
+    CV_NO_GUI_ERROR("cvGetTrackbarPos");
+    return -1;
 }
 
-CV_IMPL void cvSetTrackbarPos( const char*, const char*, int ) {
-	CV_NO_GUI_ERROR( "cvSetTrackbarPos" );
+CV_IMPL void cvSetTrackbarPos(const char*, const char*, int) {
+    CV_NO_GUI_ERROR("cvSetTrackbarPos");
 }
 
-CV_IMPL void* cvGetWindowHandle( const char* ) {
-	CV_NO_GUI_ERROR( "cvGetWindowHandle" );
-	return 0;
+CV_IMPL void* cvGetWindowHandle(const char*) {
+    CV_NO_GUI_ERROR("cvGetWindowHandle");
+    return 0;
 }
 
-CV_IMPL const char* cvGetWindowName( void* ) {
-	CV_NO_GUI_ERROR( "cvGetWindowName" );
-	return 0;
+CV_IMPL const char* cvGetWindowName(void*) {
+    CV_NO_GUI_ERROR("cvGetWindowName");
+    return 0;
 }
 
-CV_IMPL int cvWaitKey( int ) {
-	CV_NO_GUI_ERROR( "cvWaitKey" );
-	return -1;
+CV_IMPL int cvWaitKey(int) {
+    CV_NO_GUI_ERROR("cvWaitKey");
+    return -1;
 }
 
-CV_IMPL int cvInitSystem( int argc, char** argv ) {
+CV_IMPL int cvInitSystem(int argc, char** argv) {
 
-	CV_NO_GUI_ERROR( "cvInitSystem" );
-	return -1;
+    CV_NO_GUI_ERROR("cvInitSystem");
+    return -1;
 }
 
 CV_IMPL int cvStartWindowThread() {
 
-	CV_NO_GUI_ERROR( "cvStartWindowThread" );
-	return -1;
+    CV_NO_GUI_ERROR("cvStartWindowThread");
+    return -1;
 }
 
 #endif

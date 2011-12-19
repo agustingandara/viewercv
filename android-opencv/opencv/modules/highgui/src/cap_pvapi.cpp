@@ -62,31 +62,31 @@
 
 class CvCaptureCAM_PvAPI : public CvCapture {
 public:
-	CvCaptureCAM_PvAPI();
-	virtual ~CvCaptureCAM_PvAPI() {
-		close();
-	}
+    CvCaptureCAM_PvAPI();
+    virtual ~CvCaptureCAM_PvAPI() {
+        close();
+    }
 
-	virtual bool open( int index );
-	virtual void close();
-	virtual double getProperty(int);
-	virtual bool setProperty(int, double);
-	virtual bool grabFrame();
-	virtual IplImage* retrieveFrame(int);
-	virtual int getCaptureDomain() {
-		return CV_CAP_PVAPI;
-	}
+    virtual bool open(int index);
+    virtual void close();
+    virtual double getProperty(int);
+    virtual bool setProperty(int, double);
+    virtual bool grabFrame();
+    virtual IplImage* retrieveFrame(int);
+    virtual int getCaptureDomain() {
+        return CV_CAP_PVAPI;
+    }
 
 protected:
-	typedef struct {
-		unsigned long   UID;
-		tPvHandle       Handle;
-		tPvFrame        Frame;
+    typedef struct {
+        unsigned long   UID;
+        tPvHandle       Handle;
+        tPvFrame        Frame;
 
-	} tCamera;
-	IplImage* frame;
-	tCamera Camera;
-	tPvErr          Errcode;
+    } tCamera;
+    IplImage* frame;
+    tCamera Camera;
+    tPvErr          Errcode;
 
 
 };
@@ -98,132 +98,132 @@ CvCaptureCAM_PvAPI::CvCaptureCAM_PvAPI() {
 
 void CvCaptureCAM_PvAPI::close() {
 
-	// Stop the acquisition & free the camera
-	PvCommandRun(Camera.Handle, "AcquisitionStop");
+    // Stop the acquisition & free the camera
+    PvCommandRun(Camera.Handle, "AcquisitionStop");
 
-	PvCaptureEnd(Camera.Handle);
-	PvCameraClose(Camera.Handle);
+    PvCaptureEnd(Camera.Handle);
+    PvCameraClose(Camera.Handle);
 
-	cvReleaseImage(&frame);
+    cvReleaseImage(&frame);
 }
 
 // Initialize camera input
-bool CvCaptureCAM_PvAPI::open( int index ) {
+bool CvCaptureCAM_PvAPI::open(int index) {
 
-	tPvCameraInfo cameraInfo[MAX_CAMERAS];
-	if (PvInitialize()) {
-		return false;
-	}
+    tPvCameraInfo cameraInfo[MAX_CAMERAS];
+    if (PvInitialize()) {
+        return false;
+    }
 
-	usleep(250000);
+    usleep(250000);
 
-	//close();
-	int numCameras = PvCameraList(cameraInfo, MAX_CAMERAS, NULL);
-	if (numCameras <= 0 || index >= numCameras) {
-		return false;
-	}
+    //close();
+    int numCameras = PvCameraList(cameraInfo, MAX_CAMERAS, NULL);
+    if (numCameras <= 0 || index >= numCameras) {
+        return false;
+    }
 
-	Camera.UID = cameraInfo[index].UniqueId;
-	if (PvCameraOpen(Camera.UID, ePvAccessMaster, &(Camera.Handle)) == ePvErrSuccess) {
-
-
-		//Set Pixel Format to BRG24 to follow conventions
-		Errcode = PvAttrEnumSet(Camera.Handle, "PixelFormat", "Bgr24");
-		if (Errcode != ePvErrSuccess) {
-			fprintf(stderr, "PvAPI: couldn't set PixelFormat to Bgr24\n");
-			return NULL;
-		}
-
-		tPvUint32 frameWidth, frameHeight, frameSize;
-
-		PvAttrUint32Get(Camera.Handle, "TotalBytesPerFrame", &frameSize);
-		PvAttrUint32Get(Camera.Handle, "Width", &frameWidth);
-		PvAttrUint32Get(Camera.Handle, "Height", &frameHeight);
+    Camera.UID = cameraInfo[index].UniqueId;
+    if (PvCameraOpen(Camera.UID, ePvAccessMaster, &(Camera.Handle)) == ePvErrSuccess) {
 
 
-		// Create an image (24 bits RGB Color image)
-		frame = cvCreateImage(cvSize(frameWidth, frameHeight), IPL_DEPTH_8U, 3);
-		frame->widthStep = frameWidth * 3;
+        //Set Pixel Format to BRG24 to follow conventions
+        Errcode = PvAttrEnumSet(Camera.Handle, "PixelFormat", "Bgr24");
+        if (Errcode != ePvErrSuccess) {
+            fprintf(stderr, "PvAPI: couldn't set PixelFormat to Bgr24\n");
+            return NULL;
+        }
 
-		Camera.Frame.ImageBufferSize = frameSize;
-		Camera.Frame.ImageBuffer = frame->imageData;
+        tPvUint32 frameWidth, frameHeight, frameSize;
 
-		// Start the camera
-		PvCaptureStart(Camera.Handle);
+        PvAttrUint32Get(Camera.Handle, "TotalBytesPerFrame", &frameSize);
+        PvAttrUint32Get(Camera.Handle, "Width", &frameWidth);
+        PvAttrUint32Get(Camera.Handle, "Height", &frameHeight);
 
-		// Set the camera to capture continuously
-		if (PvAttrEnumSet(Camera.Handle, "AcquisitionMode", "Continuous") != ePvErrSuccess) {
-			fprintf(stderr, "Could not set Prosilica Acquisition Mode\n");
-			return false;
-		}
 
-		if (PvCommandRun(Camera.Handle, "AcquisitionStart") != ePvErrSuccess) {
-			fprintf(stderr, "Could not start Prosilica acquisition\n");
-			return false;
-		}
+        // Create an image (24 bits RGB Color image)
+        frame = cvCreateImage(cvSize(frameWidth, frameHeight), IPL_DEPTH_8U, 3);
+        frame->widthStep = frameWidth * 3;
 
-		if (PvAttrEnumSet(Camera.Handle, "FrameStartTriggerMode", "Freerun") != ePvErrSuccess) {
-			fprintf(stderr, "Error setting Prosilica trigger to \"Freerun\"");
-			return false;
-		}
+        Camera.Frame.ImageBufferSize = frameSize;
+        Camera.Frame.ImageBuffer = frame->imageData;
 
-		return true;
-	}
-	return false;
+        // Start the camera
+        PvCaptureStart(Camera.Handle);
+
+        // Set the camera to capture continuously
+        if (PvAttrEnumSet(Camera.Handle, "AcquisitionMode", "Continuous") != ePvErrSuccess) {
+            fprintf(stderr, "Could not set Prosilica Acquisition Mode\n");
+            return false;
+        }
+
+        if (PvCommandRun(Camera.Handle, "AcquisitionStart") != ePvErrSuccess) {
+            fprintf(stderr, "Could not start Prosilica acquisition\n");
+            return false;
+        }
+
+        if (PvAttrEnumSet(Camera.Handle, "FrameStartTriggerMode", "Freerun") != ePvErrSuccess) {
+            fprintf(stderr, "Error setting Prosilica trigger to \"Freerun\"");
+            return false;
+        }
+
+        return true;
+    }
+    return false;
 
 }
 
 bool CvCaptureCAM_PvAPI::grabFrame() {
-	return PvCaptureQueueFrame(Camera.Handle, &(Camera.Frame), NULL) == ePvErrSuccess;
+    return PvCaptureQueueFrame(Camera.Handle, &(Camera.Frame), NULL) == ePvErrSuccess;
 }
 
 
 IplImage* CvCaptureCAM_PvAPI::retrieveFrame(int) {
 
-	return (PvCaptureWaitForFrameDone(Camera.Handle, &(Camera.Frame), 1000) == ePvErrSuccess)
-		   ? frame : NULL;
+    return (PvCaptureWaitForFrameDone(Camera.Handle, &(Camera.Frame), 1000) == ePvErrSuccess)
+           ? frame : NULL;
 }
 
-double CvCaptureCAM_PvAPI::getProperty( int property_id ) {
-	tPvUint32 nTemp;
+double CvCaptureCAM_PvAPI::getProperty(int property_id) {
+    tPvUint32 nTemp;
 
-	switch ( property_id ) {
-	case CV_CAP_PROP_FRAME_WIDTH:
-		PvAttrUint32Get(Camera.Handle, "Width", &nTemp);
-		return (double)nTemp;
-	case CV_CAP_PROP_FRAME_HEIGHT:
-		PvAttrUint32Get(Camera.Handle, "Height", &nTemp);
-		return (double)nTemp;
-	}
-	return -1.0;
+    switch (property_id) {
+    case CV_CAP_PROP_FRAME_WIDTH:
+        PvAttrUint32Get(Camera.Handle, "Width", &nTemp);
+        return (double)nTemp;
+    case CV_CAP_PROP_FRAME_HEIGHT:
+        PvAttrUint32Get(Camera.Handle, "Height", &nTemp);
+        return (double)nTemp;
+    }
+    return -1.0;
 }
 
-bool CvCaptureCAM_PvAPI::setProperty( int property_id, double value ) {
-	switch ( property_id ) {
-		/*  TODO: Camera works, but IplImage must be modified for the new size
-		case CV_CAP_PROP_FRAME_WIDTH:
-		    PvAttrUint32Set(Camera.Handle, "Width", (tPvUint32)value);
-		    break;
-		case CV_CAP_PROP_FRAME_HEIGHT:
-		    PvAttrUint32Set(Camera.Handle, "Heigth", (tPvUint32)value);
-		    break;
-		*/
-	default:
-		return false;
-	}
-	return true;
+bool CvCaptureCAM_PvAPI::setProperty(int property_id, double value) {
+    switch (property_id) {
+        /*  TODO: Camera works, but IplImage must be modified for the new size
+        case CV_CAP_PROP_FRAME_WIDTH:
+            PvAttrUint32Set(Camera.Handle, "Width", (tPvUint32)value);
+            break;
+        case CV_CAP_PROP_FRAME_HEIGHT:
+            PvAttrUint32Set(Camera.Handle, "Heigth", (tPvUint32)value);
+            break;
+        */
+    default:
+        return false;
+    }
+    return true;
 }
 
 
-CvCapture* cvCreateCameraCapture_PvAPI( int index ) {
-	CvCaptureCAM_PvAPI* capture = new CvCaptureCAM_PvAPI;
+CvCapture* cvCreateCameraCapture_PvAPI(int index) {
+    CvCaptureCAM_PvAPI* capture = new CvCaptureCAM_PvAPI;
 
-	if ( capture->open( index )) {
-		return capture;
-	}
+    if (capture->open(index)) {
+        return capture;
+    }
 
-	delete capture;
-	return NULL;
+    delete capture;
+    return NULL;
 }
 
 #ifdef _MSC_VER

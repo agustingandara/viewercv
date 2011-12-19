@@ -45,100 +45,100 @@ namespace cv {
 
 
 void write(FileStorage& fs, const string& objname, const vector<KeyPoint>& keypoints) {
-	WriteStructContext ws(fs, objname, CV_NODE_SEQ + CV_NODE_FLOW);
+    WriteStructContext ws(fs, objname, CV_NODE_SEQ + CV_NODE_FLOW);
 
-	int i, npoints = (int)keypoints.size();
-	for ( i = 0; i < npoints; i++ ) {
-		const KeyPoint& kpt = keypoints[i];
-		write(fs, kpt.pt.x);
-		write(fs, kpt.pt.y);
-		write(fs, kpt.size);
-		write(fs, kpt.angle);
-		write(fs, kpt.response);
-		write(fs, kpt.octave);
-		write(fs, kpt.class_id);
-	}
+    int i, npoints = (int)keypoints.size();
+    for (i = 0; i < npoints; i++) {
+        const KeyPoint& kpt = keypoints[i];
+        write(fs, kpt.pt.x);
+        write(fs, kpt.pt.y);
+        write(fs, kpt.size);
+        write(fs, kpt.angle);
+        write(fs, kpt.response);
+        write(fs, kpt.octave);
+        write(fs, kpt.class_id);
+    }
 }
 
 
 void read(const FileNode& node, vector<KeyPoint>& keypoints) {
-	keypoints.resize(0);
-	FileNodeIterator it = node.begin(), it_end = node.end();
-	for ( ; it != it_end; ) {
-		KeyPoint kpt;
-		it >> kpt.pt.x >> kpt.pt.y >> kpt.size >> kpt.angle >> kpt.response >> kpt.octave >> kpt.class_id;
-		keypoints.push_back(kpt);
-	}
+    keypoints.resize(0);
+    FileNodeIterator it = node.begin(), it_end = node.end();
+    for (; it != it_end;) {
+        KeyPoint kpt;
+        it >> kpt.pt.x >> kpt.pt.y >> kpt.size >> kpt.angle >> kpt.response >> kpt.octave >> kpt.class_id;
+        keypoints.push_back(kpt);
+    }
 }
 
 
 void KeyPoint::convert(const std::vector<KeyPoint>& keypoints, std::vector<Point2f>& points2f,
-					   const vector<int>& keypointIndexes) {
-	if ( keypointIndexes.empty() ) {
-		points2f.resize( keypoints.size() );
-		for ( size_t i = 0; i < keypoints.size(); i++ ) {
-			points2f[i] = keypoints[i].pt;
-		}
-	} else {
-		points2f.resize( keypointIndexes.size() );
-		for ( size_t i = 0; i < keypointIndexes.size(); i++ ) {
-			int idx = keypointIndexes[i];
-			if ( idx >= 0 ) {
-				points2f[i] = keypoints[idx].pt;
-			} else {
-				CV_Error( CV_StsBadArg, "keypointIndexes has element < 0. TODO: process this case" );
-				//points2f[i] = Point2f(-1, -1);
-			}
-		}
-	}
+                       const vector<int>& keypointIndexes) {
+    if (keypointIndexes.empty()) {
+        points2f.resize(keypoints.size());
+        for (size_t i = 0; i < keypoints.size(); i++) {
+            points2f[i] = keypoints[i].pt;
+        }
+    } else {
+        points2f.resize(keypointIndexes.size());
+        for (size_t i = 0; i < keypointIndexes.size(); i++) {
+            int idx = keypointIndexes[i];
+            if (idx >= 0) {
+                points2f[i] = keypoints[idx].pt;
+            } else {
+                CV_Error(CV_StsBadArg, "keypointIndexes has element < 0. TODO: process this case");
+                //points2f[i] = Point2f(-1, -1);
+            }
+        }
+    }
 }
 
-void KeyPoint::convert( const std::vector<Point2f>& points2f, std::vector<KeyPoint>& keypoints,
-						float size, float response, int octave, int class_id ) {
-	for ( size_t i = 0; i < points2f.size(); i++ ) {
-		keypoints[i] = KeyPoint(points2f[i], size, -1, response, octave, class_id);
-	}
+void KeyPoint::convert(const std::vector<Point2f>& points2f, std::vector<KeyPoint>& keypoints,
+                       float size, float response, int octave, int class_id) {
+    for (size_t i = 0; i < points2f.size(); i++) {
+        keypoints[i] = KeyPoint(points2f[i], size, -1, response, octave, class_id);
+    }
 }
 
-float KeyPoint::overlap( const KeyPoint& kp1, const KeyPoint& kp2 ) {
-	float a = kp1.size * 0.5f;
-	float b = kp2.size * 0.5f;
-	float a_2 = a * a;
-	float b_2 = b * b;
+float KeyPoint::overlap(const KeyPoint& kp1, const KeyPoint& kp2) {
+    float a = kp1.size * 0.5f;
+    float b = kp2.size * 0.5f;
+    float a_2 = a * a;
+    float b_2 = b * b;
 
-	Point2f p1 = kp1.pt;
-	Point2f p2 = kp2.pt;
-	float c = (float)norm( p1 - p2 );
+    Point2f p1 = kp1.pt;
+    Point2f p2 = kp2.pt;
+    float c = (float)norm(p1 - p2);
 
-	float ovrl = 0.f;
+    float ovrl = 0.f;
 
-	// one circle is completely encovered by the other => no intersection points!
-	if ( min( a, b ) + c <= max( a, b ) ) {
-		return min( a_2, b_2 ) / max( a_2, b_2 );
-	}
+    // one circle is completely encovered by the other => no intersection points!
+    if (min(a, b) + c <= max(a, b)) {
+        return min(a_2, b_2) / max(a_2, b_2);
+    }
 
-	if ( c < a + b ) { // circles intersect
-		float c_2 = c * c;
-		float cosAlpha = ( b_2 + c_2 - a_2 ) / ( kp2.size * c );
-		float cosBeta  = ( a_2 + c_2 - b_2 ) / ( kp1.size * c );
-		float alpha = acos( cosAlpha );
-		float beta = acos( cosBeta );
-		float sinAlpha = sin(alpha);
-		float sinBeta  = sin(beta);
+    if (c < a + b) {   // circles intersect
+        float c_2 = c * c;
+        float cosAlpha = (b_2 + c_2 - a_2) / (kp2.size * c);
+        float cosBeta  = (a_2 + c_2 - b_2) / (kp1.size * c);
+        float alpha = acos(cosAlpha);
+        float beta = acos(cosBeta);
+        float sinAlpha = sin(alpha);
+        float sinBeta  = sin(beta);
 
-		float segmentAreaA = a_2 * beta;
-		float segmentAreaB = b_2 * alpha;
+        float segmentAreaA = a_2 * beta;
+        float segmentAreaB = b_2 * alpha;
 
-		float triangleAreaA = a_2 * sinBeta * cosBeta;
-		float triangleAreaB = b_2 * sinAlpha * cosAlpha;
+        float triangleAreaA = a_2 * sinBeta * cosBeta;
+        float triangleAreaB = b_2 * sinAlpha * cosAlpha;
 
-		float intersectionArea = segmentAreaA + segmentAreaB - triangleAreaA - triangleAreaB;
-		float unionArea = (a_2 + b_2) * (float)CV_PI - intersectionArea;
+        float intersectionArea = segmentAreaA + segmentAreaB - triangleAreaA - triangleAreaB;
+        float unionArea = (a_2 + b_2) * (float)CV_PI - intersectionArea;
 
-		ovrl = intersectionArea / unionArea;
-	}
+        ovrl = intersectionArea / unionArea;
+    }
 
-	return ovrl;
+    return ovrl;
 }
 
 }

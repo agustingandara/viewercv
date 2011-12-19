@@ -41,24 +41,24 @@ namespace cvflann {
 Logger logger;
 
 int Logger::log(int level, const char* fmt, ...) {
-	if (level > logLevel ) { return -1; }
+    if (level > logLevel) { return -1; }
 
-	int ret;
-	va_list arglist;
-	va_start(arglist, fmt);
-	ret = vfprintf(stream, fmt, arglist);
-	va_end(arglist);
+    int ret;
+    va_list arglist;
+    va_start(arglist, fmt);
+    ret = vfprintf(stream, fmt, arglist);
+    va_end(arglist);
 
-	return ret;
+    return ret;
 }
 
 int Logger::log(int level, const char* fmt, va_list arglist) {
-	if (level > logLevel ) { return -1; }
+    if (level > logLevel) { return -1; }
 
-	int ret;
-	ret = vfprintf(stream, fmt, arglist);
+    int ret;
+    ret = vfprintf(stream, fmt, arglist);
 
-	return ret;
+    return ret;
 }
 
 
