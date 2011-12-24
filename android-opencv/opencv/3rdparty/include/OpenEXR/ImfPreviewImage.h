@@ -49,78 +49,78 @@ namespace Imf {
 
 
 struct PreviewRgba {
-	unsigned char	r;	// Red, green and blue components of
-	unsigned char	g;	// the pixel's color; intensity is
-	unsigned char	b;	// proportional to pow (x/255, 2.2),
-	// where x is r, g, or b.
+    unsigned char	r;	// Red, green and blue components of
+    unsigned char	g;	// the pixel's color; intensity is
+    unsigned char	b;	// proportional to pow (x/255, 2.2),
+    // where x is r, g, or b.
 
-	unsigned char	a;	// The pixel's alpha; 0 == transparent,
-	// 255 == opaque.
+    unsigned char	a;	// The pixel's alpha; 0 == transparent,
+    // 255 == opaque.
 
-	PreviewRgba (unsigned char r = 0,
-				 unsigned char g = 0,
-				 unsigned char b = 0,
-				 unsigned char a = 255)
-		: r(r), g(g), b(b), a(a) {}
+    PreviewRgba(unsigned char r = 0,
+                unsigned char g = 0,
+                unsigned char b = 0,
+                unsigned char a = 255)
+        : r(r), g(g), b(b), a(a) {}
 };
 
 
 class PreviewImage {
 public:
 
-	//--------------------------------------------------------------------
-	// Constructor:
-	//
-	// PreviewImage(w,h,p) constructs a preview image with w by h pixels
-	// whose initial values are specified in pixel array p.  The x and y
-	// coordinates of the pixels in p go from 0 to w-1, and from 0 to h-1.
-	// The pixel with coordinates (x, y) is at address p + y*w + x.
-	// Pixel (0, 0) is in the upper left corner of the preview image.
-	// If p is zero, the pixels in the preview image are initialized with
-	// (r = 0, b = 0, g = 0, a = 255).
-	//
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Constructor:
+    //
+    // PreviewImage(w,h,p) constructs a preview image with w by h pixels
+    // whose initial values are specified in pixel array p.  The x and y
+    // coordinates of the pixels in p go from 0 to w-1, and from 0 to h-1.
+    // The pixel with coordinates (x, y) is at address p + y*w + x.
+    // Pixel (0, 0) is in the upper left corner of the preview image.
+    // If p is zero, the pixels in the preview image are initialized with
+    // (r = 0, b = 0, g = 0, a = 255).
+    //
+    //--------------------------------------------------------------------
 
-	PreviewImage (unsigned int width = 0,
-				  unsigned int height = 0,
-				  const PreviewRgba pixels[] = 0);
+    PreviewImage(unsigned int width = 0,
+                 unsigned int height = 0,
+                 const PreviewRgba pixels[] = 0);
 
-	//-----------------------------------------------------
-	// Copy constructor, destructor and assignment operator
-	//-----------------------------------------------------
+    //-----------------------------------------------------
+    // Copy constructor, destructor and assignment operator
+    //-----------------------------------------------------
 
-	PreviewImage (const PreviewImage& other);
-	~PreviewImage ();
+    PreviewImage(const PreviewImage& other);
+    ~PreviewImage();
 
-	PreviewImage& 	operator = (const PreviewImage& other);
-
-
-	//-----------------------------------------------
-	// Access to width, height and to the pixel array
-	//-----------------------------------------------
-
-	unsigned int	width () const	{return _width;}
-	unsigned int	height () const	{return _height;}
-
-	PreviewRgba* 	pixels ()	{return _pixels;}
-	const PreviewRgba* 	pixels () const	{return _pixels;}
+    PreviewImage& 	operator = (const PreviewImage& other);
 
 
-	//----------------------------
-	// Access to individual pixels
-	//----------------------------
+    //-----------------------------------------------
+    // Access to width, height and to the pixel array
+    //-----------------------------------------------
 
-	PreviewRgba& 	pixel (unsigned int x, unsigned int y)
-	{return _pixels[y * _width + x];}
+    unsigned int	width() const	{return _width;}
+    unsigned int	height() const	{return _height;}
 
-	const PreviewRgba& 	pixel (unsigned int x, unsigned int y) const
-	{return _pixels[y * _width + x];}
+    PreviewRgba* 	pixels()	{return _pixels;}
+    const PreviewRgba* 	pixels() const	{return _pixels;}
+
+
+    //----------------------------
+    // Access to individual pixels
+    //----------------------------
+
+    PreviewRgba& 	pixel(unsigned int x, unsigned int y)
+    {return _pixels[y * _width + x];}
+
+    const PreviewRgba& 	pixel(unsigned int x, unsigned int y) const
+    {return _pixels[y * _width + x];}
 
 private:
 
-	unsigned int	_width;
-	unsigned int	_height;
-	PreviewRgba* 	_pixels;
+    unsigned int	_width;
+    unsigned int	_height;
+    PreviewRgba* 	_pixels;
 };
 
 

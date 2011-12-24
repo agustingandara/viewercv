@@ -58,48 +58,48 @@ namespace Imf {
 class OpaqueAttribute: public Attribute {
 public:
 
-	//----------------------------
-	// Constructors and destructor
-	//----------------------------
+    //----------------------------
+    // Constructors and destructor
+    //----------------------------
 
-	OpaqueAttribute (const char typeName[]);
-	OpaqueAttribute (const OpaqueAttribute& other);
-	virtual ~OpaqueAttribute ();
-
-
-	//-------------------------------
-	// Get this attribute's type name
-	//-------------------------------
-
-	virtual const char* 	typeName () const;
+    OpaqueAttribute(const char typeName[]);
+    OpaqueAttribute(const OpaqueAttribute& other);
+    virtual ~OpaqueAttribute();
 
 
-	//------------------------------
-	// Make a copy of this attribute
-	//------------------------------
+    //-------------------------------
+    // Get this attribute's type name
+    //-------------------------------
 
-	virtual Attribute* 		copy () const;
+    virtual const char* 	typeName() const;
 
 
-	//----------------
-	// I/O and copying
-	//----------------
+    //------------------------------
+    // Make a copy of this attribute
+    //------------------------------
 
-	virtual void		writeValueTo (OStream& os,
-									  int version) const;
+    virtual Attribute* 		copy() const;
 
-	virtual void		readValueFrom (IStream& is,
-									   int size,
-									   int version);
 
-	virtual void		copyValueFrom (const Attribute& other);
+    //----------------
+    // I/O and copying
+    //----------------
+
+    virtual void		writeValueTo(OStream& os,
+                                     int version) const;
+
+    virtual void		readValueFrom(IStream& is,
+                                      int size,
+                                      int version);
+
+    virtual void		copyValueFrom(const Attribute& other);
 
 
 private:
 
-	Array<char>			_typeName;
-	long			_dataSize;
-	Array<char>			_data;
+    Array<char>			_typeName;
+    long			_dataSize;
+    Array<char>			_data;
 };
 
 

@@ -38,49 +38,49 @@ namespace cvflann {
 
 class LinearIndex : public NNIndex {
 
-	const Matrix<float> dataset;
+    const Matrix<float> dataset;
 
 public:
 
-	LinearIndex(const Matrix<float>& inputData, const LinearIndexParams& params = LinearIndexParams() ) : dataset(inputData) {
-	}
+    LinearIndex(const Matrix<float>& inputData, const LinearIndexParams& params = LinearIndexParams()) : dataset(inputData) {
+    }
 
-	flann_algorithm_t getType() const {
-		return LINEAR;
-	}
-
-
-	int size() const {
-		return dataset.rows;
-	}
-
-	int veclen() const {
-		return dataset.cols;
-	}
+    flann_algorithm_t getType() const {
+        return LINEAR;
+    }
 
 
-	int usedMemory() const {
-		return 0;
-	}
+    int size() const {
+        return dataset.rows;
+    }
 
-	void buildIndex() {
-		/* nothing to do here for linear search */
-	}
-
-	void saveIndex(FILE* /*stream*/) {
-		/* nothing to do here for linear search */
-	}
+    int veclen() const {
+        return dataset.cols;
+    }
 
 
-	void loadIndex(FILE* /*stream*/) {
-		/* nothing to do here for linear search */
-	}
+    int usedMemory() const {
+        return 0;
+    }
 
-	void findNeighbors(ResultSet& resultSet, const float* /*vec*/, const SearchParams& /*searchParams*/) {
-		for (int i = 0; i < dataset.rows; ++i) {
-			resultSet.addPoint(dataset[i], i);
-		}
-	}
+    void buildIndex() {
+        /* nothing to do here for linear search */
+    }
+
+    void saveIndex(FILE* /*stream*/) {
+        /* nothing to do here for linear search */
+    }
+
+
+    void loadIndex(FILE* /*stream*/) {
+        /* nothing to do here for linear search */
+    }
+
+    void findNeighbors(ResultSet& resultSet, const float* /*vec*/, const SearchParams& /*searchParams*/) {
+        for (int i = 0; i < dataset.rows; ++i) {
+            resultSet.addPoint(dataset[i], i);
+        }
+    }
 
 //    Params estimateSearchParams(float precision, Matrix<float>* testset = NULL)
 //    {

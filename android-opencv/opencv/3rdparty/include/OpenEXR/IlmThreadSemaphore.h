@@ -62,43 +62,43 @@ namespace IlmThread {
 class Semaphore {
 public:
 
-	Semaphore (unsigned int value = 0);
-	virtual ~Semaphore();
+    Semaphore(unsigned int value = 0);
+    virtual ~Semaphore();
 
-	void	wait();
-	void	post();
-	int		value() const;
+    void	wait();
+    void	post();
+    int		value() const;
 
 private:
 
 #if defined _WIN32 || defined _WIN64
 
-	mutable HANDLE _semaphore;
+    mutable HANDLE _semaphore;
 
 #elif HAVE_PTHREAD && !HAVE_POSIX_SEMAPHORES
 
-	//
-	// If the platform has Posix threads but no semapohores,
-	// then we implement them ourselves using condition variables
-	//
+    //
+    // If the platform has Posix threads but no semapohores,
+    // then we implement them ourselves using condition variables
+    //
 
-	struct sema_t {
-		unsigned int count;
-		unsigned long numWaiting;
-		pthread_mutex_t mutex;
-		pthread_cond_t nonZero;
-	};
+    struct sema_t {
+        unsigned int count;
+        unsigned long numWaiting;
+        pthread_mutex_t mutex;
+        pthread_cond_t nonZero;
+    };
 
-	mutable sema_t _semaphore;
+    mutable sema_t _semaphore;
 
 #elif HAVE_PTHREAD && HAVE_POSIX_SEMAPHORES
 
-	mutable sem_t _semaphore;
+    mutable sem_t _semaphore;
 
 #endif
 
-	void operator = (const Semaphore& s);	// not implemented
-	Semaphore (const Semaphore& s);		// not implemented
+    void operator = (const Semaphore& s);	// not implemented
+    Semaphore(const Semaphore& s);		// not implemented
 };
 
 

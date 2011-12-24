@@ -278,7 +278,7 @@ bool  PxMDecoder::readData(Mat& img) {
                             }
                         }
                     } else {
-                        memcpy(data, src, m_width * (bit_depth / 8));
+                        memcpy(data, src, m_width*(bit_depth / 8));
                     }
                 } else {
                     if (color) {
@@ -339,7 +339,7 @@ bool  PxMEncoder::write(const Mat& img, const vector<int>& params) {
 
     for (size_t i = 0; i < params.size(); i += 2)
         if (params[i] == CV_IMWRITE_PXM_BINARY) {
-            isBinary = params[i + 1] != 0;
+            isBinary = params[i+1] != 0;
         }
 
     WLByteStream strm;

@@ -189,7 +189,7 @@ static char* icvExtractPattern(const char* filename, unsigned* offset) {
         name = strdup(filename);
     } else { // no pattern filename was given - extract the pattern
         for (at = name; *at && !isdigit(*at); at++)
-            { ; }
+            ;
 
         if (!at) {
             return 0;
@@ -207,7 +207,7 @@ static char* icvExtractPattern(const char* filename, unsigned* offset) {
         int i;
         char* extension;
         for (i = 0, extension = at; isdigit(at[i]); i++, extension++)
-            { ; }
+            ;
         char places[10];
         sprintf(places, "%dd", i);
 

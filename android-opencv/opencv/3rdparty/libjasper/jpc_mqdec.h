@@ -87,32 +87,32 @@
 
 typedef struct {
 
-	/* The C register. */
-	uint_fast32_t creg;
+    /* The C register. */
+    uint_fast32_t creg;
 
-	/* The A register. */
-	uint_fast32_t areg;
+    /* The A register. */
+    uint_fast32_t areg;
 
-	/* The CT register. */
-	uint_fast32_t ctreg;
+    /* The CT register. */
+    uint_fast32_t ctreg;
 
-	/* The current context. */
-	jpc_mqstate_t** curctx;
+    /* The current context. */
+    jpc_mqstate_t** curctx;
 
-	/* The per-context information. */
-	jpc_mqstate_t** ctxs;
+    /* The per-context information. */
+    jpc_mqstate_t** ctxs;
 
-	/* The maximum number of contexts. */
-	int maxctxs;
+    /* The maximum number of contexts. */
+    int maxctxs;
 
-	/* The stream from which to read data. */
-	jas_stream_t* in;
+    /* The stream from which to read data. */
+    jas_stream_t* in;
 
-	/* The last character read. */
-	uchar inbuffer;
+    /* The last character read. */
+    uchar inbuffer;
 
-	/* The EOF indicator. */
-	int eof;
+    /* The EOF indicator. */
+    int eof;
 
 } jpc_mqdec_t;
 

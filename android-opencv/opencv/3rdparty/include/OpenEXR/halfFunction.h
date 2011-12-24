@@ -91,28 +91,28 @@ template <class T>
 class halfFunction {
 public:
 
-	//------------
-	// Constructor
-	//------------
+    //------------
+    // Constructor
+    //------------
 
-	template <class Function>
-	halfFunction (Function f,
-				  half domainMin = -HALF_MAX,
-				  half domainMax =  HALF_MAX,
-				  T defaultValue = 0,
-				  T posInfValue  = 0,
-				  T negInfValue  = 0,
-				  T nanValue     = 0);
+    template <class Function>
+    halfFunction(Function f,
+                 half domainMin = -HALF_MAX,
+                 half domainMax =  HALF_MAX,
+                 T defaultValue = 0,
+                 T posInfValue  = 0,
+                 T negInfValue  = 0,
+                 T nanValue     = 0);
 
-	//-----------
-	// Evaluation
-	//-----------
+    //-----------
+    // Evaluation
+    //-----------
 
-	T		operator () (half x) const;
+    T		operator()(half x) const;
 
 private:
 
-	T		_lut[1 << 16];
+    T		_lut[1 << 16];
 };
 
 
@@ -122,34 +122,34 @@ private:
 
 template <class T>
 template <class Function>
-halfFunction<T>::halfFunction (Function f,
-							   half domainMin,
-							   half domainMax,
-							   T defaultValue,
-							   T posInfValue,
-							   T negInfValue,
-							   T nanValue) {
-	for (int i = 0; i < (1 << 16); i++) {
-		half x;
-		x.setBits (i);
+halfFunction<T>::halfFunction(Function f,
+                              half domainMin,
+                              half domainMax,
+                              T defaultValue,
+                              T posInfValue,
+                              T negInfValue,
+                              T nanValue) {
+    for (int i = 0; i < (1 << 16); i++) {
+        half x;
+        x.setBits(i);
 
-		if (x.isNan()) {
-			_lut[i] = nanValue;
-		} else if (x.isInfinity()) {
-			_lut[i] = x.isNegative() ? negInfValue : posInfValue;
-		} else if (x < domainMin || x > domainMax) {
-			_lut[i] = defaultValue;
-		} else {
-			_lut[i] = f (x);
-		}
-	}
+        if (x.isNan()) {
+            _lut[i] = nanValue;
+        } else if (x.isInfinity()) {
+            _lut[i] = x.isNegative() ? negInfValue : posInfValue;
+        } else if (x < domainMin || x > domainMax) {
+            _lut[i] = defaultValue;
+        } else {
+            _lut[i] = f(x);
+        }
+    }
 }
 
 
 template <class T>
 inline T
-halfFunction<T>::operator () (half x) const {
-	return _lut[x.bits()];
+halfFunction<T>::operator()(half x) const {
+    return _lut[x.bits()];
 }
 
 

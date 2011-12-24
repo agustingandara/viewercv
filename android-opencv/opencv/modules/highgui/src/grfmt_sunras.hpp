@@ -48,15 +48,15 @@
 namespace cv {
 
 enum SunRasType {
-	RAS_OLD = 0,
-	RAS_STANDARD = 1,
-	RAS_BYTE_ENCODED = 2, /* RLE encoded */
-	RAS_FORMAT_RGB = 3    /* RGB instead of BGR */
+    RAS_OLD = 0,
+    RAS_STANDARD = 1,
+    RAS_BYTE_ENCODED = 2, /* RLE encoded */
+    RAS_FORMAT_RGB = 3    /* RGB instead of BGR */
 };
 
 enum SunRasMapType {
-	RMT_NONE = 0,       /* direct color encoding */
-	RMT_EQUAL_RGB = 1   /* paletted image */
+    RMT_NONE = 0,       /* direct color encoding */
+    RMT_EQUAL_RGB = 1   /* paletted image */
 };
 
 
@@ -64,35 +64,35 @@ enum SunRasMapType {
 class SunRasterDecoder : public BaseImageDecoder {
 public:
 
-	SunRasterDecoder();
-	virtual ~SunRasterDecoder();
+    SunRasterDecoder();
+    virtual ~SunRasterDecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
 
-	ImageDecoder newDecoder() const;
+    ImageDecoder newDecoder() const;
 
 protected:
 
-	RMByteStream    m_strm;
-	PaletteEntry    m_palette[256];
-	int             m_bpp;
-	int             m_offset;
-	SunRasType      m_encoding;
-	SunRasMapType   m_maptype;
-	int             m_maplength;
+    RMByteStream    m_strm;
+    PaletteEntry    m_palette[256];
+    int             m_bpp;
+    int             m_offset;
+    SunRasType      m_encoding;
+    SunRasMapType   m_maptype;
+    int             m_maplength;
 };
 
 
 class SunRasterEncoder : public BaseImageEncoder {
 public:
-	SunRasterEncoder();
-	virtual ~SunRasterEncoder();
+    SunRasterEncoder();
+    virtual ~SunRasterEncoder();
 
-	bool write( const Mat& img, const vector<int>& params );
+    bool write(const Mat& img, const vector<int>& params);
 
-	ImageEncoder newEncoder() const;
+    ImageEncoder newEncoder() const;
 };
 
 }

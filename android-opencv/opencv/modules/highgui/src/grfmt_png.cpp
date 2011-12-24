@@ -281,7 +281,7 @@ bool  PngEncoder::write(const Mat& img, const vector<int>& params) {
 
     for (size_t i = 0; i < params.size(); i += 2) {
         if (params[i] == CV_IMWRITE_PNG_COMPRESSION) {
-            compression_level = params[i + 1];
+            compression_level = params[i+1];
             compression_level = MIN(MAX(compression_level, 0), MAX_MEM_LEVEL);
         }
     }

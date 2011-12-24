@@ -483,7 +483,7 @@ bool  JpegEncoder::write(const Mat& img, const vector<int>& params) {
 
     for (size_t i = 0; i < params.size(); i += 2) {
         if (params[i] == CV_IMWRITE_JPEG_QUALITY) {
-            quality = params[i + 1];
+            quality = params[i+1];
             quality = MIN(MAX(quality, 0), 100);
         }
     }

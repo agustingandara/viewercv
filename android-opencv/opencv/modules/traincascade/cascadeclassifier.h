@@ -61,60 +61,60 @@
 
 class CvCascadeParams : public CvParams {
 public:
-	enum { BOOST = 0 };
-	static const int defaultStageType = BOOST;
-	static const int defaultFeatureType = CvFeatureParams::HAAR;
+    enum { BOOST = 0 };
+    static const int defaultStageType = BOOST;
+    static const int defaultFeatureType = CvFeatureParams::HAAR;
 
-	CvCascadeParams();
-	CvCascadeParams( int _stageType, int _featureType );
-	void write( FileStorage& fs ) const;
-	bool read( const FileNode& node );
+    CvCascadeParams();
+    CvCascadeParams(int _stageType, int _featureType);
+    void write(FileStorage& fs) const;
+    bool read(const FileNode& node);
 
-	void printDefaults() const;
-	void printAttrs() const;
-	bool scanAttr( const String prmName, const String val );
+    void printDefaults() const;
+    void printAttrs() const;
+    bool scanAttr(const String prmName, const String val);
 
-	int stageType;
-	int featureType;
-	Size winSize;
+    int stageType;
+    int featureType;
+    Size winSize;
 };
 
 class CvCascadeClassifier {
 public:
-	bool train( const String _cascadeDirName,
-				const String _posFilename,
-				const String _negFilename,
-				int _numPos, int _numNeg,
-				int _precalcValBufSize, int _precalcIdxBufSize,
-				int _numStages,
-				const CvCascadeParams& _cascadeParams,
-				const CvFeatureParams& _featureParams,
-				const CvCascadeBoostParams& _stageParams,
-				bool baseFormatSave = false );
+    bool train(const String _cascadeDirName,
+               const String _posFilename,
+               const String _negFilename,
+               int _numPos, int _numNeg,
+               int _precalcValBufSize, int _precalcIdxBufSize,
+               int _numStages,
+               const CvCascadeParams& _cascadeParams,
+               const CvFeatureParams& _featureParams,
+               const CvCascadeBoostParams& _stageParams,
+               bool baseFormatSave = false);
 private:
-	int predict( int sampleIdx );
-	void save( const String cascadeDirName, bool baseFormat = false );
-	bool load( const String cascadeDirName );
-	bool updateTrainingSet( double& acceptanceRatio );
-	int fillPassedSamles( int first, int count, bool isPositive, int64& consumed );
+    int predict(int sampleIdx);
+    void save(const String cascadeDirName, bool baseFormat = false);
+    bool load(const String cascadeDirName);
+    bool updateTrainingSet(double& acceptanceRatio);
+    int fillPassedSamles(int first, int count, bool isPositive, int64& consumed);
 
-	void writeParams( FileStorage& fs ) const;
-	void writeStages( FileStorage& fs, const Mat& featureMap ) const;
-	void writeFeatures( FileStorage& fs, const Mat& featureMap ) const;
-	bool readParams( const FileNode& node );
-	bool readStages( const FileNode& node );
+    void writeParams(FileStorage& fs) const;
+    void writeStages(FileStorage& fs, const Mat& featureMap) const;
+    void writeFeatures(FileStorage& fs, const Mat& featureMap) const;
+    bool readParams(const FileNode& node);
+    bool readStages(const FileNode& node);
 
-	void getUsedFeaturesIdxMap( Mat& featureMap );
+    void getUsedFeaturesIdxMap(Mat& featureMap);
 
-	CvCascadeParams cascadeParams;
-	Ptr<CvFeatureParams> featureParams;
-	Ptr<CvCascadeBoostParams> stageParams;
+    CvCascadeParams cascadeParams;
+    Ptr<CvFeatureParams> featureParams;
+    Ptr<CvCascadeBoostParams> stageParams;
 
-	Ptr<CvFeatureEvaluator> featureEvaluator;
-	vector< Ptr<CvCascadeBoost> > stageClassifiers;
-	CvCascadeImageReader imgReader;
-	int numStages, curNumSamples;
-	int numPos, numNeg;
+    Ptr<CvFeatureEvaluator> featureEvaluator;
+    vector< Ptr<CvCascadeBoost> > stageClassifiers;
+    CvCascadeImageReader imgReader;
+    int numStages, curNumSamples;
+    int numPos, numNeg;
 };
 
 #endif

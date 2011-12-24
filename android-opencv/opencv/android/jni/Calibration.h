@@ -26,32 +26,32 @@
 
 
 class Calibration {
-	std::vector<cv::KeyPoint> keypoints;
+    std::vector<cv::KeyPoint> keypoints;
 
-	vector<vector<Point2f> > imagepoints;
+    vector<vector<Point2f> > imagepoints;
 
-	cv::Mat K;
-	cv::Mat distortion;
-	cv::Size imgsize;
+    cv::Mat K;
+    cv::Mat distortion;
+    cv::Size imgsize;
 
 
 
 public:
 
-	cv::Size patternsize;
+    cv::Size patternsize;
 
-	Calibration();
-	virtual ~Calibration();
+    Calibration();
+    virtual ~Calibration();
 
-	bool detectAndDrawChessboard(int idx, image_pool* pool);
+    bool detectAndDrawChessboard(int idx, image_pool* pool);
 
-	void resetChess();
+    void resetChess();
 
-	int getNumberDetectedChessboards();
+    int getNumberDetectedChessboards();
 
-	void calibrate(const char* filename);
+    void calibrate(const char* filename);
 
-	void drawText(int idx, image_pool* pool, const char* text);
+    void drawText(int idx, image_pool* pool, const char* text);
 };
 
 

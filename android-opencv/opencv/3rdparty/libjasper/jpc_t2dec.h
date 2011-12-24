@@ -87,7 +87,7 @@
 
 /* Decode the packets for a tile-part. */
 int jpc_dec_decodepkts(jpc_dec_t* dec, jas_stream_t* pkthdrstream,
-					   jas_stream_t* in);
+                       jas_stream_t* in);
 
 /* Create a packet iterator for the decoder. */
 jpc_pi_t* jpc_dec_pi_create(jpc_dec_t* dec, jpc_dec_tile_t* tile);

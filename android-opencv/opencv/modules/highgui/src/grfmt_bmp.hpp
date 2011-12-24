@@ -48,10 +48,10 @@
 namespace cv {
 
 enum BmpCompression {
-	BMP_RGB = 0,
-	BMP_RLE8 = 1,
-	BMP_RLE4 = 2,
-	BMP_BITFIELDS = 3
+    BMP_RGB = 0,
+    BMP_RLE8 = 1,
+    BMP_RLE4 = 2,
+    BMP_BITFIELDS = 3
 };
 
 
@@ -59,34 +59,34 @@ enum BmpCompression {
 class BmpDecoder : public BaseImageDecoder {
 public:
 
-	BmpDecoder();
-	~BmpDecoder();
+    BmpDecoder();
+    ~BmpDecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
 
-	ImageDecoder newDecoder() const;
+    ImageDecoder newDecoder() const;
 
 protected:
 
-	RLByteStream    m_strm;
-	PaletteEntry    m_palette[256];
-	int             m_bpp;
-	int             m_offset;
-	BmpCompression  m_rle_code;
+    RLByteStream    m_strm;
+    PaletteEntry    m_palette[256];
+    int             m_bpp;
+    int             m_offset;
+    BmpCompression  m_rle_code;
 };
 
 
 // ... writer
 class BmpEncoder : public BaseImageEncoder {
 public:
-	BmpEncoder();
-	~BmpEncoder();
+    BmpEncoder();
+    ~BmpEncoder();
 
-	bool  write( const Mat& img, const vector<int>& params );
+    bool  write(const Mat& img, const vector<int>& params);
 
-	ImageEncoder newEncoder() const;
+    ImageEncoder newEncoder() const;
 };
 
 }

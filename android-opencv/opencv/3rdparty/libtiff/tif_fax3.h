@@ -60,7 +60,7 @@ typedef	void (*TIFFFaxFillFunc)(unsigned char*, uint32*, uint32*, uint32);
 #if defined(__cplusplus)
 extern "C" {
 #endif
-	extern	void _TIFFFax3fillruns(unsigned char*, uint32*, uint32*, uint32);
+    extern	void _TIFFFax3fillruns(unsigned char*, uint32*, uint32*, uint32);
 #if defined(__cplusplus)
 }
 #endif
@@ -82,9 +82,9 @@ extern "C" {
 #define S_EOL		12
 
 typedef struct {		/* state table entry */
-	unsigned char State;	/* see above */
-	unsigned char Width;	/* width of code in bits */
-	uint32	Param;		/* unsigned 32-bit run length in bits */
+    unsigned char State;	/* see above */
+    unsigned char Width;	/* width of code in bits */
+    uint32	Param;		/* unsigned 32-bit run length in bits */
 } TIFFFaxTabEnt;
 
 extern	const TIFFFaxTabEnt TIFFFaxMainTable[];
@@ -177,19 +177,19 @@ extern	const TIFFFaxTabEnt TIFFFaxBlackTable[];
 
 #ifdef FAX3_DEBUG
 static const char* StateNames[] = {
-	"Null   ",
-	"Pass   ",
-	"Horiz  ",
-	"V0     ",
-	"VR     ",
-	"VL     ",
-	"Ext    ",
-	"TermW  ",
-	"TermB  ",
-	"MakeUpW",
-	"MakeUpB",
-	"MakeUp ",
-	"EOL    ",
+    "Null   ",
+    "Pass   ",
+    "Horiz  ",
+    "V0     ",
+    "VR     ",
+    "VL     ",
+    "Ext    ",
+    "TermW  ",
+    "TermB  ",
+    "MakeUpW",
+    "MakeUpB",
+    "MakeUp ",
+    "EOL    ",
 };
 #define DEBUG_SHOW putchar(BitAcc & (1 << t) ? '1' : '0')
 #define LOOKUP8(wid,tab,eoflab) do {					\

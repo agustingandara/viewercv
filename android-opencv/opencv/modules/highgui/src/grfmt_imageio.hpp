@@ -19,31 +19,31 @@ namespace cv {
 class ImageIODecoder : public BaseImageDecoder {
 public:
 
-	ImageIODecoder();
-	~ImageIODecoder();
+    ImageIODecoder();
+    ~ImageIODecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
 
-	size_t signatureLength() const;
-	bool checkSignature( const string& signature ) const;
+    size_t signatureLength() const;
+    bool checkSignature(const string& signature) const;
 
-	ImageDecoder newDecoder() const;
+    ImageDecoder newDecoder() const;
 
 protected:
 
-	CGImageRef imageRef;
+    CGImageRef imageRef;
 };
 
 class ImageIOEncoder : public BaseImageEncoder {
 public:
-	ImageIOEncoder();
-	~ImageIOEncoder();
+    ImageIOEncoder();
+    ~ImageIOEncoder();
 
-	bool  write( const Mat& img, const vector<int>& params );
+    bool  write(const Mat& img, const vector<int>& params);
 
-	ImageEncoder newEncoder() const;
+    ImageEncoder newEncoder() const;
 };
 
 }

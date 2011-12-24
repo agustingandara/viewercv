@@ -119,7 +119,7 @@
 #define	JP2_JP_LEN		12
 
 typedef struct {
-	uint_fast32_t magic;
+    uint_fast32_t magic;
 } jp2_jp_t;
 
 /* FTYP box data. */
@@ -130,10 +130,10 @@ typedef struct {
 #define	JP2_FTYP_COMPATCODE		JP2_FTYP_MAJVER
 
 typedef struct {
-	uint_fast32_t majver;
-	uint_fast32_t minver;
-	uint_fast32_t numcompatcodes;
-	uint_fast32_t compatcodes[JP2_FTYP_MAXCOMPATCODES];
+    uint_fast32_t majver;
+    uint_fast32_t minver;
+    uint_fast32_t numcompatcodes;
+    uint_fast32_t compatcodes[JP2_FTYP_MAXCOMPATCODES];
 } jp2_ftyp_t;
 
 /* IHDR box data. */
@@ -142,20 +142,20 @@ typedef struct {
 #define	JP2_IHDR_BPCNULL	255
 
 typedef struct {
-	uint_fast32_t width;
-	uint_fast32_t height;
-	uint_fast16_t numcmpts;
-	uint_fast8_t bpc;
-	uint_fast8_t comptype;
-	uint_fast8_t csunk;
-	uint_fast8_t ipr;
+    uint_fast32_t width;
+    uint_fast32_t height;
+    uint_fast16_t numcmpts;
+    uint_fast8_t bpc;
+    uint_fast8_t comptype;
+    uint_fast8_t csunk;
+    uint_fast8_t ipr;
 } jp2_ihdr_t;
 
 /* BPCC box data. */
 
 typedef struct {
-	uint_fast16_t numcmpts;
-	uint_fast8_t* bpcs;
+    uint_fast16_t numcmpts;
+    uint_fast8_t* bpcs;
 } jp2_bpcc_t;
 
 /* COLR box data. */
@@ -169,22 +169,22 @@ typedef struct {
 #define	JP2_COLR_SYCC	18
 
 typedef struct {
-	uint_fast8_t method;
-	uint_fast8_t pri;
-	uint_fast8_t approx;
-	uint_fast32_t csid;
-	uint_fast8_t* iccp;
-	int iccplen;
-	/* XXX - Someday we ought to add ICC profile data here. */
+    uint_fast8_t method;
+    uint_fast8_t pri;
+    uint_fast8_t approx;
+    uint_fast32_t csid;
+    uint_fast8_t* iccp;
+    int iccplen;
+    /* XXX - Someday we ought to add ICC profile data here. */
 } jp2_colr_t;
 
 /* PCLR box data. */
 
 typedef struct {
-	uint_fast16_t numlutents;
-	uint_fast8_t numchans;
-	int_fast32_t* lutdata;
-	uint_fast8_t* bpc;
+    uint_fast16_t numlutents;
+    uint_fast8_t numchans;
+    int_fast32_t* lutdata;
+    uint_fast8_t* bpc;
 } jp2_pclr_t;
 
 /* CDEF box per-channel data. */
@@ -206,27 +206,27 @@ typedef struct {
 #define	JP2_CDEF_ASOC_NONE	65535
 
 typedef struct {
-	uint_fast16_t channo;
-	uint_fast16_t type;
-	uint_fast16_t assoc;
+    uint_fast16_t channo;
+    uint_fast16_t type;
+    uint_fast16_t assoc;
 } jp2_cdefchan_t;
 
 /* CDEF box data. */
 
 typedef struct {
-	uint_fast16_t numchans;
-	jp2_cdefchan_t* ents;
+    uint_fast16_t numchans;
+    jp2_cdefchan_t* ents;
 } jp2_cdef_t;
 
 typedef struct {
-	uint_fast16_t cmptno;
-	uint_fast8_t map;
-	uint_fast8_t pcol;
+    uint_fast16_t cmptno;
+    uint_fast8_t map;
+    uint_fast8_t pcol;
 } jp2_cmapent_t;
 
 typedef struct {
-	uint_fast16_t numchans;
-	jp2_cmapent_t* ents;
+    uint_fast16_t numchans;
+    jp2_cmapent_t* ents;
 } jp2_cmap_t;
 
 #define	JP2_CMAP_DIRECT		0
@@ -237,36 +237,36 @@ typedef struct {
 struct jp2_boxops_s;
 typedef struct {
 
-	struct jp2_boxops_s* ops;
-	struct jp2_boxinfo_s* info;
+    struct jp2_boxops_s* ops;
+    struct jp2_boxinfo_s* info;
 
-	uint_fast32_t type;
+    uint_fast32_t type;
 
-	/* The length of the box including the (variable-length) header. */
-	uint_fast32_t len;
+    /* The length of the box including the (variable-length) header. */
+    uint_fast32_t len;
 
-	/* The length of the box data. */
-	uint_fast32_t datalen;
+    /* The length of the box data. */
+    uint_fast32_t datalen;
 
-	union {
-		jp2_jp_t jp;
-		jp2_ftyp_t ftyp;
-		jp2_ihdr_t ihdr;
-		jp2_bpcc_t bpcc;
-		jp2_colr_t colr;
-		jp2_pclr_t pclr;
-		jp2_cdef_t cdef;
-		jp2_cmap_t cmap;
-	} data;
+    union {
+        jp2_jp_t jp;
+        jp2_ftyp_t ftyp;
+        jp2_ihdr_t ihdr;
+        jp2_bpcc_t bpcc;
+        jp2_colr_t colr;
+        jp2_pclr_t pclr;
+        jp2_cdef_t cdef;
+        jp2_cmap_t cmap;
+    } data;
 
 } jp2_box_t;
 
 typedef struct jp2_boxops_s {
-	void (*init)(jp2_box_t* box);
-	void (*destroy)(jp2_box_t* box);
-	int (*getdata)(jp2_box_t* box, jas_stream_t* in);
-	int (*putdata)(jp2_box_t* box, jas_stream_t* out);
-	void (*dumpdata)(jp2_box_t* box, FILE* out);
+    void (*init)(jp2_box_t* box);
+    void (*destroy)(jp2_box_t* box);
+    int (*getdata)(jp2_box_t* box, jas_stream_t* in);
+    int (*putdata)(jp2_box_t* box, jas_stream_t* out);
+    void (*dumpdata)(jp2_box_t* box, FILE* out);
 } jp2_boxops_t;
 
 /******************************************************************************\
@@ -274,10 +274,10 @@ typedef struct jp2_boxops_s {
 \******************************************************************************/
 
 typedef struct jp2_boxinfo_s {
-	int type;
-	char* name;
-	int flags;
-	jp2_boxops_t ops;
+    int type;
+    char* name;
+    int flags;
+    jp2_boxops_t ops;
 } jp2_boxinfo_t;
 
 /******************************************************************************\

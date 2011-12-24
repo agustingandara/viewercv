@@ -501,10 +501,10 @@ bool CvCaptureCAM_DC1394_v2_CPP::grabFrame() {
                 maps[0][1] = cvCreateImage(size, IPL_DEPTH_16S, 1);
                 maps[1][0] = cvCreateImage(size, IPL_DEPTH_16S, 2);
                 maps[1][1] = cvCreateImage(size, IPL_DEPTH_16S, 1);
-                char buf[4 * 4096];
+                char buf[4*4096];
                 if (getVidereCalibrationInfo(buf, (int)sizeof(buf)) &&
                         initVidereRectifyMaps(buf, maps[0], maps[1]))
-                    { ; }
+                    ;
                 else {
                     rectify = false;
                 }
@@ -598,9 +598,9 @@ bool CvCaptureCAM_DC1394_v2_CPP::getVidereCalibrationInfo(char* buf, int bufSize
             break;
         }
         buf[pos] = (uchar)(quad >> 24);
-        buf[pos + 1] = (uchar)(quad >> 16);
-        buf[pos + 2] = (uchar)(quad >> 8);
-        buf[pos + 3] = (uchar)(quad);
+        buf[pos+1] = (uchar)(quad >> 16);
+        buf[pos+2] = (uchar)(quad >> 8);
+        buf[pos+3] = (uchar)(quad);
     }
 
     if (pos == 0) {

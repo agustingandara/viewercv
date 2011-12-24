@@ -55,37 +55,37 @@ namespace cv {
 
 enum { WINDOW_AUTOSIZE = 1 };
 
-CV_EXPORTS void namedWindow( const string& winname, int flags CV_DEFAULT(WINDOW_AUTOSIZE) );
-CV_EXPORTS void destroyWindow( const string& winname );
+CV_EXPORTS void namedWindow(const string& winname, int flags CV_DEFAULT(WINDOW_AUTOSIZE));
+CV_EXPORTS void destroyWindow(const string& winname);
 CV_EXPORTS int startWindowThread();
 
 CV_EXPORTS void setWindowProperty(const string& winname, int prop_id, double prop_value);//YV
 CV_EXPORTS double getWindowProperty(const string& winname, int prop_id);//YV
 
-CV_EXPORTS void imshow( const string& winname, const Mat& mat );
+CV_EXPORTS void imshow(const string& winname, const Mat& mat);
 
 typedef void (CV_CDECL* TrackbarCallback)(int pos, void* userdata);
 
-CV_EXPORTS int createTrackbar( const string& trackbarname, const string& winname,
-							   int* value, int count,
-							   TrackbarCallback onChange CV_DEFAULT(0),
-							   void* userdata CV_DEFAULT(0));
+CV_EXPORTS int createTrackbar(const string& trackbarname, const string& winname,
+                              int* value, int count,
+                              TrackbarCallback onChange CV_DEFAULT(0),
+                              void* userdata CV_DEFAULT(0));
 
-CV_EXPORTS int getTrackbarPos( const string& trackbarname, const string& winname );
-CV_EXPORTS void setTrackbarPos( const string& trackbarname, const string& winname, int pos );
+CV_EXPORTS int getTrackbarPos(const string& trackbarname, const string& winname);
+CV_EXPORTS void setTrackbarPos(const string& trackbarname, const string& winname, int pos);
 
-typedef void (*MouseCallback )(int event, int x, int y, int flags, void* param);
+typedef void (*MouseCallback)(int event, int x, int y, int flags, void* param);
 
 //! assigns callback for mouse events
-CV_EXPORTS void setMouseCallback( const string& windowName, MouseCallback onMouse, void* param = 0);
+CV_EXPORTS void setMouseCallback(const string& windowName, MouseCallback onMouse, void* param = 0);
 
-CV_EXPORTS Mat imread( const string& filename, int flags = 1 );
-CV_EXPORTS bool imwrite( const string& filename, const Mat& img,
-						 const vector<int>& params = vector<int>());
-CV_EXPORTS Mat imdecode( const Mat& buf, int flags );
-CV_EXPORTS bool imencode( const string& ext, const Mat& img,
-						  vector<uchar>& buf,
-						  const vector<int>& params = vector<int>());
+CV_EXPORTS Mat imread(const string& filename, int flags = 1);
+CV_EXPORTS bool imwrite(const string& filename, const Mat& img,
+                        const vector<int>& params = vector<int>());
+CV_EXPORTS Mat imdecode(const Mat& buf, int flags);
+CV_EXPORTS bool imencode(const string& ext, const Mat& img,
+                         vector<uchar>& buf,
+                         const vector<int>& params = vector<int>());
 
 CV_EXPORTS int waitKey(int delay = 0);
 
@@ -96,40 +96,40 @@ template<> void CV_EXPORTS Ptr<CvVideoWriter>::delete_obj();
 
 class CV_EXPORTS VideoCapture {
 public:
-	VideoCapture();
-	VideoCapture(const string& filename);
-	VideoCapture(int device);
+    VideoCapture();
+    VideoCapture(const string& filename);
+    VideoCapture(int device);
 
-	virtual ~VideoCapture();
-	virtual bool open(const string& filename);
-	virtual bool open(int device);
-	virtual bool isOpened() const;
-	virtual void release();
+    virtual ~VideoCapture();
+    virtual bool open(const string& filename);
+    virtual bool open(int device);
+    virtual bool isOpened() const;
+    virtual void release();
 
-	virtual bool grab();
-	virtual bool retrieve(Mat& image, int channel = 0);
-	virtual VideoCapture& operator >> (Mat& image);
+    virtual bool grab();
+    virtual bool retrieve(Mat& image, int channel = 0);
+    virtual VideoCapture& operator >> (Mat& image);
 
-	virtual bool set(int propId, double value);
-	virtual double get(int propId);
+    virtual bool set(int propId, double value);
+    virtual double get(int propId);
 
 protected:
-	Ptr<CvCapture> cap;
+    Ptr<CvCapture> cap;
 };
 
 
 class CV_EXPORTS VideoWriter {
 public:
-	VideoWriter();
-	VideoWriter(const string& filename, int fourcc, double fps, Size frameSize, bool isColor = true);
+    VideoWriter();
+    VideoWriter(const string& filename, int fourcc, double fps, Size frameSize, bool isColor = true);
 
-	virtual ~VideoWriter();
-	virtual bool open(const string& filename, int fourcc, double fps, Size frameSize, bool isColor = true);
-	virtual bool isOpened() const;
-	virtual VideoWriter& operator << (const Mat& image);
+    virtual ~VideoWriter();
+    virtual bool open(const string& filename, int fourcc, double fps, Size frameSize, bool isColor = true);
+    virtual bool isOpened() const;
+    virtual VideoWriter& operator << (const Mat& image);
 
 protected:
-	Ptr<CvVideoWriter> writer;
+    Ptr<CvVideoWriter> writer;
 };
 
 #endif

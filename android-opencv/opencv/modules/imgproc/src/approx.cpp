@@ -608,7 +608,7 @@ icvApproxPolyDP(CvSeq* src_contour, int header_size,
         dx = end_pt.x - start_pt.x;
         dy = end_pt.y - start_pt.y;
         dist = abs((pt.x - start_pt.x) * dy - (pt.y - start_pt.y) * dx);
-        if (dist* dist <= 0.5 * eps * (dx * dx + dy * dy) && dx != 0 && dy != 0) {
+        if (dist* dist <= 0.5 * eps*(dx * dx + dy * dy) && dx != 0 && dy != 0) {
             new_count--;
             *((PT*)reader2.ptr) = start_pt = end_pt;
             CV_NEXT_SEQ_ELEM(sizeof(pt), reader2);

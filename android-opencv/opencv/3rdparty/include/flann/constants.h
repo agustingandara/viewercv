@@ -36,33 +36,33 @@ const double FLANN_VERSION = 1.20;
 
 /* Nearest neighbor index algorithms */
 enum flann_algorithm_t {
-	LINEAR = 0,
-	KDTREE = 1,
-	KMEANS = 2,
-	COMPOSITE = 3,
-	SAVED = 254,
-	AUTOTUNED = 255,
+    LINEAR = 0,
+    KDTREE = 1,
+    KMEANS = 2,
+    COMPOSITE = 3,
+    SAVED = 254,
+    AUTOTUNED = 255,
 };
 
 enum flann_centers_init_t {
-	CENTERS_RANDOM = 0,
-	CENTERS_GONZALES = 1,
-	CENTERS_KMEANSPP = 2
+    CENTERS_RANDOM = 0,
+    CENTERS_GONZALES = 1,
+    CENTERS_KMEANSPP = 2
 };
 
 
 enum flann_log_level_t {
-	LOG_NONE = 0,
-	LOG_FATAL = 1,
-	LOG_ERROR = 2,
-	LOG_WARN = 3,
-	LOG_INFO = 4
+    LOG_NONE = 0,
+    LOG_FATAL = 1,
+    LOG_ERROR = 2,
+    LOG_WARN = 3,
+    LOG_INFO = 4
 };
 
 enum flann_distance_t {
-	EUCLIDEAN = 1,
-	MANHATTAN = 2,
-	MINKOWSKI = 3
+    EUCLIDEAN = 1,
+    MANHATTAN = 2,
+    MINKOWSKI = 3
 };
 
 #endif  // CONSTANTS_H

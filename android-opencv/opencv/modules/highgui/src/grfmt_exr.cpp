@@ -390,11 +390,11 @@ void  ExrDecoder::UpSampleY(uchar* data, int xstep, int ystep, int ysample) {
         for (int x = 0; x < m_width; x++) {
             for (int i = 1; i < ysample; i++) {
                 if (!m_native_depth) {
-                    data[(yre + i) * ystep + x * xstep] = data[y * ystep + x * xstep];
+                    data[(yre + i) * ystep + x* xstep] = data[y * ystep + x * xstep];
                 } else if (m_type == FLOAT) {
-                    ((float*)data)[(yre + i) * ystep + x * xstep] = ((float*)data)[y * ystep + x * xstep];
+                    ((float*)data)[(yre + i) * ystep + x* xstep] = ((float*)data)[y * ystep + x * xstep];
                 } else {
-                    ((uint*)data)[(yre + i) * ystep + x * xstep] = ((uint*)data)[y * ystep + x * xstep];
+                    ((uint*)data)[(yre + i) * ystep + x* xstep] = ((uint*)data)[y * ystep + x * xstep];
                 }
             }
         }
@@ -429,22 +429,22 @@ void  ExrDecoder::ChromaToBGR(float* data, int numlines, int step) {
 
             if (!m_native_depth) {
                 int t = cvRound(b);
-                ((uchar*)data)[y * step + x * 3] = CV_CAST_8U(t);
+                ((uchar*)data)[y* step + x * 3] = CV_CAST_8U(t);
                 t = cvRound(Y);
-                ((uchar*)data)[y * step + x * 3 + 1] = CV_CAST_8U(t);
+                ((uchar*)data)[y* step + x * 3 + 1] = CV_CAST_8U(t);
                 t = cvRound(r);
-                ((uchar*)data)[y * step + x * 3 + 2] = CV_CAST_8U(t);
+                ((uchar*)data)[y* step + x * 3 + 2] = CV_CAST_8U(t);
             } else if (m_type == FLOAT) {
-                data[y * step + x * 3] = (float)b;
-                data[y * step + x * 3 + 1] = (float)Y;
-                data[y * step + x * 3 + 2] = (float)r;
+                data[y* step + x * 3] = (float)b;
+                data[y* step + x * 3 + 1] = (float)Y;
+                data[y* step + x * 3 + 2] = (float)r;
             } else {
                 int t = cvRound(b);
-                ((uint*)data)[y * step + x * 3] = (uint)MAX(t, 0);
+                ((uint*)data)[y* step + x * 3] = (uint)MAX(t, 0);
                 t = cvRound(Y);
-                ((uint*)data)[y * step + x * 3 + 1] = (uint)MAX(t, 0);
+                ((uint*)data)[y* step + x * 3 + 1] = (uint)MAX(t, 0);
                 t = cvRound(r);
-                ((uint*)data)[y * step + x * 3 + 2] = (uint)MAX(t, 0);
+                ((uint*)data)[y* step + x * 3 + 2] = (uint)MAX(t, 0);
             }
         }
     }

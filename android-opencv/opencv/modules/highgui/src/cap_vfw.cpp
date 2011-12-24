@@ -639,7 +639,7 @@ bool CvVideoWriter_VFW::writeFrame(const IplImage* image) {
     if (image->nChannels != tempFrame->nChannels ||
             image->depth != tempFrame->depth ||
             image->origin == 0 ||
-            image->widthStep != cvAlign(image->width * image->nChannels * ((image->depth & 255) / 8), 4)) {
+            image->widthStep != cvAlign(image->width * image->nChannels*((image->depth & 255) / 8), 4)) {
         cvConvertImage(image, tempFrame, image->origin == 0 ? CV_CVTIMG_FLIP : 0);
         image = (const IplImage*)tempFrame;
     }

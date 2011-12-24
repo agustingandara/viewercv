@@ -536,7 +536,7 @@ void KeyPointCollection::add(const Mat& _image, const vector<KeyPoint>& _points)
 
 KeyPoint KeyPointCollection::getKeyPoint(int index) const {
     size_t i = 0;
-    for (; i < startIndices.size() && startIndices[i] <= index; i++) { ; }
+    for (; i < startIndices.size() && startIndices[i] <= index; i++);
     i--;
     assert(i < startIndices.size() && (size_t)index - startIndices[i] < points[i].size());
 

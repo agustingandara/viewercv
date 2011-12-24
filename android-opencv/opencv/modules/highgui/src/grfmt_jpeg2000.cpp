@@ -269,30 +269,30 @@ bool  Jpeg2KDecoder::readComponent8u(uchar* data, void* _buffer,
             if (maxval == 256 && offset == 0)
                 for (x = 0; x < xend - xstart; x++) {
                     int pix = pix_row[x];
-                    dst[x * ncmpts] = CV_CAST_8U(pix);
+                    dst[x* ncmpts] = CV_CAST_8U(pix);
                 }
             else
                 for (x = 0; x < xend - xstart; x++) {
                     int pix = ((pix_row[x] + delta) >> rshift) << lshift;
-                    dst[x * ncmpts] = CV_CAST_8U(pix);
+                    dst[x* ncmpts] = CV_CAST_8U(pix);
                 }
         } else if (xstep == 2 && offset == 0)
             for (x = 0, j = 0; x < xend - xstart; x += 2, j++) {
                 int pix = ((pix_row[j] + delta) >> rshift) << lshift;
-                dst[x * ncmpts] = dst[(x + 1) * ncmpts] = CV_CAST_8U(pix);
+                dst[x* ncmpts] = dst[(x+1)*ncmpts] = CV_CAST_8U(pix);
             }
         else
             for (x = 0, j = 0; x < xend - xstart; j++) {
                 int pix = ((pix_row[j] + delta) >> rshift) << lshift;
                 pix = CV_CAST_8U(pix);
                 for (x1 = x + xstep; x < x1; x++) {
-                    dst[x * ncmpts] = (uchar)pix;
+                    dst[x* ncmpts] = (uchar)pix;
                 }
             }
         y1 = y + ystep;
         for (++y; y < y1; y++, dst += step)
             for (x = 0; x < xend - xstart; x++) {
-                dst[x * ncmpts + step] = dst[x * ncmpts];
+                dst[x* ncmpts + step] = dst[x*ncmpts];
             }
     }
 
@@ -327,30 +327,30 @@ bool  Jpeg2KDecoder::readComponent16u(unsigned short* data, void* _buffer,
             if (maxval == 65536 && offset == 0)
                 for (x = 0; x < xend - xstart; x++) {
                     int pix = pix_row[x];
-                    dst[x * ncmpts] = CV_CAST_16U(pix);
+                    dst[x* ncmpts] = CV_CAST_16U(pix);
                 }
             else
                 for (x = 0; x < xend - xstart; x++) {
                     int pix = ((pix_row[x] + delta) >> rshift) << lshift;
-                    dst[x * ncmpts] = CV_CAST_16U(pix);
+                    dst[x* ncmpts] = CV_CAST_16U(pix);
                 }
         } else if (xstep == 2 && offset == 0)
             for (x = 0, j = 0; x < xend - xstart; x += 2, j++) {
                 int pix = ((pix_row[j] + delta) >> rshift) << lshift;
-                dst[x * ncmpts] = dst[(x + 1) * ncmpts] = CV_CAST_16U(pix);
+                dst[x* ncmpts] = dst[(x+1)*ncmpts] = CV_CAST_16U(pix);
             }
         else
             for (x = 0, j = 0; x < xend - xstart; j++) {
                 int pix = ((pix_row[j] + delta) >> rshift) << lshift;
                 pix = CV_CAST_16U(pix);
                 for (x1 = x + xstep; x < x1; x++) {
-                    dst[x * ncmpts] = (ushort)pix;
+                    dst[x* ncmpts] = (ushort)pix;
                 }
             }
         y1 = y + ystep;
         for (++y; y < y1; y++, dst += step)
             for (x = 0; x < xend - xstart; x++) {
-                dst[x * ncmpts + step] = dst[x * ncmpts];
+                dst[x* ncmpts + step] = dst[x*ncmpts];
             }
     }
 

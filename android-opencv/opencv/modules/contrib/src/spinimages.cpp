@@ -169,7 +169,7 @@ void initRotationMat(const Point3f& n, float out[9]) {
                       sin(pitch), 0,  cos(pitch)
                     };
 
-    double roll = atan2((double)n.y, n.x * pmat[3 * 2 + 0] + n.z * pmat[3 * 2 + 2]);
+    double roll = atan2((double)n.y, n.x * pmat[3*2+0] + n.z * pmat[3*2+2]);
 
     double rmat[] = { 1,     0,         0,
                       0, cos(roll), -sin(roll) ,
@@ -178,14 +178,14 @@ void initRotationMat(const Point3f& n, float out[9]) {
 
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j)
-            out[3 * i + j] = (float)(rmat[3 * i + 0] * pmat[3 * 0 + j] +
-                                     rmat[3 * i + 1] * pmat[3 * 1 + j] + rmat[3 * i + 2] * pmat[3 * 2 + j]);
+            out[3*i+j] = (float)(rmat[3*i+0] * pmat[3*0+j] +
+                                 rmat[3*i+1] * pmat[3*1+j] + rmat[3*i+2] * pmat[3*2+j]);
 }
 
 void transform(const Point3f& in, float matrix[9], Point3f& out) {
-    out.x = in.x * matrix[3 * 0 + 0] + in.y * matrix[3 * 0 + 1] + in.z * matrix[3 * 0 + 2];
-    out.y = in.x * matrix[3 * 1 + 0] + in.y * matrix[3 * 1 + 1] + in.z * matrix[3 * 1 + 2];
-    out.z = in.x * matrix[3 * 2 + 0] + in.y * matrix[3 * 2 + 1] + in.z * matrix[3 * 2 + 2];
+    out.x = in.x * matrix[3*0+0] + in.y * matrix[3*0+1] + in.z * matrix[3*0+2];
+    out.y = in.x * matrix[3*1+0] + in.y * matrix[3*1+1] + in.z * matrix[3*1+2];
+    out.z = in.x * matrix[3*2+0] + in.y * matrix[3*2+1] + in.z * matrix[3*2+2];
 }
 
 #if CV_SSE2
@@ -239,7 +239,7 @@ void computeSpinImages(const Octree& Octree, const vector<Point3f>& points, cons
     float searchRad = support * sqrt(5.f) / 2;  //  sqrt(sup*sup + (sup/2) * (sup/2) )
 
 #ifdef _OPENMP
-    #pragma omp parallel for num_threads(nthreads)
+#pragma omp parallel for num_threads(nthreads)
 #endif
     for (i = 0; i < (int)points_size; ++i) {
         if (mask[i] == 0) {
@@ -293,10 +293,10 @@ void computeSpinImages(const Octree& Octree, const vector<Point3f>& points, cons
             int CV_DECL_ALIGNED(16) o[4];
 
             for (; j <= inSphere_size - 5; j += 4) {
-                __m128 pt0 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j + 0])); // x0 y0 z0 .
-                __m128 pt1 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j + 1])); // x1 y1 z1 .
-                __m128 pt2 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j + 2])); // x2 y2 z2 .
-                __m128 pt3 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j + 3])); // x3 y3 z3 .
+                __m128 pt0 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j+0])); // x0 y0 z0 .
+                __m128 pt1 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j+1])); // x1 y1 z1 .
+                __m128 pt2 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j+2])); // x2 y2 z2 .
+                __m128 pt3 = transformSSE(rotmatSSE, _mm_loadu_ps((float*)&pointsInSphere[j+3])); // x3 y3 z3 .
 
                 __m128 z0 = _mm_unpackhi_ps(pt0, pt1); // z0 z1 . .
                 __m128 z1 = _mm_unpackhi_ps(pt2, pt3); // z2 z3 . .
@@ -405,7 +405,7 @@ void computeSpinImages(const Octree& Octree, const vector<Point3f>& points, cons
             cellptr[0] += 1 - f1 - f2 + f1f2;
             cellptr[1] += f2 - f1f2;
             cellptr[step] += f1 - f1f2;
-            cellptr[step + 1] += f1f2;
+            cellptr[step+1] += f1f2;
         }
         mask[i] = 1;
     }
@@ -737,7 +737,7 @@ Mat cv::SpinImageModel::packRandomScaledSpins(bool separateScale, size_t xCount,
     int sz = spins.front().cols;
 
     Mat result(yCount * sz + (yCount - 1), xCount * sz + (xCount - 1), CV_8UC3);
-    result = colors[(static_cast<int64>(cvGetTickCount() / cvGetTickFrequency()) / 1000) % colors_mum];
+    result = colors[(static_cast<int64>(cvGetTickCount()/cvGetTickFrequency())/1000) % colors_mum];
 
     size_t pos = 0;
     for (size_t y = 0; y < yCount; ++y)
@@ -979,7 +979,7 @@ void cv::SpinImageModel::match(const SpinImageModel& scene, vector< vector<Vec2i
             nonzero[i] = countNonZero(model.spinImages.row(i));
         }
         sort(nonzero, less<int>());
-        model.lambda = static_cast<float>(nonzero[ nonzero.size() / 2 ]) / 2;
+        model.lambda = static_cast<float>(nonzero[ nonzero.size()/2 ]) / 2;
     }
 
     TickMeter corr_timer;

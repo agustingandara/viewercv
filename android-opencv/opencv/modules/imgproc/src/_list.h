@@ -61,20 +61,20 @@ static const long default_size = 10;
 static const long default_inc_size = 10;
 
 struct _pos {
-	void* m_pos;
+    void* m_pos;
 #ifdef _DEBUG
-	struct _list* m_list;
+    struct _list* m_list;
 #endif /*_DEBUG*/
 };
 typedef struct _pos CVPOS;
 struct _list {
-	void* m_buffer;
-	void* m_first_buffer;
-	long m_buf_size; /* The size of the buffer */
-	long m_size; /* The number of elements */
-	CVPOS m_head;
-	CVPOS m_tail;
-	CVPOS m_head_free;
+    void* m_buffer;
+    void* m_first_buffer;
+    long m_buf_size; /* The size of the buffer */
+    long m_size; /* The number of elements */
+    CVPOS m_head;
+    CVPOS m_tail;
+    CVPOS m_head_free;
 };
 
 typedef struct _list _CVLIST;
@@ -360,11 +360,11 @@ int prefix##get_count_##type(_CVLIST* list)\
     IMPLEMENT_LIST(type, prefix)
 
 typedef struct __index {
-	int value;
-	float rho, theta;
+    int value;
+    float rho, theta;
 }
 _index;
 
-DECLARE_LIST( _index, h_ )
+DECLARE_LIST(_index, h_)
 
 #endif/*_CV_LIST_H_*/

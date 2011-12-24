@@ -61,7 +61,7 @@
 #if !defined WIN32 && !defined _WIN32
 #include "cvconfig.h"
 #else
-void  FillBitmapInfo( BITMAPINFO* bmi, int width, int height, int bpp, int origin );
+void  FillBitmapInfo(BITMAPINFO* bmi, int width, int height, int bpp, int origin);
 #endif
 
 /* Errors */
@@ -82,20 +82,20 @@ void  FillBitmapInfo( BITMAPINFO* bmi, int width, int height, int bpp, int origi
 /***************************** CvCapture structure ******************************/
 
 struct CvCapture {
-	virtual ~CvCapture() {}
-	virtual double getProperty(int) { return 0; }
-	virtual bool setProperty(int, double) { return 0; }
-	virtual bool grabFrame() { return true; }
-	virtual IplImage* retrieveFrame(int) { return 0; }
-	virtual IplImage* queryFrame() { return grabFrame() ? retrieveFrame(0) : 0; }
-	virtual int getCaptureDomain() { return CV_CAP_ANY; } // Return the type of the capture object: CV_CAP_VFW, etc...
+    virtual ~CvCapture() {}
+    virtual double getProperty(int) { return 0; }
+    virtual bool setProperty(int, double) { return 0; }
+    virtual bool grabFrame() { return true; }
+    virtual IplImage* retrieveFrame(int) { return 0; }
+    virtual IplImage* queryFrame() { return grabFrame() ? retrieveFrame(0) : 0; }
+    virtual int getCaptureDomain() { return CV_CAP_ANY; } // Return the type of the capture object: CV_CAP_VFW, etc...
 };
 
 /*************************** CvVideoWriter structure ****************************/
 
 struct CvVideoWriter {
-	virtual ~CvVideoWriter() {}
-	virtual bool writeFrame(const IplImage*) { return false; }
+    virtual ~CvVideoWriter() {}
+    virtual bool writeFrame(const IplImage*) { return false; }
 };
 
 #if defined WIN32 || defined _WIN32
@@ -113,20 +113,20 @@ struct CvVideoWriter {
 #endif
 
 
-CvCapture* cvCreateCameraCapture_V4L( int index );
-CvCapture* cvCreateCameraCapture_DC1394( int index );
-CvCapture* cvCreateCameraCapture_DC1394_2( int index );
-CvCapture* cvCreateCameraCapture_MIL( int index );
-CvCapture* cvCreateCameraCapture_CMU( int index );
-CV_IMPL CvCapture* cvCreateCameraCapture_TYZX( int index );
-CvCapture* cvCreateFileCapture_Win32( const char* filename );
-CvCapture* cvCreateCameraCapture_VFW( int index );
-CvCapture* cvCreateFileCapture_VFW( const char* filename );
-CvVideoWriter* cvCreateVideoWriter_Win32( const char* filename, int fourcc,
-		double fps, CvSize frameSize, int is_color );
-CvVideoWriter* cvCreateVideoWriter_VFW( const char* filename, int fourcc,
-										double fps, CvSize frameSize, int is_color );
-CvCapture* cvCreateCameraCapture_DShow( int index );
+CvCapture* cvCreateCameraCapture_V4L(int index);
+CvCapture* cvCreateCameraCapture_DC1394(int index);
+CvCapture* cvCreateCameraCapture_DC1394_2(int index);
+CvCapture* cvCreateCameraCapture_MIL(int index);
+CvCapture* cvCreateCameraCapture_CMU(int index);
+CV_IMPL CvCapture* cvCreateCameraCapture_TYZX(int index);
+CvCapture* cvCreateFileCapture_Win32(const char* filename);
+CvCapture* cvCreateCameraCapture_VFW(int index);
+CvCapture* cvCreateFileCapture_VFW(const char* filename);
+CvVideoWriter* cvCreateVideoWriter_Win32(const char* filename, int fourcc,
+        double fps, CvSize frameSize, int is_color);
+CvVideoWriter* cvCreateVideoWriter_VFW(const char* filename, int fourcc,
+                                       double fps, CvSize frameSize, int is_color);
+CvCapture* cvCreateCameraCapture_DShow(int index);
 
 CVAPI(int) cvHaveImageReader(const char* filename);
 CVAPI(int) cvHaveImageWriter(const char* filename);
@@ -134,7 +134,7 @@ CVAPI(int) cvHaveImageWriter(const char* filename);
 CvCapture* cvCreateFileCapture_Images(const char* filename);
 CvVideoWriter* cvCreateVideoWriter_Images(const char* filename);
 
-CvCapture* cvCreateFileCapture_XINE (const char* filename);
+CvCapture* cvCreateFileCapture_XINE(const char* filename);
 
 #define CV_CAP_GSTREAMER_1394		0
 #define CV_CAP_GSTREAMER_V4L		1
@@ -142,22 +142,22 @@ CvCapture* cvCreateFileCapture_XINE (const char* filename);
 #define CV_CAP_GSTREAMER_FILE		3
 
 CvCapture* cvCreateCapture_GStreamer(int type, const char* filename);
-CVAPI(CvCapture*) cvCreateFileCapture_FFMPEG (const char* filename);
+CVAPI(CvCapture*) cvCreateFileCapture_FFMPEG(const char* filename);
 
 
-CVAPI(CvVideoWriter*) cvCreateVideoWriter_FFMPEG ( const char* filename, int fourcc,
-		double fps, CvSize frameSize, int is_color );
+CVAPI(CvVideoWriter*) cvCreateVideoWriter_FFMPEG(const char* filename, int fourcc,
+        double fps, CvSize frameSize, int is_color);
 
-CvCapture* cvCreateFileCapture_QT (const char*   filename);
-CvCapture* cvCreateCameraCapture_QT  (const int     index);
+CvCapture* cvCreateFileCapture_QT(const char*   filename);
+CvCapture* cvCreateCameraCapture_QT(const int     index);
 
-CvVideoWriter* cvCreateVideoWriter_QT ( const char* filename, int fourcc,
-										double fps, CvSize frameSize, int is_color );
+CvVideoWriter* cvCreateVideoWriter_QT(const char* filename, int fourcc,
+                                      double fps, CvSize frameSize, int is_color);
 
-CvCapture* cvCreateCameraCapture_Unicap  (const int     index);
-CvCapture* cvCreateCameraCapture_PvAPI  (const int     index);
-CvVideoWriter* cvCreateVideoWriter_GStreamer( const char* filename, int fourcc,
-		double fps, CvSize frameSize, int is_color );
+CvCapture* cvCreateCameraCapture_Unicap(const int     index);
+CvCapture* cvCreateCameraCapture_PvAPI(const int     index);
+CvVideoWriter* cvCreateVideoWriter_GStreamer(const char* filename, int fourcc,
+        double fps, CvSize frameSize, int is_color);
 
 //Yannick Verdie 2010
 double cvGetMode_W32(const char* name);

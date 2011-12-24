@@ -42,130 +42,130 @@
 #include "precomp.hpp"
 
 CV_IMPL int
-icvSubdiv2DCheck( CvSubdiv2D* subdiv ) {
-	int i, j, total = subdiv->edges->total;
-	CV_Assert( subdiv != 0 );
+icvSubdiv2DCheck(CvSubdiv2D* subdiv) {
+    int i, j, total = subdiv->edges->total;
+    CV_Assert(subdiv != 0);
 
-	for ( i = 0; i < total; i++ ) {
-		CvQuadEdge2D* edge = (CvQuadEdge2D*)cvGetSetElem(subdiv->edges, i);
+    for (i = 0; i < total; i++) {
+        CvQuadEdge2D* edge = (CvQuadEdge2D*)cvGetSetElem(subdiv->edges, i);
 
-		if ( edge && CV_IS_SET_ELEM( edge )) {
-			for ( j = 0; j < 4; j++ ) {
-				CvSubdiv2DEdge e = (CvSubdiv2DEdge)edge + j;
-				CvSubdiv2DEdge o_next = cvSubdiv2DNextEdge(e);
-				CvSubdiv2DEdge o_prev = cvSubdiv2DGetEdge(e, CV_PREV_AROUND_ORG );
-				CvSubdiv2DEdge d_prev = cvSubdiv2DGetEdge(e, CV_PREV_AROUND_DST );
-				CvSubdiv2DEdge d_next = cvSubdiv2DGetEdge(e, CV_NEXT_AROUND_DST );
+        if (edge && CV_IS_SET_ELEM(edge)) {
+            for (j = 0; j < 4; j++) {
+                CvSubdiv2DEdge e = (CvSubdiv2DEdge)edge + j;
+                CvSubdiv2DEdge o_next = cvSubdiv2DNextEdge(e);
+                CvSubdiv2DEdge o_prev = cvSubdiv2DGetEdge(e, CV_PREV_AROUND_ORG);
+                CvSubdiv2DEdge d_prev = cvSubdiv2DGetEdge(e, CV_PREV_AROUND_DST);
+                CvSubdiv2DEdge d_next = cvSubdiv2DGetEdge(e, CV_NEXT_AROUND_DST);
 
-				// check points
-				if ( cvSubdiv2DEdgeOrg(e) != cvSubdiv2DEdgeOrg(o_next)) {
-					return 0;
-				}
-				if ( cvSubdiv2DEdgeOrg(e) != cvSubdiv2DEdgeOrg(o_prev)) {
-					return 0;
-				}
-				if ( cvSubdiv2DEdgeDst(e) != cvSubdiv2DEdgeDst(d_next)) {
-					return 0;
-				}
-				if ( cvSubdiv2DEdgeDst(e) != cvSubdiv2DEdgeDst(d_prev)) {
-					return 0;
-				}
-				if ( j % 2 == 0 ) {
-					if ( cvSubdiv2DEdgeDst(o_next) != cvSubdiv2DEdgeOrg(d_prev)) {
-						return 0;
-					}
-					if ( cvSubdiv2DEdgeDst(o_prev) != cvSubdiv2DEdgeOrg(d_next)) {
-						return 0;
-					}
-					if ( cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(
-											   e, CV_NEXT_AROUND_LEFT), CV_NEXT_AROUND_LEFT), CV_NEXT_AROUND_LEFT) != e ) {
-						return 0;
-					}
-					if ( cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(
-											   e, CV_NEXT_AROUND_RIGHT), CV_NEXT_AROUND_RIGHT), CV_NEXT_AROUND_RIGHT) != e) {
-						return 0;
-					}
-				}
-			}
-		}
-	}
+                // check points
+                if (cvSubdiv2DEdgeOrg(e) != cvSubdiv2DEdgeOrg(o_next)) {
+                    return 0;
+                }
+                if (cvSubdiv2DEdgeOrg(e) != cvSubdiv2DEdgeOrg(o_prev)) {
+                    return 0;
+                }
+                if (cvSubdiv2DEdgeDst(e) != cvSubdiv2DEdgeDst(d_next)) {
+                    return 0;
+                }
+                if (cvSubdiv2DEdgeDst(e) != cvSubdiv2DEdgeDst(d_prev)) {
+                    return 0;
+                }
+                if (j % 2 == 0) {
+                    if (cvSubdiv2DEdgeDst(o_next) != cvSubdiv2DEdgeOrg(d_prev)) {
+                        return 0;
+                    }
+                    if (cvSubdiv2DEdgeDst(o_prev) != cvSubdiv2DEdgeOrg(d_next)) {
+                        return 0;
+                    }
+                    if (cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(
+                            e, CV_NEXT_AROUND_LEFT), CV_NEXT_AROUND_LEFT), CV_NEXT_AROUND_LEFT) != e) {
+                        return 0;
+                    }
+                    if (cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(cvSubdiv2DGetEdge(
+                            e, CV_NEXT_AROUND_RIGHT), CV_NEXT_AROUND_RIGHT), CV_NEXT_AROUND_RIGHT) != e) {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
 
-	return 1;
+    return 1;
 }
 
 
 
 static void
-draw_subdiv_facet( CvSubdiv2D* subdiv, IplImage* dst, IplImage* src, CvSubdiv2DEdge edge ) {
-	CvSubdiv2DEdge t = edge;
-	int i, count = 0;
-	CvPoint local_buf[100];
-	CvPoint* buf = local_buf;
+draw_subdiv_facet(CvSubdiv2D* subdiv, IplImage* dst, IplImage* src, CvSubdiv2DEdge edge) {
+    CvSubdiv2DEdge t = edge;
+    int i, count = 0;
+    CvPoint local_buf[100];
+    CvPoint* buf = local_buf;
 
-	// count number of edges in facet
-	do {
-		count++;
-		t = cvSubdiv2DGetEdge( t, CV_NEXT_AROUND_LEFT );
-	} while ( t != edge && count < subdiv->quad_edges * 4 );
+    // count number of edges in facet
+    do {
+        count++;
+        t = cvSubdiv2DGetEdge(t, CV_NEXT_AROUND_LEFT);
+    } while (t != edge && count < subdiv->quad_edges * 4);
 
-	if ( count * sizeof( buf[0] ) > sizeof( local_buf )) {
-		buf = (CvPoint*) malloc( count * sizeof( buf[0] ));
-	}
+    if (count * sizeof(buf[0]) > sizeof(local_buf)) {
+        buf = (CvPoint*) malloc(count * sizeof(buf[0]));
+    }
 
-	// gather points
-	t = edge;
-	for ( i = 0; i < count; i++ ) {
-		CvSubdiv2DPoint* pt = cvSubdiv2DEdgeOrg( t );
+    // gather points
+    t = edge;
+    for (i = 0; i < count; i++) {
+        CvSubdiv2DPoint* pt = cvSubdiv2DEdgeOrg(t);
 
-		if ( !pt ) {
-			break;
-		}
-		assert( fabs( pt->pt.x ) < 10000 && fabs( pt->pt.y ) < 10000 );
-		buf[i] = cvPoint( cvRound( pt->pt.x ), cvRound( pt->pt.y ));
-		t = cvSubdiv2DGetEdge( t, CV_NEXT_AROUND_LEFT );
-	}
+        if (!pt) {
+            break;
+        }
+        assert(fabs(pt->pt.x) < 10000 && fabs(pt->pt.y) < 10000);
+        buf[i] = cvPoint(cvRound(pt->pt.x), cvRound(pt->pt.y));
+        t = cvSubdiv2DGetEdge(t, CV_NEXT_AROUND_LEFT);
+    }
 
-	if ( i == count ) {
-		CvSubdiv2DPoint* pt = cvSubdiv2DEdgeDst( cvSubdiv2DRotateEdge( edge, 1 ));
-		CvPoint ip = cvPoint( cvRound( pt->pt.x ), cvRound( pt->pt.y ));
-		CvScalar color = {{0, 0, 0, 0}};
+    if (i == count) {
+        CvSubdiv2DPoint* pt = cvSubdiv2DEdgeDst(cvSubdiv2DRotateEdge(edge, 1));
+        CvPoint ip = cvPoint(cvRound(pt->pt.x), cvRound(pt->pt.y));
+        CvScalar color = {{0, 0, 0, 0}};
 
-		//printf("count = %d, (%d,%d)\n", ip.x, ip.y );
+        //printf("count = %d, (%d,%d)\n", ip.x, ip.y );
 
-		if ( 0 <= ip.x && ip.x < src->width && 0 <= ip.y && ip.y < src->height ) {
-			uchar* ptr = (uchar*)(src->imageData + ip.y * src->widthStep + ip.x * 3);
-			color = CV_RGB( ptr[2], ptr[1], ptr[0] );
-		}
+        if (0 <= ip.x && ip.x < src->width && 0 <= ip.y && ip.y < src->height) {
+            uchar* ptr = (uchar*)(src->imageData + ip.y * src->widthStep + ip.x * 3);
+            color = CV_RGB(ptr[2], ptr[1], ptr[0]);
+        }
 
-		cvFillConvexPoly( dst, buf, count, color );
-		//draw_subdiv_point( dst, pt->pt, CV_RGB(0,0,0));
-	}
+        cvFillConvexPoly(dst, buf, count, color);
+        //draw_subdiv_point( dst, pt->pt, CV_RGB(0,0,0));
+    }
 
-	if ( buf != local_buf ) {
-		free( buf );
-	}
+    if (buf != local_buf) {
+        free(buf);
+    }
 }
 
 
 CV_IMPL void
-icvDrawMosaic( CvSubdiv2D* subdiv, IplImage* src, IplImage* dst ) {
-	int i, total = subdiv->edges->total;
+icvDrawMosaic(CvSubdiv2D* subdiv, IplImage* src, IplImage* dst) {
+    int i, total = subdiv->edges->total;
 
-	cvCalcSubdivVoronoi2D( subdiv );
+    cvCalcSubdivVoronoi2D(subdiv);
 
-	//icvSet( dst, 255 );
-	for ( i = 0; i < total; i++ ) {
-		CvQuadEdge2D* edge = (CvQuadEdge2D*) cvGetSetElem( subdiv->edges, i );
+    //icvSet( dst, 255 );
+    for (i = 0; i < total; i++) {
+        CvQuadEdge2D* edge = (CvQuadEdge2D*) cvGetSetElem(subdiv->edges, i);
 
-		if ( edge && CV_IS_SET_ELEM( edge )) {
-			CvSubdiv2DEdge e = (CvSubdiv2DEdge) edge;
+        if (edge && CV_IS_SET_ELEM(edge)) {
+            CvSubdiv2DEdge e = (CvSubdiv2DEdge) edge;
 
-			// left
-			draw_subdiv_facet( subdiv, dst, src, cvSubdiv2DRotateEdge( e, 1 ));
-			// right
-			draw_subdiv_facet( subdiv, dst, src, cvSubdiv2DRotateEdge( e, 3 ));
-		}
-	}
+            // left
+            draw_subdiv_facet(subdiv, dst, src, cvSubdiv2DRotateEdge(e, 1));
+            // right
+            draw_subdiv_facet(subdiv, dst, src, cvSubdiv2DRotateEdge(e, 3));
+        }
+    }
 }
 
 /* End of file. */

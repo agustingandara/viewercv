@@ -501,20 +501,20 @@ CV_IMPL int cvNextNArraySlice(CvNArrayIterator* iterator) {
 
     for (dims = iterator->dims; dims > 0; dims--) {
         for (i = 0; i < iterator->count; i++) {
-            iterator->ptr[i] += iterator->hdr[i]->dim[dims - 1].step;
+            iterator->ptr[i] += iterator->hdr[i]->dim[dims-1].step;
         }
 
-        if (--iterator->stack[dims - 1] > 0) {
+        if (--iterator->stack[dims-1] > 0) {
             break;
         }
 
-        size = iterator->hdr[0]->dim[dims - 1].size;
+        size = iterator->hdr[0]->dim[dims-1].size;
 
         for (i = 0; i < iterator->count; i++) {
-            iterator->ptr[i] -= (size_t)size * iterator->hdr[i]->dim[dims - 1].step;
+            iterator->ptr[i] -= (size_t)size * iterator->hdr[i]->dim[dims-1].step;
         }
 
-        iterator->stack[dims - 1] = size;
+        iterator->stack[dims-1] = size;
     }
 
     return dims > 0;
@@ -1830,7 +1830,7 @@ cvGet1D(const CvArr* arr, int idx) {
         // the first part is mul-free sufficient check
         // that the index is within the matrix
         if ((unsigned)idx >= (unsigned)(mat->rows + mat->cols - 1) &&
-                (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
+        (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -1860,7 +1860,7 @@ cvGet2D(const CvArr* arr, int y, int x) {
         CvMat* mat = (CvMat*)arr;
 
         if ((unsigned)y >= (unsigned)(mat->rows) ||
-                (unsigned)x >= (unsigned)(mat->cols)) {
+        (unsigned)x >= (unsigned)(mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -1939,7 +1939,7 @@ cvGetReal1D(const CvArr* arr, int idx) {
         // the first part is mul-free sufficient check
         // that the index is within the matrix
         if ((unsigned)idx >= (unsigned)(mat->rows + mat->cols - 1) &&
-                (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
+        (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -1972,7 +1972,7 @@ cvGetReal2D(const CvArr* arr, int y, int x) {
         CvMat* mat = (CvMat*)arr;
 
         if ((unsigned)y >= (unsigned)(mat->rows) ||
-                (unsigned)x >= (unsigned)(mat->cols)) {
+        (unsigned)x >= (unsigned)(mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -2063,7 +2063,7 @@ cvSet1D(CvArr* arr, int idx, CvScalar scalar) {
         // the first part is mul-free sufficient check
         // that the index is within the matrix
         if ((unsigned)idx >= (unsigned)(mat->rows + mat->cols - 1) &&
-                (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
+        (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -2088,7 +2088,7 @@ cvSet2D(CvArr* arr, int y, int x, CvScalar scalar) {
         CvMat* mat = (CvMat*)arr;
 
         if ((unsigned)y >= (unsigned)(mat->rows) ||
-                (unsigned)x >= (unsigned)(mat->cols)) {
+        (unsigned)x >= (unsigned)(mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -2149,7 +2149,7 @@ cvSetReal1D(CvArr* arr, int idx, double value) {
         // the first part is mul-free sufficient check
         // that the index is within the matrix
         if ((unsigned)idx >= (unsigned)(mat->rows + mat->cols - 1) &&
-                (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
+        (unsigned)idx >= (unsigned)(mat->rows * mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -2179,7 +2179,7 @@ cvSetReal2D(CvArr* arr, int y, int x, double value) {
         CvMat* mat = (CvMat*)arr;
 
         if ((unsigned)y >= (unsigned)(mat->rows) ||
-                (unsigned)x >= (unsigned)(mat->cols)) {
+        (unsigned)x >= (unsigned)(mat->cols)) {
             CV_Error(CV_StsOutOfRange, "index is out of range");
         }
 
@@ -2265,7 +2265,7 @@ cvClearND(CvArr* arr, const int* idx) {
 // convert array (CvMat or IplImage) to CvMat
 CV_IMPL CvMat*
 cvGetMat(const CvArr* array, CvMat* mat,
-         int* pCOI, int allowND) {
+int* pCOI, int allowND) {
     CvMat* result = 0;
     CvMat* src = (CvMat*)array;
     int coi = 0;
@@ -2301,27 +2301,27 @@ cvGetMat(const CvArr* array, CvMat* mat,
 
                 if (img->roi->coi == 0)
                     CV_Error(CV_StsBadFlag,
-                             "Images with planar data layout should be used with COI selected");
+                    "Images with planar data layout should be used with COI selected");
 
                 cvInitMatHeader(mat, img->roi->height,
-                                img->roi->width, type,
-                                img->imageData + (img->roi->coi - 1)*img->imageSize +
-                                img->roi->yOffset * img->widthStep +
-                                img->roi->xOffset * CV_ELEM_SIZE(type),
-                                img->widthStep);
+                img->roi->width, type,
+                img->imageData + (img->roi->coi - 1)*img->imageSize +
+                img->roi->yOffset * img->widthStep +
+                img->roi->xOffset * CV_ELEM_SIZE(type),
+                img->widthStep);
             } else { /* pixel order */
                 int type = CV_MAKETYPE(depth, img->nChannels);
                 coi = img->roi->coi;
 
                 if (img->nChannels > CV_CN_MAX)
                     CV_Error(CV_BadNumChannels,
-                             "The image is interleaved and has over CV_CN_MAX channels");
+                    "The image is interleaved and has over CV_CN_MAX channels");
 
                 cvInitMatHeader(mat, img->roi->height, img->roi->width,
-                                type, img->imageData +
-                                img->roi->yOffset * img->widthStep +
-                                img->roi->xOffset * CV_ELEM_SIZE(type),
-                                img->widthStep);
+                type, img->imageData +
+                img->roi->yOffset * img->widthStep +
+                img->roi->xOffset * CV_ELEM_SIZE(type),
+                img->widthStep);
             }
         } else {
             int type = CV_MAKETYPE(depth, img->nChannels);
@@ -2331,7 +2331,7 @@ cvGetMat(const CvArr* array, CvMat* mat,
             }
 
             cvInitMatHeader(mat, img->height, img->width, type,
-                            img->imageData, img->widthStep);
+            img->imageData, img->widthStep);
         }
 
         result = mat;
@@ -2381,8 +2381,8 @@ cvGetMat(const CvArr* array, CvMat* mat,
 
 CV_IMPL CvArr*
 cvReshapeMatND(const CvArr* arr,
-               int sizeof_header, CvArr* _header,
-               int new_cn, int new_dims, int* new_sizes) {
+int sizeof_header, CvArr* _header,
+int new_cn, int new_dims, int* new_sizes) {
     CvArr* result = 0;
     int dims, coi = 0;
 
@@ -2453,22 +2453,22 @@ cvReshapeMatND(const CvArr* arr,
 
             if (!CV_IS_MAT_CONT(mat->type))
                 CV_Error(CV_BadStep,
-                         "The matrix is not continuous so the number of rows can not be changed");
+                "The matrix is not continuous so the number of rows can not be changed");
 
             total_width = total_size / new_rows;
 
             if (total_width* new_rows != total_size)
                 CV_Error(CV_StsBadArg, "The total number of matrix elements "
-                         "is not divisible by the new number of rows");
+                "is not divisible by the new number of rows");
         }
 
         header.rows = new_rows;
         header.cols = total_width / new_cn;
 
         if (header.cols* new_cn != total_width ||
-                (new_sizes && header.cols != new_sizes[1]))
+        (new_sizes && header.cols != new_sizes[1]))
             CV_Error(CV_StsBadArg, "The total matrix width is not "
-                     "divisible by the new number of columns");
+            "divisible by the new number of columns");
 
         header.type = (mat->type & ~CV_MAT_TYPE_MASK) | CV_MAKETYPE(mat->type, new_cn);
         header.step = header.cols * CV_ELEM_SIZE(mat->type);
@@ -2500,12 +2500,12 @@ cvReshapeMatND(const CvArr* arr,
             {
                 CvMatND* mat = (CvMatND*)arr;
                 assert(new_cn > 0);
-                int last_dim_size = mat->dim[mat->dims - 1].size * CV_MAT_CN(mat->type);
+                int last_dim_size = mat->dim[mat->dims-1].size * CV_MAT_CN(mat->type);
                 int new_size = last_dim_size / new_cn;
 
                 if (new_size* new_cn != last_dim_size)
                     CV_Error(CV_StsBadArg,
-                             "The last dimension full size is not divisible by new number of channels");
+                    "The last dimension full size is not divisible by new number of channels");
 
                 if (mat != header) {
                     memcpy(header, mat, sizeof(*header));
@@ -2513,7 +2513,7 @@ cvReshapeMatND(const CvArr* arr,
                     header->hdr_refcount = 0;
                 }
 
-                header->dim[header->dims - 1].size = new_size;
+                header->dim[header->dims-1].size = new_size;
                 header->type = (header->type & ~CV_MAT_TYPE_MASK) | CV_MAKETYPE(header->type, new_cn);
             }
         } else {
@@ -2524,8 +2524,8 @@ cvReshapeMatND(const CvArr* arr,
 
             if (new_cn != 0)
                 CV_Error(CV_StsBadArg,
-                         "Simultaneous change of shape and number of channels is not supported. "
-                         "Do it by 2 separate calls");
+                "Simultaneous change of shape and number of channels is not supported. "
+                "Do it by 2 separate calls");
 
             if (!CV_IS_MATND(mat)) {
                 cvGetMatND(mat, &stub, &coi);
@@ -2545,13 +2545,13 @@ cvReshapeMatND(const CvArr* arr,
             for (i = 0; i < new_dims; i++) {
                 if (new_sizes[i] <= 0)
                     CV_Error(CV_StsBadSize,
-                             "One of new dimension sizes is non-positive");
+                    "One of new dimension sizes is non-positive");
                 size2 *= new_sizes[i];
             }
 
             if (size1 != size2)
                 CV_Error(CV_StsBadSize,
-                         "Number of elements in the original and reshaped array is different");
+                "Number of elements in the original and reshaped array is different");
 
             if (header != mat) {
                 header->refcount = 0;
@@ -2582,7 +2582,7 @@ cvReshapeMatND(const CvArr* arr,
 
 CV_IMPL CvMat*
 cvReshape(const CvArr* array, CvMat* header,
-          int new_cn, int new_rows) {
+int new_cn, int new_rows) {
     CvMat* result = 0;
     CvMat* mat = (CvMat*)array;
     int total_width, new_width;
@@ -2625,7 +2625,7 @@ cvReshape(const CvArr* array, CvMat* header,
         int total_size = total_width * mat->rows;
         if (!CV_IS_MAT_CONT(mat->type))
             CV_Error(CV_BadStep,
-                     "The matrix is not continuous, thus its number of rows can not be changed");
+            "The matrix is not continuous, thus its number of rows can not be changed");
 
         if ((unsigned)new_rows > (unsigned)total_size) {
             CV_Error(CV_StsOutOfRange, "Bad new number of rows");
@@ -2635,7 +2635,7 @@ cvReshape(const CvArr* array, CvMat* header,
 
         if (total_width* new_rows != total_size)
             CV_Error(CV_StsBadArg, "The total number of matrix elements "
-                     "is not divisible by the new number of rows");
+            "is not divisible by the new number of rows");
 
         header->rows = new_rows;
         header->step = total_width * CV_ELEM_SIZE1(mat->type);
@@ -2645,7 +2645,7 @@ cvReshape(const CvArr* array, CvMat* header,
 
     if (new_width* new_cn != total_width)
         CV_Error(CV_BadNumChannels,
-                 "The total width is not divisible by the new number of channels");
+        "The total width is not divisible by the new number of channels");
 
     header->cols = new_width;
     header->type = (mat->type  & ~CV_MAT_TYPE_MASK) | CV_MAKETYPE(mat->type, new_cn);
@@ -2680,7 +2680,7 @@ cvGetImage(const CvArr* array, IplImage* img) {
         depth = cvIplDepth(mat->type);
 
         cvInitImageHeader(img, cvSize(mat->cols, mat->rows),
-                          depth, CV_MAT_CN(mat->type));
+        depth, CV_MAT_CN(mat->type));
         cvSetData(img, mat->data.ptr, mat->step);
 
         result = img;
@@ -2733,7 +2733,7 @@ icvGetColorModel(int nchannels, const char** colorModel, const char** channelSeq
 
 
 // create IplImage header
-CV_IMPL IplImage*
+CV_IMPL IplImage *
 cvCreateImageHeader(CvSize size, int depth, int channels) {
     IplImage* img = 0;
 
@@ -2757,7 +2757,7 @@ cvCreateImageHeader(CvSize size, int depth, int channels) {
 
 
 // create IplImage header and allocate underlying data
-CV_IMPL IplImage*
+CV_IMPL IplImage *
 cvCreateImage(CvSize size, int depth, int channels) {
     IplImage* img = cvCreateImageHeader(size, depth, channels);
     assert(img);

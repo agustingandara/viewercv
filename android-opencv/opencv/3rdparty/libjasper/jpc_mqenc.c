@@ -186,44 +186,44 @@ static void jpc_mqenc_setbits(jpc_mqenc_t* mqenc);
 /* Create a MQ encoder. */
 
 jpc_mqenc_t* jpc_mqenc_create(int maxctxs, jas_stream_t* out) {
-	jpc_mqenc_t* mqenc;
+    jpc_mqenc_t* mqenc;
 
-	/* Allocate memory for the MQ encoder. */
-	if (!(mqenc = jas_malloc(sizeof(jpc_mqenc_t)))) {
-		goto error;
-	}
-	mqenc->out = out;
-	mqenc->maxctxs = maxctxs;
+    /* Allocate memory for the MQ encoder. */
+    if (!(mqenc = jas_malloc(sizeof(jpc_mqenc_t)))) {
+        goto error;
+    }
+    mqenc->out = out;
+    mqenc->maxctxs = maxctxs;
 
-	/* Allocate memory for the per-context state information. */
-	if (!(mqenc->ctxs = jas_malloc(mqenc->maxctxs * sizeof(jpc_mqstate_t*)))) {
-		goto error;
-	}
+    /* Allocate memory for the per-context state information. */
+    if (!(mqenc->ctxs = jas_malloc(mqenc->maxctxs * sizeof(jpc_mqstate_t*)))) {
+        goto error;
+    }
 
-	/* Set the current context to the first one. */
-	mqenc->curctx = mqenc->ctxs;
+    /* Set the current context to the first one. */
+    mqenc->curctx = mqenc->ctxs;
 
-	jpc_mqenc_init(mqenc);
+    jpc_mqenc_init(mqenc);
 
-	/* Initialize the per-context state information to something sane. */
-	jpc_mqenc_setctxs(mqenc, 0, 0);
+    /* Initialize the per-context state information to something sane. */
+    jpc_mqenc_setctxs(mqenc, 0, 0);
 
-	return mqenc;
+    return mqenc;
 
 error:
-	if (mqenc) {
-		jpc_mqenc_destroy(mqenc);
-	}
-	return 0;
+    if (mqenc) {
+        jpc_mqenc_destroy(mqenc);
+    }
+    return 0;
 }
 
 /* Destroy a MQ encoder. */
 
 void jpc_mqenc_destroy(jpc_mqenc_t* mqenc) {
-	if (mqenc->ctxs) {
-		jas_free(mqenc->ctxs);
-	}
-	jas_free(mqenc);
+    if (mqenc->ctxs) {
+        jas_free(mqenc->ctxs);
+    }
+    jas_free(mqenc);
 }
 
 /******************************************************************************\
@@ -233,42 +233,42 @@ void jpc_mqenc_destroy(jpc_mqenc_t* mqenc) {
 /* Initialize the coding state of a MQ encoder. */
 
 void jpc_mqenc_init(jpc_mqenc_t* mqenc) {
-	mqenc->areg = 0x8000;
-	mqenc->outbuf = -1;
-	mqenc->creg = 0;
-	mqenc->ctreg = 12;
-	mqenc->lastbyte = -1;
-	mqenc->err = 0;
+    mqenc->areg = 0x8000;
+    mqenc->outbuf = -1;
+    mqenc->creg = 0;
+    mqenc->ctreg = 12;
+    mqenc->lastbyte = -1;
+    mqenc->err = 0;
 }
 
 /* Initialize one or more contexts. */
 
 void jpc_mqenc_setctxs(jpc_mqenc_t* mqenc, int numctxs, jpc_mqctx_t* ctxs) {
-	jpc_mqstate_t** ctx;
-	int n;
+    jpc_mqstate_t** ctx;
+    int n;
 
-	ctx = mqenc->ctxs;
-	n = JAS_MIN(mqenc->maxctxs, numctxs);
-	while (--n >= 0) {
-		*ctx = &jpc_mqstates[2 * ctxs->ind + ctxs->mps];
-		++ctx;
-		++ctxs;
-	}
-	n = mqenc->maxctxs - numctxs;
-	while (--n >= 0) {
-		*ctx = &jpc_mqstates[0];
-		++ctx;
-	}
+    ctx = mqenc->ctxs;
+    n = JAS_MIN(mqenc->maxctxs, numctxs);
+    while (--n >= 0) {
+        *ctx = &jpc_mqstates[2 * ctxs->ind + ctxs->mps];
+        ++ctx;
+        ++ctxs;
+    }
+    n = mqenc->maxctxs - numctxs;
+    while (--n >= 0) {
+        *ctx = &jpc_mqstates[0];
+        ++ctx;
+    }
 
 }
 
 /* Get the coding state for a MQ encoder. */
 
 void jpc_mqenc_getstate(jpc_mqenc_t* mqenc, jpc_mqencstate_t* state) {
-	state->areg = mqenc->areg;
-	state->creg = mqenc->creg;
-	state->ctreg = mqenc->ctreg;
-	state->lastbyte = mqenc->lastbyte;
+    state->areg = mqenc->areg;
+    state->creg = mqenc->creg;
+    state->ctreg = mqenc->ctreg;
+    state->lastbyte = mqenc->lastbyte;
 }
 
 /******************************************************************************\
@@ -278,47 +278,47 @@ void jpc_mqenc_getstate(jpc_mqenc_t* mqenc, jpc_mqencstate_t* state) {
 /* Encode a bit. */
 
 int jpc_mqenc_putbit_func(jpc_mqenc_t* mqenc, int bit) {
-	const jpc_mqstate_t* state;
-	JAS_DBGLOG(100, ("jpc_mqenc_putbit(%p, %d)\n", mqenc, bit));
-	JPC_MQENC_CALL(100, jpc_mqenc_dump(mqenc, stderr));
+    const jpc_mqstate_t* state;
+    JAS_DBGLOG(100, ("jpc_mqenc_putbit(%p, %d)\n", mqenc, bit));
+    JPC_MQENC_CALL(100, jpc_mqenc_dump(mqenc, stderr));
 
-	state = *(mqenc->curctx);
+    state = *(mqenc->curctx);
 
-	if (state->mps == bit) {
-		/* Apply the CODEMPS algorithm as defined in the standard. */
-		mqenc->areg -= state->qeval;
-		if (!(mqenc->areg & 0x8000)) {
-			jpc_mqenc_codemps2(mqenc);
-		} else {
-			mqenc->creg += state->qeval;
-		}
-	} else {
-		/* Apply the CODELPS algorithm as defined in the standard. */
-		jpc_mqenc_codelps2(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc->curctx, mqenc);
-	}
+    if (state->mps == bit) {
+        /* Apply the CODEMPS algorithm as defined in the standard. */
+        mqenc->areg -= state->qeval;
+        if (!(mqenc->areg & 0x8000)) {
+            jpc_mqenc_codemps2(mqenc);
+        } else {
+            mqenc->creg += state->qeval;
+        }
+    } else {
+        /* Apply the CODELPS algorithm as defined in the standard. */
+        jpc_mqenc_codelps2(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc->curctx, mqenc);
+    }
 
-	return jpc_mqenc_error(mqenc) ? (-1) : 0;
+    return jpc_mqenc_error(mqenc) ? (-1) : 0;
 }
 
 int jpc_mqenc_codemps2(jpc_mqenc_t* mqenc) {
-	/* Note: This function only performs part of the work associated with
-	the CODEMPS algorithm from the standard.  Some of the work is also
-	performed by the caller. */
+    /* Note: This function only performs part of the work associated with
+    the CODEMPS algorithm from the standard.  Some of the work is also
+    performed by the caller. */
 
-	jpc_mqstate_t* state = *(mqenc->curctx);
-	if (mqenc->areg < state->qeval) {
-		mqenc->areg = state->qeval;
-	} else {
-		mqenc->creg += state->qeval;
-	}
-	*mqenc->curctx = state->nmps;
-	jpc_mqenc_renorme(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
-	return jpc_mqenc_error(mqenc) ? (-1) : 0;
+    jpc_mqstate_t* state = *(mqenc->curctx);
+    if (mqenc->areg < state->qeval) {
+        mqenc->areg = state->qeval;
+    } else {
+        mqenc->creg += state->qeval;
+    }
+    *mqenc->curctx = state->nmps;
+    jpc_mqenc_renorme(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
+    return jpc_mqenc_error(mqenc) ? (-1) : 0;
 }
 
 int jpc_mqenc_codelps(jpc_mqenc_t* mqenc) {
-	jpc_mqenc_codelps2(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc->curctx, mqenc);
-	return jpc_mqenc_error(mqenc) ? (-1) : 0;
+    jpc_mqenc_codelps2(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc->curctx, mqenc);
+    return jpc_mqenc_error(mqenc) ? (-1) : 0;
 }
 
 /******************************************************************************\
@@ -328,54 +328,54 @@ int jpc_mqenc_codelps(jpc_mqenc_t* mqenc) {
 /* Terminate the code word. */
 
 int jpc_mqenc_flush(jpc_mqenc_t* mqenc, int termmode) {
-	int_fast16_t k;
+    int_fast16_t k;
 
-	switch (termmode) {
-	case JPC_MQENC_PTERM:
-		k = 11 - mqenc->ctreg + 1;
-		while (k > 0) {
-			mqenc->creg <<= mqenc->ctreg;
-			mqenc->ctreg = 0;
-			jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg,
-							  mqenc);
-			k -= mqenc->ctreg;
-		}
-		if (mqenc->outbuf != 0xff) {
-			jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
-		}
-		break;
-	case JPC_MQENC_DEFTERM:
-		jpc_mqenc_setbits(mqenc);
-		mqenc->creg <<= mqenc->ctreg;
-		jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
-		mqenc->creg <<= mqenc->ctreg;
-		jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
-		if (mqenc->outbuf != 0xff) {
-			jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
-		}
-		break;
-	default:
-		abort();
-		break;
-	}
-	return 0;
+    switch (termmode) {
+    case JPC_MQENC_PTERM:
+        k = 11 - mqenc->ctreg + 1;
+        while (k > 0) {
+            mqenc->creg <<= mqenc->ctreg;
+            mqenc->ctreg = 0;
+            jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg,
+                              mqenc);
+            k -= mqenc->ctreg;
+        }
+        if (mqenc->outbuf != 0xff) {
+            jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
+        }
+        break;
+    case JPC_MQENC_DEFTERM:
+        jpc_mqenc_setbits(mqenc);
+        mqenc->creg <<= mqenc->ctreg;
+        jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
+        mqenc->creg <<= mqenc->ctreg;
+        jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
+        if (mqenc->outbuf != 0xff) {
+            jpc_mqenc_byteout(mqenc->areg, mqenc->creg, mqenc->ctreg, mqenc);
+        }
+        break;
+    default:
+        abort();
+        break;
+    }
+    return 0;
 }
 
 static void jpc_mqenc_setbits(jpc_mqenc_t* mqenc) {
-	uint_fast32_t tmp = mqenc->creg + mqenc->areg;
-	mqenc->creg |= 0xffff;
-	if (mqenc->creg >= tmp) {
-		mqenc->creg -= 0x8000;
-	}
+    uint_fast32_t tmp = mqenc->creg + mqenc->areg;
+    mqenc->creg |= 0xffff;
+    if (mqenc->creg >= tmp) {
+        mqenc->creg -= 0x8000;
+    }
 }
 
 /* Dump a MQ encoder to a stream for debugging. */
 
 int jpc_mqenc_dump(jpc_mqenc_t* mqenc, FILE* out) {
-	fprintf(out, "AREG = %08x, CREG = %08x, CTREG = %d\n",
-			mqenc->areg, mqenc->creg, mqenc->ctreg);
-	fprintf(out, "IND = %02d, MPS = %d, QEVAL = %04x\n",
-			*mqenc->curctx - jpc_mqstates, (*mqenc->curctx)->mps,
-			(*mqenc->curctx)->qeval);
-	return 0;
+    fprintf(out, "AREG = %08x, CREG = %08x, CTREG = %d\n",
+            mqenc->areg, mqenc->creg, mqenc->ctreg);
+    fprintf(out, "IND = %02d, MPS = %d, QEVAL = %04x\n",
+            *mqenc->curctx - jpc_mqstates, (*mqenc->curctx)->mps,
+            (*mqenc->curctx)->qeval);
+    return 0;
 }

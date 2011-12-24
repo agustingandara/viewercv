@@ -51,9 +51,9 @@ namespace Imf {
 
 
 typedef TypedAttribute<std::string> StringAttribute;
-template <> const char* StringAttribute::staticTypeName ();
-template <> void StringAttribute::writeValueTo (OStream&, int) const;
-template <> void StringAttribute::readValueFrom (IStream&, int, int);
+template <> const char* StringAttribute::staticTypeName();
+template <> void StringAttribute::writeValueTo(OStream&, int) const;
+template <> void StringAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

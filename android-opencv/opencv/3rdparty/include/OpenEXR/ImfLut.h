@@ -59,33 +59,33 @@ namespace Imf {
 class HalfLut {
 public:
 
-	//------------
-	// Constructor
-	//------------
+    //------------
+    // Constructor
+    //------------
 
-	template <class Function>
-	HalfLut (Function f);
-
-
-	//----------------------------------------------------------------------
-	// Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
-	//----------------------------------------------------------------------
-
-	void apply (half* data,
-				int nData,
-				int stride = 1) const;
+    template <class Function>
+    HalfLut(Function f);
 
 
-	//---------------------------------------------------------------
-	// Apply the table to a frame buffer slice (see ImfFrameBuffer.h)
-	//---------------------------------------------------------------
+    //----------------------------------------------------------------------
+    // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
+    //----------------------------------------------------------------------
 
-	void apply (const Slice& data,
-				const Imath::Box2i& dataWindow) const;
+    void apply(half* data,
+               int nData,
+               int stride = 1) const;
+
+
+    //---------------------------------------------------------------
+    // Apply the table to a frame buffer slice (see ImfFrameBuffer.h)
+    //---------------------------------------------------------------
+
+    void apply(const Slice& data,
+               const Imath::Box2i& dataWindow) const;
 
 private:
 
-	halfFunction <half>	_lut;
+    halfFunction <half>	_lut;
 };
 
 
@@ -96,36 +96,36 @@ private:
 class RgbaLut {
 public:
 
-	//------------
-	// Constructor
-	//------------
+    //------------
+    // Constructor
+    //------------
 
-	template <class Function>
-	RgbaLut (Function f, RgbaChannels chn = WRITE_RGB);
-
-
-	//----------------------------------------------------------------------
-	// Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
-	//----------------------------------------------------------------------
-
-	void apply (Rgba* data,
-				int nData,
-				int stride = 1) const;
+    template <class Function>
+    RgbaLut(Function f, RgbaChannels chn = WRITE_RGB);
 
 
-	//-----------------------------------------------------------------------
-	// Apply the table to a frame buffer (see RgbaOutpuFile.setFrameBuffer())
-	//-----------------------------------------------------------------------
+    //----------------------------------------------------------------------
+    // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
+    //----------------------------------------------------------------------
 
-	void apply (Rgba* base,
-				int xStride,
-				int yStride,
-				const Imath::Box2i& dataWindow) const;
+    void apply(Rgba* data,
+               int nData,
+               int stride = 1) const;
+
+
+    //-----------------------------------------------------------------------
+    // Apply the table to a frame buffer (see RgbaOutpuFile.setFrameBuffer())
+    //-----------------------------------------------------------------------
+
+    void apply(Rgba* base,
+               int xStride,
+               int yStride,
+               const Imath::Box2i& dataWindow) const;
 
 private:
 
-	halfFunction <half>	_lut;
-	RgbaChannels	_chn;
+    halfFunction <half>	_lut;
+    RgbaChannels	_chn;
 };
 
 
@@ -137,7 +137,7 @@ private:
 // the center [2000] and that number is near 0.18.
 //
 
-half round12log (half x);
+half round12log(half x);
 
 
 //
@@ -147,9 +147,9 @@ half round12log (half x);
 //
 
 struct roundNBit {
-	roundNBit (int n): n(n) {}
-	half operator () (half x) {return x.round(n);}
-	int n;
+    roundNBit(int n): n(n) {}
+    half operator()(half x) {return x.round(n);}
+    int n;
 };
 
 
@@ -159,19 +159,19 @@ struct roundNBit {
 
 
 template <class Function>
-HalfLut::HalfLut (Function f):
-	_lut(f, -HALF_MAX, HALF_MAX, half (0),
-		 half::posInf(), half::negInf(), half::qNan()) {
-	// empty
+HalfLut::HalfLut(Function f):
+    _lut(f, -HALF_MAX, HALF_MAX, half(0),
+         half::posInf(), half::negInf(), half::qNan()) {
+    // empty
 }
 
 
 template <class Function>
-RgbaLut::RgbaLut (Function f, RgbaChannels chn):
-	_lut(f, -HALF_MAX, HALF_MAX, half (0),
-		 half::posInf(), half::negInf(), half::qNan()),
-	_chn(chn) {
-	// empty
+RgbaLut::RgbaLut(Function f, RgbaChannels chn):
+    _lut(f, -HALF_MAX, HALF_MAX, half(0),
+         half::posInf(), half::negInf(), half::qNan()),
+    _chn(chn) {
+    // empty
 }
 
 

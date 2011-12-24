@@ -305,13 +305,13 @@ void  Octree::buildNext(size_t nodeInd) {
 
         size_t subboxInd = findSubboxForPoint(p, nodes[nodeInd]);
 
-        boxBorders[subboxInd + 1]++;
+        boxBorders[subboxInd+1]++;
         boxIndices[j] = subboxInd;
         tempPoints[j] = p;
     }
 
     for (size_t i = 1; i < boxBorders.size(); ++i) {
-        boxBorders[i] += boxBorders[i - 1];
+        boxBorders[i] += boxBorders[i-1];
     }
 
     vector<size_t> writeInds(boxBorders.begin(), boxBorders.end());
@@ -325,7 +325,7 @@ void  Octree::buildNext(size_t nodeInd) {
     }
 
     for (size_t i = 0; i < MAX_LEAFS; ++i) {
-        if (boxBorders[i] == boxBorders[i + 1]) {
+        if (boxBorders[i] == boxBorders[i+1]) {
             continue;
         }
 
@@ -335,8 +335,8 @@ void  Octree::buildNext(size_t nodeInd) {
 
         child.isLeaf = true;
         child.maxLevels = nodes[nodeInd].maxLevels - 1;
-        child.begin = nodes[nodeInd].begin + (int)boxBorders[i + 0];
-        child.end   = nodes[nodeInd].begin + (int)boxBorders[i + 1];
+        child.begin = nodes[nodeInd].begin + (int)boxBorders[i+0];
+        child.end   = nodes[nodeInd].begin + (int)boxBorders[i+1];
         for (size_t k = 0; k < MAX_LEAFS; k++) {
             child.children[k] = 0;
         }

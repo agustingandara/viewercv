@@ -68,223 +68,223 @@ struct PreviewRgba;
 class TiledRgbaOutputFile {
 public:
 
-	//---------------------------------------------------
-	// Constructor -- rgbaChannels, tileXSize, tileYSize,
-	// levelMode, and levelRoundingMode overwrite the
-	// channel list and tile description attribute in the
-	// header that is passed as an argument to the
-	// constructor.
-	//---------------------------------------------------
+    //---------------------------------------------------
+    // Constructor -- rgbaChannels, tileXSize, tileYSize,
+    // levelMode, and levelRoundingMode overwrite the
+    // channel list and tile description attribute in the
+    // header that is passed as an argument to the
+    // constructor.
+    //---------------------------------------------------
 
-	TiledRgbaOutputFile (const char name[],
-						 const Header& header,
-						 RgbaChannels rgbaChannels,
-						 int tileXSize,
-						 int tileYSize,
-						 LevelMode mode,
-						 LevelRoundingMode rmode = ROUND_DOWN,
-						 int numThreads = globalThreadCount ());
-
-
-	//---------------------------------------------------
-	// Constructor -- like the previous one, but the new
-	// TiledRgbaOutputFile is attached to a file that has
-	// already been opened by the caller.  Destroying
-	// TiledRgbaOutputFileObjects constructed with this
-	// constructor does not automatically close the
-	// corresponding files.
-	//---------------------------------------------------
-
-	TiledRgbaOutputFile (OStream& os,
-						 const Header& header,
-						 RgbaChannels rgbaChannels,
-						 int tileXSize,
-						 int tileYSize,
-						 LevelMode mode,
-						 LevelRoundingMode rmode = ROUND_DOWN,
-						 int numThreads = globalThreadCount ());
+    TiledRgbaOutputFile(const char name[],
+                        const Header& header,
+                        RgbaChannels rgbaChannels,
+                        int tileXSize,
+                        int tileYSize,
+                        LevelMode mode,
+                        LevelRoundingMode rmode = ROUND_DOWN,
+                        int numThreads = globalThreadCount());
 
 
-	//------------------------------------------------------
-	// Constructor -- header data are explicitly specified
-	// as function call arguments (an empty dataWindow means
-	// "same as displayWindow")
-	//------------------------------------------------------
+    //---------------------------------------------------
+    // Constructor -- like the previous one, but the new
+    // TiledRgbaOutputFile is attached to a file that has
+    // already been opened by the caller.  Destroying
+    // TiledRgbaOutputFileObjects constructed with this
+    // constructor does not automatically close the
+    // corresponding files.
+    //---------------------------------------------------
 
-	TiledRgbaOutputFile (const char name[],
-						 int tileXSize,
-						 int tileYSize,
-						 LevelMode mode,
-						 LevelRoundingMode rmode,
-						 const Imath::Box2i& displayWindow,
-						 const Imath::Box2i& dataWindow = Imath::Box2i(),
-						 RgbaChannels rgbaChannels = WRITE_RGBA,
-						 float pixelAspectRatio = 1,
-						 const Imath::V2f screenWindowCenter =
-							 Imath::V2f (0, 0),
-						 float screenWindowWidth = 1,
-						 LineOrder lineOrder = INCREASING_Y,
-						 Compression compression = ZIP_COMPRESSION,
-						 int numThreads = globalThreadCount ());
+    TiledRgbaOutputFile(OStream& os,
+                        const Header& header,
+                        RgbaChannels rgbaChannels,
+                        int tileXSize,
+                        int tileYSize,
+                        LevelMode mode,
+                        LevelRoundingMode rmode = ROUND_DOWN,
+                        int numThreads = globalThreadCount());
 
 
-	//-----------------------------------------------
-	// Constructor -- like the previous one, but both
-	// the display window and the data window are
-	// Box2i (V2i (0, 0), V2i (width - 1, height -1))
-	//-----------------------------------------------
+    //------------------------------------------------------
+    // Constructor -- header data are explicitly specified
+    // as function call arguments (an empty dataWindow means
+    // "same as displayWindow")
+    //------------------------------------------------------
 
-	TiledRgbaOutputFile (const char name[],
-						 int width,
-						 int height,
-						 int tileXSize,
-						 int tileYSize,
-						 LevelMode mode,
-						 LevelRoundingMode rmode = ROUND_DOWN,
-						 RgbaChannels rgbaChannels = WRITE_RGBA,
-						 float pixelAspectRatio = 1,
-						 const Imath::V2f screenWindowCenter =
-							 Imath::V2f (0, 0),
-						 float screenWindowWidth = 1,
-						 LineOrder lineOrder = INCREASING_Y,
-						 Compression compression = ZIP_COMPRESSION,
-						 int numThreads = globalThreadCount ());
-
-
-	virtual ~TiledRgbaOutputFile ();
+    TiledRgbaOutputFile(const char name[],
+                        int tileXSize,
+                        int tileYSize,
+                        LevelMode mode,
+                        LevelRoundingMode rmode,
+                        const Imath::Box2i& displayWindow,
+                        const Imath::Box2i& dataWindow = Imath::Box2i(),
+                        RgbaChannels rgbaChannels = WRITE_RGBA,
+                        float pixelAspectRatio = 1,
+                        const Imath::V2f screenWindowCenter =
+                            Imath::V2f(0, 0),
+                        float screenWindowWidth = 1,
+                        LineOrder lineOrder = INCREASING_Y,
+                        Compression compression = ZIP_COMPRESSION,
+                        int numThreads = globalThreadCount());
 
 
-	//------------------------------------------------
-	// Define a frame buffer as the pixel data source:
-	// Pixel (x, y) is at address
-	//
-	//  base + x * xStride + y * yStride
-	//
-	//------------------------------------------------
+    //-----------------------------------------------
+    // Constructor -- like the previous one, but both
+    // the display window and the data window are
+    // Box2i (V2i (0, 0), V2i (width - 1, height -1))
+    //-----------------------------------------------
 
-	void		setFrameBuffer (const Rgba* base,
-								size_t xStride,
-								size_t yStride);
-
-	//--------------------------
-	// Access to the file header
-	//--------------------------
-
-	const Header& 		header () const;
-	const FrameBuffer& 		frameBuffer () const;
-	const Imath::Box2i& 	displayWindow () const;
-	const Imath::Box2i& 	dataWindow () const;
-	float			pixelAspectRatio () const;
-	const Imath::V2f		screenWindowCenter () const;
-	float			screenWindowWidth () const;
-	LineOrder			lineOrder () const;
-	Compression			compression () const;
-	RgbaChannels		channels () const;
+    TiledRgbaOutputFile(const char name[],
+                        int width,
+                        int height,
+                        int tileXSize,
+                        int tileYSize,
+                        LevelMode mode,
+                        LevelRoundingMode rmode = ROUND_DOWN,
+                        RgbaChannels rgbaChannels = WRITE_RGBA,
+                        float pixelAspectRatio = 1,
+                        const Imath::V2f screenWindowCenter =
+                            Imath::V2f(0, 0),
+                        float screenWindowWidth = 1,
+                        LineOrder lineOrder = INCREASING_Y,
+                        Compression compression = ZIP_COMPRESSION,
+                        int numThreads = globalThreadCount());
 
 
-	//----------------------------------------------------
-	// Utility functions (same as in Imf::TiledOutputFile)
-	//----------------------------------------------------
-
-	unsigned int	tileXSize () const;
-	unsigned int	tileYSize () const;
-	LevelMode		levelMode () const;
-	LevelRoundingMode	levelRoundingMode () const;
-
-	int			numLevels () const;
-	int			numXLevels () const;
-	int			numYLevels () const;
-	bool		isValidLevel (int lx, int ly) const;
-
-	int			levelWidth  (int lx) const;
-	int			levelHeight (int ly) const;
-
-	int			numXTiles (int lx = 0) const;
-	int			numYTiles (int ly = 0) const;
-
-	Imath::Box2i	dataWindowForLevel (int l = 0) const;
-	Imath::Box2i	dataWindowForLevel (int lx, int ly) const;
-
-	Imath::Box2i	dataWindowForTile (int dx, int dy,
-									   int l = 0) const;
-
-	Imath::Box2i	dataWindowForTile (int dx, int dy,
-									   int lx, int ly) const;
-
-	//------------------------------------------------------------------
-	// Write pixel data:
-	//
-	// writeTile(dx, dy, lx, ly) writes the tile with tile
-	// coordinates (dx, dy), and level number (lx, ly) to
-	// the file.
-	//
-	//   dx must lie in the interval [0, numXTiles(lx)-1]
-	//   dy must lie in the interval [0, numYTiles(ly)-1]
-	//
-	//   lx must lie in the interval [0, numXLevels()-1]
-	//   ly must lie in the inverval [0, numYLevels()-1]
-	//
-	// writeTile(dx, dy, level) is a convenience function
-	// used for ONE_LEVEL and MIPMAP_LEVEL files.  It calls
-	// writeTile(dx, dy, level, level).
-	//
-	// The two writeTiles(dx1, dx2, dy1, dy2, ...) functions allow
-	// writing multiple tiles at once.  If multi-threading is used
-	// multiple tiles are written concurrently.
-	//
-	// Pixels that are outside the pixel coordinate range for the tile's
-	// level, are never accessed by writeTile().
-	//
-	// Each tile in the file must be written exactly once.
-	//
-	//------------------------------------------------------------------
-
-	void		writeTile (int dx, int dy, int l = 0);
-	void		writeTile (int dx, int dy, int lx, int ly);
-
-	void		writeTiles (int dxMin, int dxMax, int dyMin, int dyMax,
-							int lx, int ly);
-
-	void		writeTiles (int dxMin, int dxMax, int dyMin, int dyMax,
-							int l = 0);
+    virtual ~TiledRgbaOutputFile();
 
 
-	// -------------------------------------------------------------------------
-	// Update the preview image (see Imf::TiledOutputFile::updatePreviewImage())
-	// -------------------------------------------------------------------------
+    //------------------------------------------------
+    // Define a frame buffer as the pixel data source:
+    // Pixel (x, y) is at address
+    //
+    //  base + x * xStride + y * yStride
+    //
+    //------------------------------------------------
 
-	void		updatePreviewImage (const PreviewRgba[]);
+    void		setFrameBuffer(const Rgba* base,
+                               size_t xStride,
+                               size_t yStride);
+
+    //--------------------------
+    // Access to the file header
+    //--------------------------
+
+    const Header& 		header() const;
+    const FrameBuffer& 		frameBuffer() const;
+    const Imath::Box2i& 	displayWindow() const;
+    const Imath::Box2i& 	dataWindow() const;
+    float			pixelAspectRatio() const;
+    const Imath::V2f		screenWindowCenter() const;
+    float			screenWindowWidth() const;
+    LineOrder			lineOrder() const;
+    Compression			compression() const;
+    RgbaChannels		channels() const;
 
 
-	//------------------------------------------------
-	// Break a tile -- for testing and debugging only
-	// (see Imf::TiledOutputFile::breakTile())
-	//
-	// Warning: Calling this function usually results
-	// in a broken image file.  The file or parts of
-	// it may not be readable, or the file may contain
-	// bad data.
-	//
-	//------------------------------------------------
+    //----------------------------------------------------
+    // Utility functions (same as in Imf::TiledOutputFile)
+    //----------------------------------------------------
 
-	void		breakTile  (int dx, int dy,
-							int lx, int ly,
-							int offset,
-							int length,
-							char c);
+    unsigned int	tileXSize() const;
+    unsigned int	tileYSize() const;
+    LevelMode		levelMode() const;
+    LevelRoundingMode	levelRoundingMode() const;
+
+    int			numLevels() const;
+    int			numXLevels() const;
+    int			numYLevels() const;
+    bool		isValidLevel(int lx, int ly) const;
+
+    int			levelWidth(int lx) const;
+    int			levelHeight(int ly) const;
+
+    int			numXTiles(int lx = 0) const;
+    int			numYTiles(int ly = 0) const;
+
+    Imath::Box2i	dataWindowForLevel(int l = 0) const;
+    Imath::Box2i	dataWindowForLevel(int lx, int ly) const;
+
+    Imath::Box2i	dataWindowForTile(int dx, int dy,
+                                      int l = 0) const;
+
+    Imath::Box2i	dataWindowForTile(int dx, int dy,
+                                      int lx, int ly) const;
+
+    //------------------------------------------------------------------
+    // Write pixel data:
+    //
+    // writeTile(dx, dy, lx, ly) writes the tile with tile
+    // coordinates (dx, dy), and level number (lx, ly) to
+    // the file.
+    //
+    //   dx must lie in the interval [0, numXTiles(lx)-1]
+    //   dy must lie in the interval [0, numYTiles(ly)-1]
+    //
+    //   lx must lie in the interval [0, numXLevels()-1]
+    //   ly must lie in the inverval [0, numYLevels()-1]
+    //
+    // writeTile(dx, dy, level) is a convenience function
+    // used for ONE_LEVEL and MIPMAP_LEVEL files.  It calls
+    // writeTile(dx, dy, level, level).
+    //
+    // The two writeTiles(dx1, dx2, dy1, dy2, ...) functions allow
+    // writing multiple tiles at once.  If multi-threading is used
+    // multiple tiles are written concurrently.
+    //
+    // Pixels that are outside the pixel coordinate range for the tile's
+    // level, are never accessed by writeTile().
+    //
+    // Each tile in the file must be written exactly once.
+    //
+    //------------------------------------------------------------------
+
+    void		writeTile(int dx, int dy, int l = 0);
+    void		writeTile(int dx, int dy, int lx, int ly);
+
+    void		writeTiles(int dxMin, int dxMax, int dyMin, int dyMax,
+                           int lx, int ly);
+
+    void		writeTiles(int dxMin, int dxMax, int dyMin, int dyMax,
+                           int l = 0);
+
+
+    // -------------------------------------------------------------------------
+    // Update the preview image (see Imf::TiledOutputFile::updatePreviewImage())
+    // -------------------------------------------------------------------------
+
+    void		updatePreviewImage(const PreviewRgba[]);
+
+
+    //------------------------------------------------
+    // Break a tile -- for testing and debugging only
+    // (see Imf::TiledOutputFile::breakTile())
+    //
+    // Warning: Calling this function usually results
+    // in a broken image file.  The file or parts of
+    // it may not be readable, or the file may contain
+    // bad data.
+    //
+    //------------------------------------------------
+
+    void		breakTile(int dx, int dy,
+                          int lx, int ly,
+                          int offset,
+                          int length,
+                          char c);
 private:
 
-	//
-	// Copy constructor and assignment are not implemented
-	//
+    //
+    // Copy constructor and assignment are not implemented
+    //
 
-	TiledRgbaOutputFile (const TiledRgbaOutputFile&);
-	TiledRgbaOutputFile& operator = (const TiledRgbaOutputFile&);
+    TiledRgbaOutputFile(const TiledRgbaOutputFile&);
+    TiledRgbaOutputFile& operator = (const TiledRgbaOutputFile&);
 
-	class ToYa;
+    class ToYa;
 
-	TiledOutputFile*             _outputFile;
-	ToYa* 			_toYa;
+    TiledOutputFile*             _outputFile;
+    ToYa* 			_toYa;
 };
 
 
@@ -296,153 +296,153 @@ private:
 class TiledRgbaInputFile {
 public:
 
-	//--------------------------------------------------------
-	// Constructor -- opens the file with the specified name.
-	// Destroying TiledRgbaInputFile objects constructed with
-	// this constructor automatically closes the corresponding
-	// files.
-	//--------------------------------------------------------
+    //--------------------------------------------------------
+    // Constructor -- opens the file with the specified name.
+    // Destroying TiledRgbaInputFile objects constructed with
+    // this constructor automatically closes the corresponding
+    // files.
+    //--------------------------------------------------------
 
-	TiledRgbaInputFile (const char name[],
-						int numThreads = globalThreadCount ());
-
-
-	//-------------------------------------------------------
-	// Constructor -- attaches the new TiledRgbaInputFile
-	// object to a file that has already been opened by the
-	// caller.
-	// Destroying TiledRgbaInputFile objects constructed with
-	// this constructor does not automatically close the
-	// corresponding files.
-	//-------------------------------------------------------
-
-	TiledRgbaInputFile (IStream& is, int numThreads = globalThreadCount ());
+    TiledRgbaInputFile(const char name[],
+                       int numThreads = globalThreadCount());
 
 
-	//-----------
-	// Destructor
-	//-----------
+    //-------------------------------------------------------
+    // Constructor -- attaches the new TiledRgbaInputFile
+    // object to a file that has already been opened by the
+    // caller.
+    // Destroying TiledRgbaInputFile objects constructed with
+    // this constructor does not automatically close the
+    // corresponding files.
+    //-------------------------------------------------------
 
-	virtual ~TiledRgbaInputFile ();
-
-
-	//-----------------------------------------------------
-	// Define a frame buffer as the pixel data destination:
-	// Pixel (x, y) is at address
-	//
-	//  base + x * xStride + y * yStride
-	//
-	//-----------------------------------------------------
-
-	void			setFrameBuffer (Rgba* base,
-									size_t xStride,
-									size_t yStride);
-
-	//--------------------------
-	// Access to the file header
-	//--------------------------
-
-	const Header& 		header () const;
-	const FrameBuffer& 		frameBuffer () const;
-	const Imath::Box2i& 	displayWindow () const;
-	const Imath::Box2i& 	dataWindow () const;
-	float			pixelAspectRatio () const;
-	const Imath::V2f		screenWindowCenter () const;
-	float			screenWindowWidth () const;
-	LineOrder			lineOrder () const;
-	Compression			compression () const;
-	RgbaChannels		channels () const;
-	const char*                 fileName () const;
-	bool			isComplete () const;
-
-	//----------------------------------
-	// Access to the file format version
-	//----------------------------------
-
-	int				version () const;
+    TiledRgbaInputFile(IStream& is, int numThreads = globalThreadCount());
 
 
-	//---------------------------------------------------
-	// Utility functions (same as in Imf::TiledInputFile)
-	//---------------------------------------------------
+    //-----------
+    // Destructor
+    //-----------
 
-	unsigned int	tileXSize () const;
-	unsigned int	tileYSize () const;
-	LevelMode		levelMode () const;
-	LevelRoundingMode	levelRoundingMode () const;
-
-	int			numLevels () const;
-	int			numXLevels () const;
-	int			numYLevels () const;
-	bool		isValidLevel (int lx, int ly) const;
-
-	int			levelWidth  (int lx) const;
-	int			levelHeight (int ly) const;
-
-	int			numXTiles (int lx = 0) const;
-	int			numYTiles (int ly = 0) const;
-
-	Imath::Box2i	dataWindowForLevel (int l = 0) const;
-	Imath::Box2i	dataWindowForLevel (int lx, int ly) const;
-
-	Imath::Box2i	dataWindowForTile (int dx, int dy,
-									   int l = 0) const;
-
-	Imath::Box2i	dataWindowForTile (int dx, int dy,
-									   int lx, int ly) const;
+    virtual ~TiledRgbaInputFile();
 
 
-	//----------------------------------------------------------------
-	// Read pixel data:
-	//
-	// readTile(dx, dy, lx, ly) reads the tile with tile
-	// coordinates (dx, dy), and level number (lx, ly),
-	// and stores it in the current frame buffer.
-	//
-	//   dx must lie in the interval [0, numXTiles(lx)-1]
-	//   dy must lie in the interval [0, numYTiles(ly)-1]
-	//
-	//   lx must lie in the interval [0, numXLevels()-1]
-	//   ly must lie in the inverval [0, numYLevels()-1]
-	//
-	// readTile(dx, dy, level) is a convenience function used
-	// for ONE_LEVEL and MIPMAP_LEVELS files.  It calls
-	// readTile(dx, dy, level, level).
-	//
-	// The two readTiles(dx1, dx2, dy1, dy2, ...) functions allow
-	// reading multiple tiles at once.  If multi-threading is used
-	// multiple tiles are read concurrently.
-	//
-	// Pixels that are outside the pixel coordinate range for the
-	// tile's level, are never accessed by readTile().
-	//
-	// Attempting to access a tile that is not present in the file
-	// throws an InputExc exception.
-	//
-	//----------------------------------------------------------------
+    //-----------------------------------------------------
+    // Define a frame buffer as the pixel data destination:
+    // Pixel (x, y) is at address
+    //
+    //  base + x * xStride + y * yStride
+    //
+    //-----------------------------------------------------
 
-	void           	readTile (int dx, int dy, int l = 0);
-	void           	readTile (int dx, int dy, int lx, int ly);
+    void			setFrameBuffer(Rgba* base,
+                                   size_t xStride,
+                                   size_t yStride);
 
-	void		readTiles (int dxMin, int dxMax,
-						   int dyMin, int dyMax, int lx, int ly);
+    //--------------------------
+    // Access to the file header
+    //--------------------------
 
-	void		readTiles (int dxMin, int dxMax,
-						   int dyMin, int dyMax, int l = 0);
+    const Header& 		header() const;
+    const FrameBuffer& 		frameBuffer() const;
+    const Imath::Box2i& 	displayWindow() const;
+    const Imath::Box2i& 	dataWindow() const;
+    float			pixelAspectRatio() const;
+    const Imath::V2f		screenWindowCenter() const;
+    float			screenWindowWidth() const;
+    LineOrder			lineOrder() const;
+    Compression			compression() const;
+    RgbaChannels		channels() const;
+    const char*                 fileName() const;
+    bool			isComplete() const;
+
+    //----------------------------------
+    // Access to the file format version
+    //----------------------------------
+
+    int				version() const;
+
+
+    //---------------------------------------------------
+    // Utility functions (same as in Imf::TiledInputFile)
+    //---------------------------------------------------
+
+    unsigned int	tileXSize() const;
+    unsigned int	tileYSize() const;
+    LevelMode		levelMode() const;
+    LevelRoundingMode	levelRoundingMode() const;
+
+    int			numLevels() const;
+    int			numXLevels() const;
+    int			numYLevels() const;
+    bool		isValidLevel(int lx, int ly) const;
+
+    int			levelWidth(int lx) const;
+    int			levelHeight(int ly) const;
+
+    int			numXTiles(int lx = 0) const;
+    int			numYTiles(int ly = 0) const;
+
+    Imath::Box2i	dataWindowForLevel(int l = 0) const;
+    Imath::Box2i	dataWindowForLevel(int lx, int ly) const;
+
+    Imath::Box2i	dataWindowForTile(int dx, int dy,
+                                      int l = 0) const;
+
+    Imath::Box2i	dataWindowForTile(int dx, int dy,
+                                      int lx, int ly) const;
+
+
+    //----------------------------------------------------------------
+    // Read pixel data:
+    //
+    // readTile(dx, dy, lx, ly) reads the tile with tile
+    // coordinates (dx, dy), and level number (lx, ly),
+    // and stores it in the current frame buffer.
+    //
+    //   dx must lie in the interval [0, numXTiles(lx)-1]
+    //   dy must lie in the interval [0, numYTiles(ly)-1]
+    //
+    //   lx must lie in the interval [0, numXLevels()-1]
+    //   ly must lie in the inverval [0, numYLevels()-1]
+    //
+    // readTile(dx, dy, level) is a convenience function used
+    // for ONE_LEVEL and MIPMAP_LEVELS files.  It calls
+    // readTile(dx, dy, level, level).
+    //
+    // The two readTiles(dx1, dx2, dy1, dy2, ...) functions allow
+    // reading multiple tiles at once.  If multi-threading is used
+    // multiple tiles are read concurrently.
+    //
+    // Pixels that are outside the pixel coordinate range for the
+    // tile's level, are never accessed by readTile().
+    //
+    // Attempting to access a tile that is not present in the file
+    // throws an InputExc exception.
+    //
+    //----------------------------------------------------------------
+
+    void           	readTile(int dx, int dy, int l = 0);
+    void           	readTile(int dx, int dy, int lx, int ly);
+
+    void		readTiles(int dxMin, int dxMax,
+                          int dyMin, int dyMax, int lx, int ly);
+
+    void		readTiles(int dxMin, int dxMax,
+                          int dyMin, int dyMax, int l = 0);
 
 private:
 
-	//
-	// Copy constructor and assignment are not implemented
-	//
+    //
+    // Copy constructor and assignment are not implemented
+    //
 
-	TiledRgbaInputFile (const TiledRgbaInputFile&);
-	TiledRgbaInputFile& operator = (const TiledRgbaInputFile&);
+    TiledRgbaInputFile(const TiledRgbaInputFile&);
+    TiledRgbaInputFile& operator = (const TiledRgbaInputFile&);
 
-	class FromYa;
+    class FromYa;
 
-	TiledInputFile* 	_inputFile;
-	FromYa* 		_fromYa;
+    TiledInputFile* 	_inputFile;
+    FromYa* 		_fromYa;
 };
 
 

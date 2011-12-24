@@ -57,42 +57,42 @@ template <>
 class numeric_limits <half> {
 public:
 
-	static const bool is_specialized = true;
+    static const bool is_specialized = true;
 
-	static half min () throw () {return HALF_NRM_MIN;}
-	static half max () throw () {return HALF_MAX;}
+    static half min() throw() {return HALF_NRM_MIN;}
+    static half max() throw() {return HALF_MAX;}
 
-	static const int digits = HALF_MANT_DIG;
-	static const int digits10 = HALF_DIG;
-	static const bool is_signed = true;
-	static const bool is_integer = false;
-	static const bool is_exact = false;
-	static const int radix = HALF_RADIX;
-	static half epsilon () throw () {return HALF_EPSILON;}
-	static half round_error () throw () {return HALF_EPSILON / 2;}
+    static const int digits = HALF_MANT_DIG;
+    static const int digits10 = HALF_DIG;
+    static const bool is_signed = true;
+    static const bool is_integer = false;
+    static const bool is_exact = false;
+    static const int radix = HALF_RADIX;
+    static half epsilon() throw() {return HALF_EPSILON;}
+    static half round_error() throw() {return HALF_EPSILON / 2;}
 
-	static const int min_exponent = HALF_MIN_EXP;
-	static const int min_exponent10 = HALF_MIN_10_EXP;
-	static const int max_exponent = HALF_MAX_EXP;
-	static const int max_exponent10 = HALF_MAX_10_EXP;
+    static const int min_exponent = HALF_MIN_EXP;
+    static const int min_exponent10 = HALF_MIN_10_EXP;
+    static const int max_exponent = HALF_MAX_EXP;
+    static const int max_exponent10 = HALF_MAX_10_EXP;
 
-	static const bool has_infinity = true;
-	static const bool has_quiet_NaN = true;
-	static const bool has_signaling_NaN = true;
-	static const float_denorm_style has_denorm = denorm_present;
-	static const bool has_denorm_loss = false;
-	static half infinity () throw () {return half::posInf();}
-	static half quiet_NaN () throw () {return half::qNan();}
-	static half signaling_NaN () throw () {return half::sNan();}
-	static half denorm_min () throw () {return HALF_MIN;}
+    static const bool has_infinity = true;
+    static const bool has_quiet_NaN = true;
+    static const bool has_signaling_NaN = true;
+    static const float_denorm_style has_denorm = denorm_present;
+    static const bool has_denorm_loss = false;
+    static half infinity() throw() {return half::posInf();}
+    static half quiet_NaN() throw() {return half::qNan();}
+    static half signaling_NaN() throw() {return half::sNan();}
+    static half denorm_min() throw() {return HALF_MIN;}
 
-	static const bool is_iec559 = false;
-	static const bool is_bounded = false;
-	static const bool is_modulo = false;
+    static const bool is_iec559 = false;
+    static const bool is_bounded = false;
+    static const bool is_modulo = false;
 
-	static const bool traps = true;
-	static const bool tinyness_before = false;
-	static const float_round_style round_style = round_to_nearest;
+    static const bool traps = true;
+    static const bool tinyness_before = false;
+    static const float_round_style round_style = round_to_nearest;
 };
 
 

@@ -1294,7 +1294,7 @@ if (capture->bufferIndex == capture->memoryBuffer.frames) {
 }
 
 return(1);
-}
+      }
 
       /*
        * Turn a YUV4:2:0 block into an RGB block
@@ -1677,23 +1677,23 @@ void bayer2rgb24(long int WIDTH, long int HEIGHT, unsigned char* src, unsigned c
             if ((i % 2) == 0) {
                 /* B */
                 if ((i > WIDTH) && ((i % WIDTH) > 0)) {
-                    *scanpt++ = (*(rawpt - WIDTH - 1) + * (rawpt - WIDTH + 1) +
-                                 * (rawpt + WIDTH - 1) + * (rawpt + WIDTH + 1)) / 4; /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1) +
-                                 * (rawpt + WIDTH) + * (rawpt - WIDTH)) / 4; /* G */
+                    *scanpt++ = (*(rawpt - WIDTH - 1) + *(rawpt - WIDTH + 1) +
+                                 *(rawpt + WIDTH - 1) + *(rawpt + WIDTH + 1)) / 4; /* R */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1) +
+                                 *(rawpt + WIDTH) + *(rawpt - WIDTH)) / 4; /* G */
                     *scanpt++ = *rawpt;                                     /* B */
                 } else {
                     /* first line or left column */
                     *scanpt++ = *(rawpt + WIDTH + 1);       /* R */
-                    *scanpt++ = (*(rawpt + 1) + * (rawpt + WIDTH)) / 2; /* G */
+                    *scanpt++ = (*(rawpt + 1) + *(rawpt + WIDTH)) / 2; /* G */
                     *scanpt++ = *rawpt;                             /* B */
                 }
             } else {
                 /* (B)G */
                 if ((i > WIDTH) && ((i % WIDTH) < (WIDTH - 1))) {
-                    *scanpt++ = (*(rawpt + WIDTH) + * (rawpt - WIDTH)) / 2; /* R */
+                    *scanpt++ = (*(rawpt + WIDTH) + *(rawpt - WIDTH)) / 2; /* R */
                     *scanpt++ = *rawpt;                                     /* G */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1)) / 2; /* B */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1)) / 2;  /* B */
                 } else {
                     /* first line or right column */
                     *scanpt++ = *(rawpt + WIDTH);   /* R */
@@ -1704,10 +1704,10 @@ void bayer2rgb24(long int WIDTH, long int HEIGHT, unsigned char* src, unsigned c
         } else {
             if ((i % 2) == 0) {
                 /* G(R) */
-                if ((i < (WIDTH * (HEIGHT - 1))) && ((i % WIDTH) > 0)) {
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1)) / 2; /* R */
+                if ((i < (WIDTH*(HEIGHT - 1))) && ((i % WIDTH) > 0)) {
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1)) / 2;  /* R */
                     *scanpt++ = *rawpt;                                     /* G */
-                    *scanpt++ = (*(rawpt + WIDTH) + * (rawpt - WIDTH)) / 2; /* B */
+                    *scanpt++ = (*(rawpt + WIDTH) + *(rawpt - WIDTH)) / 2; /* B */
                 } else {
                     /* bottom line or left column */
                     *scanpt++ = *(rawpt + 1);       /* R */
@@ -1716,16 +1716,16 @@ void bayer2rgb24(long int WIDTH, long int HEIGHT, unsigned char* src, unsigned c
                 }
             } else {
                 /* R */
-                if (i < (WIDTH * (HEIGHT - 1)) && ((i % WIDTH) < (WIDTH - 1))) {
+                if (i < (WIDTH*(HEIGHT - 1)) && ((i % WIDTH) < (WIDTH - 1))) {
                     *scanpt++ = *rawpt;                                     /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1) +
-                                 * (rawpt - WIDTH) + * (rawpt + WIDTH)) / 4; /* G */
-                    *scanpt++ = (*(rawpt - WIDTH - 1) + * (rawpt - WIDTH + 1) +
-                                 * (rawpt + WIDTH - 1) + * (rawpt + WIDTH + 1)) / 4; /* B */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1) +
+                                 *(rawpt - WIDTH) + *(rawpt + WIDTH)) / 4; /* G */
+                    *scanpt++ = (*(rawpt - WIDTH - 1) + *(rawpt - WIDTH + 1) +
+                                 *(rawpt + WIDTH - 1) + *(rawpt + WIDTH + 1)) / 4; /* B */
                 } else {
                     /* bottom line or right column */
                     *scanpt++ = *rawpt;                             /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt - WIDTH)) / 2; /* G */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt - WIDTH)) / 2; /* G */
                     *scanpt++ = *(rawpt - WIDTH - 1);       /* B */
                 }
             }
@@ -1753,9 +1753,9 @@ void sgbrg2rgb24(long int WIDTH, long int HEIGHT, unsigned char* src, unsigned c
         if ((i / WIDTH) % 2 == 0) {   //even row
             if ((i % 2) == 0) {   //even pixel
                 if ((i > WIDTH) && ((i % WIDTH) > 0)) {
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1)) / 2; /* R */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1)) / 2; /* R */
                     *scanpt++ = *(rawpt);                        /* G */
-                    *scanpt++ = (*(rawpt - WIDTH) + * (rawpt + WIDTH)) / 2; /* B */
+                    *scanpt++ = (*(rawpt - WIDTH) + *(rawpt + WIDTH)) / 2; /* B */
                 } else {
                     /* first line or left column */
 
@@ -1766,36 +1766,36 @@ void sgbrg2rgb24(long int WIDTH, long int HEIGHT, unsigned char* src, unsigned c
             } else { //odd pixel
                 if ((i > WIDTH) && ((i % WIDTH) < (WIDTH - 1))) {
                     *scanpt++ = *(rawpt);       /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1) + * (rawpt - WIDTH) + * (rawpt + WIDTH)) / 4; /* G */
-                    *scanpt++ = (*(rawpt - WIDTH - 1) + * (rawpt - WIDTH + 1) + * (rawpt + WIDTH - 1) + * (rawpt + WIDTH + 1)) / 4; /* B */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1) + *(rawpt - WIDTH) + *(rawpt + WIDTH)) / 4; /* G */
+                    *scanpt++ = (*(rawpt - WIDTH - 1) + *(rawpt - WIDTH + 1) + *(rawpt + WIDTH - 1) + *(rawpt + WIDTH + 1)) / 4; /* B */
                 } else {
                     /* first line or right column */
 
                     *scanpt++ = *(rawpt);       /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + WIDTH)) / 2; /* G */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + WIDTH)) / 2; /* G */
                     *scanpt++ = *(rawpt + WIDTH - 1);  /* B */
                 }
             }
         } else {
             //odd row
             if ((i % 2) == 0) {   //even pixel
-                if ((i < (WIDTH * (HEIGHT - 1))) && ((i % WIDTH) > 0)) {
-                    *scanpt++ = (*(rawpt - WIDTH - 1) + * (rawpt - WIDTH + 1) + * (rawpt + WIDTH - 1) + * (rawpt + WIDTH + 1)) / 4; /* R */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1) + * (rawpt - WIDTH) + * (rawpt + WIDTH)) / 4; /* G */
+                if ((i < (WIDTH*(HEIGHT - 1))) && ((i % WIDTH) > 0)) {
+                    *scanpt++ = (*(rawpt - WIDTH - 1) + *(rawpt - WIDTH + 1) + *(rawpt + WIDTH - 1) + *(rawpt + WIDTH + 1)) / 4;  /* R */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1) + *(rawpt - WIDTH) + *(rawpt + WIDTH)) / 4;  /* G */
                     *scanpt++ =  *(rawpt); /* B */
                 } else {
                     /* bottom line or left column */
 
                     *scanpt++ =  *(rawpt - WIDTH + 1);      /* R */
-                    *scanpt++ = (*(rawpt + 1) + * (rawpt - WIDTH)) / 2; /* G */
+                    *scanpt++ = (*(rawpt + 1) + *(rawpt - WIDTH)) / 2;  /* G */
                     *scanpt++ =  *(rawpt); /* B */
                 }
             } else {
                 //odd pixel
-                if (i < (WIDTH * (HEIGHT - 1)) && ((i % WIDTH) < (WIDTH - 1))) {
-                    *scanpt++ = (*(rawpt - WIDTH) + * (rawpt + WIDTH)) / 2; /* R */
+                if (i < (WIDTH*(HEIGHT - 1)) && ((i % WIDTH) < (WIDTH - 1))) {
+                    *scanpt++ = (*(rawpt - WIDTH) + *(rawpt + WIDTH)) / 2; /* R */
                     *scanpt++ = *(rawpt);      /* G */
-                    *scanpt++ = (*(rawpt - 1) + * (rawpt + 1)) / 2; /* B */
+                    *scanpt++ = (*(rawpt - 1) + *(rawpt + 1)) / 2; /* B */
                 } else {
                     /* bottom line or right column */
 
@@ -1950,13 +1950,13 @@ int sonix_decompress(int width, int height, unsigned char* inp, unsigned char* o
                 /* value is relative to top and left pixel */
                 if (col < 2) {
                     /* left column: relative to top pixel */
-                    val += outp[-2 * width];
+                    val += outp[-2*width];
                 } else if (row < 2) {
                     /* top row: relative to left pixel */
                     val += outp[-2];
                 } else {
                     /* main area: average of left pixel and top pixel */
-                    val += (outp[-2] + outp[-2 * width]) / 2;
+                    val += (outp[-2] + outp[-2*width]) / 2;
                 }
             }
 
@@ -2079,18 +2079,18 @@ if (V4L2_SUPPORT == 1) {
         sonix_decompress(capture->form.fmt.pix.width,
                          capture->form.fmt.pix.height,
                          (unsigned char*)capture->buffers[capture->bufferIndex].start,
-                         (unsigned char*)capture->buffers[(capture->bufferIndex + 1) % capture->req.count].start);
+                         (unsigned char*)capture->buffers[(capture->bufferIndex+1) % capture->req.count].start);
 
         bayer2rgb24(capture->form.fmt.pix.width,
                     capture->form.fmt.pix.height,
-                    (unsigned char*)capture->buffers[(capture->bufferIndex + 1) % capture->req.count].start,
+                    (unsigned char*)capture->buffers[(capture->bufferIndex+1) % capture->req.count].start,
                     (unsigned char*)capture->frame.imageData);
     }
 
     if (PALETTE_SGBRG == 1) {
         sgbrg2rgb24(capture->form.fmt.pix.width,
                     capture->form.fmt.pix.height,
-                    (unsigned char*)capture->buffers[(capture->bufferIndex + 1) % capture->req.count].start,
+                    (unsigned char*)capture->buffers[(capture->bufferIndex+1) % capture->req.count].start,
                     (unsigned char*)capture->frame.imageData);
     }
 
@@ -2132,7 +2132,7 @@ if (V4L2_SUPPORT == 1) {
 }
 
 return(&capture->frame);
-}
+      }
 
       static double icvGetPropertyCAM_V4L(CvCaptureCAM_V4L* capture,
 int property_id) {
@@ -2400,7 +2400,7 @@ static int icvSetVideoSize(CvCaptureCAM_V4L* capture, int w, int h) {
 
 return 0;
 
-}
+       }
 
        static int icvSetControl(CvCaptureCAM_V4L* capture,
 int property_id, double value) {
@@ -2575,7 +2575,7 @@ int property_id, double value) {
 /* all was OK */
 return 0;
 
-}
+       }
 
        static int icvSetPropertyCAM_V4L(CvCaptureCAM_V4L* capture,
 int property_id, double value) {

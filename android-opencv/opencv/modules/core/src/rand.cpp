@@ -84,16 +84,16 @@ RandBits_(Mat& _arr, uint64* state, const void* _param) {
                 temp = RNG_NEXT(temp);
                 t0 = ((int)temp & p[i + 12]) + p[i];
                 temp = RNG_NEXT(temp);
-                t1 = ((int)temp & p[i + 13]) + p[i + 1];
+                t1 = ((int)temp & p[i + 13]) + p[i+1];
                 arr[i] = saturate_cast<T>(t0);
-                arr[i + 1] = saturate_cast<T>(t1);
+                arr[i+1] = saturate_cast<T>(t1);
 
                 temp = RNG_NEXT(temp);
-                t0 = ((int)temp & p[i + 14]) + p[i + 2];
+                t0 = ((int)temp & p[i + 14]) + p[i+2];
                 temp = RNG_NEXT(temp);
-                t1 = ((int)temp & p[i + 15]) + p[i + 3];
-                arr[i + 2] = saturate_cast<T>(t0);
-                arr[i + 3] = saturate_cast<T>(t1);
+                t1 = ((int)temp & p[i + 15]) + p[i+3];
+                arr[i+2] = saturate_cast<T>(t0);
+                arr[i+3] = saturate_cast<T>(t1);
 
                 if (!--k) {
                     k = 3;
@@ -107,14 +107,14 @@ RandBits_(Mat& _arr, uint64* state, const void* _param) {
                 temp = RNG_NEXT(temp);
                 t = (int)temp;
                 t0 = (t & p[i + 12]) + p[i];
-                t1 = ((t >> 8) & p[i + 13]) + p[i + 1];
+                t1 = ((t >> 8) & p[i + 13]) + p[i+1];
                 arr[i] = saturate_cast<T>(t0);
-                arr[i + 1] = saturate_cast<T>(t1);
+                arr[i+1] = saturate_cast<T>(t1);
 
                 t0 = ((t >> 16) & p[i + 14]) + p[i + 2];
                 t1 = ((t >> 24) & p[i + 15]) + p[i + 3];
-                arr[i + 2] = saturate_cast<T>(t0);
-                arr[i + 3] = saturate_cast<T>(t1);
+                arr[i+2] = saturate_cast<T>(t0);
+                arr[i+3] = saturate_cast<T>(t1);
 
                 if (!--k) {
                     k = 3;
@@ -152,7 +152,7 @@ Randi_(Mat& _arr, uint64* state, const void* _param) {
 
     for (k = 0; k < cn; k++) {
         ds[k].delta = param[k];
-        ds[k].d = (unsigned)(param[k + 12] - param[k]);
+        ds[k].d = (unsigned)(param[k+12] - param[k]);
         int l = 0;
         while (((uint64)1 << l) < ds[k].d) {
             l++;
@@ -177,26 +177,26 @@ Randi_(Mat& _arr, uint64* state, const void* _param) {
             temp = RNG_NEXT(temp);
             t1 = (unsigned)temp;
             v0 = (unsigned)(((uint64)t0 * p[i].M) >> 32);
-            v1 = (unsigned)(((uint64)t1 * p[i + 1].M) >> 32);
+            v1 = (unsigned)(((uint64)t1 * p[i+1].M) >> 32);
             v0 = (v0 + ((t0 - v0) >> p[i].sh1)) >> p[i].sh2;
-            v1 = (v1 + ((t1 - v1) >> p[i + 1].sh1)) >> p[i + 1].sh2;
+            v1 = (v1 + ((t1 - v1) >> p[i+1].sh1)) >> p[i+1].sh2;
             v0 = t0 - v0 * p[i].d + p[i].delta;
-            v1 = t1 - v1 * p[i + 1].d + p[i + 1].delta;
+            v1 = t1 - v1 * p[i+1].d + p[i+1].delta;
             arr[i] = saturate_cast<T>((int)v0);
-            arr[i + 1] = saturate_cast<T>((int)v1);
+            arr[i+1] = saturate_cast<T>((int)v1);
 
             temp = RNG_NEXT(temp);
             t0 = (unsigned)temp;
             temp = RNG_NEXT(temp);
             t1 = (unsigned)temp;
-            v0 = (unsigned)(((uint64)t0 * p[i + 2].M) >> 32);
-            v1 = (unsigned)(((uint64)t1 * p[i + 3].M) >> 32);
-            v0 = (v0 + ((t0 - v0) >> p[i + 2].sh1)) >> p[i + 2].sh2;
-            v1 = (v1 + ((t1 - v1) >> p[i + 3].sh1)) >> p[i + 3].sh2;
-            v0 = t0 - v0 * p[i + 2].d + p[i + 2].delta;
-            v1 = t1 - v1 * p[i + 3].d + p[i + 3].delta;
-            arr[i + 2] = saturate_cast<T>((int)v0);
-            arr[i + 3] = saturate_cast<T>((int)v1);
+            v0 = (unsigned)(((uint64)t0 * p[i+2].M) >> 32);
+            v1 = (unsigned)(((uint64)t1 * p[i+3].M) >> 32);
+            v0 = (v0 + ((t0 - v0) >> p[i+2].sh1)) >> p[i+2].sh2;
+            v1 = (v1 + ((t1 - v1) >> p[i+3].sh1)) >> p[i+3].sh2;
+            v0 = t0 - v0 * p[i+2].d + p[i+2].delta;
+            v1 = t1 - v1 * p[i+3].d + p[i+3].delta;
+            arr[i+2] = saturate_cast<T>((int)v0);
+            arr[i+3] = saturate_cast<T>((int)v1);
 
             if (!--k) {
                 k = 3;
@@ -231,16 +231,16 @@ static void Randf_(Mat& _arr, uint64* state, const void* _param) {
             float f0, f1;
 
             temp = RNG_NEXT(temp);
-            f0 = (int)temp * p[i + 12] + p[i];
+            f0 = (int)temp * p[i+12] + p[i];
             temp = RNG_NEXT(temp);
-            f1 = (int)temp * p[i + 13] + p[i + 1];
-            arr[i] = f0; arr[i + 1] = f1;
+            f1 = (int)temp * p[i+13] + p[i+1];
+            arr[i] = f0; arr[i+1] = f1;
 
             temp = RNG_NEXT(temp);
-            f0 = (int)temp * p[i + 14] + p[i + 2];
+            f0 = (int)temp * p[i+14] + p[i+2];
             temp = RNG_NEXT(temp);
-            f1 = (int)temp * p[i + 15] + p[i + 3];
-            arr[i + 2] = f0; arr[i + 3] = f1;
+            f1 = (int)temp * p[i+15] + p[i+3];
+            arr[i+2] = f0; arr[i+3] = f1;
 
             if (!--k) {
                 k = 3;
@@ -250,7 +250,7 @@ static void Randf_(Mat& _arr, uint64* state, const void* _param) {
 
         for (; i < size.width; i++) {
             temp = RNG_NEXT(temp);
-            arr[i] = (int)temp * p[i + 12] + p[i];
+            arr[i] = (int)temp * p[i+12] + p[i];
         }
     }
 
@@ -275,19 +275,19 @@ Randd_(Mat& _arr, uint64* state, const void* _param) {
 
             temp = RNG_NEXT(temp);
             v = (temp >> 32) | (temp << 32);
-            f0 = v * p[i + 12] + p[i];
+            f0 = v * p[i+12] + p[i];
             temp = RNG_NEXT(temp);
             v = (temp >> 32) | (temp << 32);
-            f1 = v * p[i + 13] + p[i + 1];
-            arr[i] = f0; arr[i + 1] = f1;
+            f1 = v * p[i+13] + p[i+1];
+            arr[i] = f0; arr[i+1] = f1;
 
             temp = RNG_NEXT(temp);
             v = (temp >> 32) | (temp << 32);
-            f0 = v * p[i + 14] + p[i + 2];
+            f0 = v * p[i+14] + p[i+2];
             temp = RNG_NEXT(temp);
             v = (temp >> 32) | (temp << 32);
-            f1 = v * p[i + 15] + p[i + 3];
-            arr[i + 2] = f0; arr[i + 3] = f1;
+            f1 = v * p[i+15] + p[i+3];
+            arr[i+2] = f0; arr[i+3] = f1;
 
             if (!--k) {
                 k = 3;
@@ -298,7 +298,7 @@ Randd_(Mat& _arr, uint64* state, const void* _param) {
         for (; i < size.width; i++) {
             temp = RNG_NEXT(temp);
             v = (temp >> 32) | (temp << 32);
-            arr[i] = v * p[i + 12] + p[i];
+            arr[i] = v * p[i+12] + p[i];
         }
     }
 
@@ -338,7 +338,7 @@ Randn_0_1_32f_C1R(float* arr, int len, uint64* state) {
 
         for (i = 126; i >= 1; i--) {
             dn = std::sqrt(-2.*std::log(vn / dn + std::exp(-.5 * dn * dn)));
-            kn[i + 1] = (unsigned)((dn / tn) * m1);
+            kn[i+1] = (unsigned)((dn / tn) * m1);
             tn = dn;
             fn[i] = (float)std::exp(-.5 * dn * dn);
             wn[i] = (float)(dn / m1);
@@ -365,14 +365,14 @@ Randn_0_1_32f_C1R(float* arr, int len, uint64* state) {
                     x = (float)(-std::log(x + FLT_MIN) * 0.2904764);
                     y = (float) - std::log(y + FLT_MIN);
                 }	// .2904764 is 1/r
-                while (y + y < x * x) { ; }
+                while (y + y < x * x);
                 x = hz > 0 ? r + x : -r - x;
                 break;
             }
             // iz > 0, handle the wedges of other strips
             y = (unsigned)temp * rng_flt;
             temp = RNG_NEXT(temp);
-            if (fn[iz] + y * (fn[iz - 1] - fn[iz]) < std::exp(-.5 * x * x)) {
+            if (fn[iz] + y*(fn[iz - 1] - fn[iz]) < std::exp(-.5 * x * x)) {
                 break;
             }
         }
@@ -412,15 +412,15 @@ Randn_(Mat& _arr, uint64* state, const void* _param) {
             for (j = 0; j <= len - 4; j += 4) {
                 PT f0, f1;
 
-                f0 = buffer[j] * p[j + 12] + p[j];
-                f1 = buffer[j + 1] * p[j + 13] + p[j + 1];
-                arr[i + j] = saturate_cast<T>(f0);
-                arr[i + j + 1] = saturate_cast<T>(f1);
+                f0 = buffer[j] * p[j+12] + p[j];
+                f1 = buffer[j+1] * p[j+13] + p[j+1];
+                arr[i+j] = saturate_cast<T>(f0);
+                arr[i+j+1] = saturate_cast<T>(f1);
 
-                f0 = buffer[j + 2] * p[j + 14] + p[j + 2];
-                f1 = buffer[j + 3] * p[j + 15] + p[j + 3];
-                arr[i + j + 2] = saturate_cast<T>(f0);
-                arr[i + j + 3] = saturate_cast<T>(f1);
+                f0 = buffer[j+2] * p[j+14] + p[j+2];
+                f1 = buffer[j+3] * p[j+15] + p[j+3];
+                arr[i+j+2] = saturate_cast<T>(f0);
+                arr[i+j+3] = saturate_cast<T>(f1);
 
                 if (--k == 0) {
                     k = 3;
@@ -429,7 +429,7 @@ Randn_(Mat& _arr, uint64* state, const void* _param) {
             }
 
             for (; j < len; j++) {
-                arr[i + j] = saturate_cast<T>(buffer[j] * p[j + 12] + p[j]);
+                arr[i+j] = saturate_cast<T>(buffer[j] * p[j+12] + p[j]);
             }
         }
     }

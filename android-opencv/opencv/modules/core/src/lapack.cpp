@@ -99,7 +99,7 @@ double determinant(const Mat& mat) {
             if (info == 0) {
                 result = 1;
                 for (i = 0; i < n; i++) {
-                    result *= ((float*)a.data)[i * (n + 1)];
+                    result *= ((float*)a.data)[i*(n+1)];
                     sign ^= ipiv[i] != i + 1;
                 }
                 result *= sign ? -1 : 1;
@@ -127,7 +127,7 @@ double determinant(const Mat& mat) {
             if (info == 0) {
                 result = 1;
                 for (i = 0; i < n; i++) {
-                    result *= ((double*)a.data)[i * (n + 1)];
+                    result *= ((double*)a.data)[i*(n+1)];
                     sign ^= ipiv[i] != i + 1;
                 }
                 result *= sign ? -1 : 1;
@@ -165,9 +165,9 @@ double invert(const Mat& src, Mat& dst, int method) {
 
         return type == CV_32F ?
                (((float*)svd.w.data)[0] >= FLT_EPSILON ?
-                ((float*)svd.w.data)[n - 1] / ((float*)svd.w.data)[0] : 0) :
+                ((float*)svd.w.data)[n-1] / ((float*)svd.w.data)[0] : 0) :
                    (((double*)svd.w.data)[0] >= DBL_EPSILON ?
-                    ((double*)svd.w.data)[n - 1] / ((double*)svd.w.data)[0] : 0);
+                    ((double*)svd.w.data)[n-1] / ((double*)svd.w.data)[0] : 0);
     }
 
     CV_Assert(src.rows == src.cols && (type == CV_32F || type == CV_64F));
@@ -522,7 +522,7 @@ bool solve(const Mat& src, const Mat& _src2, Mat& dst, int method) {
     } else if (method == DECOMP_LU) {
         buf_size += (n + 1) * sizeof(integer);
     } else if (method == DECOMP_CHOLESKY)
-        { ; }
+        ;
     else {
         CV_Error(CV_StsBadArg, "Unknown method");
     }
@@ -679,10 +679,10 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
     int Estep = matE.step / sizeof(Real);
 
     for (k = 0; k < n; k++) {
-        e[k * estep] = S[(Sstep + 1) * k];
+        e[k* estep] = S[(Sstep + 1)*k];
         if (k < n - 1) {
-            for (m = k + 1, mv = std::abs(S[Sstep * k + m]), i = k + 2; i < n; i++) {
-                Real v = std::abs(S[Sstep * k + i]);
+            for (m = k + 1, mv = std::abs(S[Sstep*k + m]), i = k + 2; i < n; i++) {
+                Real v = std::abs(S[Sstep*k+i]);
                 if (mv < v) {
                     mv = v, m = i;
                 }
@@ -692,7 +692,7 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
         }
         if (k > 0) {
             for (m = 0, mv = std::abs(S[k]), i = 1; i < k; i++) {
-                Real v = std::abs(S[Sstep * i + k]);
+                Real v = std::abs(S[Sstep*i+k]);
                 if (mv < v) {
                     mv = v, m = i;
                 }
@@ -718,11 +718,11 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
             }
         }
 
-        Real p = S[Sstep * k + l];
+        Real p = S[Sstep*k + l];
         if (std::abs(p) <= eps) {
             break;
         }
-        Real y = Real((e[estep * l] - e[estep * k]) * 0.5);
+        Real y = Real((e[estep*l] - e[estep*k]) * 0.5);
         Real t = std::abs(y) + hypot(p, y);
         Real s = hypot(p, t);
         Real c = t / s;
@@ -730,10 +730,10 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
         if (y < 0) {
             s = -s, t = -t;
         }
-        S[Sstep * k + l] = 0;
+        S[Sstep* k + l] = 0;
 
-        e[estep * k] -= t;
-        e[estep * l] += t;
+        e[estep* k] -= t;
+        e[estep* l] += t;
 
         Real a0, b0;
 
@@ -742,19 +742,19 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
 
         // rotate rows and columns k and l
         for (i = 0; i < k; i++) {
-            rotate(S[Sstep * i + k], S[Sstep * i + l]);
+            rotate(S[Sstep*i+k], S[Sstep*i+l]);
         }
         for (i = k + 1; i < l; i++) {
-            rotate(S[Sstep * k + i], S[Sstep * i + l]);
+            rotate(S[Sstep*k+i], S[Sstep*i+l]);
         }
         for (i = l + 1; i < n; i++) {
-            rotate(S[Sstep * k + i], S[Sstep * l + i]);
+            rotate(S[Sstep*k+i], S[Sstep*l+i]);
         }
 
         // rotate eigenvectors
         if (computeEvects)
             for (i = 0; i < n; i++) {
-                rotate(E[Estep * k + i], E[Estep * l + i]);
+                rotate(E[Estep*k+i], E[Estep*l+i]);
             }
 
 #undef rotate
@@ -762,8 +762,8 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
         for (j = 0; j < 2; j++) {
             int idx = j == 0 ? k : l;
             if (idx < n - 1) {
-                for (m = idx + 1, mv = std::abs(S[Sstep * idx + m]), i = idx + 2; i < n; i++) {
-                    Real v = std::abs(S[Sstep * idx + i]);
+                for (m = idx + 1, mv = std::abs(S[Sstep*idx + m]), i = idx + 2; i < n; i++) {
+                    Real v = std::abs(S[Sstep*idx+i]);
                     if (mv < v) {
                         mv = v, m = i;
                     }
@@ -773,7 +773,7 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
             }
             if (idx > 0) {
                 for (m = 0, mv = std::abs(S[idx]), i = 1; i < idx; i++) {
-                    Real v = std::abs(S[Sstep * i + idx]);
+                    Real v = std::abs(S[Sstep*i+idx]);
                     if (mv < v) {
                         mv = v, m = i;
                     }
@@ -788,15 +788,15 @@ template<typename Real> bool jacobi(const Mat& _S0, Mat& _e, Mat& matE, bool com
     for (k = 0; k < n - 1; k++) {
         m = k;
         for (i = k + 1; i < n; i++) {
-            if (e[estep * m] < e[estep * i]) {
+            if (e[estep*m] < e[estep*i]) {
                 m = i;
             }
         }
         if (k != m) {
-            std::swap(e[estep * m], e[estep * k]);
+            std::swap(e[estep*m], e[estep*k]);
             if (computeEvects)
                 for (i = 0; i < n; i++) {
-                    std::swap(E[Estep * m + i], E[Estep * k + i]);
+                    std::swap(E[Estep*m + i], E[Estep*k + i]);
                 }
         }
     }
@@ -957,16 +957,16 @@ MatrAXPY(int m, int n, const T1* x, int dx,
          const T2* a, int inca, T3* y, int dy) {
     int i, j;
     for (i = 0; i < m; i++, x += dx, y += dy) {
-        T2 s = a[i * inca];
+        T2 s = a[i*inca];
         for (j = 0; j <= n - 4; j += 4) {
             T3 t0 = (T3)(y[j]   + s * x[j]);
-            T3 t1 = (T3)(y[j + 1] + s * x[j + 1]);
+            T3 t1 = (T3)(y[j+1] + s * x[j+1]);
             y[j]   = t0;
-            y[j + 1] = t1;
-            t0 = (T3)(y[j + 2] + s * x[j + 2]);
-            t1 = (T3)(y[j + 3] + s * x[j + 3]);
-            y[j + 2] = t0;
-            y[j + 3] = t1;
+            y[j+1] = t1;
+            t0 = (T3)(y[j+2] + s * x[j+2]);
+            t1 = (T3)(y[j+3] + s * x[j+3]);
+            y[j+2] = t0;
+            y[j+3] = t1;
         }
 
         for (; j < n; j++) {
@@ -992,17 +992,17 @@ SVBkSb(int m, int n, const T* w, int incw,
 
     for (i = 0; i < n; i++)
         for (j = 0; j < nb; j++) {
-            x[i * ldx + j] = 0;
+            x[i* ldx + j] = 0;
         }
 
     for (i = 0; i < nm; i++) {
-        threshold += w[i * incw];
+        threshold += w[i*incw];
     }
     threshold *= eps;
 
     // v * inv(w) * uT * b
     for (i = 0; i < nm; i++, u += udelta0, v += vdelta0) {
-        double wi = w[i * incw];
+        double wi = w[i*incw];
         if (wi <= threshold) {
             continue;
         }
@@ -1012,7 +1012,7 @@ SVBkSb(int m, int n, const T* w, int incw,
             double s = 0;
             if (b)
                 for (j = 0; j < m; j++) {
-                    s += u[j * udelta1] * b[j * ldb];
+                    s += u[j*udelta1] * b[j*ldb];
                 }
             else {
                 s = u[0];
@@ -1020,7 +1020,7 @@ SVBkSb(int m, int n, const T* w, int incw,
             s *= wi;
 
             for (j = 0; j < n; j++) {
-                x[j * ldx] = (T)(x[j * ldx] + s * v[j * vdelta1]);
+                x[j* ldx] = (T)(x[j*ldx] + s * v[j*vdelta1]);
             }
         } else {
             if (b) {
@@ -1033,7 +1033,7 @@ SVBkSb(int m, int n, const T* w, int incw,
                 }
             } else {
                 for (j = 0; j < nb; j++) {
-                    buffer[j] = u[j * udelta1] * wi;
+                    buffer[j] = u[j*udelta1] * wi;
                 }
             }
             MatrAXPY(n, nb, buffer, 0, v, vdelta1, x, ldx);

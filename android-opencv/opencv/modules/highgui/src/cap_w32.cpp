@@ -43,14 +43,14 @@
 
 extern "C"
 {
-    typedef void* (*CvCreateFileCapture_Plugin)(const char* filename);
-    typedef void* (*CvCreateCameraCapture_Plugin)(int index);
+    typedef void*(*CvCreateFileCapture_Plugin)(const char* filename);
+    typedef void*(*CvCreateCameraCapture_Plugin)(int index);
     typedef int (*CvGrabFrame_Plugin)(void* capture_handle);
-    typedef IplImage* (*CvRetrieveFrame_Plugin)(void* capture_handle, int);
+    typedef IplImage*(*CvRetrieveFrame_Plugin)(void* capture_handle, int);
     typedef int (*CvSetCaptureProperty_Plugin)(void* capture_handle, int prop_id, double value);
     typedef double(*CvGetCaptureProperty_Plugin)(void* capture_handle, int prop_id);
     typedef void (*CvReleaseCapture_Plugin)(void** capture_handle);
-    typedef void* (*CvCreateVideoWriter_Plugin)(const char* filename, int fourcc,
+    typedef void*(*CvCreateVideoWriter_Plugin)(const char* filename, int fourcc,
             double fps, CvSize frameSize, int isColor);
     typedef int (*CvWriteFrame_Plugin)(void* writer_handle, const IplImage* frame);
     typedef void (*CvReleaseVideoWriter_Plugin)(void** writer);

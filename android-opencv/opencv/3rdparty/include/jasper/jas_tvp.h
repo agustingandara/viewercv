@@ -78,71 +78,71 @@
 extern "C" {
 #endif
 
-	/******************************************************************************\
-	* Types.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Types.
+    \******************************************************************************/
 
-	/* Tag information type. */
+    /* Tag information type. */
 
-	typedef struct {
+    typedef struct {
 
-		int id;
-		/* The ID for the tag. */
+        int id;
+        /* The ID for the tag. */
 
-		char* name;
-		/* The name of the tag. */
+        char* name;
+        /* The name of the tag. */
 
-	} jas_taginfo_t;
+    } jas_taginfo_t;
 
-	/* Tag-value parser type. */
+    /* Tag-value parser type. */
 
-	typedef struct {
+    typedef struct {
 
-		char* buf;
-		/* The parsing buffer. */
+        char* buf;
+        /* The parsing buffer. */
 
-		char* tag;
-		/* The current tag name. */
+        char* tag;
+        /* The current tag name. */
 
-		char* val;
-		/* The current value. */
+        char* val;
+        /* The current value. */
 
-		char* pos;
-		/* The current position in the parsing buffer. */
+        char* pos;
+        /* The current position in the parsing buffer. */
 
-	} jas_tvparser_t;
+    } jas_tvparser_t;
 
-	/******************************************************************************\
-	* Tag information functions.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Tag information functions.
+    \******************************************************************************/
 
-	/* Lookup a tag by name. */
-	jas_taginfo_t* jas_taginfos_lookup(jas_taginfo_t* taginfos, const char* name);
+    /* Lookup a tag by name. */
+    jas_taginfo_t* jas_taginfos_lookup(jas_taginfo_t* taginfos, const char* name);
 
-	/* This function returns a pointer to the specified taginfo object if it
-	  exists (i.e., the pointer is nonnull); otherwise, a pointer to a dummy
-	  object is returned.  This is useful in some situations to avoid checking
-	  for a null pointer. */
-	jas_taginfo_t* jas_taginfo_nonull(jas_taginfo_t* taginfo);
+    /* This function returns a pointer to the specified taginfo object if it
+      exists (i.e., the pointer is nonnull); otherwise, a pointer to a dummy
+      object is returned.  This is useful in some situations to avoid checking
+      for a null pointer. */
+    jas_taginfo_t* jas_taginfo_nonull(jas_taginfo_t* taginfo);
 
-	/******************************************************************************\
-	* Tag-value parser functions.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Tag-value parser functions.
+    \******************************************************************************/
 
-	/* Create a tag-value parser for the specified string. */
-	jas_tvparser_t* jas_tvparser_create(const char* s);
+    /* Create a tag-value parser for the specified string. */
+    jas_tvparser_t* jas_tvparser_create(const char* s);
 
-	/* Destroy a tag-value parser. */
-	void jas_tvparser_destroy(jas_tvparser_t* tvparser);
+    /* Destroy a tag-value parser. */
+    void jas_tvparser_destroy(jas_tvparser_t* tvparser);
 
-	/* Get the next tag-value pair. */
-	int jas_tvparser_next(jas_tvparser_t* tvparser);
+    /* Get the next tag-value pair. */
+    int jas_tvparser_next(jas_tvparser_t* tvparser);
 
-	/* Get the tag name for the current tag-value pair. */
-	char* jas_tvparser_gettag(jas_tvparser_t* tvparser);
+    /* Get the tag name for the current tag-value pair. */
+    char* jas_tvparser_gettag(jas_tvparser_t* tvparser);
 
-	/* Get the value for the current tag-value pair. */
-	char* jas_tvparser_getval(jas_tvparser_t* tvparser);
+    /* Get the value for the current tag-value pair. */
+    char* jas_tvparser_getval(jas_tvparser_t* tvparser);
 
 #ifdef __cplusplus
 }

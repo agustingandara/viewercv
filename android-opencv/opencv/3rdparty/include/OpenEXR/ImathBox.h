@@ -71,53 +71,53 @@ template <class T>
 class Box {
 public:
 
-	//-------------------------
-	//  Data Members are public
-	//-------------------------
+    //-------------------------
+    //  Data Members are public
+    //-------------------------
 
-	T				min;
-	T				max;
+    T				min;
+    T				max;
 
-	//-----------------------------------------------------
-	//	Constructors - an "empty" box is created by default
-	//-----------------------------------------------------
+    //-----------------------------------------------------
+    //	Constructors - an "empty" box is created by default
+    //-----------------------------------------------------
 
-	Box();
-	Box(const T& point);
-	Box(const T& minT, const T& maxT);
+    Box();
+    Box(const T& point);
+    Box(const T& minT, const T& maxT);
 
-	//--------------------
-	//  Operators:  ==, !=
-	//--------------------
+    //--------------------
+    //  Operators:  ==, !=
+    //--------------------
 
-	bool                        operator == (const Box<T> &src) const;
-	bool                        operator != (const Box<T> &src) const;
+    bool                        operator == (const Box<T> &src) const;
+    bool                        operator != (const Box<T> &src) const;
 
-	//------------------
-	//	Box manipulation
-	//------------------
+    //------------------
+    //	Box manipulation
+    //------------------
 
-	void			makeEmpty();
-	void			extendBy(const T& point);
-	void			extendBy(const Box<T>& box);
+    void			makeEmpty();
+    void			extendBy(const T& point);
+    void			extendBy(const Box<T>& box);
 
-	//---------------------------------------------------
-	//	Query functions - these compute results each time
-	//---------------------------------------------------
+    //---------------------------------------------------
+    //	Query functions - these compute results each time
+    //---------------------------------------------------
 
-	T				size() const;
-	T				center() const;
-	bool			intersects(const T& point) const;
-	bool			intersects(const Box<T> &box) const;
+    T				size() const;
+    T				center() const;
+    bool			intersects(const T& point) const;
+    bool			intersects(const Box<T> &box) const;
 
-	unsigned int		majorAxis() const;
+    unsigned int		majorAxis() const;
 
-	//----------------
-	//	Classification
-	//----------------
+    //----------------
+    //	Classification
+    //----------------
 
-	bool			isEmpty() const;
-	bool			hasVolume() const;
+    bool			isEmpty() const;
+    bool			hasVolume() const;
 };
 
 
@@ -143,111 +143,111 @@ typedef Box <V3d> Box3d;
 
 template <class T>
 inline Box<T>::Box() {
-	makeEmpty();
+    makeEmpty();
 }
 
 template <class T>
 inline Box<T>::Box(const T& point) {
-	min = point;
-	max = point;
+    min = point;
+    max = point;
 }
 
 template <class T>
 inline Box<T>::Box(const T& minV, const T& maxV) {
-	min = minV;
-	max = maxV;
+    min = minV;
+    max = maxV;
 }
 
 template <class T>
 inline bool
 Box<T>::operator == (const Box<T> &src) const {
-	return (min == src.min && max == src.max);
+    return (min == src.min && max == src.max);
 }
 
 template <class T>
 inline bool
 Box<T>::operator != (const Box<T> &src) const {
-	return (min != src.min || max != src.max);
+    return (min != src.min || max != src.max);
 }
 
 template <class T>
 inline void Box<T>::makeEmpty() {
-	min = T(T::baseTypeMax());
-	max = T(T::baseTypeMin());
+    min = T(T::baseTypeMax());
+    max = T(T::baseTypeMin());
 }
 
 template <class T>
 inline void Box<T>::extendBy(const T& point) {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if ( point[i] < min[i] ) { min[i] = point[i]; }
-		if ( point[i] > max[i] ) { max[i] = point[i]; }
-	}
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (point[i] < min[i]) { min[i] = point[i]; }
+        if (point[i] > max[i]) { max[i] = point[i]; }
+    }
 }
 
 template <class T>
 inline void Box<T>::extendBy(const Box<T>& box) {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if ( box.min[i] < min[i] ) { min[i] = box.min[i]; }
-		if ( box.max[i] > max[i] ) { max[i] = box.max[i]; }
-	}
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (box.min[i] < min[i]) { min[i] = box.min[i]; }
+        if (box.max[i] > max[i]) { max[i] = box.max[i]; }
+    }
 }
 
 template <class T>
 inline bool Box<T>::intersects(const T& point) const {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if (point[i] < min[i] || point[i] > max[i]) { return false; }
-	}
-	return true;
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (point[i] < min[i] || point[i] > max[i]) { return false; }
+    }
+    return true;
 }
 
 template <class T>
 inline bool Box<T>::intersects(const Box<T>& box) const {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if (box.max[i] < min[i] || box.min[i] > max[i]) { return false; }
-	}
-	return true;
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (box.max[i] < min[i] || box.min[i] > max[i]) { return false; }
+    }
+    return true;
 }
 
 template <class T>
 inline T Box<T>::size() const {
-	if (isEmpty()) {
-		return T (0);
-	}
+    if (isEmpty()) {
+        return T(0);
+    }
 
-	return max - min;
+    return max - min;
 }
 
 template <class T>
 inline T Box<T>::center() const {
-	return (max + min) / 2;
+    return (max + min) / 2;
 }
 
 template <class T>
 inline bool Box<T>::isEmpty() const {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if (max[i] < min[i]) { return true; }
-	}
-	return false;
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (max[i] < min[i]) { return true; }
+    }
+    return false;
 }
 
 template <class T>
 inline bool Box<T>::hasVolume() const {
-	for (unsigned int i = 0; i < min.dimensions(); i++) {
-		if (max[i] <= min[i]) { return false; }
-	}
-	return true;
+    for (unsigned int i = 0; i < min.dimensions(); i++) {
+        if (max[i] <= min[i]) { return false; }
+    }
+    return true;
 }
 
 template<class T>
 inline unsigned int Box<T>::majorAxis() const {
-	unsigned int major = 0;
-	T s = size();
+    unsigned int major = 0;
+    T s = size();
 
-	for (unsigned int i = 1; i < min.dimensions(); i++) {
-		if ( s[i] > s[major] ) { major = i; }
-	}
+    for (unsigned int i = 1; i < min.dimensions(); i++) {
+        if (s[i] > s[major]) { major = i; }
+    }
 
-	return major;
+    return major;
 }
 
 } // namespace Imath

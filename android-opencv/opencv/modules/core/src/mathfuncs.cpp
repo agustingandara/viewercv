@@ -97,7 +97,7 @@ static CvStatus CV_STDCALL FastAtan2_32f(const float* Y, const float* X, float* 
             __m128 xq4 = _mm_mul_ps(x4, x4), yq4 = _mm_mul_ps(y4, y4);
             __m128 xly = _mm_cmplt_ps(xq4, yq4);
             __m128 z4 = _mm_div_ps(_mm_mul_ps(x4, y4), _mm_add_ps(_mm_add_ps(_mm_max_ps(xq4, yq4),
-                                   _mm_mul_ps(_mm_min_ps(xq4, yq4), _0_28)), eps));
+            _mm_mul_ps(_mm_min_ps(xq4, yq4), _0_28)), eps));
 
             // a4 <- x < y ? 90 : 0;
             __m128 a4 = _mm_and_ps(xly, _90);
@@ -153,15 +153,15 @@ float  cubeRoot(float value) {
     /* 0.125 <= fr < 1.0 */
     /* Use quartic rational polynomial with error < 2^(-24) */
     fr = (float)(((((45.2548339756803022511987494 * fr +
-                     192.2798368355061050458134625) * fr +
-                    119.1654824285581628956914143) * fr +
-                   13.43250139086239872172837314) * fr +
-                  0.1636161226585754240958355063) /
-                 ((((14.80884093219134573786480845 * fr +
-                     151.9714051044435648658557668) * fr +
-                    168.5254414101568283957668343) * fr +
-                   33.9905941350215598754191872) * fr +
-                  1.0));
+    192.2798368355061050458134625) * fr +
+    119.1654824285581628956914143) * fr +
+    13.43250139086239872172837314) * fr +
+    0.1636161226585754240958355063) /
+    ((((14.80884093219134573786480845 * fr +
+    151.9714051044435648658557668) * fr +
+    168.5254414101568283957668343) * fr +
+    33.9905941350215598754191872) * fr +
+    1.0));
 
     /* fr *= 2^ex * sign */
     m.f = value;
@@ -448,7 +448,7 @@ void cartToPolar(const Mat& X, const Mat& Y, Mat& Mag, Mat& Angle, bool angleInD
 
 static CvStatus CV_STDCALL
 SinCos_32f(const float* angle, float* sinval, float* cosval,
-           int len, int angle_in_degrees) {
+int len, int angle_in_degrees) {
     const int N = 64;
 
     static const double sin_table[] = {
@@ -702,16 +702,16 @@ static CvStatus CV_STDCALL Exp_32f(const float* _x, float* y, int n) {
             x0 = x[i].i < 0 ? -exp_max_val : exp_max_val;
         }
 
-        if (((x[i + 1].i >> 23) & 255) > 127 + 10) {
-            x1 = x[i + 1].i < 0 ? -exp_max_val : exp_max_val;
+        if (((x[i+1].i >> 23) & 255) > 127 + 10) {
+            x1 = x[i+1].i < 0 ? -exp_max_val : exp_max_val;
         }
 
-        if (((x[i + 2].i >> 23) & 255) > 127 + 10) {
-            x2 = x[i + 2].i < 0 ? -exp_max_val : exp_max_val;
+        if (((x[i+2].i >> 23) & 255) > 127 + 10) {
+            x2 = x[i+2].i < 0 ? -exp_max_val : exp_max_val;
         }
 
-        if (((x[i + 3].i >> 23) & 255) > 127 + 10) {
-            x3 = x[i + 3].i < 0 ? -exp_max_val : exp_max_val;
+        if (((x[i+3].i >> 23) & 255) > 127 + 10) {
+            x3 = x[i+3].i < 0 ? -exp_max_val : exp_max_val;
         }
 
         val0 = cvRound(x0);
@@ -807,17 +807,17 @@ static CvStatus CV_STDCALL Exp_64f(const double* _x, double* y, int n) {
             x0 = t < 0 ? -exp_max_val : exp_max_val;
         }
 
-        t = (int)(x[i + 1].i >> 52);
+        t = (int)(x[i+1].i >> 52);
         if ((t & 2047) > 1023 + 10) {
             x1 = t < 0 ? -exp_max_val : exp_max_val;
         }
 
-        t = (int)(x[i + 2].i >> 52);
+        t = (int)(x[i+2].i >> 52);
         if ((t & 2047) > 1023 + 10) {
             x2 = t < 0 ? -exp_max_val : exp_max_val;
         }
 
-        t = (int)(x[i + 3].i >> 52);
+        t = (int)(x[i+3].i >> 52);
         if ((t & 2047) > 1023 + 10) {
             x3 = t < 0 ? -exp_max_val : exp_max_val;
         }
@@ -1213,7 +1213,7 @@ static CvStatus CV_STDCALL Log_32f(const float* _x, float* y, int n) {
         int h0, h1, h2, h3;
 
         h0 = x[i];
-        h1 = x[i + 1];
+        h1 = x[i+1];
         buf[0].i = (h0 & LOGTAB_MASK2_32F) | (127 << 23);
         buf[1].i = (h1 & LOGTAB_MASK2_32F) | (127 << 23);
 
@@ -1226,8 +1226,8 @@ static CvStatus CV_STDCALL Log_32f(const float* _x, float* y, int n) {
         y0 += icvLogTab[h0];
         y1 += icvLogTab[h1];
 
-        h2 = x[i + 2];
-        h3 = x[i + 3];
+        h2 = x[i+2];
+        h3 = x[i+3];
 
         x0 = LOGTAB_TRANSLATE(buf[0].f, h0);
         x1 = LOGTAB_TRANSLATE(buf[1].f, h1);
@@ -1759,7 +1759,7 @@ cvSolveCubic(const CvMat* coeffs, CvMat* roots) {
         }
         a1 = c[0];
         a2 = c[step];
-        a3 = c[step * 2];
+        a3 = c[step*2];
     } else {
         const double* c = coeffs->data.db;
         if (coeffs->rows > 1) {
@@ -1770,7 +1770,7 @@ cvSolveCubic(const CvMat* coeffs, CvMat* roots) {
         }
         a1 = c[0];
         a2 = c[step];
-        a3 = c[step * 2];
+        a3 = c[step*2];
     }
 
     if (a0 == 0) {
@@ -1835,7 +1835,7 @@ cvSolveCubic(const CvMat* coeffs, CvMat* roots) {
         }
         r[0] = (float)x0;
         r[step] = (float)x1;
-        r[step * 2] = (float)x2;
+        r[step*2] = (float)x2;
     } else {
         double* r = roots->data.db;
         if (roots->rows > 1) {
@@ -1843,7 +1843,7 @@ cvSolveCubic(const CvMat* coeffs, CvMat* roots) {
         }
         r[0] = x0;
         r[step] = x1;
-        r[step * 2] = x2;
+        r[step*2] = x2;
     }
 
     return n;
@@ -1914,7 +1914,7 @@ double cv::solvePoly(const Mat& coeffs0, Mat& roots0, int maxIters) {
             p = roots[i];
             C num = coeffs[n], denom = 1;
             for (j = 0; j < n; j++) {
-                num = num * p + coeffs[n - j - 1];
+                num = num * p + coeffs[n-j-1];
                 if (j != i) { denom = denom * (p - roots[j]); }
             }
             num /= denom;

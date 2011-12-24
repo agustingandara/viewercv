@@ -49,36 +49,36 @@ namespace cv {
 
 // native simple TIFF codec
 enum TiffCompression {
-	TIFF_UNCOMP = 1,
-	TIFF_HUFFMAN = 2,
-	TIFF_PACKBITS = 32773
+    TIFF_UNCOMP = 1,
+    TIFF_HUFFMAN = 2,
+    TIFF_PACKBITS = 32773
 };
 
 enum TiffByteOrder {
-	TIFF_ORDER_II = 0x4949,
-	TIFF_ORDER_MM = 0x4d4d
+    TIFF_ORDER_II = 0x4949,
+    TIFF_ORDER_MM = 0x4d4d
 };
 
 
 enum  TiffTag {
-	TIFF_TAG_WIDTH  = 256,
-	TIFF_TAG_HEIGHT = 257,
-	TIFF_TAG_BITS_PER_SAMPLE = 258,
-	TIFF_TAG_COMPRESSION = 259,
-	TIFF_TAG_PHOTOMETRIC = 262,
-	TIFF_TAG_STRIP_OFFSETS = 273,
-	TIFF_TAG_STRIP_COUNTS = 279,
-	TIFF_TAG_SAMPLES_PER_PIXEL = 277,
-	TIFF_TAG_ROWS_PER_STRIP = 278,
-	TIFF_TAG_PLANAR_CONFIG = 284,
-	TIFF_TAG_COLOR_MAP = 320
+    TIFF_TAG_WIDTH  = 256,
+    TIFF_TAG_HEIGHT = 257,
+    TIFF_TAG_BITS_PER_SAMPLE = 258,
+    TIFF_TAG_COMPRESSION = 259,
+    TIFF_TAG_PHOTOMETRIC = 262,
+    TIFF_TAG_STRIP_OFFSETS = 273,
+    TIFF_TAG_STRIP_COUNTS = 279,
+    TIFF_TAG_SAMPLES_PER_PIXEL = 277,
+    TIFF_TAG_ROWS_PER_STRIP = 278,
+    TIFF_TAG_PLANAR_CONFIG = 284,
+    TIFF_TAG_COLOR_MAP = 320
 };
 
 
 enum TiffFieldType {
-	TIFF_TYPE_BYTE = 1,
-	TIFF_TYPE_SHORT = 3,
-	TIFF_TYPE_LONG = 4
+    TIFF_TYPE_BYTE = 1,
+    TIFF_TYPE_SHORT = 3,
+    TIFF_TYPE_LONG = 4
 };
 
 
@@ -88,19 +88,19 @@ enum TiffFieldType {
 
 class TiffDecoder : public BaseImageDecoder {
 public:
-	TiffDecoder();
-	virtual ~TiffDecoder();
+    TiffDecoder();
+    virtual ~TiffDecoder();
 
-	bool  readHeader();
-	bool  readData( Mat& img );
-	void  close();
+    bool  readHeader();
+    bool  readData(Mat& img);
+    void  close();
 
-	size_t signatureLength() const;
-	bool checkSignature( const string& signature ) const;
-	ImageDecoder newDecoder() const;
+    size_t signatureLength() const;
+    bool checkSignature(const string& signature) const;
+    ImageDecoder newDecoder() const;
 
 protected:
-	void* m_tif;
+    void* m_tif;
 };
 
 #endif
@@ -108,16 +108,16 @@ protected:
 // ... and writer
 class TiffEncoder : public BaseImageEncoder {
 public:
-	TiffEncoder();
-	virtual ~TiffEncoder();
+    TiffEncoder();
+    virtual ~TiffEncoder();
 
-	bool  write( const Mat& img, const vector<int>& params );
-	ImageEncoder newEncoder() const;
+    bool  write(const Mat& img, const vector<int>& params);
+    ImageEncoder newEncoder() const;
 
 protected:
-	void  writeTag( WLByteStream& strm, TiffTag tag,
-					TiffFieldType fieldType,
-					int count, int value );
+    void  writeTag(WLByteStream& strm, TiffTag tag,
+                   TiffFieldType fieldType,
+                   int count, int value);
 };
 
 }

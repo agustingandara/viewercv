@@ -165,69 +165,69 @@ typedef signed char schar;
 typedef void CvArr;
 
 typedef union Cv32suf {
-	int i;
-	unsigned u;
-	float f;
+    int i;
+    unsigned u;
+    float f;
 }
 Cv32suf;
 
 typedef union Cv64suf {
-	int64 i;
-	uint64 u;
-	double f;
+    int64 i;
+    uint64 u;
+    double f;
 }
 Cv64suf;
 
 typedef int CVStatus;
 
 enum {
-	CV_StsOk =                       0, /* everithing is ok                */
-	CV_StsBackTrace =               -1, /* pseudo error for back trace     */
-	CV_StsError =                   -2, /* unknown /unspecified error      */
-	CV_StsInternal =                -3, /* internal error (bad state)      */
-	CV_StsNoMem =                   -4, /* insufficient memory             */
-	CV_StsBadArg =                  -5, /* function arg/param is bad       */
-	CV_StsBadFunc =                 -6, /* unsupported function            */
-	CV_StsNoConv =                  -7, /* iter. didn't converge           */
-	CV_StsAutoTrace =               -8, /* tracing                         */
-	CV_HeaderIsNull =               -9, /* image header is NULL            */
-	CV_BadImageSize =              -10, /* image size is invalid           */
-	CV_BadOffset =                 -11, /* offset is invalid               */
-	CV_BadDataPtr =                -12, /**/
-	CV_BadStep =                   -13, /**/
-	CV_BadModelOrChSeq =           -14, /**/
-	CV_BadNumChannels =            -15, /**/
-	CV_BadNumChannel1U =           -16, /**/
-	CV_BadDepth =                  -17, /**/
-	CV_BadAlphaChannel =           -18, /**/
-	CV_BadOrder =                  -19, /**/
-	CV_BadOrigin =                 -20, /**/
-	CV_BadAlign =                  -21, /**/
-	CV_BadCallBack =               -22, /**/
-	CV_BadTileSize =               -23, /**/
-	CV_BadCOI =                    -24, /**/
-	CV_BadROISize =                -25, /**/
-	CV_MaskIsTiled =               -26, /**/
-	CV_StsNullPtr =                -27, /* null pointer */
-	CV_StsVecLengthErr =           -28, /* incorrect vector length */
-	CV_StsFilterStructContentErr = -29, /* incorr. filter structure content */
-	CV_StsKernelStructContentErr = -30, /* incorr. transform kernel content */
-	CV_StsFilterOffsetErr =        -31, /* incorrect filter ofset value */
-	CV_StsBadSize =                -201, /* the input/output structure size is incorrect  */
-	CV_StsDivByZero =              -202, /* division by zero */
-	CV_StsInplaceNotSupported =    -203, /* in-place operation is not supported */
-	CV_StsObjectNotFound =         -204, /* request can't be completed */
-	CV_StsUnmatchedFormats =       -205, /* formats of input/output arrays differ */
-	CV_StsBadFlag =                -206, /* flag is wrong or not supported */
-	CV_StsBadPoint =               -207, /* bad CvPoint */
-	CV_StsBadMask =                -208, /* bad format of mask (neither 8uC1 nor 8sC1)*/
-	CV_StsUnmatchedSizes =         -209, /* sizes of input/output structures do not match */
-	CV_StsUnsupportedFormat =      -210, /* the data format/type is not supported by the function*/
-	CV_StsOutOfRange =             -211, /* some of parameters are out of range */
-	CV_StsParseError =             -212, /* invalid syntax/structure of the parsed file */
-	CV_StsNotImplemented =         -213, /* the requested function/feature is not implemented */
-	CV_StsBadMemBlock =            -214, /* an allocated block has been corrupted */
-	CV_StsAssert =                 -215 /* assertion failed */
+    CV_StsOk =                       0, /* everithing is ok                */
+    CV_StsBackTrace =               -1, /* pseudo error for back trace     */
+    CV_StsError =                   -2, /* unknown /unspecified error      */
+    CV_StsInternal =                -3, /* internal error (bad state)      */
+    CV_StsNoMem =                   -4, /* insufficient memory             */
+    CV_StsBadArg =                  -5, /* function arg/param is bad       */
+    CV_StsBadFunc =                 -6, /* unsupported function            */
+    CV_StsNoConv =                  -7, /* iter. didn't converge           */
+    CV_StsAutoTrace =               -8, /* tracing                         */
+    CV_HeaderIsNull =               -9, /* image header is NULL            */
+    CV_BadImageSize =              -10, /* image size is invalid           */
+    CV_BadOffset =                 -11, /* offset is invalid               */
+    CV_BadDataPtr =                -12, /**/
+    CV_BadStep =                   -13, /**/
+    CV_BadModelOrChSeq =           -14, /**/
+    CV_BadNumChannels =            -15, /**/
+    CV_BadNumChannel1U =           -16, /**/
+    CV_BadDepth =                  -17, /**/
+    CV_BadAlphaChannel =           -18, /**/
+    CV_BadOrder =                  -19, /**/
+    CV_BadOrigin =                 -20, /**/
+    CV_BadAlign =                  -21, /**/
+    CV_BadCallBack =               -22, /**/
+    CV_BadTileSize =               -23, /**/
+    CV_BadCOI =                    -24, /**/
+    CV_BadROISize =                -25, /**/
+    CV_MaskIsTiled =               -26, /**/
+    CV_StsNullPtr =                -27, /* null pointer */
+    CV_StsVecLengthErr =           -28, /* incorrect vector length */
+    CV_StsFilterStructContentErr = -29, /* incorr. filter structure content */
+    CV_StsKernelStructContentErr = -30, /* incorr. transform kernel content */
+    CV_StsFilterOffsetErr =        -31, /* incorrect filter ofset value */
+    CV_StsBadSize =                -201, /* the input/output structure size is incorrect  */
+    CV_StsDivByZero =              -202, /* division by zero */
+    CV_StsInplaceNotSupported =    -203, /* in-place operation is not supported */
+    CV_StsObjectNotFound =         -204, /* request can't be completed */
+    CV_StsUnmatchedFormats =       -205, /* formats of input/output arrays differ */
+    CV_StsBadFlag =                -206, /* flag is wrong or not supported */
+    CV_StsBadPoint =               -207, /* bad CvPoint */
+    CV_StsBadMask =                -208, /* bad format of mask (neither 8uC1 nor 8sC1)*/
+    CV_StsUnmatchedSizes =         -209, /* sizes of input/output structures do not match */
+    CV_StsUnsupportedFormat =      -210, /* the data format/type is not supported by the function*/
+    CV_StsOutOfRange =             -211, /* some of parameters are out of range */
+    CV_StsParseError =             -212, /* invalid syntax/structure of the parsed file */
+    CV_StsNotImplemented =         -213, /* the requested function/feature is not implemented */
+    CV_StsBadMemBlock =            -214, /* an allocated block has been corrupted */
+    CV_StsAssert =                 -215 /* assertion failed */
 };
 
 /****************************************************************************************\
@@ -261,86 +261,86 @@ enum {
 #define  CV_CMP(a,b)    (((a) > (b)) - ((a) < (b)))
 #define  CV_SIGN(a)     CV_CMP((a),0)
 
-CV_INLINE  int  cvRound( double value ) {
+CV_INLINE  int  cvRound(double value) {
 #if (defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__ && !defined __APPLE__)
-	__m128d t = _mm_set_sd( value );
-	return _mm_cvtsd_si32(t);
+    __m128d t = _mm_set_sd(value);
+    return _mm_cvtsd_si32(t);
 #elif defined _MSC_VER && defined _M_IX86
-	int t;
-	__asm {
-		fld value;
-		fistp t;
-	}
-	return t;
+    int t;
+    __asm {
+        fld value;
+        fistp t;
+    }
+    return t;
 #elif defined HAVE_LRINT || defined CV_ICC || defined __GNUC__
-	return (int)lrint(value);
+    return (int)lrint(value);
 #else
-	// while this is not IEEE754-compliant rounding, it's usually a good enough approximation
-	return (int)(value + (value >= 0 ? 0.5 : -0.5));
+    // while this is not IEEE754-compliant rounding, it's usually a good enough approximation
+    return (int)(value + (value >= 0 ? 0.5 : -0.5));
 #endif
 }
 
 
-CV_INLINE  int  cvFloor( double value ) {
+CV_INLINE  int  cvFloor(double value) {
 #ifdef __GNUC__
-	int i = (int)value;
-	return i - (i > value);
+    int i = (int)value;
+    return i - (i > value);
 #elif defined _MSC_VER && defined _M_X64
-	__m128d t = _mm_set_sd( value );
-	int i = _mm_cvtsd_si32(t);
-	return i - _mm_movemask_pd(_mm_cmplt_sd(t, _mm_cvtsi32_sd(t, i)));
+    __m128d t = _mm_set_sd(value);
+    int i = _mm_cvtsd_si32(t);
+    return i - _mm_movemask_pd(_mm_cmplt_sd(t, _mm_cvtsi32_sd(t, i)));
 #else
-	int i = cvRound(value);
-	Cv32suf diff;
-	diff.f = (float)(value - i);
-	return i - (diff.i < 0);
+    int i = cvRound(value);
+    Cv32suf diff;
+    diff.f = (float)(value - i);
+    return i - (diff.i < 0);
 #endif
 }
 
 
-CV_INLINE  int  cvCeil( double value ) {
+CV_INLINE  int  cvCeil(double value) {
 #ifdef __GNUC__
-	int i = (int)value;
-	return i + (i < value);
+    int i = (int)value;
+    return i + (i < value);
 #elif defined _MSC_VER && defined _M_X64
-	__m128d t = _mm_set_sd( value );
-	int i = _mm_cvtsd_si32(t);
-	return i + _mm_movemask_pd(_mm_cmplt_sd(_mm_cvtsi32_sd(t, i), t));
+    __m128d t = _mm_set_sd(value);
+    int i = _mm_cvtsd_si32(t);
+    return i + _mm_movemask_pd(_mm_cmplt_sd(_mm_cvtsi32_sd(t, i), t));
 #else
-	int i = cvRound(value);
-	Cv32suf diff;
-	diff.f = (float)(i - value);
-	return i + (diff.i < 0);
+    int i = cvRound(value);
+    Cv32suf diff;
+    diff.f = (float)(i - value);
+    return i + (diff.i < 0);
 #endif
 }
 
 #define cvInvSqrt(value) ((float)(1./sqrt(value)))
 #define cvSqrt(value)  ((float)sqrt(value))
 
-CV_INLINE int cvIsNaN( double value ) {
+CV_INLINE int cvIsNaN(double value) {
 #if 1/*defined _MSC_VER || defined __BORLANDC__
-	return _isnan(value);
+    return _isnan(value);
 #elif defined __GNUC__
-	return isnan(value);
+    return isnan(value);
 #else*/
-	Cv64suf ieee754;
-	ieee754.f = value;
-	return ((unsigned)(ieee754.u >> 32) & 0x7fffffff) +
-		   ((unsigned)ieee754.u != 0) > 0x7ff00000;
+    Cv64suf ieee754;
+    ieee754.f = value;
+    return ((unsigned)(ieee754.u >> 32) & 0x7fffffff) +
+           ((unsigned)ieee754.u != 0) > 0x7ff00000;
 #endif
 }
 
 
-CV_INLINE int cvIsInf( double value ) {
+CV_INLINE int cvIsInf(double value) {
 #if 1/*defined _MSC_VER || defined __BORLANDC__
-	return !_finite(value);
+    return !_finite(value);
 #elif defined __GNUC__
-	return isinf(value);
+    return isinf(value);
 #else*/
-	Cv64suf ieee754;
-	ieee754.f = value;
-	return ((unsigned)(ieee754.u >> 32) & 0x7fffffff) == 0x7ff00000 &&
-		   (unsigned)ieee754.u == 0;
+    Cv64suf ieee754;
+    ieee754.f = value;
+    return ((unsigned)(ieee754.u >> 32) & 0x7fffffff) == 0x7ff00000 &&
+           (unsigned)ieee754.u == 0;
 #endif
 }
 
@@ -349,22 +349,22 @@ CV_INLINE int cvIsInf( double value ) {
 
 typedef uint64 CvRNG;
 
-CV_INLINE CvRNG cvRNG( int64 seed CV_DEFAULT(-1)) {
-	CvRNG rng = seed ? (uint64)seed : (uint64)(int64) - 1;
-	return rng;
+CV_INLINE CvRNG cvRNG(int64 seed CV_DEFAULT(-1)) {
+    CvRNG rng = seed ? (uint64)seed : (uint64)(int64) - 1;
+    return rng;
 }
 
 /* Return random 32-bit unsigned integer: */
-CV_INLINE unsigned cvRandInt( CvRNG* rng ) {
-	uint64 temp = *rng;
-	temp = (uint64)(unsigned)temp * 4164903690U + (temp >> 32);
-	*rng = temp;
-	return (unsigned)temp;
+CV_INLINE unsigned cvRandInt(CvRNG* rng) {
+    uint64 temp = *rng;
+    temp = (uint64)(unsigned)temp * 4164903690U + (temp >> 32);
+    *rng = temp;
+    return (unsigned)temp;
 }
 
 /* Returns random floating-point number between 0 and 1: */
-CV_INLINE double cvRandReal( CvRNG* rng ) {
-	return cvRandInt(rng) * 2.3283064365386962890625e-10 /* 2^-32 */;
+CV_INLINE double cvRandReal(CvRNG* rng) {
+    return cvRandInt(rng) * 2.3283064365386962890625e-10 /* 2^-32 */;
 }
 
 /****************************************************************************************\
@@ -409,34 +409,34 @@ CV_INLINE double cvRandReal( CvRNG* rng ) {
 #define IPL_BORDER_WRAP       3
 
 typedef struct _IplImage {
-	int  nSize;             /* sizeof(IplImage) */
-	int  ID;                /* version (=0)*/
-	int  nChannels;         /* Most of OpenCV functions support 1,2,3 or 4 channels */
-	int  alphaChannel;      /* Ignored by OpenCV */
-	int  depth;             /* Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
+    int  nSize;             /* sizeof(IplImage) */
+    int  ID;                /* version (=0)*/
+    int  nChannels;         /* Most of OpenCV functions support 1,2,3 or 4 channels */
+    int  alphaChannel;      /* Ignored by OpenCV */
+    int  depth;             /* Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
                                IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported.  */
-	char colorModel[4];     /* Ignored by OpenCV */
-	char channelSeq[4];     /* ditto */
-	int  dataOrder;         /* 0 - interleaved color channels, 1 - separate color channels.
+    char colorModel[4];     /* Ignored by OpenCV */
+    char channelSeq[4];     /* ditto */
+    int  dataOrder;         /* 0 - interleaved color channels, 1 - separate color channels.
                                cvCreateImage can only create interleaved images */
-	int  origin;            /* 0 - top-left origin,
+    int  origin;            /* 0 - top-left origin,
                                1 - bottom-left origin (Windows bitmaps style).  */
-	int  align;             /* Alignment of image rows (4 or 8).
+    int  align;             /* Alignment of image rows (4 or 8).
                                OpenCV ignores it and uses widthStep instead.    */
-	int  width;             /* Image width in pixels.                           */
-	int  height;            /* Image height in pixels.                          */
-	struct _IplROI* roi;    /* Image ROI. If NULL, the whole image is selected. */
-	struct _IplImage* maskROI;      /* Must be NULL. */
-	void*  imageId;                 /* "           " */
-	struct _IplTileInfo* tileInfo;  /* "           " */
-	int  imageSize;         /* Image data size in bytes
+    int  width;             /* Image width in pixels.                           */
+    int  height;            /* Image height in pixels.                          */
+    struct _IplROI* roi;    /* Image ROI. If NULL, the whole image is selected. */
+    struct _IplImage* maskROI;      /* Must be NULL. */
+    void*  imageId;                 /* "           " */
+    struct _IplTileInfo* tileInfo;  /* "           " */
+    int  imageSize;         /* Image data size in bytes
                                (==image->height*image->widthStep
                                in case of interleaved data)*/
-	char* imageData;        /* Pointer to aligned image data.         */
-	int  widthStep;         /* Size of aligned image row in bytes.    */
-	int  BorderMode[4];     /* Ignored by OpenCV.                     */
-	int  BorderConst[4];    /* Ditto.                                 */
-	char* imageDataOrigin;  /* Pointer to very origin of image data
+    char* imageData;        /* Pointer to aligned image data.         */
+    int  widthStep;         /* Size of aligned image row in bytes.    */
+    int  BorderMode[4];     /* Ignored by OpenCV.                     */
+    int  BorderConst[4];    /* Ditto.                                 */
+    char* imageDataOrigin;  /* Pointer to very origin of image data
                                (not necessarily aligned) -
                                needed for correct deallocation */
 }
@@ -445,30 +445,30 @@ IplImage;
 typedef struct _IplTileInfo IplTileInfo;
 
 typedef struct _IplROI {
-	int  coi; /* 0 - no COI (all channels are selected), 1 - 0th channel is selected ...*/
-	int  xOffset;
-	int  yOffset;
-	int  width;
-	int  height;
+    int  coi; /* 0 - no COI (all channels are selected), 1 - 0th channel is selected ...*/
+    int  xOffset;
+    int  yOffset;
+    int  width;
+    int  height;
 }
 IplROI;
 
 typedef struct _IplConvKernel {
-	int  nCols;
-	int  nRows;
-	int  anchorX;
-	int  anchorY;
-	int* values;
-	int  nShiftR;
+    int  nCols;
+    int  nRows;
+    int  anchorX;
+    int  anchorY;
+    int* values;
+    int  nShiftR;
 }
 IplConvKernel;
 
 typedef struct _IplConvKernelFP {
-	int  nCols;
-	int  nRows;
-	int  anchorX;
-	int  anchorY;
-	float* values;
+    int  nCols;
+    int  nRows;
+    int  anchorX;
+    int  anchorY;
+    float* values;
 }
 IplConvKernelFP;
 
@@ -584,34 +584,34 @@ IplConvKernelFP;
 #define CV_TYPE_NAME_MAT    "opencv-matrix"
 
 typedef struct CvMat {
-	int type;
-	int step;
+    int type;
+    int step;
 
-	/* for internal use only */
-	int* refcount;
-	int hdr_refcount;
+    /* for internal use only */
+    int* refcount;
+    int hdr_refcount;
 
-	union {
-		uchar* ptr;
-		short* s;
-		int* i;
-		float* fl;
-		double* db;
-	} data;
+    union {
+        uchar* ptr;
+        short* s;
+        int* i;
+        float* fl;
+        double* db;
+    } data;
 
 #ifdef __cplusplus
-	union {
-		int rows;
-		int height;
-	};
+    union {
+        int rows;
+        int height;
+    };
 
-	union {
-		int cols;
-		int width;
-	};
+    union {
+        int cols;
+        int width;
+    };
 #else
-	int rows;
-	int cols;
+    int rows;
+    int cols;
 #endif
 
 }
@@ -662,20 +662,20 @@ CvMat;
  * (Use together with cvCreateData, or use cvCreateMat instead to
  * get a matrix with allocated data):
  */
-CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL)) {
-	CvMat m;
+CV_INLINE CvMat cvMat(int rows, int cols, int type, void* data CV_DEFAULT(NULL)) {
+    CvMat m;
 
-	assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
-	type = CV_MAT_TYPE(type);
-	m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
-	m.cols = cols;
-	m.rows = rows;
-	m.step = m.cols * CV_ELEM_SIZE(type);
-	m.data.ptr = (uchar*)data;
-	m.refcount = NULL;
-	m.hdr_refcount = 0;
+    assert((unsigned)CV_MAT_DEPTH(type) <= CV_64F);
+    type = CV_MAT_TYPE(type);
+    m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
+    m.cols = cols;
+    m.rows = rows;
+    m.step = m.cols * CV_ELEM_SIZE(type);
+    m.data.ptr = (uchar*)data;
+    m.refcount = NULL;
+    m.hdr_refcount = 0;
 
-	return m;
+    return m;
 }
 
 
@@ -691,41 +691,41 @@ CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL)
     (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
 
 
-CV_INLINE  double  cvmGet( const CvMat* mat, int row, int col ) {
-	int type;
+CV_INLINE  double  cvmGet(const CvMat* mat, int row, int col) {
+    int type;
 
-	type = CV_MAT_TYPE(mat->type);
-	assert( (unsigned)row < (unsigned)mat->rows &&
-			(unsigned)col < (unsigned)mat->cols );
+    type = CV_MAT_TYPE(mat->type);
+    assert((unsigned)row < (unsigned)mat->rows &&
+           (unsigned)col < (unsigned)mat->cols);
 
-	if ( type == CV_32FC1 ) {
-		return ((float*)(mat->data.ptr + (size_t)mat->step * row))[col];
-	} else {
-		assert( type == CV_64FC1 );
-		return ((double*)(mat->data.ptr + (size_t)mat->step * row))[col];
-	}
+    if (type == CV_32FC1) {
+        return ((float*)(mat->data.ptr + (size_t)mat->step * row))[col];
+    } else {
+        assert(type == CV_64FC1);
+        return ((double*)(mat->data.ptr + (size_t)mat->step * row))[col];
+    }
 }
 
 
-CV_INLINE  void  cvmSet( CvMat* mat, int row, int col, double value ) {
-	int type;
-	type = CV_MAT_TYPE(mat->type);
-	assert( (unsigned)row < (unsigned)mat->rows &&
-			(unsigned)col < (unsigned)mat->cols );
+CV_INLINE  void  cvmSet(CvMat* mat, int row, int col, double value) {
+    int type;
+    type = CV_MAT_TYPE(mat->type);
+    assert((unsigned)row < (unsigned)mat->rows &&
+           (unsigned)col < (unsigned)mat->cols);
 
-	if ( type == CV_32FC1 ) {
-		((float*)(mat->data.ptr + (size_t)mat->step * row))[col] = (float)value;
-	} else {
-		assert( type == CV_64FC1 );
-		((double*)(mat->data.ptr + (size_t)mat->step * row))[col] = (double)value;
-	}
+    if (type == CV_32FC1) {
+        ((float*)(mat->data.ptr + (size_t)mat->step * row))[col] = (float)value;
+    } else {
+        assert(type == CV_64FC1);
+        ((double*)(mat->data.ptr + (size_t)mat->step * row))[col] = (double)value;
+    }
 }
 
 
-CV_INLINE int cvIplDepth( int type ) {
-	int depth = CV_MAT_DEPTH(type);
-	return CV_ELEM_SIZE1(depth) * 8 | (depth == CV_8S || depth == CV_16S ||
-									   depth == CV_32S ? IPL_DEPTH_SIGN : 0);
+CV_INLINE int cvIplDepth(int type) {
+    int depth = CV_MAT_DEPTH(type);
+    return CV_ELEM_SIZE1(depth) * 8 | (depth == CV_8S || depth == CV_16S ||
+                                       depth == CV_32S ? IPL_DEPTH_SIGN : 0);
 }
 
 
@@ -740,25 +740,25 @@ CV_INLINE int cvIplDepth( int type ) {
 #define CV_MAX_DIM_HEAP       (1 << 16)
 
 typedef struct CvMatND {
-	int type;
-	int dims;
+    int type;
+    int dims;
 
-	int* refcount;
-	int hdr_refcount;
+    int* refcount;
+    int hdr_refcount;
 
-	union {
-		uchar* ptr;
-		float* fl;
-		double* db;
-		int* i;
-		short* s;
-	} data;
+    union {
+        uchar* ptr;
+        float* fl;
+        double* db;
+        int* i;
+        short* s;
+    } data;
 
-	struct {
-		int size;
-		int step;
-	}
-	dim[CV_MAX_DIM];
+    struct {
+        int size;
+        int step;
+    }
+    dim[CV_MAX_DIM];
 }
 CvMatND;
 
@@ -779,17 +779,17 @@ CvMatND;
 struct CvSet;
 
 typedef struct CvSparseMat {
-	int type;
-	int dims;
-	int* refcount;
-	int hdr_refcount;
+    int type;
+    int dims;
+    int* refcount;
+    int hdr_refcount;
 
-	struct CvSet* heap;
-	void** hashtable;
-	int hashsize;
-	int valoffset;
-	int idxoffset;
-	int size[CV_MAX_DIM];
+    struct CvSet* heap;
+    void** hashtable;
+    int hashsize;
+    int valoffset;
+    int idxoffset;
+    int size[CV_MAX_DIM];
 }
 CvSparseMat;
 
@@ -803,15 +803,15 @@ CvSparseMat;
 /**************** iteration through a sparse array *****************/
 
 typedef struct CvSparseNode {
-	unsigned hashval;
-	struct CvSparseNode* next;
+    unsigned hashval;
+    struct CvSparseNode* next;
 }
 CvSparseNode;
 
 typedef struct CvSparseMatIterator {
-	CvSparseMat* mat;
-	CvSparseNode* node;
-	int curidx;
+    CvSparseMat* mat;
+    CvSparseNode* node;
+    int curidx;
 }
 CvSparseMatIterator;
 
@@ -839,11 +839,11 @@ typedef int CvHistType;
 #define CV_HIST_UNIFORM       1
 
 typedef struct CvHistogram {
-	int     type;
-	CvArr*  bins;
-	float   thresh[CV_MAX_DIM][2];  /* For uniform histograms.                      */
-	float** thresh2;                /* For non-uniform histograms.                  */
-	CvMatND mat;                    /* Embedded matrix header for array histograms. */
+    int     type;
+    CvArr*  bins;
+    float   thresh[CV_MAX_DIM][2];  /* For uniform histograms.                      */
+    float** thresh2;                /* For non-uniform histograms.                  */
+    CvMatND mat;                    /* Embedded matrix header for array histograms. */
 }
 CvHistogram;
 
@@ -868,39 +868,39 @@ CvHistogram;
 /*************************************** CvRect *****************************************/
 
 typedef struct CvRect {
-	int x;
-	int y;
-	int width;
-	int height;
+    int x;
+    int y;
+    int width;
+    int height;
 }
 CvRect;
 
-CV_INLINE  CvRect  cvRect( int x, int y, int width, int height ) {
-	CvRect r;
+CV_INLINE  CvRect  cvRect(int x, int y, int width, int height) {
+    CvRect r;
 
-	r.x = x;
-	r.y = y;
-	r.width = width;
-	r.height = height;
+    r.x = x;
+    r.y = y;
+    r.width = width;
+    r.height = height;
 
-	return r;
+    return r;
 }
 
 
-CV_INLINE  IplROI  cvRectToROI( CvRect rect, int coi ) {
-	IplROI roi;
-	roi.xOffset = rect.x;
-	roi.yOffset = rect.y;
-	roi.width = rect.width;
-	roi.height = rect.height;
-	roi.coi = coi;
+CV_INLINE  IplROI  cvRectToROI(CvRect rect, int coi) {
+    IplROI roi;
+    roi.xOffset = rect.x;
+    roi.yOffset = rect.y;
+    roi.width = rect.width;
+    roi.height = rect.height;
+    roi.coi = coi;
 
-	return roi;
+    return roi;
 }
 
 
-CV_INLINE  CvRect  cvROIToRect( IplROI roi ) {
-	return cvRect( roi.xOffset, roi.yOffset, roi.width, roi.height );
+CV_INLINE  CvRect  cvROIToRect(IplROI roi) {
+    return cvRect(roi.xOffset, roi.yOffset, roi.width, roi.height);
 }
 
 /*********************************** CvTermCriteria *************************************/
@@ -910,183 +910,183 @@ CV_INLINE  CvRect  cvROIToRect( IplROI roi ) {
 #define CV_TERMCRIT_EPS     2
 
 typedef struct CvTermCriteria {
-	int    type;  /* may be combination of
+    int    type;  /* may be combination of
                      CV_TERMCRIT_ITER
                      CV_TERMCRIT_EPS */
-	int    max_iter;
-	double epsilon;
+    int    max_iter;
+    double epsilon;
 }
 CvTermCriteria;
 
-CV_INLINE  CvTermCriteria  cvTermCriteria( int type, int max_iter, double epsilon ) {
-	CvTermCriteria t;
+CV_INLINE  CvTermCriteria  cvTermCriteria(int type, int max_iter, double epsilon) {
+    CvTermCriteria t;
 
-	t.type = type;
-	t.max_iter = max_iter;
-	t.epsilon = (float)epsilon;
+    t.type = type;
+    t.max_iter = max_iter;
+    t.epsilon = (float)epsilon;
 
-	return t;
+    return t;
 }
 
 
 /******************************* CvPoint and variants ***********************************/
 
 typedef struct CvPoint {
-	int x;
-	int y;
+    int x;
+    int y;
 }
 CvPoint;
 
 
-CV_INLINE  CvPoint  cvPoint( int x, int y ) {
-	CvPoint p;
+CV_INLINE  CvPoint  cvPoint(int x, int y) {
+    CvPoint p;
 
-	p.x = x;
-	p.y = y;
+    p.x = x;
+    p.y = y;
 
-	return p;
+    return p;
 }
 
 
 typedef struct CvPoint2D32f {
-	float x;
-	float y;
+    float x;
+    float y;
 }
 CvPoint2D32f;
 
 
-CV_INLINE  CvPoint2D32f  cvPoint2D32f( double x, double y ) {
-	CvPoint2D32f p;
+CV_INLINE  CvPoint2D32f  cvPoint2D32f(double x, double y) {
+    CvPoint2D32f p;
 
-	p.x = (float)x;
-	p.y = (float)y;
+    p.x = (float)x;
+    p.y = (float)y;
 
-	return p;
+    return p;
 }
 
 
-CV_INLINE  CvPoint2D32f  cvPointTo32f( CvPoint point ) {
-	return cvPoint2D32f( (float)point.x, (float)point.y );
+CV_INLINE  CvPoint2D32f  cvPointTo32f(CvPoint point) {
+    return cvPoint2D32f((float)point.x, (float)point.y);
 }
 
 
-CV_INLINE  CvPoint  cvPointFrom32f( CvPoint2D32f point ) {
-	CvPoint ipt;
-	ipt.x = cvRound(point.x);
-	ipt.y = cvRound(point.y);
+CV_INLINE  CvPoint  cvPointFrom32f(CvPoint2D32f point) {
+    CvPoint ipt;
+    ipt.x = cvRound(point.x);
+    ipt.y = cvRound(point.y);
 
-	return ipt;
+    return ipt;
 }
 
 
 typedef struct CvPoint3D32f {
-	float x;
-	float y;
-	float z;
+    float x;
+    float y;
+    float z;
 }
 CvPoint3D32f;
 
 
-CV_INLINE  CvPoint3D32f  cvPoint3D32f( double x, double y, double z ) {
-	CvPoint3D32f p;
+CV_INLINE  CvPoint3D32f  cvPoint3D32f(double x, double y, double z) {
+    CvPoint3D32f p;
 
-	p.x = (float)x;
-	p.y = (float)y;
-	p.z = (float)z;
+    p.x = (float)x;
+    p.y = (float)y;
+    p.z = (float)z;
 
-	return p;
+    return p;
 }
 
 
 typedef struct CvPoint2D64f {
-	double x;
-	double y;
+    double x;
+    double y;
 }
 CvPoint2D64f;
 
 
-CV_INLINE  CvPoint2D64f  cvPoint2D64f( double x, double y ) {
-	CvPoint2D64f p;
+CV_INLINE  CvPoint2D64f  cvPoint2D64f(double x, double y) {
+    CvPoint2D64f p;
 
-	p.x = x;
-	p.y = y;
+    p.x = x;
+    p.y = y;
 
-	return p;
+    return p;
 }
 
 
 typedef struct CvPoint3D64f {
-	double x;
-	double y;
-	double z;
+    double x;
+    double y;
+    double z;
 }
 CvPoint3D64f;
 
 
-CV_INLINE  CvPoint3D64f  cvPoint3D64f( double x, double y, double z ) {
-	CvPoint3D64f p;
+CV_INLINE  CvPoint3D64f  cvPoint3D64f(double x, double y, double z) {
+    CvPoint3D64f p;
 
-	p.x = x;
-	p.y = y;
-	p.z = z;
+    p.x = x;
+    p.y = y;
+    p.z = z;
 
-	return p;
+    return p;
 }
 
 
 /******************************** CvSize's & CvBox **************************************/
 
 typedef struct {
-	int width;
-	int height;
+    int width;
+    int height;
 }
 CvSize;
 
-CV_INLINE  CvSize  cvSize( int width, int height ) {
-	CvSize s;
+CV_INLINE  CvSize  cvSize(int width, int height) {
+    CvSize s;
 
-	s.width = width;
-	s.height = height;
+    s.width = width;
+    s.height = height;
 
-	return s;
+    return s;
 }
 
 typedef struct CvSize2D32f {
-	float width;
-	float height;
+    float width;
+    float height;
 }
 CvSize2D32f;
 
 
-CV_INLINE  CvSize2D32f  cvSize2D32f( double width, double height ) {
-	CvSize2D32f s;
+CV_INLINE  CvSize2D32f  cvSize2D32f(double width, double height) {
+    CvSize2D32f s;
 
-	s.width = (float)width;
-	s.height = (float)height;
+    s.width = (float)width;
+    s.height = (float)height;
 
-	return s;
+    return s;
 }
 
 typedef struct CvBox2D {
-	CvPoint2D32f center;  /* Center of the box.                          */
-	CvSize2D32f  size;    /* Box width and length.                       */
-	float angle;          /* Angle between the horizontal axis           */
-	/* and the first side (i.e. length) in degrees */
+    CvPoint2D32f center;  /* Center of the box.                          */
+    CvSize2D32f  size;    /* Box width and length.                       */
+    float angle;          /* Angle between the horizontal axis           */
+    /* and the first side (i.e. length) in degrees */
 }
 CvBox2D;
 
 
 /* Line iterator state: */
 typedef struct CvLineIterator {
-	/* Pointer to the current point: */
-	uchar* ptr;
+    /* Pointer to the current point: */
+    uchar* ptr;
 
-	/* Bresenham algorithm state: */
-	int  err;
-	int  plus_delta;
-	int  minus_delta;
-	int  plus_step;
-	int  minus_step;
+    /* Bresenham algorithm state: */
+    int  err;
+    int  plus_delta;
+    int  minus_delta;
+    int  plus_step;
+    int  minus_step;
 }
 CvLineIterator;
 
@@ -1095,16 +1095,16 @@ CvLineIterator;
 /************************************* CvSlice ******************************************/
 
 typedef struct CvSlice {
-	int  start_index, end_index;
+    int  start_index, end_index;
 }
 CvSlice;
 
-CV_INLINE  CvSlice  cvSlice( int start, int end ) {
-	CvSlice slice;
-	slice.start_index = start;
-	slice.end_index = end;
+CV_INLINE  CvSlice  cvSlice(int start, int end) {
+    CvSlice slice;
+    slice.start_index = start;
+    slice.end_index = end;
 
-	return slice;
+    return slice;
 }
 
 #define CV_WHOLE_SEQ_END_INDEX 0x3fffffff
@@ -1114,33 +1114,33 @@ CV_INLINE  CvSlice  cvSlice( int start, int end ) {
 /************************************* CvScalar *****************************************/
 
 typedef struct CvScalar {
-	double val[4];
+    double val[4];
 }
 CvScalar;
 
-CV_INLINE  CvScalar  cvScalar( double val0, double val1 CV_DEFAULT(0),
-							   double val2 CV_DEFAULT(0), double val3 CV_DEFAULT(0)) {
-	CvScalar scalar;
-	scalar.val[0] = val0; scalar.val[1] = val1;
-	scalar.val[2] = val2; scalar.val[3] = val3;
-	return scalar;
+CV_INLINE  CvScalar  cvScalar(double val0, double val1 CV_DEFAULT(0),
+                              double val2 CV_DEFAULT(0), double val3 CV_DEFAULT(0)) {
+    CvScalar scalar;
+    scalar.val[0] = val0; scalar.val[1] = val1;
+    scalar.val[2] = val2; scalar.val[3] = val3;
+    return scalar;
 }
 
 
-CV_INLINE  CvScalar  cvRealScalar( double val0 ) {
-	CvScalar scalar;
-	scalar.val[0] = val0;
-	scalar.val[1] = scalar.val[2] = scalar.val[3] = 0;
-	return scalar;
+CV_INLINE  CvScalar  cvRealScalar(double val0) {
+    CvScalar scalar;
+    scalar.val[0] = val0;
+    scalar.val[1] = scalar.val[2] = scalar.val[3] = 0;
+    return scalar;
 }
 
-CV_INLINE  CvScalar  cvScalarAll( double val0123 ) {
-	CvScalar scalar;
-	scalar.val[0] = val0123;
-	scalar.val[1] = val0123;
-	scalar.val[2] = val0123;
-	scalar.val[3] = val0123;
-	return scalar;
+CV_INLINE  CvScalar  cvScalarAll(double val0123) {
+    CvScalar scalar;
+    scalar.val[0] = val0123;
+    scalar.val[1] = val0123;
+    scalar.val[2] = val0123;
+    scalar.val[3] = val0123;
+    return scalar;
 }
 
 /****************************************************************************************\
@@ -1150,20 +1150,20 @@ CV_INLINE  CvScalar  cvScalarAll( double val0123 ) {
 /******************************** Memory storage ****************************************/
 
 typedef struct CvMemBlock {
-	struct CvMemBlock*  prev;
-	struct CvMemBlock*  next;
+    struct CvMemBlock*  prev;
+    struct CvMemBlock*  next;
 }
 CvMemBlock;
 
 #define CV_STORAGE_MAGIC_VAL    0x42890000
 
 typedef struct CvMemStorage {
-	int signature;
-	CvMemBlock* bottom;           /* First allocated block.                   */
-	CvMemBlock* top;              /* Current memory block - top of the stack. */
-	struct  CvMemStorage* parent; /* We get new blocks from parent as needed. */
-	int block_size;               /* Block size.                              */
-	int free_space;               /* Remaining free space in current block.   */
+    int signature;
+    CvMemBlock* bottom;           /* First allocated block.                   */
+    CvMemBlock* top;              /* Current memory block - top of the stack. */
+    struct  CvMemStorage* parent; /* We get new blocks from parent as needed. */
+    int block_size;               /* Block size.                              */
+    int free_space;               /* Remaining free space in current block.   */
 }
 CvMemStorage;
 
@@ -1173,8 +1173,8 @@ CvMemStorage;
 
 
 typedef struct CvMemStoragePos {
-	CvMemBlock* top;
-	int free_space;
+    CvMemBlock* top;
+    int free_space;
 }
 CvMemStoragePos;
 
@@ -1182,12 +1182,12 @@ CvMemStoragePos;
 /*********************************** Sequence *******************************************/
 
 typedef struct CvSeqBlock {
-	struct CvSeqBlock*  prev; /* Previous sequence block.                   */
-	struct CvSeqBlock*  next; /* Next sequence block.                       */
-	int    start_index;         /* Index of the first element in the block +  */
-	/* sequence->first->start_index.              */
-	int    count;             /* Number of elements in the block.           */
-	schar* data;              /* Pointer to the first element of the block. */
+    struct CvSeqBlock*  prev; /* Previous sequence block.                   */
+    struct CvSeqBlock*  next; /* Next sequence block.                       */
+    int    start_index;         /* Index of the first element in the block +  */
+    /* sequence->first->start_index.              */
+    int    count;             /* Number of elements in the block.           */
+    schar* data;              /* Pointer to the first element of the block. */
 }
 CvSeqBlock;
 
@@ -1216,7 +1216,7 @@ CvSeqBlock;
     CvSeqBlock* first;        /* Pointer to the first sequence block. */
 
 typedef struct CvSeq {
-	CV_SEQUENCE_FIELDS()
+    CV_SEQUENCE_FIELDS()
 }
 CvSeq;
 
@@ -1235,7 +1235,7 @@ CvSeq;
     struct elem_type* next_free;
 
 typedef struct CvSetElem {
-	CV_SET_ELEM_FIELDS(CvSetElem)
+    CV_SET_ELEM_FIELDS(CvSetElem)
 }
 CvSetElem;
 
@@ -1245,7 +1245,7 @@ CvSetElem;
     int active_count;
 
 typedef struct CvSet {
-	CV_SET_FIELDS()
+    CV_SET_FIELDS()
 }
 CvSet;
 
@@ -1289,18 +1289,18 @@ CvSet;
 
 
 typedef struct CvGraphEdge {
-	CV_GRAPH_EDGE_FIELDS()
+    CV_GRAPH_EDGE_FIELDS()
 }
 CvGraphEdge;
 
 typedef struct CvGraphVtx {
-	CV_GRAPH_VERTEX_FIELDS()
+    CV_GRAPH_VERTEX_FIELDS()
 }
 CvGraphVtx;
 
 typedef struct CvGraphVtx2D {
-	CV_GRAPH_VERTEX_FIELDS()
-	CvPoint2D32f* ptr;
+    CV_GRAPH_VERTEX_FIELDS()
+    CvPoint2D32f* ptr;
 }
 CvGraphVtx2D;
 
@@ -1313,7 +1313,7 @@ CvGraphVtx2D;
     CvSet* edges;
 
 typedef struct CvGraph {
-	CV_GRAPH_FIELDS()
+    CV_GRAPH_FIELDS()
 }
 CvGraph;
 
@@ -1322,8 +1322,8 @@ CvGraph;
 /*********************************** Chain/Countour *************************************/
 
 typedef struct CvChain {
-	CV_SEQUENCE_FIELDS()
-	CvPoint  origin;
+    CV_SEQUENCE_FIELDS()
+    CvPoint  origin;
 }
 CvChain;
 
@@ -1334,7 +1334,7 @@ CvChain;
     int reserved[3];
 
 typedef struct CvContour {
-	CV_CONTOUR_FIELDS()
+    CV_CONTOUR_FIELDS()
 }
 CvContour;
 
@@ -1477,7 +1477,7 @@ typedef CvContour CvPoint2DSeq;
     schar*       block_max;  /* pointer to the end of block */
 
 typedef struct CvSeqWriter {
-	CV_SEQ_WRITER_FIELDS()
+    CV_SEQ_WRITER_FIELDS()
 }
 CvSeqWriter;
 
@@ -1494,7 +1494,7 @@ CvSeqWriter;
 
 
 typedef struct CvSeqReader {
-	CV_SEQ_READER_FIELDS()
+    CV_SEQ_READER_FIELDS()
 }
 CvSeqReader;
 
@@ -1623,18 +1623,18 @@ typedef struct CvFileStorage CvFileStorage;
 
 /* List of attributes: */
 typedef struct CvAttrList {
-	const char** attr;         /* NULL-terminated array of (attribute_name,attribute_value) pairs. */
-	struct CvAttrList* next;   /* Pointer to next chunk of the attributes list.                    */
+    const char** attr;         /* NULL-terminated array of (attribute_name,attribute_value) pairs. */
+    struct CvAttrList* next;   /* Pointer to next chunk of the attributes list.                    */
 }
 CvAttrList;
 
-CV_INLINE CvAttrList cvAttrList( const char** attr CV_DEFAULT(NULL),
-								 CvAttrList* next CV_DEFAULT(NULL) ) {
-	CvAttrList l;
-	l.attr = attr;
-	l.next = next;
+CV_INLINE CvAttrList cvAttrList(const char** attr CV_DEFAULT(NULL),
+                                CvAttrList* next CV_DEFAULT(NULL)) {
+    CvAttrList l;
+    l.attr = attr;
+    l.next = next;
 
-	return l;
+    return l;
 }
 
 struct CvTypeInfo;
@@ -1674,17 +1674,17 @@ struct CvTypeInfo;
 #define CV_NODE_SEQ_IS_SIMPLE(seq) (((seq)->flags & CV_NODE_SEQ_SIMPLE) != 0)
 
 typedef struct CvString {
-	int len;
-	char* ptr;
+    int len;
+    char* ptr;
 }
 CvString;
 
 /* All the keys (names) of elements in the readed file storage
    are stored in the hash to speed up the lookup operations: */
 typedef struct CvStringHashNode {
-	unsigned hashval;
-	CvString str;
-	struct CvStringHashNode* next;
+    unsigned hashval;
+    CvString str;
+    struct CvStringHashNode* next;
 }
 CvStringHashNode;
 
@@ -1692,43 +1692,43 @@ typedef struct CvGenericHash CvFileNodeHash;
 
 /* Basic element of the file storage - scalar or collection: */
 typedef struct CvFileNode {
-	int tag;
-	struct CvTypeInfo* info; /* type information
+    int tag;
+    struct CvTypeInfo* info; /* type information
             (only for user-defined object, for others it is 0) */
-	union {
-		double f; /* scalar floating-point number */
-		int i;    /* scalar integer number */
-		CvString str; /* text string */
-		CvSeq* seq; /* sequence (ordered collection of file nodes) */
-		CvFileNodeHash* map; /* map (collection of named file nodes) */
-	} data;
+    union {
+        double f; /* scalar floating-point number */
+        int i;    /* scalar integer number */
+        CvString str; /* text string */
+        CvSeq* seq; /* sequence (ordered collection of file nodes) */
+        CvFileNodeHash* map; /* map (collection of named file nodes) */
+    } data;
 }
 CvFileNode;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-	typedef int (CV_CDECL* CvIsInstanceFunc)( const void* struct_ptr );
-	typedef void (CV_CDECL* CvReleaseFunc)( void** struct_dblptr );
-	typedef void* (CV_CDECL* CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
-	typedef void (CV_CDECL* CvWriteFunc)( CvFileStorage* storage, const char* name,
-										  const void* struct_ptr, CvAttrList attributes );
-	typedef void* (CV_CDECL* CvCloneFunc)( const void* struct_ptr );
+    typedef int (CV_CDECL* CvIsInstanceFunc)(const void* struct_ptr);
+    typedef void (CV_CDECL* CvReleaseFunc)(void** struct_dblptr);
+    typedef void*(CV_CDECL* CvReadFunc)(CvFileStorage* storage, CvFileNode* node);
+    typedef void (CV_CDECL* CvWriteFunc)(CvFileStorage* storage, const char* name,
+                                         const void* struct_ptr, CvAttrList attributes);
+    typedef void*(CV_CDECL* CvCloneFunc)(const void* struct_ptr);
 #ifdef __cplusplus
 }
 #endif
 
 typedef struct CvTypeInfo {
-	int flags;
-	int header_size;
-	struct CvTypeInfo* prev;
-	struct CvTypeInfo* next;
-	const char* type_name;
-	CvIsInstanceFunc is_instance;
-	CvReleaseFunc release;
-	CvReadFunc read;
-	CvWriteFunc write;
-	CvCloneFunc clone;
+    int flags;
+    int header_size;
+    struct CvTypeInfo* prev;
+    struct CvTypeInfo* next;
+    const char* type_name;
+    CvIsInstanceFunc is_instance;
+    CvReleaseFunc release;
+    CvReadFunc read;
+    CvWriteFunc write;
+    CvCloneFunc clone;
 }
 CvTypeInfo;
 
@@ -1736,19 +1736,19 @@ CvTypeInfo;
 /**** System data types ******/
 
 typedef struct CvPluginFuncInfo {
-	void** func_addr;
-	void* default_func_addr;
-	const char* func_names;
-	int search_modules;
-	int loaded_from;
+    void** func_addr;
+    void* default_func_addr;
+    const char* func_names;
+    int search_modules;
+    int loaded_from;
 }
 CvPluginFuncInfo;
 
 typedef struct CvModuleInfo {
-	struct CvModuleInfo* next;
-	const char* name;
-	const char* version;
-	CvPluginFuncInfo* func_tab;
+    struct CvModuleInfo* next;
+    const char* name;
+    const char* version;
+    CvPluginFuncInfo* func_tab;
 }
 CvModuleInfo;
 

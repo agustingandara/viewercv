@@ -56,182 +56,182 @@ struct PreviewRgba;
 class OutputFile {
 public:
 
-	//-----------------------------------------------------------
-	// Constructor -- opens the file and writes the file header.
-	// The file header is also copied into the OutputFile object,
-	// and can later be accessed via the header() method.
-	// Destroying this OutputFile object automatically closes
-	// the file.
-	//
-	// numThreads determines the number of threads that will be
-	// used to write the file (see ImfThreading.h).
-	//-----------------------------------------------------------
+    //-----------------------------------------------------------
+    // Constructor -- opens the file and writes the file header.
+    // The file header is also copied into the OutputFile object,
+    // and can later be accessed via the header() method.
+    // Destroying this OutputFile object automatically closes
+    // the file.
+    //
+    // numThreads determines the number of threads that will be
+    // used to write the file (see ImfThreading.h).
+    //-----------------------------------------------------------
 
-	OutputFile (const char fileName[], const Header& header,
-				int numThreads = globalThreadCount());
-
-
-	//------------------------------------------------------------
-	// Constructor -- attaches the new OutputFile object to a file
-	// that has already been opened, and writes the file header.
-	// The file header is also copied into the OutputFile object,
-	// and can later be accessed via the header() method.
-	// Destroying this OutputFile object does not automatically
-	// close the file.
-	//
-	// numThreads determines the number of threads that will be
-	// used to write the file (see ImfThreading.h).
-	//------------------------------------------------------------
-
-	OutputFile (OStream& os, const Header& header,
-				int numThreads = globalThreadCount());
+    OutputFile(const char fileName[], const Header& header,
+               int numThreads = globalThreadCount());
 
 
-	//-------------------------------------------------
-	// Destructor
-	//
-	// Destroying the OutputFile object before writing
-	// all scan lines within the data window results in
-	// an incomplete file.
-	//-------------------------------------------------
+    //------------------------------------------------------------
+    // Constructor -- attaches the new OutputFile object to a file
+    // that has already been opened, and writes the file header.
+    // The file header is also copied into the OutputFile object,
+    // and can later be accessed via the header() method.
+    // Destroying this OutputFile object does not automatically
+    // close the file.
+    //
+    // numThreads determines the number of threads that will be
+    // used to write the file (see ImfThreading.h).
+    //------------------------------------------------------------
 
-	virtual ~OutputFile ();
-
-
-	//------------------------
-	// Access to the file name
-	//------------------------
-
-	const char* 	fileName () const;
+    OutputFile(OStream& os, const Header& header,
+               int numThreads = globalThreadCount());
 
 
-	//--------------------------
-	// Access to the file header
-	//--------------------------
+    //-------------------------------------------------
+    // Destructor
+    //
+    // Destroying the OutputFile object before writing
+    // all scan lines within the data window results in
+    // an incomplete file.
+    //-------------------------------------------------
 
-	const Header& 	header () const;
-
-
-	//-------------------------------------------------------
-	// Set the current frame buffer -- copies the FrameBuffer
-	// object into the OutputFile object.
-	//
-	// The current frame buffer is the source of the pixel
-	// data written to the file.  The current frame buffer
-	// must be set at least once before writePixels() is
-	// called.  The current frame buffer can be changed
-	// after each call to writePixels.
-	//-------------------------------------------------------
-
-	void		setFrameBuffer (const FrameBuffer& frameBuffer);
+    virtual ~OutputFile();
 
 
-	//-----------------------------------
-	// Access to the current frame buffer
-	//-----------------------------------
+    //------------------------
+    // Access to the file name
+    //------------------------
 
-	const FrameBuffer& 	frameBuffer () const;
-
-
-	//-------------------------------------------------------------------
-	// Write pixel data:
-	//
-	// writePixels(n) retrieves the next n scan lines worth of data from
-	// the current frame buffer, starting with the scan line indicated by
-	// currentScanLine(), and stores the data in the output file, and
-	// progressing in the direction indicated by header.lineOrder().
-	//
-	// To produce a complete and correct file, exactly m scan lines must
-	// be written, where m is equal to
-	// header().dataWindow().max.y - header().dataWindow().min.y + 1.
-	//-------------------------------------------------------------------
-
-	void		writePixels (int numScanLines = 1);
+    const char* 	fileName() const;
 
 
-	//------------------------------------------------------------------
-	// Access to the current scan line:
-	//
-	// currentScanLine() returns the y coordinate of the first scan line
-	// that will be read from the current frame buffer during the next
-	// call to writePixels().
-	//
-	// If header.lineOrder() == INCREASING_Y:
-	//
-	//	The current scan line before the first call to writePixels()
-	//  is header().dataWindow().min.y.  After writing each scan line,
-	//  the current scan line is incremented by 1.
-	//
-	// If header.lineOrder() == DECREASING_Y:
-	//
-	//	The current scan line before the first call to writePixels()
-	//  is header().dataWindow().max.y.  After writing each scan line,
-	//  the current scan line is decremented by 1.
-	//
-	//------------------------------------------------------------------
+    //--------------------------
+    // Access to the file header
+    //--------------------------
 
-	int			currentScanLine () const;
+    const Header& 	header() const;
 
 
-	//--------------------------------------------------------------
-	// Shortcut to copy all pixels from an InputFile into this file,
-	// without uncompressing and then recompressing the pixel data.
-	// This file's header must be compatible with the InputFile's
-	// header:  The two header's "dataWindow", "compression",
-	// "lineOrder" and "channels" attributes must be the same.
-	//--------------------------------------------------------------
+    //-------------------------------------------------------
+    // Set the current frame buffer -- copies the FrameBuffer
+    // object into the OutputFile object.
+    //
+    // The current frame buffer is the source of the pixel
+    // data written to the file.  The current frame buffer
+    // must be set at least once before writePixels() is
+    // called.  The current frame buffer can be changed
+    // after each call to writePixels.
+    //-------------------------------------------------------
 
-	void		copyPixels (InputFile& in);
-
-
-	//--------------------------------------------------------------
-	// Updating the preview image:
-	//
-	// updatePreviewImage() supplies a new set of pixels for the
-	// preview image attribute in the file's header.  If the header
-	// does not contain a preview image, updatePreviewImage() throws
-	// an Iex::LogicExc.
-	//
-	// Note: updatePreviewImage() is necessary because images are
-	// often stored in a file incrementally, a few scan lines at a
-	// time, while the image is being generated.  Since the preview
-	// image is an attribute in the file's header, it gets stored in
-	// the file as soon as the file is opened, but we may not know
-	// what the preview image should look like until we have written
-	// the last scan line of the main image.
-	//
-	//--------------------------------------------------------------
-
-	void		updatePreviewImage (const PreviewRgba newPixels[]);
+    void		setFrameBuffer(const FrameBuffer& frameBuffer);
 
 
-	//---------------------------------------------------------
-	// Break a scan line -- for testing and debugging only:
-	//
-	// breakScanLine(y,p,n,c) introduces an error into the
-	// output file by writing n copies of character c, starting
-	// p bytes from the beginning of the pixel data block that
-	// contains scan line y.
-	//
-	// Warning: Calling this function usually results in a
-	// broken image file.  The file or parts of it may not
-	// be readable, or the file may contain bad data.
-	//
-	//---------------------------------------------------------
+    //-----------------------------------
+    // Access to the current frame buffer
+    //-----------------------------------
 
-	void		breakScanLine  (int y, int offset, int length, char c);
+    const FrameBuffer& 	frameBuffer() const;
 
 
-	struct Data;
+    //-------------------------------------------------------------------
+    // Write pixel data:
+    //
+    // writePixels(n) retrieves the next n scan lines worth of data from
+    // the current frame buffer, starting with the scan line indicated by
+    // currentScanLine(), and stores the data in the output file, and
+    // progressing in the direction indicated by header.lineOrder().
+    //
+    // To produce a complete and correct file, exactly m scan lines must
+    // be written, where m is equal to
+    // header().dataWindow().max.y - header().dataWindow().min.y + 1.
+    //-------------------------------------------------------------------
+
+    void		writePixels(int numScanLines = 1);
+
+
+    //------------------------------------------------------------------
+    // Access to the current scan line:
+    //
+    // currentScanLine() returns the y coordinate of the first scan line
+    // that will be read from the current frame buffer during the next
+    // call to writePixels().
+    //
+    // If header.lineOrder() == INCREASING_Y:
+    //
+    //	The current scan line before the first call to writePixels()
+    //  is header().dataWindow().min.y.  After writing each scan line,
+    //  the current scan line is incremented by 1.
+    //
+    // If header.lineOrder() == DECREASING_Y:
+    //
+    //	The current scan line before the first call to writePixels()
+    //  is header().dataWindow().max.y.  After writing each scan line,
+    //  the current scan line is decremented by 1.
+    //
+    //------------------------------------------------------------------
+
+    int			currentScanLine() const;
+
+
+    //--------------------------------------------------------------
+    // Shortcut to copy all pixels from an InputFile into this file,
+    // without uncompressing and then recompressing the pixel data.
+    // This file's header must be compatible with the InputFile's
+    // header:  The two header's "dataWindow", "compression",
+    // "lineOrder" and "channels" attributes must be the same.
+    //--------------------------------------------------------------
+
+    void		copyPixels(InputFile& in);
+
+
+    //--------------------------------------------------------------
+    // Updating the preview image:
+    //
+    // updatePreviewImage() supplies a new set of pixels for the
+    // preview image attribute in the file's header.  If the header
+    // does not contain a preview image, updatePreviewImage() throws
+    // an Iex::LogicExc.
+    //
+    // Note: updatePreviewImage() is necessary because images are
+    // often stored in a file incrementally, a few scan lines at a
+    // time, while the image is being generated.  Since the preview
+    // image is an attribute in the file's header, it gets stored in
+    // the file as soon as the file is opened, but we may not know
+    // what the preview image should look like until we have written
+    // the last scan line of the main image.
+    //
+    //--------------------------------------------------------------
+
+    void		updatePreviewImage(const PreviewRgba newPixels[]);
+
+
+    //---------------------------------------------------------
+    // Break a scan line -- for testing and debugging only:
+    //
+    // breakScanLine(y,p,n,c) introduces an error into the
+    // output file by writing n copies of character c, starting
+    // p bytes from the beginning of the pixel data block that
+    // contains scan line y.
+    //
+    // Warning: Calling this function usually results in a
+    // broken image file.  The file or parts of it may not
+    // be readable, or the file may contain bad data.
+    //
+    //---------------------------------------------------------
+
+    void		breakScanLine(int y, int offset, int length, char c);
+
+
+    struct Data;
 
 private:
 
-	OutputFile (const OutputFile&);			// not implemented
-	OutputFile& operator = (const OutputFile&);	// not implemented
+    OutputFile(const OutputFile&);			// not implemented
+    OutputFile& operator = (const OutputFile&);	// not implemented
 
-	void		initialize (const Header& header);
+    void		initialize(const Header& header);
 
-	Data* 		_data;
+    Data* 		_data;
 };
 
 

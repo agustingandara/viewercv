@@ -44,153 +44,153 @@
 #ifdef WIN32 /* make sure it builds under Linux whenever it is included into Makefile.am or not. */
 
 //void icvCutContour( CvSeq* current, IplImage* image );
-CvSeq* icvCutContourRaster( CvSeq* current, CvMemStorage* storage, IplImage* image );
+CvSeq* icvCutContourRaster(CvSeq* current, CvMemStorage* storage, IplImage* image);
 
 
 //create lists of segments of all contours from image
-CvSeq* cvExtractSingleEdges( IplImage* image, //bw image - it's content will be destroyed by cvFindContours
-							 CvMemStorage* storage ) {
-	CvMemStorage* tmp_storage = cvCreateChildMemStorage( storage );
-	CvSeq* contours = 0;
-	cvFindContours( image, tmp_storage, &contours, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE );
-	cvZero( image );
+CvSeq* cvExtractSingleEdges(IplImage* image,  //bw image - it's content will be destroyed by cvFindContours
+                            CvMemStorage* storage) {
+    CvMemStorage* tmp_storage = cvCreateChildMemStorage(storage);
+    CvSeq* contours = 0;
+    cvFindContours(image, tmp_storage, &contours, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+    cvZero(image);
 
-	//iterate through contours
-	//iterate through tree
-	CvSeq* current = contours;
-	int number = 0;
-	int level = 1;
+    //iterate through contours
+    //iterate through tree
+    CvSeq* current = contours;
+    int number = 0;
+    int level = 1;
 
-	CvSeq* output = 0;
-	CvSeq* tail_seq = 0;
+    CvSeq* output = 0;
+    CvSeq* tail_seq = 0;
 
-	//actually this loop can iterates through tree,
-	//but still we use CV_RETR_LIST it is not useful
-	while ( current ) {
-		number++;
+    //actually this loop can iterates through tree,
+    //but still we use CV_RETR_LIST it is not useful
+    while (current) {
+        number++;
 
-		//get vertical list of segments for one contour
-		CvSeq* new_seq = icvCutContourRaster( current, storage,  image );
+        //get vertical list of segments for one contour
+        CvSeq* new_seq = icvCutContourRaster(current, storage,  image);
 
-		//add this vertical list to horisontal list
-		if ( new_seq ) {
-			if ( tail_seq ) {
-				tail_seq->h_next = new_seq;
-				new_seq->h_prev = tail_seq;
-				tail_seq = new_seq;
-			} else {
-				output = tail_seq = new_seq;
-			}
-		}
+        //add this vertical list to horisontal list
+        if (new_seq) {
+            if (tail_seq) {
+                tail_seq->h_next = new_seq;
+                new_seq->h_prev = tail_seq;
+                tail_seq = new_seq;
+            } else {
+                output = tail_seq = new_seq;
+            }
+        }
 
-		//iteration through tree
-		if ( current->v_next ) {
-			//goto child
-			current = current->v_next;
-			level++;
-		} else {
-			//go parent
-			while ( !current->h_next ) {
-				current = current->v_prev;
-				level--;
-				if ( !level ) { break; }
-			}
+        //iteration through tree
+        if (current->v_next) {
+            //goto child
+            current = current->v_next;
+            level++;
+        } else {
+            //go parent
+            while (!current->h_next) {
+                current = current->v_prev;
+                level--;
+                if (!level) { break; }
+            }
 
-			if ( current ) { //go brother
-				current = current->h_next;
-			}
-		}
-	}
+            if (current) {   //go brother
+                current = current->h_next;
+            }
+        }
+    }
 
-	//free temporary memstorage with initial contours
-	cvReleaseMemStorage( &tmp_storage );
+    //free temporary memstorage with initial contours
+    cvReleaseMemStorage(&tmp_storage);
 
-	return output;
+    return output;
 }
 
 //makes vertical list of segments for 1 contour
-CvSeq* icvCutContourRaster( CvSeq* current, CvMemStorage* storage, IplImage* image /*tmp image*/) {
-	//iplSet(image, 0 ); // this can cause double edges if two contours have common edge
-	// for example if object is circle with 1 pixel width
-	// to remove such problem - remove this iplSet
+CvSeq* icvCutContourRaster(CvSeq* current, CvMemStorage* storage, IplImage* image /*tmp image*/) {
+    //iplSet(image, 0 ); // this can cause double edges if two contours have common edge
+    // for example if object is circle with 1 pixel width
+    // to remove such problem - remove this iplSet
 
-	//approx contour by single edges
-	CvSeqReader reader;
-	CvSeqWriter writer;
+    //approx contour by single edges
+    CvSeqReader reader;
+    CvSeqWriter writer;
 
-	int writing = 0;
-	cvStartReadSeq( current, &reader, 0 );
-	//below line just to avoid warning
-	cvStartWriteSeq( current->flags, sizeof(CvContour), sizeof(CvPoint), storage, &writer );
+    int writing = 0;
+    cvStartReadSeq(current, &reader, 0);
+    //below line just to avoid warning
+    cvStartWriteSeq(current->flags, sizeof(CvContour), sizeof(CvPoint), storage, &writer);
 
-	CvSeq* output = 0;
-	CvSeq* tail = 0;
+    CvSeq* output = 0;
+    CvSeq* tail = 0;
 
-	//first pass through contour - compute number of branches at every point
-	int i;
-	for ( i = 0; i < current->total; i++ ) {
-		CvPoint cur;
+    //first pass through contour - compute number of branches at every point
+    int i;
+    for (i = 0; i < current->total; i++) {
+        CvPoint cur;
 
-		CV_READ_SEQ_ELEM( cur, reader );
+        CV_READ_SEQ_ELEM(cur, reader);
 
-		//mark point
-		((uchar*)image->imageData)[image->widthStep * cur.y + cur.x]++;
-		assert( ((uchar*)image->imageData)[image->widthStep* cur.y + cur.x] != 255 );
+        //mark point
+        ((uchar*)image->imageData)[image->widthStep * cur.y + cur.x]++;
+        assert(((uchar*)image->imageData)[image->widthStep* cur.y + cur.x] != 255);
 
-	}
+    }
 
-	//second pass - create separate edges
-	for ( i = 0; i < current->total; i++ ) {
-		CvPoint cur;
+    //second pass - create separate edges
+    for (i = 0; i < current->total; i++) {
+        CvPoint cur;
 
-		CV_READ_SEQ_ELEM( cur, reader );
+        CV_READ_SEQ_ELEM(cur, reader);
 
-		//get pixel at this point
-		uchar flag = image->imageData[image->widthStep * cur.y + cur.x];
-		if ( flag != 255 && flag < 3) { //
-			if (!writing) {
-				cvStartWriteSeq( current->flags, sizeof(CvContour), sizeof(CvPoint), storage, &writer );
-				writing = 1 ;
-			}
+        //get pixel at this point
+        uchar flag = image->imageData[image->widthStep * cur.y + cur.x];
+        if (flag != 255 && flag < 3) {  //
+            if (!writing) {
+                cvStartWriteSeq(current->flags, sizeof(CvContour), sizeof(CvPoint), storage, &writer);
+                writing = 1 ;
+            }
 
-			//mark point
-			if ( flag < 3 ) { ((uchar*)image->imageData)[image->widthStep* cur.y + cur.x] = 255; }
-			//add it to another seq
-			CV_WRITE_SEQ_ELEM( cur, writer );
+            //mark point
+            if (flag < 3) { ((uchar*)image->imageData)[image->widthStep* cur.y + cur.x] = 255; }
+            //add it to another seq
+            CV_WRITE_SEQ_ELEM(cur, writer);
 
-		} else {
-			//exclude this point from contour
-			if ( writing ) {
-				CvSeq* newseq = cvEndWriteSeq( &writer );
-				writing = 0;
+        } else {
+            //exclude this point from contour
+            if (writing) {
+                CvSeq* newseq = cvEndWriteSeq(&writer);
+                writing = 0;
 
-				if ( tail ) {
-					tail->v_next = newseq;
-					newseq->v_prev = tail;
-					tail = newseq;
-				} else {
-					output = tail = newseq;
-				}
-			}
-		}
-	}
-
-
-	if ( writing ) { //if were not self intersections
-		CvSeq* newseq = cvEndWriteSeq( &writer );
-		writing = 0;
-
-		if ( tail ) {
-			tail->v_next = newseq;
-			newseq->v_prev = tail;
-			tail = newseq;
-		} else {
-			output = tail = newseq;
-		}
-	}
+                if (tail) {
+                    tail->v_next = newseq;
+                    newseq->v_prev = tail;
+                    tail = newseq;
+                } else {
+                    output = tail = newseq;
+                }
+            }
+        }
+    }
 
 
-	return output;
+    if (writing) {   //if were not self intersections
+        CvSeq* newseq = cvEndWriteSeq(&writer);
+        writing = 0;
+
+        if (tail) {
+            tail->v_next = newseq;
+            newseq->v_prev = tail;
+            tail = newseq;
+        } else {
+            output = tail = newseq;
+        }
+    }
+
+
+    return output;
 
 }
 

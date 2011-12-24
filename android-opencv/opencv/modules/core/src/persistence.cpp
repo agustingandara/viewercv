@@ -290,9 +290,9 @@ CV_IMPL const char*
 cvAttrValue(const CvAttrList* attr, const char* attr_name) {
     while (attr && attr->attr) {
         int i;
-        for (i = 0; attr->attr[i * 2] != 0; i++) {
-            if (strcmp(attr_name, attr->attr[i * 2]) == 0) {
-                return attr->attr[i * 2 + 1];
+        for (i = 0; attr->attr[i*2] != 0; i++) {
+            if (strcmp(attr_name, attr->attr[i*2]) == 0) {
+                return attr->attr[i*2+1];
             }
         }
         attr = attr->next;
@@ -334,7 +334,7 @@ cvCreateMap(int flags, int header_size, int elem_size,
 static void
 icvParseError(CvFileStorage* fs, const char* func_name,
               const char* err_msg, const char* source_file, int source_line) {
-    char buf[1 << 10];
+    char buf[1<<10];
     sprintf(buf, "%s(%d): %s", fs->filename, fs->lineno, err_msg);
     cvError(CV_StsParseError, func_name, buf, source_file, source_line);
 }
@@ -745,7 +745,7 @@ icvDoubleToString(char* buf, double value) {
                 ptr++;
             }
             for (; isdigit(*ptr); ptr++)
-                { ; }
+                ;
             if (*ptr == ',') {
                 *ptr = '.';
             }
@@ -782,7 +782,7 @@ icvFloatToString(char* buf, float value) {
                 ptr++;
             }
             for (; isdigit(*ptr); ptr++)
-                { ; }
+                ;
             if (*ptr == ',') {
                 *ptr = '.';
             }
@@ -879,7 +879,7 @@ icvYMLSkipSpaces(CvFileStorage* fs, char* ptr, int min_indent, int max_comment_i
                 break;
             } else {
                 int l = (int)strlen(ptr);
-                if (ptr[l - 1] != '\n' && ptr[l - 1] != '\r' && !icvEof(fs)) {
+                if (ptr[l-1] != '\n' && ptr[l-1] != '\r' && !icvEof(fs)) {
                     CV_PARSE_ERROR("Too long string or a last string w/o newline");
                 }
             }
@@ -1487,7 +1487,7 @@ icvYMLWriteReal(CvFileStorage* fs, const char* key, double value) {
 static void
 icvYMLWriteString(CvFileStorage* fs, const char* key,
                   const char* str, int quote CV_DEFAULT(0)) {
-    char buf[CV_FS_MAX_LEN * 4 + 16];
+    char buf[CV_FS_MAX_LEN*4+16];
     char* data = (char*)str;
     int i, len;
 
@@ -1500,7 +1500,7 @@ icvYMLWriteString(CvFileStorage* fs, const char* key,
         CV_Error(CV_StsBadArg, "The written string is too long");
     }
 
-    if (quote || len == 0 || str[0] != str[len - 1] || (str[0] != '\"' && str[0] != '\'')) {
+    if (quote || len == 0 || str[0] != str[len-1] || (str[0] != '\"' && str[0] != '\'')) {
         int need_quote = quote || len == 0;
         data = buf;
         *data++ = '\"';
@@ -1653,7 +1653,7 @@ icvXMLSkipSpaces(CvFileStorage* fs, char* ptr, int mode) {
                 break;
             } else {
                 int l = (int)strlen(ptr);
-                if (ptr[l - 1] != '\n' && ptr[l - 1] != '\r' && !icvEof(fs)) {
+                if (ptr[l-1] != '\n' && ptr[l-1] != '\r' && !icvEof(fs)) {
                     CV_PARSE_ERROR("Too long string or a last string w/o newline");
                 }
             }
@@ -1797,7 +1797,7 @@ icvXMLParseValue(CvFileStorage* fs, char* ptr, CvFileNode* node,
                 ptr = endptr;
             } else {
                 // string
-                char buf[CV_FS_MAX_LEN + 16];
+                char buf[CV_FS_MAX_LEN+16];
                 int i = 0, len, is_quoted = 0;
                 elem->tag = CV_NODE_STRING;
                 if (c == '\"') {
@@ -1962,7 +1962,7 @@ icvXMLParseTag(CvFileStorage* fs, char* ptr, CvStringHashNode** _tag,
                     last = last->next = chunk;
                 }
             }
-            last->attr[count * 2] = attrname->str.ptr;
+            last->attr[count*2] = attrname->str.ptr;
         }
 
         if (last) {
@@ -1985,7 +1985,7 @@ icvXMLParseTag(CvFileStorage* fs, char* ptr, CvStringHashNode** _tag,
 
             ptr = icvXMLParseValue(fs, ptr, &stub, CV_NODE_STRING);
             assert(stub.tag == CV_NODE_STRING);
-            last->attr[count * 2 + 1] = stub.data.str.ptr;
+            last->attr[count*2+1] = stub.data.str.ptr;
             count++;
         }
 
@@ -2302,7 +2302,7 @@ icvXMLWriteReal(CvFileStorage* fs, const char* key, double value) {
 
 static void
 icvXMLWriteString(CvFileStorage* fs, const char* key, const char* str, int quote) {
-    char buf[CV_FS_MAX_LEN * 6 + 16];
+    char buf[CV_FS_MAX_LEN*6+16];
     char* data = (char*)str;
     int i, len;
 
@@ -2315,7 +2315,7 @@ icvXMLWriteString(CvFileStorage* fs, const char* key, const char* str, int quote
         CV_Error(CV_StsBadArg, "The written string is too long");
     }
 
-    if (quote || len == 0 || str[0] != '\"' || str[0] != str[len - 1]) {
+    if (quote || len == 0 || str[0] != '\"' || str[0] != str[len-1]) {
         int need_quote = quote || len == 0;
         data = buf;
         *data++ = '\"';
@@ -2710,7 +2710,7 @@ icvDecodeFormat(const char* dt, int* fmt_pairs, int max_len) {
 
         if (isdigit(c)) {
             int count = c - '0';
-            if (isdigit(dt[k + 1])) {
+            if (isdigit(dt[k+1])) {
                 char* endptr = 0;
                 count = (int)strtol(dt + k, &endptr, 10);
                 k = (int)(endptr - dt) - 1;
@@ -2729,9 +2729,9 @@ icvDecodeFormat(const char* dt, int* fmt_pairs, int max_len) {
             if (fmt_pairs[i] == 0) {
                 fmt_pairs[i] = 1;
             }
-            fmt_pairs[i + 1] = (int)(pos - icvTypeSymbol);
-            if (i > 0 && fmt_pairs[i + 1] == fmt_pairs[i - 1]) {
-                fmt_pairs[i - 2] += fmt_pairs[i];
+            fmt_pairs[i+1] = (int)(pos - icvTypeSymbol);
+            if (i > 0 && fmt_pairs[i+1] == fmt_pairs[i-1]) {
+                fmt_pairs[i-2] += fmt_pairs[i];
             } else {
                 i += 2;
                 if (i >= max_len) {
@@ -2756,7 +2756,7 @@ icvCalcElemSize(const char* dt, int initial_size) {
     fmt_pair_count = icvDecodeFormat(dt, fmt_pairs, CV_FS_MAX_FMT_PAIRS);
     fmt_pair_count *= 2;
     for (i = 0, size = initial_size; i < fmt_pair_count; i += 2) {
-        comp_size = CV_ELEM_SIZE(fmt_pairs[i + 1]);
+        comp_size = CV_ELEM_SIZE(fmt_pairs[i+1]);
         size = cvAlign(size, comp_size);
         size += comp_size * fmt_pairs[i];
     }
@@ -2788,7 +2788,7 @@ CV_IMPL void
 cvWriteRawData(CvFileStorage* fs, const void* _data, int len, const char* dt) {
     const char* data0 = (const char*)_data;
     int offset = 0;
-    int fmt_pairs[CV_FS_MAX_FMT_PAIRS * 2], k, fmt_pair_count;
+    int fmt_pairs[CV_FS_MAX_FMT_PAIRS*2], k, fmt_pair_count;
     char buf[256] = "";
 
     CV_CHECK_OUTPUT_FILE_STORAGE(fs);
@@ -2814,8 +2814,8 @@ cvWriteRawData(CvFileStorage* fs, const void* _data, int len, const char* dt) {
 
     for (; len--;) {
         for (k = 0; k < fmt_pair_count; k++) {
-            int i, count = fmt_pairs[k * 2];
-            int elem_type = fmt_pairs[k * 2 + 1];
+            int i, count = fmt_pairs[k*2];
+            int elem_type = fmt_pairs[k*2+1];
             int elem_size = CV_ELEM_SIZE(elem_type);
             const char* data, *ptr;
 
@@ -2905,7 +2905,7 @@ CV_IMPL void
 cvReadRawDataSlice(const CvFileStorage* fs, CvSeqReader* reader,
                    int len, void* _data, const char* dt) {
     char* data0 = (char*)_data;
-    int fmt_pairs[CV_FS_MAX_FMT_PAIRS * 2], k = 0, fmt_pair_count;
+    int fmt_pairs[CV_FS_MAX_FMT_PAIRS*2], k = 0, fmt_pair_count;
     int i = 0, offset = 0, count = 0;
 
     CV_CHECK_FILE_STORAGE(fs);
@@ -2922,11 +2922,11 @@ cvReadRawDataSlice(const CvFileStorage* fs, CvSeqReader* reader,
 
     for (;;) {
         for (k = 0; k < fmt_pair_count; k++) {
-            int elem_type = fmt_pairs[k * 2 + 1];
+            int elem_type = fmt_pairs[k*2+1];
             int elem_size = CV_ELEM_SIZE(elem_type);
             char* data;
 
-            count = fmt_pairs[k * 2];
+            count = fmt_pairs[k*2];
             offset = cvAlign(offset, elem_size);
             data = data0 + offset;
 
@@ -3468,7 +3468,7 @@ icvReadSparseMat(CvFileStorage* fs, CvFileNode* node) {
         }
         k = elem->data.i;
         if (i > 0 && k >= 0) {
-            idx[dims - 1] = k;
+            idx[dims-1] = k;
         } else {
             if (i > 0) {
                 k = dims + k - 1;
@@ -4060,7 +4060,7 @@ icvWriteGraph(CvFileStorage* fs, const char* name,
             if (k == 1) {
                 int fmt_pairs[CV_FS_MAX_FMT_PAIRS], fmt_pair_count;
                 fmt_pair_count = icvDecodeFormat(dt, fmt_pairs, CV_FS_MAX_FMT_PAIRS);
-                if (fmt_pair_count > 2 || CV_ELEM_SIZE(fmt_pairs[2 * 2 + 1]) >= (int)sizeof(double)) {
+                if (fmt_pair_count > 2 || CV_ELEM_SIZE(fmt_pairs[2*2+1]) >= (int)sizeof(double)) {
                     edge_user_align = sizeof(double);
                 }
             }

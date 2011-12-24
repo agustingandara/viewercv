@@ -237,7 +237,7 @@ Scalar trace(const Mat& m) {
         size_t step = m.step / sizeof(ptr[0]) + 1;
         double _s = 0;
         for (i = 0; i < nm; i++) {
-            _s += ptr[i * step];
+            _s += ptr[i*step];
         }
         return _s;
     }
@@ -247,7 +247,7 @@ Scalar trace(const Mat& m) {
         size_t step = m.step / sizeof(ptr[0]) + 1;
         double _s = 0;
         for (i = 0; i < nm; i++) {
-            _s += ptr[i * step];
+            _s += ptr[i*step];
         }
         return _s;
     }
@@ -361,7 +361,7 @@ void completeSymm(Mat& matrix, bool LtoR) {
         for (i = 0; i < nrows; i++) {
             if (!LtoR) { j1 = i; } else { j0 = i + 1; }
             for (j = j0; j < j1; j++) {
-                data[i * step + j] = data[j * step + i];
+                data[i* step + j] = data[j*step + i];
             }
         }
     } else if (type == CV_64FC1) {
@@ -370,7 +370,7 @@ void completeSymm(Mat& matrix, bool LtoR) {
         for (i = 0; i < nrows; i++) {
             if (!LtoR) { j1 = i; } else { j0 = i + 1; }
             for (j = j0; j < j1; j++) {
-                data[i * step + j] = data[j * step + i];
+                data[i* step + j] = data[j*step + i];
             }
         }
     } else {
@@ -390,8 +390,8 @@ Mat Mat::cross(const Mat& m) const {
         size_t lda = rows > 1 ? step / sizeof(a[0]) : 1;
         size_t ldb = rows > 1 ? m.step / sizeof(b[0]) : 1;
 
-        c[0] = a[lda] * b[ldb * 2] - a[lda * 2] * b[ldb];
-        c[1] = a[lda * 2] * b[0] - a[0] * b[ldb * 2];
+        c[0] = a[lda] * b[ldb*2] - a[lda*2] * b[ldb];
+        c[1] = a[lda*2] * b[0] - a[0] * b[ldb*2];
         c[2] = a[0] * b[ldb] - a[lda] * b[0];
     } else if (d == CV_64F) {
         const double* a = (const double*)data, *b = (const double*)m.data;
@@ -399,8 +399,8 @@ Mat Mat::cross(const Mat& m) const {
         size_t lda = rows > 1 ? step / sizeof(a[0]) : 1;
         size_t ldb = rows > 1 ? m.step / sizeof(b[0]) : 1;
 
-        c[0] = a[lda] * b[ldb * 2] - a[lda * 2] * b[ldb];
-        c[1] = a[lda * 2] * b[0] - a[0] * b[ldb * 2];
+        c[0] = a[lda] * b[ldb*2] - a[lda*2] * b[ldb];
+        c[1] = a[lda*2] * b[0] - a[0] * b[ldb*2];
         c[2] = a[0] * b[ldb] - a[lda] * b[0];
     }
 
@@ -434,12 +434,12 @@ reduceR_(const Mat& srcmat, Mat& dstmat) {
         for (i = 0; i <= size.width - 4; i += 4) {
             WT s0, s1;
             s0 = op(buf[i], (WT)src[i]);
-            s1 = op(buf[i + 1], (WT)src[i + 1]);
-            buf[i] = s0; buf[i + 1] = s1;
+            s1 = op(buf[i+1], (WT)src[i+1]);
+            buf[i] = s0; buf[i+1] = s1;
 
-            s0 = op(buf[i + 2], (WT)src[i + 2]);
-            s1 = op(buf[i + 3], (WT)src[i + 3]);
-            buf[i + 2] = s0; buf[i + 3] = s1;
+            s0 = op(buf[i+2], (WT)src[i+2]);
+            s1 = op(buf[i+3], (WT)src[i+3]);
+            buf[i+2] = s0; buf[i+3] = s1;
         }
 
         for (; i < size.width; i++) {
@@ -470,12 +470,12 @@ reduceC_(const Mat& srcmat, Mat& dstmat) {
             }
         else {
             for (k = 0; k < cn; k++) {
-                WT a0 = src[k], a1 = src[k + cn];
+                WT a0 = src[k], a1 = src[k+cn];
                 for (i = 2 * cn; i <= size.width - 4 * cn; i += 4 * cn) {
-                    a0 = op(a0, (WT)src[i + k]);
-                    a1 = op(a1, (WT)src[i + k + cn]);
-                    a0 = op(a0, (WT)src[i + k + cn * 2]);
-                    a1 = op(a1, (WT)src[i + k + cn * 3]);
+                    a0 = op(a0, (WT)src[i+k]);
+                    a1 = op(a1, (WT)src[i+k+cn]);
+                    a0 = op(a0, (WT)src[i+k+cn*2]);
+                    a1 = op(a1, (WT)src[i+k+cn*3]);
                 }
 
                 for (; i < size.width; i += cn) {
@@ -668,7 +668,7 @@ template<typename T> static void sort_(const Mat& src, Mat& dst, int flags) {
         std::sort(ptr, ptr + len, LessThan<T>());
         if (sortDescending)
             for (j = 0; j < len / 2; j++) {
-                std::swap(ptr[j], ptr[len - 1 - j]);
+                std::swap(ptr[j], ptr[len-1-j]);
             }
         if (!sortRows)
             for (j = 0; j < len; j++) {
@@ -717,7 +717,7 @@ template<typename T> static void sortIdx_(const Mat& src, Mat& dst, int flags) {
         std::sort(iptr, iptr + len, LessThanIdx<T>(ptr));
         if (sortDescending)
             for (j = 0; j < len / 2; j++) {
-                std::swap(iptr[j], iptr[len - 1 - j]);
+                std::swap(iptr[j], iptr[len-1-j]);
             }
         if (!sortRows)
             for (j = 0; j < len; j++) {
@@ -781,7 +781,7 @@ static inline float distance(const float* a, const float* b, int n, bool simd) {
 #endif
     {
         for (; j <= n - 4; j += 4) {
-            float t0 = a[j] - b[j], t1 = a[j + 1] - b[j + 1], t2 = a[j + 2] - b[j + 2], t3 = a[j + 3] - b[j + 3];
+            float t0 = a[j] - b[j], t1 = a[j+1] - b[j+1], t2 = a[j+2] - b[j+2], t3 = a[j+3] - b[j+3];
             d += t0 * t0 + t1 * t1 + t2 * t2 + t3 * t3;
         }
     }
@@ -955,16 +955,16 @@ double kmeans(const Mat& data, int K, Mat& best_labels,
                     float* center = centers.ptr<float>(k);
                     for (j = 0; j <= dims - 4; j += 4) {
                         float t0 = center[j] + sample[j];
-                        float t1 = center[j + 1] + sample[j + 1];
+                        float t1 = center[j+1] + sample[j+1];
 
                         center[j] = t0;
-                        center[j + 1] = t1;
+                        center[j+1] = t1;
 
-                        t0 = center[j + 2] + sample[j + 2];
-                        t1 = center[j + 3] + sample[j + 3];
+                        t0 = center[j+2] + sample[j+2];
+                        t1 = center[j+3] + sample[j+3];
 
-                        center[j + 2] = t0;
-                        center[j + 3] = t1;
+                        center[j+2] = t0;
+                        center[j+3] = t1;
                     }
                     for (; j < dims; j++) {
                         center[j] += sample[j];
@@ -1223,9 +1223,9 @@ MatND::MatND(const MatND& m, const Range* ranges)
         }
     }
 
-    CV_Assert(step[d - 1] == elemSize());
+    CV_Assert(step[d-1] == elemSize());
     for (j = d - 1; j > i; j--) {
-        if (step[j]*size[j] < step[j - 1]) {
+        if (step[j]*size[j] < step[j-1]) {
             break;
         }
     }
@@ -1335,7 +1335,7 @@ MatND::operator Mat() const {
         }
     } else {
         rows = 1;
-        cols = size[d - 1];
+        cols = size[d-1];
 
         for (d1 = 0; d1 < d; d1++)
             if (size[d1] > 1) {
@@ -1343,8 +1343,8 @@ MatND::operator Mat() const {
             }
 
         for (i = d - 1; i > d1; i--) {
-            int64 cols1 = (int64)cols * size[i - 1];
-            if (cols1 != (int)cols1 || size[i]*step[i] != step[i - 1]) {
+            int64 cols1 = (int64)cols * size[i-1];
+            if (cols1 != (int)cols1 || size[i]*step[i] != step[i-1]) {
                 break;
             }
             cols = (int)cols1;
@@ -1355,8 +1355,8 @@ MatND::operator Mat() const {
             _step = step[i];
             rows = size[i];
             for (; i > d1; i--) {
-                int64 rows1 = (int64)rows * size[i - 1];
-                if (rows1 != (int)rows1 || size[i]*step[i] != step[i - 1]) {
+                int64 rows1 = (int64)rows * size[i-1];
+                if (rows1 != (int)rows1 || size[i]*step[i] != step[i-1]) {
                     break;
                 }
                 rows = (int)rows1;
@@ -1468,9 +1468,9 @@ void NAryMatNDIterator::init(const MatND** _arrays, size_t count) {
         }
 
         if (!A.isContinuous()) {
-            CV_Assert(A.step[d - 1] == A.elemSize());
+            CV_Assert(A.step[d-1] == A.elemSize());
             for (j = d - 1; j > d1; j--)
-                if (A.step[j]*A.size[j] < A.step[j - 1]) {
+                if (A.step[j]*A.size[j] < A.step[j-1]) {
                     break;
                 }
             iterdepth = std::max(iterdepth, j);
@@ -1481,9 +1481,9 @@ void NAryMatNDIterator::init(const MatND** _arrays, size_t count) {
         CV_Error(CV_StsBadArg, "All the input arrays are empty");
     }
 
-    int total = arrays[i0].size[d - 1];
+    int total = arrays[i0].size[d-1];
     for (j = d - 1; j > iterdepth; j--) {
-        int64 total1 = (int64)total * arrays[i0].size[j - 1];
+        int64 total1 = (int64)total * arrays[i0].size[j-1];
         if (total1 != (int)total1) {
             break;
         }
@@ -2342,13 +2342,13 @@ SparseMat::SparseMat(const MatND& m)
             if (isZeroElem(ptr, esz)) {
                 continue;
             }
-            idx[d - 1] = i;
+            idx[d-1] = i;
             uchar* to = newNode(idx, hash(idx));
             copyElem(ptr, to, esz);
         }
 
         for (i = d - 2; i >= 0; i--) {
-            ptr += m.step[i] - m.size[i + 1] * m.step[i + 1];
+            ptr += m.step[i] - m.size[i+1] * m.step[i+1];
             if (++idx[i] < m.size[i]) {
                 break;
             }
@@ -2580,7 +2580,7 @@ void SparseMat::clear() {
     }
 }
 
-SparseMat::operator CvSparseMat* () const {
+SparseMat::operator CvSparseMat*() const {
     if (!hdr) {
         return 0;
     }

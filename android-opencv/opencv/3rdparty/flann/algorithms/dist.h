@@ -58,26 +58,26 @@ namespace cvflann {
  */
 template <typename Iterator1, typename Iterator2>
 double euclidean_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, double acc = 0) {
-	double distsq = acc;
-	double diff0, diff1, diff2, diff3;
-	Iterator1 lastgroup = last1 - 3;
+    double distsq = acc;
+    double diff0, diff1, diff2, diff3;
+    Iterator1 lastgroup = last1 - 3;
 
-	/* Process 4 items with each loop for efficiency. */
-	while (first1 < lastgroup) {
-		diff0 = first1[0] - first2[0];
-		diff1 = first1[1] - first2[1];
-		diff2 = first1[2] - first2[2];
-		diff3 = first1[3] - first2[3];
-		distsq += diff0 * diff0 + diff1 * diff1 + diff2 * diff2 + diff3 * diff3;
-		first1 += 4;
-		first2 += 4;
-	}
-	/* Process last 0-3 pixels.  Not needed for standard vector lengths. */
-	while (first1 < last1) {
-		diff0 = *first1++ - *first2++;
-		distsq += diff0 * diff0;
-	}
-	return distsq;
+    /* Process 4 items with each loop for efficiency. */
+    while (first1 < lastgroup) {
+        diff0 = first1[0] - first2[0];
+        diff1 = first1[1] - first2[1];
+        diff2 = first1[2] - first2[2];
+        diff3 = first1[3] - first2[3];
+        distsq += diff0 * diff0 + diff1 * diff1 + diff2 * diff2 + diff3 * diff3;
+        first1 += 4;
+        first2 += 4;
+    }
+    /* Process last 0-3 pixels.  Not needed for standard vector lengths. */
+    while (first1 < last1) {
+        diff0 = *first1++ - *first2++;
+        distsq += diff0 * diff0;
+    }
+    return distsq;
 }
 
 /**
@@ -88,26 +88,26 @@ double euclidean_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, doubl
  */
 template <typename Iterator1, typename Iterator2>
 double manhattan_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, double acc = 0) {
-	double distsq = acc;
-	double diff0, diff1, diff2, diff3;
-	Iterator1 lastgroup = last1 - 3;
+    double distsq = acc;
+    double diff0, diff1, diff2, diff3;
+    Iterator1 lastgroup = last1 - 3;
 
-	/* Process 4 items with each loop for efficiency. */
-	while (first1 < lastgroup) {
-		diff0 = fabs(first1[0] - first2[0]);
-		diff1 = fabs(first1[1] - first2[1]);
-		diff2 = fabs(first1[2] - first2[2]);
-		diff3 = fabs(first1[3] - first2[3]);
-		distsq += diff0 + diff1 + diff2  + diff3;
-		first1 += 4;
-		first2 += 4;
-	}
-	/* Process last 0-3 pixels.  Not needed for standard vector lengths. */
-	while (first1 < last1) {
-		diff0 = fabs(*first1++ - *first2++);
-		distsq += diff0;
-	}
-	return distsq;
+    /* Process 4 items with each loop for efficiency. */
+    while (first1 < lastgroup) {
+        diff0 = fabs(first1[0] - first2[0]);
+        diff1 = fabs(first1[1] - first2[1]);
+        diff2 = fabs(first1[2] - first2[2]);
+        diff3 = fabs(first1[3] - first2[3]);
+        distsq += diff0 + diff1 + diff2  + diff3;
+        first1 += 4;
+        first2 += 4;
+    }
+    /* Process last 0-3 pixels.  Not needed for standard vector lengths. */
+    while (first1 < last1) {
+        diff0 = fabs(*first1++ - *first2++);
+        distsq += diff0;
+    }
+    return distsq;
 }
 
 
@@ -123,28 +123,28 @@ extern int flann_minkowski_order;
  */
 template <typename Iterator1, typename Iterator2>
 double minkowski_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, double acc = 0) {
-	double distsq = acc;
-	double diff0, diff1, diff2, diff3;
-	Iterator1 lastgroup = last1 - 3;
+    double distsq = acc;
+    double diff0, diff1, diff2, diff3;
+    Iterator1 lastgroup = last1 - 3;
 
-	int p = flann_minkowski_order;
+    int p = flann_minkowski_order;
 
-	/* Process 4 items with each loop for efficiency. */
-	while (first1 < lastgroup) {
-		diff0 = fabs(first1[0] - first2[0]);
-		diff1 = fabs(first1[1] - first2[1]);
-		diff2 = fabs(first1[2] - first2[2]);
-		diff3 = fabs(first1[3] - first2[3]);
-		distsq += pow(diff0, p) + pow(diff1, p) + pow(diff2, p)  + pow(diff3, p);
-		first1 += 4;
-		first2 += 4;
-	}
-	/* Process last 0-3 pixels.  Not needed for standard vector lengths. */
-	while (first1 < last1) {
-		diff0 = fabs(*first1++ - *first2++);
-		distsq += pow(diff0, p);
-	}
-	return distsq;
+    /* Process 4 items with each loop for efficiency. */
+    while (first1 < lastgroup) {
+        diff0 = fabs(first1[0] - first2[0]);
+        diff1 = fabs(first1[1] - first2[1]);
+        diff2 = fabs(first1[2] - first2[2]);
+        diff3 = fabs(first1[3] - first2[3]);
+        distsq += pow(diff0, p) + pow(diff1, p) + pow(diff2, p)  + pow(diff3, p);
+        first1 += 4;
+        first2 += 4;
+    }
+    /* Process last 0-3 pixels.  Not needed for standard vector lengths. */
+    while (first1 < last1) {
+        diff0 = fabs(*first1++ - *first2++);
+        distsq += pow(diff0, p);
+    }
+    return distsq;
 }
 
 
@@ -160,16 +160,16 @@ extern flann_distance_t flann_distance_type;
  */
 template <typename Iterator1, typename Iterator2>
 float custom_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, double acc = 0) {
-	switch (flann_distance_type) {
-	case EUCLIDEAN:
-		return (float)euclidean_dist(first1, last1, first2, acc);
-	case MANHATTAN:
-		return (float)manhattan_dist(first1, last1, first2, acc);
-	case MINKOWSKI:
-		return (float)minkowski_dist(first1, last1, first2, acc);
-	default:
-		return (float)euclidean_dist(first1, last1, first2, acc);
-	}
+    switch (flann_distance_type) {
+    case EUCLIDEAN:
+        return (float)euclidean_dist(first1, last1, first2, acc);
+    case MANHATTAN:
+        return (float)manhattan_dist(first1, last1, first2, acc);
+    case MINKOWSKI:
+        return (float)minkowski_dist(first1, last1, first2, acc);
+    default:
+        return (float)euclidean_dist(first1, last1, first2, acc);
+    }
 }
 
 /*
@@ -182,21 +182,21 @@ float custom_dist(Iterator1 first1, Iterator1 last1, Iterator2 first2, double ac
 template <typename T>
 struct ZeroIterator {
 
-	T operator*() {
-		return 0;
-	}
+    T operator*() {
+        return 0;
+    }
 
-	T operator[](int /*index*/) {
-		return 0;
-	}
+    T operator[](int /*index*/) {
+        return 0;
+    }
 
-	ZeroIterator<T>& operator ++(int) {
-		return *this;
-	}
+    ZeroIterator<T>& operator ++(int) {
+        return *this;
+    }
 
-	ZeroIterator<T>& operator+=(int) {
-		return *this;
-	}
+    ZeroIterator<T>& operator+=(int) {
+        return *this;
+    }
 
 };
 extern ZeroIterator<float> zero;

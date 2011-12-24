@@ -52,15 +52,15 @@ namespace Imf {
 
 
 typedef TypedAttribute<Imath::Box2i> Box2iAttribute;
-template <> const char* Box2iAttribute::staticTypeName ();
-template <> void Box2iAttribute::writeValueTo (OStream&, int) const;
-template <> void Box2iAttribute::readValueFrom (IStream&, int, int);
+template <> const char* Box2iAttribute::staticTypeName();
+template <> void Box2iAttribute::writeValueTo(OStream&, int) const;
+template <> void Box2iAttribute::readValueFrom(IStream&, int, int);
 
 
 typedef TypedAttribute<Imath::Box2f> Box2fAttribute;
-template <> const char* Box2fAttribute::staticTypeName ();
-template <> void Box2fAttribute::writeValueTo (OStream&, int) const;
-template <> void Box2fAttribute::readValueFrom (IStream&, int, int);
+template <> const char* Box2fAttribute::staticTypeName();
+template <> void Box2fAttribute::writeValueTo(OStream&, int) const;
+template <> void Box2fAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

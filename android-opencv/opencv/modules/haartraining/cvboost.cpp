@@ -517,7 +517,7 @@ CvClassifier* cvCreateStumpClassifier(CvMat* trainData,
         va.step = sstep;
         icvSortIndexedValArray_32s(idx, l, &va);
         if (findStumpThreshold_32s[(int)((CvStumpTrainParams*) trainParams)->error]
-                (data + i * ((size_t) cstep), sstep,
+                (data + i *((size_t) cstep), sstep,
                  wdata, wstep, ydata, ystep, (uchar*) idx, sizeof(int), l,
                  &(stump->lerror), &(stump->rerror),
                  &(stump->threshold), &(stump->left), &(stump->right),
@@ -687,7 +687,7 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
             filter = (char*) cvAlloc(sizeof(char) * m);
             memset((void*) filter, 0, sizeof(char) * m);
             for (i = 0; i < l; i++) {
-                filter[(int) * ((float*)(idxdata + i * idxstep))] = (char) 1;
+                filter[(int) *((float*)(idxdata + i * idxstep))] = (char) 1;
             }
         }
     } else {
@@ -721,10 +721,10 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
 
     compidx = 0;
 #ifdef _OPENMP
-    #pragma omp parallel private(mat, va, lerror, rerror, left, right, threshold, \
-    optcompidx, sumw, sumwy, sumwyy, t_compidx, t_n, \
-    ti, tj, tk, t_data, t_cstep, t_sstep, matcstep,  \
-    matsstep, t_idx)
+#pragma omp parallel private(mat, va, lerror, rerror, left, right, threshold, \
+                                 optcompidx, sumw, sumwy, sumwyy, t_compidx, t_n, \
+                                 ti, tj, tk, t_data, t_cstep, t_sstep, matcstep,  \
+                                 matsstep, t_idx)
 #endif /* _OPENMP */
     {
         lerror = FLT_MAX;
@@ -786,7 +786,7 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
         }
 
 #ifdef _OPENMP
-        #pragma omp critical(c_compidx)
+#pragma omp critical(c_compidx)
 #endif /* _OPENMP */
         {
             t_compidx = compidx;
@@ -947,7 +947,7 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
                 }
             }
 #ifdef _OPENMP
-            #pragma omp critical(c_compidx)
+#pragma omp critical(c_compidx)
 #endif /* _OPENMP */
             {
                 t_compidx = compidx;
@@ -957,7 +957,7 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
 
         /* get the best classifier */
 #ifdef _OPENMP
-        #pragma omp critical(c_beststump)
+#pragma omp critical(c_beststump)
 #endif /* _OPENMP */
         {
             if (lerror + rerror < stump->lerror + stump->rerror) {
@@ -983,7 +983,7 @@ CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
 
     /* free allocated memory */
     if (filter != NULL) {
-    cvFree(&filter);
+        cvFree(&filter);
     }
 
     if (((CvMTStumpTrainParams*) trainParams)->type == CV_CLASSIFICATION_CLASS) {
@@ -1242,17 +1242,17 @@ CvClassifier* cvCreateCARTClassifier(CvMat* trainData,
     listcount = 0;
     for (i = 1; i < count; i++) {
         /* split last added node */
-        splitIdxCallback(intnode[i - 1].stump->compidx, intnode[i - 1].stump->threshold,
-                         intnode[i - 1].sampleIdx, &lidx, &ridx, userdata);
+        splitIdxCallback(intnode[i-1].stump->compidx, intnode[i-1].stump->threshold,
+                         intnode[i-1].sampleIdx, &lidx, &ridx, userdata);
 
-        if (intnode[i - 1].stump->lerror != 0.0F) {
+        if (intnode[i-1].stump->lerror != 0.0F) {
             list[listcount].sampleIdx = lidx;
             list[listcount].stump = (CvStumpClassifier*)
                                     ((CvCARTTrainParams*) trainParams)->stumpConstructor(trainData, flags,
                                             trainClasses, typeMask, missedMeasurementsMask, compIdx,
                                             list[listcount].sampleIdx,
                                             weights, ((CvCARTTrainParams*) trainParams)->stumpTrainParams);
-            list[listcount].errdrop = intnode[i - 1].stump->lerror
+            list[listcount].errdrop = intnode[i-1].stump->lerror
                                       - (list[listcount].stump->lerror + list[listcount].stump->rerror);
             list[listcount].leftflag = 1;
             list[listcount].parent = i - 1;
@@ -1260,14 +1260,14 @@ CvClassifier* cvCreateCARTClassifier(CvMat* trainData,
         } else {
             cvReleaseMat(&lidx);
         }
-        if (intnode[i - 1].stump->rerror != 0.0F) {
+        if (intnode[i-1].stump->rerror != 0.0F) {
             list[listcount].sampleIdx = ridx;
             list[listcount].stump = (CvStumpClassifier*)
                                     ((CvCARTTrainParams*) trainParams)->stumpConstructor(trainData, flags,
                                             trainClasses, typeMask, missedMeasurementsMask, compIdx,
                                             list[listcount].sampleIdx,
                                             weights, ((CvCARTTrainParams*) trainParams)->stumpTrainParams);
-            list[listcount].errdrop = intnode[i - 1].stump->rerror
+            list[listcount].errdrop = intnode[i-1].stump->rerror
                                       - (list[listcount].stump->lerror + list[listcount].stump->rerror);
             list[listcount].leftflag = 0;
             list[listcount].parent = i - 1;
@@ -1322,13 +1322,13 @@ CvClassifier* cvCreateCARTClassifier(CvMat* trainData,
 
     /* CLEAN UP */
     for (i = 0; i < count && (intnode[i].stump != NULL); i++) {
-        intnode[i].stump->release((CvClassifier**) & (intnode[i].stump));
+        intnode[i].stump->release((CvClassifier**) &(intnode[i].stump));
         if (i != 0) {
             cvReleaseMat(&(intnode[i].sampleIdx));
         }
     }
     for (i = 0; i < listcount; i++) {
-        list[i].stump->release((CvClassifier**) & (list[i].stump));
+        list[i].stump->release((CvClassifier**) &(list[i].stump));
         cvReleaseMat(&(list[i].sampleIdx));
     }
 
@@ -1767,7 +1767,7 @@ float icvBoostNextWeakClassifierGAB(CvMat* weakEvalVals,
     return 1.0F;
 }
 
-typedef CvBoostTrainer* (*CvBoostStartTraining)(CvMat* trainClasses,
+typedef CvBoostTrainer*(*CvBoostStartTraining)(CvMat* trainClasses,
         CvMat* weakTrainVals,
         CvMat* weights,
         CvMat* sampleIdx,
@@ -2023,7 +2023,7 @@ CvBtTrainer* cvBtStart(CvCARTClassifier** trees,
         icvZeroApproxFunc[type](zero_approx, ptr);
         for (i = 0; i < m; i++) {
             for (j = 0; j < numclasses; j++) {
-                ptr->f[i * numclasses + j] = zero_approx[j];
+                ptr->f[i* numclasses + j] = zero_approx[j];
             }
         }
 
@@ -2291,7 +2291,7 @@ void icvBtNext_L2CLASS(CvCARTClassifier** trees, CvBtTrainer* trainer) {
 
         threshold = sorted_weights[i];
 
-        while (i > 0 && sorted_weights[i - 1] == threshold) { i--; }
+        while (i > 0 && sorted_weights[i-1] == threshold) { i--; }
 
         if (i > 0) {
             trimmed_num = trainer->numsamples - i;
@@ -2437,7 +2437,7 @@ void icvBtNext_LKCLASS(CvCARTClassifier** trees, CvBtTrainer* trainer) {
 
             threshold = sorted_weights[i];
 
-            while (i > 0 && sorted_weights[i - 1] == threshold) { i--; }
+            while (i > 0 && sorted_weights[i-1] == threshold) { i--; }
 
             if (i > 0) {
                 trimmed_num = trainer->numsamples - i;
@@ -2598,7 +2598,7 @@ void cvBtNext(CvCARTClassifier** trees, CvBtTrainer* trainer) {
             index = icvGetIdxAt(trainer->sampleIdx, i);
             sample.data.ptr = sample_data + index * sample_step;
             for (j = 0; j < trainer->numclasses; j++) {
-                trainer->f[index * trainer->numclasses + j] +=
+                trainer->f[index* trainer->numclasses + j] +=
                     trees[j]->eval((CvClassifier*)(trees[j]), &sample);
             }
         }
@@ -2896,7 +2896,7 @@ void cvTuneBtClassifier(CvClassifier* classifier, CvMat*, int flags,
             ((CvBtClassifier*) classifier)->trees = (CvCARTClassifier**) ptr;
             classifier->flags &= ~CV_TUNABLE;
             CV_CALL(cvBtEnd((CvBtTrainer**)
-                            & (((CvBtClassifier*) classifier)->trainer)));
+                            &(((CvBtClassifier*) classifier)->trainer)));
             ((CvBtClassifier*) classifier)->trainer = NULL;
         }
     }
@@ -3152,7 +3152,7 @@ CvMat* cvTrimWeights(CvMat* weights, CvMat* idx, float factor) {
 
         threshold = sorted_weights[i];
 
-        while (i > 0 && sorted_weights[i - 1] == threshold) { i--; }
+        while (i > 0 && sorted_weights[i-1] == threshold) { i--; }
 
         if (i > 0 || (idx != NULL && CV_MAT_TYPE(idx->type) != CV_32FC1)) {
             CV_CALL(ptr = cvCreateMat(1, num - i, CV_32FC1));

@@ -76,53 +76,53 @@ extern "C" {
 
 #include <jasper/jas_config.h>
 
-	/******************************************************************************\
-	* Constants.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Constants.
+    \******************************************************************************/
 
 #define	JAS_GETOPT_EOF	(-1)
 #define	JAS_GETOPT_ERR	'?'
 
-	/* option flags. */
+    /* option flags. */
 #define	JAS_OPT_HASARG	0x01	/* option has argument */
 
-	/******************************************************************************\
-	* Types.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Types.
+    \******************************************************************************/
 
-	/* Command line option type. */
-	typedef struct {
+    /* Command line option type. */
+    typedef struct {
 
-		int id;
-		/* The unique identifier for this option. */
+        int id;
+        /* The unique identifier for this option. */
 
-		char* name;
-		/* The name of this option. */
+        char* name;
+        /* The name of this option. */
 
-		int flags;
-		/* option flags. */
+        int flags;
+        /* option flags. */
 
-	} jas_opt_t;
+    } jas_opt_t;
 
-	/******************************************************************************\
-	* External data.
-	\******************************************************************************/
+    /******************************************************************************\
+    * External data.
+    \******************************************************************************/
 
-	/* The current option index. */
-	extern int jas_optind;
+    /* The current option index. */
+    extern int jas_optind;
 
-	/* The current option argument. */
-	extern char* jas_optarg;
+    /* The current option argument. */
+    extern char* jas_optarg;
 
-	/* The debug level. */
-	extern int jas_opterr;
+    /* The debug level. */
+    extern int jas_opterr;
 
-	/******************************************************************************\
-	* Prototypes.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Prototypes.
+    \******************************************************************************/
 
-	/* Get the next option. */
-	int jas_getopt(int argc, char** argv, jas_opt_t* opts);
+    /* Get the next option. */
+    int jas_getopt(int argc, char** argv, jas_opt_t* opts);
 
 #ifdef __cplusplus
 }

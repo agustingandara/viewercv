@@ -395,12 +395,12 @@ static IplImage* icvRetrieveFrameCAM_DC1394(CvCaptureCAM_DC1394* capture, int) {
                 //printf("icvRetrieveFrame convert RGB to BGR\n");
                 /* Convert RGB to BGR */
                 for (int i = 0; i < capture->frame.imageSize; i += 6) {
-                    dst[i]   = src[i + 2];
-                    dst[i + 1] = src[i + 1];
-                    dst[i + 2] = src[i];
-                    dst[i + 3] = src[i + 5];
-                    dst[i + 4] = src[i + 4];
-                    dst[i + 5] = src[i + 3];
+                    dst[i]   = src[i+2];
+                    dst[i+1] = src[i+1];
+                    dst[i+2] = src[i];
+                    dst[i+3] = src[i+5];
+                    dst[i+4] = src[i+4];
+                    dst[i+5] = src[i+3];
                 }
                 break;
             case COLOR_FORMAT7_YUV422:
@@ -1031,13 +1031,13 @@ rgb482bgr(const unsigned char* src, unsigned char* dest,
 
     while (i > 0) {
         y = src[i--];
-        dest[j - 2] = (y + (src[i--] << 8)) >> (bits - 8);
+        dest[j-2] = (y + (src[i--] << 8)) >> (bits - 8);
         j--;
         y = src[i--];
         dest[j] = (y + (src[i--] << 8)) >> (bits - 8);
         j--;
         y = src[i--];
-        dest[j + 2] = (y + (src[i--] << 8)) >> (bits - 8);
+        dest[j+2] = (y + (src[i--] << 8)) >> (bits - 8);
         j--;
     }
 }

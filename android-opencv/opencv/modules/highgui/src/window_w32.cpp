@@ -230,7 +230,7 @@ static CvWindow* icvFindWindowByName(const char* name) {
     CvWindow* window = hg_windows;
 
     for (; window != 0 && strcmp(name, window->name) != 0; window = window->next)
-        { ; }
+        ;
 
     return window;
 }
@@ -314,7 +314,7 @@ icvSaveWindowPos(const char* name, CvRect rect) {
         char currentKey[1024];
 
         strcpy(rootKey, icvWindowPosRootKey);
-        rootKey[strlen(rootKey) - 1] = '\0';
+        rootKey[strlen(rootKey)-1] = '\0';
         if (RegCreateKeyEx(HKEY_CURRENT_USER, rootKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ + KEY_WRITE, 0, &hroot, NULL) != ERROR_SUCCESS)
             //RegOpenKeyEx( HKEY_CURRENT_USER,rootKey,0,KEY_READ,&hroot) != ERROR_SUCCESS )
         {
@@ -762,7 +762,7 @@ cvShowImage(const char* name, const CvArr* arr) {
     if (size.cx != image->width || size.cy != image->height || channels != channels0) {
         changed_size = true;
 
-        uchar buffer[sizeof(BITMAPINFO) + 255 * sizeof(RGBQUAD)];
+        uchar buffer[sizeof(BITMAPINFO) + 255*sizeof(RGBQUAD)];
         BITMAPINFO* binfo = (BITMAPINFO*)buffer;
 
         DeleteObject(SelectObject(window->dc, window->image));
@@ -1284,7 +1284,7 @@ icvFindTrackbarByName(const CvWindow* window, const char* name) {
     CvTrackbar* trackbar = window->toolbar.first;
 
     for (; trackbar != 0 && strcmp(trackbar->name, name) != 0; trackbar = trackbar->next)
-        { ; }
+        ;
 
     return trackbar;
 }

@@ -61,41 +61,41 @@ using namespace Imath;
 class ExrDecoder : public BaseImageDecoder {
 public:
 
-	ExrDecoder();
-	~ExrDecoder();
+    ExrDecoder();
+    ~ExrDecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
 
-	ImageDecoder newDecoder() const;
+    ImageDecoder newDecoder() const;
 
 protected:
-	void  UpSample( uchar* data, int xstep, int ystep, int xsample, int ysample );
-	void  UpSampleX( float* data, int xstep, int xsample );
-	void  UpSampleY( uchar* data, int xstep, int ystep, int ysample );
-	void  ChromaToBGR( float* data, int numlines, int step );
-	void  RGBToGray( float* in, float* out );
+    void  UpSample(uchar* data, int xstep, int ystep, int xsample, int ysample);
+    void  UpSampleX(float* data, int xstep, int xsample);
+    void  UpSampleY(uchar* data, int xstep, int ystep, int ysample);
+    void  ChromaToBGR(float* data, int numlines, int step);
+    void  RGBToGray(float* in, float* out);
 
-	InputFile*      m_file;
-	PixelType       m_type;
-	Box2i           m_datawindow;
-	bool            m_ischroma;
-	const Channel*  m_red;
-	const Channel*  m_green;
-	const Channel*  m_blue;
-	Chromaticities  m_chroma;
+    InputFile*      m_file;
+    PixelType       m_type;
+    Box2i           m_datawindow;
+    bool            m_ischroma;
+    const Channel*  m_red;
+    const Channel*  m_green;
+    const Channel*  m_blue;
+    Chromaticities  m_chroma;
 };
 
 
 class ExrEncoder : public BaseImageEncoder {
 public:
-	ExrEncoder();
-	~ExrEncoder();
+    ExrEncoder();
+    ~ExrEncoder();
 
-	bool  isFormatSupported( int depth ) const;
-	bool  write( const Mat& img, const Vector<int>& params );
-	ImageEncoder newEncoder() const;
+    bool  isFormatSupported(int depth) const;
+    bool  write(const Mat& img, const Vector<int>& params);
+    ImageEncoder newEncoder() const;
 };
 
 }

@@ -40,46 +40,46 @@ typedef struct _GstAppSink GstAppSink;
 typedef struct _GstAppSinkClass GstAppSinkClass;
 
 struct _GstAppSink {
-	GstBaseSink basesink;
+    GstBaseSink basesink;
 
-	/*< private >*/
-	GstCaps* caps;
+    /*< private >*/
+    GstCaps* caps;
 
-	GCond* cond;
-	GMutex* mutex;
-	GQueue* queue;
-	GstBuffer* preroll;
-	gboolean started;
-	gboolean is_eos;
+    GCond* cond;
+    GMutex* mutex;
+    GQueue* queue;
+    GstBuffer* preroll;
+    gboolean started;
+    gboolean is_eos;
 };
 
 struct _GstAppSinkClass {
-	GstBaseSinkClass basesink_class;
+    GstBaseSinkClass basesink_class;
 
-	/* signals */
-	gboolean    (*eos)          (GstAppSink* sink);
-	gboolean    (*new_preroll)  (GstAppSink* sink);
-	gboolean    (*new_buffer)   (GstAppSink* sink);
+    /* signals */
+    gboolean(*eos)(GstAppSink* sink);
+    gboolean(*new_preroll)(GstAppSink* sink);
+    gboolean(*new_buffer)(GstAppSink* sink);
 
-	/* actions */
-	GstBuffer * (*pull_preroll)  (GstAppSink* sink);
-	GstBuffer * (*pull_buffer)   (GstAppSink* sink);
+    /* actions */
+    GstBuffer *(*pull_preroll)(GstAppSink* sink);
+    GstBuffer *(*pull_buffer)(GstAppSink* sink);
 };
 
 GType gst_app_sink_get_type(void);
 
-GST_DEBUG_CATEGORY_EXTERN (app_sink_debug);
+GST_DEBUG_CATEGORY_EXTERN(app_sink_debug);
 
-void            gst_app_sink_set_caps       (GstAppSink* appsink, const GstCaps* caps);
-GstCaps*        gst_app_sink_get_caps       (GstAppSink* appsink);
+void            gst_app_sink_set_caps(GstAppSink* appsink, const GstCaps* caps);
+GstCaps*        gst_app_sink_get_caps(GstAppSink* appsink);
 
-gboolean        gst_app_sink_is_eos         (GstAppSink* appsink);
+gboolean        gst_app_sink_is_eos(GstAppSink* appsink);
 
-GstBuffer*      gst_app_sink_pull_preroll   (GstAppSink* appsink);
-GstBuffer*      gst_app_sink_pull_buffer    (GstAppSink* appsink);
-GstBuffer*      gst_app_sink_peek_buffer    (GstAppSink* appsink);
+GstBuffer*      gst_app_sink_pull_preroll(GstAppSink* appsink);
+GstBuffer*      gst_app_sink_pull_buffer(GstAppSink* appsink);
+GstBuffer*      gst_app_sink_peek_buffer(GstAppSink* appsink);
 
-guint           gst_app_sink_get_queue_length (GstAppSink* appsink);
+guint           gst_app_sink_get_queue_length(GstAppSink* appsink);
 
 G_END_DECLS
 

@@ -892,7 +892,7 @@ icvFindTrackbarByName(const CvWindow* window, const char* name) {
     CvTrackbar* trackbar = window->toolbar.first;
 
     for (; trackbar != 0 && strcmp(trackbar->name, name) != 0; trackbar = trackbar->next)
-        { ; }
+        ;
 
     return trackbar;
 }
@@ -1146,7 +1146,7 @@ CV_IMPL const char* cvGetWindowName(void* window_handle) {
     return window_name;
 }
 
-static gboolean icvOnKeyPress(GtkWidget* /*widget*/,
+static gboolean icvOnKeyPress(GtkWidget * /*widget*/,
                               GdkEventKey* event, gpointer /*user_data*/) {
     int code = 0;
 
@@ -1327,7 +1327,7 @@ CV_IMPL int cvWaitKey(int delay) {
         }
         last_key = -1;
         while (gtk_main_iteration_do(TRUE) && last_key < 0 && !expired && hg_windows != 0)
-            { ; }
+            ;
 
         if (delay > 0 && !expired) {
             g_source_remove(timer);

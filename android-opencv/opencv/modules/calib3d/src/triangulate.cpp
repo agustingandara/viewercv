@@ -95,8 +95,8 @@ cvTriangulatePoints(CvMat* projMatr1, CvMat* projMatr2, CvMat* projPoints1, CvMa
     CvMat matrW;
     CvMat matrV;
     //double matrU_dat[9*9];
-    double matrW_dat[6 * 4];
-    double matrV_dat[4 * 4];
+    double matrW_dat[6*4];
+    double matrV_dat[4*4];
 
     //matrU = cvMat(6,6,CV_64F,matrU_dat);
     matrW = cvMat(6, 4, CV_64F, matrW_dat);
@@ -274,10 +274,10 @@ cvCorrectMatches(CvMat* F_, CvMat* points1_, CvMat* points2_, CvMat* new_points1
     double t_min, s_val, t, s;
     for (int p = 0; p < points1->cols; ++p) {
         // Replace F by T2-t * F * T1-t
-        x1 = points1->data.db[p * 2];
-        y1 = points1->data.db[p * 2 + 1];
-        x2 = points2->data.db[p * 2];
-        y2 = points2->data.db[p * 2 + 1];
+        x1 = points1->data.db[p*2];
+        y1 = points1->data.db[p*2+1];
+        x2 = points2->data.db[p*2];
+        y2 = points2->data.db[p*2+1];
 
         cvSetZero(T1i);
         cvSetReal2D(T1i, 0, 0, 1);
@@ -370,7 +370,7 @@ cvCorrectMatches(CvMat* F_, CvMat* points1_, CvMat* points2_, CvMat* new_points1
         t_min = DBL_MAX;
         s_val = 1. / (f1 * f1) + (c * c) / (a * a + f2 * f2 * c * c);
         for (int ti = 0; ti < 6; ++ti) {
-            t = result->data.db[2 * ti];
+            t = result->data.db[2*ti];
             s = (t * t) / (1 + f1 * f1 * t * t) + ((c * t + d) * (c * t + d)) / ((a * t + b) * (a * t + b) + f2 * f2 * (c * t + d) * (c * t + d));
             if (s < s_val) {
                 s_val = s;
@@ -402,10 +402,10 @@ cvCorrectMatches(CvMat* F_, CvMat* points1_, CvMat* points2_, CvMat* new_points1
         y2 = tmp31_2->data.db[1];
 
         // Return the points in the matrix format that the user wants
-        points1->data.db[p * 2] = x1;
-        points1->data.db[p * 2 + 1] = y1;
-        points2->data.db[p * 2] = x2;
-        points2->data.db[p * 2 + 1] = y2;
+        points1->data.db[p*2] = x1;
+        points1->data.db[p*2+1] = y1;
+        points2->data.db[p*2] = x2;
+        points2->data.db[p*2+1] = y2;
     }
 
     if (new_points1) {

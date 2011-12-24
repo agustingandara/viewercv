@@ -80,7 +80,7 @@ namespace Imf {
 // chromaticities of the primaries and the white point
 //
 
-IMF_STD_ATTRIBUTE_DEF (chromaticities, Chromaticities, Chromaticities)
+IMF_STD_ATTRIBUTE_DEF(chromaticities, Chromaticities, Chromaticities)
 
 
 //
@@ -94,7 +94,7 @@ IMF_STD_ATTRIBUTE_DEF (chromaticities, Chromaticities, Chromaticities)
 //
 //
 
-IMF_STD_ATTRIBUTE_DEF (whiteLuminance, WhiteLuminance, float)
+IMF_STD_ATTRIBUTE_DEF(whiteLuminance, WhiteLuminance, float)
 
 
 //
@@ -102,14 +102,14 @@ IMF_STD_ATTRIBUTE_DEF (whiteLuminance, WhiteLuminance, float)
 // The image's vertical output density is xDensity * pixelAspectRatio.
 //
 
-IMF_STD_ATTRIBUTE_DEF (xDensity, XDensity, float)
+IMF_STD_ATTRIBUTE_DEF(xDensity, XDensity, float)
 
 
 //
 // owner -- name of the owner of the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (owner, Owner, std::string)
+IMF_STD_ATTRIBUTE_DEF(owner, Owner, std::string)
 
 
 //
@@ -117,7 +117,7 @@ IMF_STD_ATTRIBUTE_DEF (owner, Owner, std::string)
 // form, for example a verbal description of the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (comments, Comments, std::string)
+IMF_STD_ATTRIBUTE_DEF(comments, Comments, std::string)
 
 
 //
@@ -133,7 +133,7 @@ IMF_STD_ATTRIBUTE_DEF (comments, Comments, std::string)
 //
 //
 
-IMF_STD_ATTRIBUTE_DEF (capDate, CapDate, std::string)
+IMF_STD_ATTRIBUTE_DEF(capDate, CapDate, std::string)
 
 
 //
@@ -143,7 +143,7 @@ IMF_STD_ATTRIBUTE_DEF (capDate, CapDate, std::string)
 //    UTC == local time + utcOffset
 //
 
-IMF_STD_ATTRIBUTE_DEF (utcOffset, utcOffset, float)
+IMF_STD_ATTRIBUTE_DEF(utcOffset, utcOffset, float)
 
 
 //
@@ -154,23 +154,23 @@ IMF_STD_ATTRIBUTE_DEF (utcOffset, utcOffset, float)
 // at longitude 85.317, latitude 27.717, altitude 1305.
 //
 
-IMF_STD_ATTRIBUTE_DEF (longitude, Longitude, float)
-IMF_STD_ATTRIBUTE_DEF (latitude, Latitude, float)
-IMF_STD_ATTRIBUTE_DEF (altitude, Altitude, float)
+IMF_STD_ATTRIBUTE_DEF(longitude, Longitude, float)
+IMF_STD_ATTRIBUTE_DEF(latitude, Latitude, float)
+IMF_STD_ATTRIBUTE_DEF(altitude, Altitude, float)
 
 
 //
 // focus -- the camera's focus distance, in meters
 //
 
-IMF_STD_ATTRIBUTE_DEF (focus, Focus, float)
+IMF_STD_ATTRIBUTE_DEF(focus, Focus, float)
 
 
 //
 // exposure -- exposure time, in seconds
 //
 
-IMF_STD_ATTRIBUTE_DEF (expTime, ExpTime, float)
+IMF_STD_ATTRIBUTE_DEF(expTime, ExpTime, float)
 
 
 //
@@ -178,7 +178,7 @@ IMF_STD_ATTRIBUTE_DEF (expTime, ExpTime, float)
 // of the lens divided by the diameter of the iris opening)
 //
 
-IMF_STD_ATTRIBUTE_DEF (aperture, Aperture, float)
+IMF_STD_ATTRIBUTE_DEF(aperture, Aperture, float)
 
 
 //
@@ -186,7 +186,7 @@ IMF_STD_ATTRIBUTE_DEF (aperture, Aperture, float)
 // that was used to record the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (isoSpeed, IsoSpeed, float)
+IMF_STD_ATTRIBUTE_DEF(isoSpeed, IsoSpeed, float)
 
 
 //
@@ -196,7 +196,7 @@ IMF_STD_ATTRIBUTE_DEF (isoSpeed, IsoSpeed, float)
 // see header file ImfEnvmap.h
 //
 
-IMF_STD_ATTRIBUTE_DEF (envmap, Envmap, Envmap)
+IMF_STD_ATTRIBUTE_DEF(envmap, Envmap, Envmap)
 
 
 //
@@ -205,14 +205,14 @@ IMF_STD_ATTRIBUTE_DEF (envmap, Envmap, Envmap)
 // the roll.
 //
 
-IMF_STD_ATTRIBUTE_DEF (keyCode, KeyCode, KeyCode)
+IMF_STD_ATTRIBUTE_DEF(keyCode, KeyCode, KeyCode)
 
 
 //
 // timeCode -- time and control code
 //
 
-IMF_STD_ATTRIBUTE_DEF (timeCode, TimeCode, TimeCode)
+IMF_STD_ATTRIBUTE_DEF(timeCode, TimeCode, TimeCode)
 
 
 //
@@ -243,7 +243,7 @@ IMF_STD_ATTRIBUTE_DEF (timeCode, TimeCode, TimeCode)
 //			every other instance is mirrored
 //
 
-IMF_STD_ATTRIBUTE_DEF (wrapmodes, Wrapmodes, std::string)
+IMF_STD_ATTRIBUTE_DEF(wrapmodes, Wrapmodes, std::string)
 
 
 } // namespace Imf

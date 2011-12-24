@@ -57,34 +57,34 @@ namespace Imf {
 class StdIFStream: public IStream {
 public:
 
-	//-------------------------------------------------------
-	// A constructor that opens the file with the given name.
-	// The destructor will close the file.
-	//-------------------------------------------------------
+    //-------------------------------------------------------
+    // A constructor that opens the file with the given name.
+    // The destructor will close the file.
+    //-------------------------------------------------------
 
-	StdIFStream (const char fileName[]);
-
-
-	//---------------------------------------------------------
-	// A constructor that uses a std::ifstream that has already
-	// been opened by the caller.  The StdIFStream's destructor
-	// will not close the std::ifstream.
-	//---------------------------------------------------------
-
-	StdIFStream (std::ifstream& is, const char fileName[]);
+    StdIFStream(const char fileName[]);
 
 
-	virtual ~StdIFStream ();
+    //---------------------------------------------------------
+    // A constructor that uses a std::ifstream that has already
+    // been opened by the caller.  The StdIFStream's destructor
+    // will not close the std::ifstream.
+    //---------------------------------------------------------
 
-	virtual bool	read (char c[/*n*/], int n);
-	virtual Int64	tellg ();
-	virtual void	seekg (Int64 pos);
-	virtual void	clear ();
+    StdIFStream(std::ifstream& is, const char fileName[]);
+
+
+    virtual ~StdIFStream();
+
+    virtual bool	read(char c[/*n*/], int n);
+    virtual Int64	tellg();
+    virtual void	seekg(Int64 pos);
+    virtual void	clear();
 
 private:
 
-	std::ifstream* 	_is;
-	bool		_deleteStream;
+    std::ifstream* 	_is;
+    bool		_deleteStream;
 };
 
 
@@ -96,33 +96,33 @@ private:
 class StdOFStream: public OStream {
 public:
 
-	//-------------------------------------------------------
-	// A constructor that opens the file with the given name.
-	// The destructor will close the file.
-	//-------------------------------------------------------
+    //-------------------------------------------------------
+    // A constructor that opens the file with the given name.
+    // The destructor will close the file.
+    //-------------------------------------------------------
 
-	StdOFStream (const char fileName[]);
-
-
-	//---------------------------------------------------------
-	// A constructor that uses a std::ofstream that has already
-	// been opened by the caller.  The StdOFStream's destructor
-	// will not close the std::ofstream.
-	//---------------------------------------------------------
-
-	StdOFStream (std::ofstream& os, const char fileName[]);
+    StdOFStream(const char fileName[]);
 
 
-	virtual ~StdOFStream ();
+    //---------------------------------------------------------
+    // A constructor that uses a std::ofstream that has already
+    // been opened by the caller.  The StdOFStream's destructor
+    // will not close the std::ofstream.
+    //---------------------------------------------------------
 
-	virtual void	write (const char c[/*n*/], int n);
-	virtual Int64	tellp ();
-	virtual void	seekp (Int64 pos);
+    StdOFStream(std::ofstream& os, const char fileName[]);
+
+
+    virtual ~StdOFStream();
+
+    virtual void	write(const char c[/*n*/], int n);
+    virtual Int64	tellp();
+    virtual void	seekp(Int64 pos);
 
 private:
 
-	std::ofstream* 	_os;
-	bool		_deleteStream;
+    std::ofstream* 	_os;
+    bool		_deleteStream;
 };
 
 
@@ -134,17 +134,17 @@ private:
 class StdOSStream: public OStream {
 public:
 
-	StdOSStream ();
+    StdOSStream();
 
-	virtual void	write (const char c[/*n*/], int n);
-	virtual Int64	tellp ();
-	virtual void	seekp (Int64 pos);
+    virtual void	write(const char c[/*n*/], int n);
+    virtual Int64	tellp();
+    virtual void	seekp(Int64 pos);
 
-	std::string		str () const {return _os.str();}
+    std::string		str() const {return _os.str();}
 
 private:
 
-	std::ostringstream 	_os;
+    std::ostringstream 	_os;
 };
 
 

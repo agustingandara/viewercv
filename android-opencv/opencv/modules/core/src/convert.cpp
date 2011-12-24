@@ -57,7 +57,7 @@ splitC2_(const Mat& srcmat, Mat* dstmat) {
         T* dst1 = (T*)(dstmat[1].data + dstmat[1].step * y);
 
         for (int x = 0; x < size.width; x++) {
-            T t0 = src[x * 2], t1 = src[x * 2 + 1];
+            T t0 = src[x*2], t1 = src[x*2+1];
             dst0[x] = t0; dst1[x] = t1;
         }
     }
@@ -73,7 +73,7 @@ splitC3_(const Mat& srcmat, Mat* dstmat) {
         T* dst2 = (T*)(dstmat[2].data + dstmat[2].step * y);
 
         for (int x = 0; x < size.width; x++) {
-            T t0 = src[x * 3], t1 = src[x * 3 + 1], t2 = src[x * 3 + 2];
+            T t0 = src[x*3], t1 = src[x*3+1], t2 = src[x*3+2];
             dst0[x] = t0; dst1[x] = t1; dst2[x] = t2;
         }
     }
@@ -90,9 +90,9 @@ splitC4_(const Mat& srcmat, Mat* dstmat) {
         T* dst3 = (T*)(dstmat[3].data + dstmat[3].step * y);
 
         for (int x = 0; x < size.width; x++) {
-            T t0 = src[x * 4], t1 = src[x * 4 + 1];
+            T t0 = src[x*4], t1 = src[x*4+1];
             dst0[x] = t0; dst1[x] = t1;
-            t0 = src[x * 4 + 2]; t1 = src[x * 4 + 3];
+            t0 = src[x*4+2]; t1 = src[x*4+3];
             dst2[x] = t0; dst3[x] = t1;
         }
     }
@@ -120,15 +120,15 @@ void split(const Mat& src, Mat* mv) {
     }
 
     if (cn <= 4) {
-        SplitFunc func = tab[(cn - 2) * 5 + (src.elemSize1() >> 1)];
+        SplitFunc func = tab[(cn-2)*5 + (src.elemSize1()>>1)];
         CV_Assert(func != 0);
         func(src, mv);
     } else {
         vector<int> pairs(cn * 2);
 
         for (i = 0; i < cn; i++) {
-            pairs[i * 2] = i;
-            pairs[i * 2 + 1] = 0;
+            pairs[i*2] = i;
+            pairs[i*2+1] = 0;
         }
         mixChannels(&src, 1, mv, cn, &pairs[0], cn);
     }
@@ -149,7 +149,7 @@ mergeC2_(const Mat* srcmat, Mat& dstmat) {
 
         for (int x = 0; x < size.width; x++) {
             T t0 = src0[x], t1 = src1[x];
-            dst[x * 2] = t0; dst[x * 2 + 1] = t1;
+            dst[x*2] = t0; dst[x*2+1] = t1;
         }
     }
 }
@@ -165,7 +165,7 @@ mergeC3_(const Mat* srcmat, Mat& dstmat) {
 
         for (int x = 0; x < size.width; x++) {
             T t0 = src0[x], t1 = src1[x], t2 = src2[x];
-            dst[x * 3] = t0; dst[x * 3 + 1] = t1; dst[x * 3 + 2] = t2;
+            dst[x*3] = t0; dst[x*3+1] = t1; dst[x*3+2] = t2;
         }
     }
 }
@@ -182,9 +182,9 @@ mergeC4_(const Mat* srcmat, Mat& dstmat) {
 
         for (int x = 0; x < size.width; x++) {
             T t0 = src0[x], t1 = src1[x];
-            dst[x * 4] = t0; dst[x * 4 + 1] = t1;
+            dst[x*4] = t0; dst[x*4+1] = t1;
             t0 = src2[x]; t1 = src3[x];
-            dst[x * 4 + 2] = t0; dst[x * 4 + 3] = t1;
+            dst[x*4+2] = t0; dst[x*4+3] = t1;
         }
     }
 }
@@ -223,7 +223,7 @@ void merge(const Mat* mv, size_t n, Mat& dst) {
     dst.create(size, CV_MAKETYPE(depth, total));
 
     if (allch1 && total <= 4) {
-        MergeFunc func = tab[(total - 2) * 5 + (CV_ELEM_SIZE(depth) >> 1)];
+        MergeFunc func = tab[(total-2)*5 + (CV_ELEM_SIZE(depth)>>1)];
         CV_Assert(func != 0);
         func(mv, dst);
     } else {
@@ -233,8 +233,8 @@ void merge(const Mat* mv, size_t n, Mat& dst) {
         for (i = 0, j = 0; i < n; i++, j += ni) {
             ni = mv[i].channels();
             for (k = 0; k < ni; k++) {
-                pairs[(j + k) * 2] = j + k;
-                pairs[(j + k) * 2 + 1] = j + k;
+                pairs[(j+k)*2] = j + k;
+                pairs[(j+k)*2+1] = j + k;
             }
         }
         mixChannels(mv, n, &dst, 1, &pairs[0], total);
@@ -306,14 +306,14 @@ void mixChannels(const Mat* src, int nsrcs, Mat* dst, int ndsts, const int* from
     int depth = dst[0].depth(), esz1 = (int)dst[0].elemSize1();
     Size size = dst[0].size();
 
-    AutoBuffer<uchar> buf(npairs * (sizeof(void*) * 2 + sizeof(int) * 4));
+    AutoBuffer<uchar> buf(npairs*(sizeof(void*) * 2 + sizeof(int) * 4));
     void** srcs = (void**)(uchar*)buf;
     void** dsts = srcs + npairs;
     int* s0 = (int*)(dsts + npairs), *s1 = s0 + npairs, *d0 = s1 + npairs, *d1 = d0 + npairs;
     bool isContinuous = true;
 
     for (i = 0; i < npairs; i++) {
-        int i0 = fromTo[i * 2], i1 = fromTo[i * 2 + 1], j;
+        int i0 = fromTo[i*2], i1 = fromTo[i*2+1], j;
         if (i0 >= 0) {
             for (j = 0; j < nsrcs; i0 -= src[j].channels(), j++)
                 if (i0 < src[j].channels()) {
@@ -436,11 +436,11 @@ cvtScale_(const Mat& srcmat, Mat& dstmat, double _scale, double _shift) {
         for (; x <= size.width - 4; x += 4) {
             DT t0, t1;
             t0 = op(src[x] * scale + shift);
-            t1 = op(src[x + 1] * scale + shift);
-            dst[x] = t0; dst[x + 1] = t1;
-            t0 = op(src[x + 2] * scale + shift);
-            t1 = op(src[x + 3] * scale + shift);
-            dst[x + 2] = t0; dst[x + 3] = t1;
+            t1 = op(src[x+1] * scale + shift);
+            dst[x] = t0; dst[x+1] = t1;
+            t0 = op(src[x+2] * scale + shift);
+            t1 = op(src[x+3] * scale + shift);
+            dst[x+2] = t0; dst[x+3] = t1;
         }
 
         for (; x < size.width; x++) {
@@ -469,11 +469,11 @@ cvtScaleInt_(const Mat& srcmat, Mat& dstmat, double _scale, double _shift) {
         for (; x <= size.width - 4; x += 4) {
             DT t0, t1;
             t0 = op(src[x] * scale + shift);
-            t1 = op(src[x + 1] * scale + shift);
-            dst[x] = t0; dst[x + 1] = t1;
-            t0 = op(src[x + 2] * scale + shift);
-            t1 = op(src[x + 3] * scale + shift);
-            dst[x + 2] = t0; dst[x + 3] = t1;
+            t1 = op(src[x+1] * scale + shift);
+            dst[x] = t0; dst[x+1] = t1;
+            t0 = op(src[x+2] * scale + shift);
+            t1 = op(src[x+3] * scale + shift);
+            dst[x+2] = t0; dst[x+3] = t1;
         }
 
         for (; x < size.width; x++) {
@@ -494,11 +494,11 @@ cvt_(const Mat& srcmat, Mat& dstmat) {
         for (; x <= size.width - 4; x += 4) {
             DT t0, t1;
             t0 = saturate_cast<DT>(src[x]);
-            t1 = saturate_cast<DT>(src[x + 1]);
-            dst[x] = t0; dst[x + 1] = t1;
-            t0 = saturate_cast<DT>(src[x + 2]);
-            t1 = saturate_cast<DT>(src[x + 3]);
-            dst[x + 2] = t0; dst[x + 3] = t1;
+            t1 = saturate_cast<DT>(src[x+1]);
+            dst[x] = t0; dst[x+1] = t1;
+            t0 = saturate_cast<DT>(src[x+2]);
+            t1 = saturate_cast<DT>(src[x+3]);
+            dst[x+2] = t0; dst[x+3] = t1;
         }
 
         for (; x < size.width; x++) {
@@ -711,7 +711,7 @@ LUT8u(const Mat& srcmat, Mat& dstmat, const Mat& lut) {
 
             for (k = 0; k < cn; k++)
                 for (i = 0; i < size.width; i += cn) {
-                    dst[i + k] = _lut[src[i + k] * cn + k];
+                    dst[i+k] = _lut[src[i+k] * cn + k];
                 }
         }
         return;
@@ -720,7 +720,7 @@ LUT8u(const Mat& srcmat, Mat& dstmat, const Mat& lut) {
     /* repack the lut to planar layout */
     for (k = 0; k < cn; k++)
         for (i = 0; i < 256; i++) {
-            lutp[k][i] = _lut[i * cn + k];
+            lutp[k][i] = _lut[i*cn+k];
         }
 
     for (y = 0; y < size.height; y++) {
@@ -733,8 +733,8 @@ LUT8u(const Mat& srcmat, Mat& dstmat, const Mat& lut) {
                 const T* lut = lutp[k];
                 for (j = i; j <= limit - cn * 2; j += cn * 2) {
                     T t0 = lut[src[j]];
-                    T t1 = lut[src[j + cn]];
-                    dst[j] = t0; dst[j + cn] = t1;
+                    T t1 = lut[src[j+cn]];
+                    dst[j] = t0; dst[j+cn] = t1;
                 }
 
                 for (; j < limit; j += cn) {
@@ -820,8 +820,8 @@ cvSplit(const void* srcarr, void* dstarr0, void* dstarr1, void* dstarr2, void* d
             CV_Assert(dvec[j].size() == src.size() &&
                       dvec[j].depth() == src.depth() &&
                       dvec[j].channels() == 1 && i < src.channels());
-            pairs[j * 2] = i;
-            pairs[j * 2 + 1] = j;
+            pairs[j*2] = i;
+            pairs[j*2+1] = j;
             j++;
         }
     }
@@ -852,8 +852,8 @@ cvMerge(const void* srcarr0, const void* srcarr1, const void* srcarr2,
             CV_Assert(svec[j].size() == dst.size() &&
                       svec[j].depth() == dst.depth() &&
                       svec[j].channels() == 1 && i < dst.channels());
-            pairs[j * 2] = j;
-            pairs[j * 2 + 1] = i;
+            pairs[j*2] = j;
+            pairs[j*2+1] = i;
             j++;
         }
     }
@@ -877,7 +877,7 @@ cvMixChannels(const CvArr** src, int src_count,
         buf[i] = cv::cvarrToMat(src[i]);
     }
     for (i = 0; i < dst_count; i++) {
-        buf[i + src_count] = cv::cvarrToMat(dst[i]);
+        buf[i+src_count] = cv::cvarrToMat(dst[i]);
     }
     cv::mixChannels(&buf[0], src_count, &buf[src_count], dst_count, from_to, pair_count);
 }

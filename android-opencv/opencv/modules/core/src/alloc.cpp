@@ -144,7 +144,7 @@ const size_t HDR_SIZE = 128;
 const size_t MAX_BLOCK_SIZE = MEM_BLOCK_SIZE - HDR_SIZE;
 const int MAX_BIN = 28;
 
-static const int binSizeTab[MAX_BIN + 1] = {
+static const int binSizeTab[MAX_BIN+1] = {
     8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 128, 160, 192, 256, 320, 384, 480, 544, 672, 768,
     896, 1056, 1328, 1600, 2688, 4048, 5408, 8128, 16256
 };
@@ -161,14 +161,14 @@ struct MallocTables {
     }
     int bin(size_t size) {
         assert(size <= MAX_BLOCK_SIZE);
-        return binIdx[(size + 7) >> 3];
+        return binIdx[(size + 7)>>3];
     }
 
     MallocTables() {
         initBinTab();
     }
 
-    uchar binIdx[MAX_BLOCK_SIZE / 8 + 1];
+    uchar binIdx[MAX_BLOCK_SIZE/8+1];
 };
 
 MallocTables mallocTables;
@@ -352,7 +352,7 @@ struct ThreadData {
         }
     }
 
-    Block* bins[MAX_BIN + 1][3];
+    Block* bins[MAX_BIN+1][3];
 
 #ifdef WIN32
 #ifdef WINCE
@@ -373,23 +373,23 @@ struct ThreadData {
         return data;
     }
 #else
-    static void deleteData(void* data) {
-        delete(ThreadData*)data;
-    }
+static void deleteData(void* data) {
+    delete(ThreadData*)data;
+}
 
-    static pthread_key_t tlsKey;
-    static ThreadData* get() {
-        ThreadData* data;
-        if (!tlsKey) {
-            pthread_key_create(&tlsKey, deleteData);
-        }
-        data = (ThreadData*)pthread_getspecific(tlsKey);
-        if (!data) {
-            data = new ThreadData;
-            pthread_setspecific(tlsKey, data);
-        }
-        return data;
+static pthread_key_t tlsKey;
+static ThreadData* get() {
+    ThreadData* data;
+    if (!tlsKey) {
+        pthread_key_create(&tlsKey, deleteData);
     }
+    data = (ThreadData*)pthread_getspecific(tlsKey);
+    if (!data) {
+        data = new ThreadData;
+        pthread_setspecific(tlsKey, data);
+    }
+    return data;
+}
 #endif
 };
 
@@ -559,7 +559,7 @@ void fastFree(void* ptr) {
                 float ratio = (float)stat.nettoBytes / stat.bruttoBytes;
                 if (stat.minUsageRatio > ratio)
                 stat.minUsageRatio = ratio;
-            ) { ; }
+            );
 
             SANITY_CHECK(block);
 

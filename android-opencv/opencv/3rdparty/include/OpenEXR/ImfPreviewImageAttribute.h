@@ -52,13 +52,13 @@ namespace Imf {
 typedef TypedAttribute<PreviewImage> PreviewImageAttribute;
 
 template <>
-const char* PreviewImageAttribute::staticTypeName ();
+const char* PreviewImageAttribute::staticTypeName();
 
 template <>
-void PreviewImageAttribute::writeValueTo (OStream&, int) const;
+void PreviewImageAttribute::writeValueTo(OStream&, int) const;
 
 template <>
-void PreviewImageAttribute::readValueFrom (IStream&, int, int);
+void PreviewImageAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

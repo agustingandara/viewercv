@@ -247,22 +247,22 @@
    allocate any memory and stores generated centers in <centers>, returns <centers>.
    If <centers> == NULL, the function allocates memory and creates the matrice. Centers
    are supposed to be oriented horizontally. */
-CvMat* icvGenerateRandomClusterCenters( int seed,
-										const CvMat* data,
-										int num_of_clusters,
-										CvMat* centers CV_DEFAULT(0));
+CvMat* icvGenerateRandomClusterCenters(int seed,
+                                       const CvMat* data,
+                                       int num_of_clusters,
+                                       CvMat* centers CV_DEFAULT(0));
 
 /* Fills the <labels> using <probs> by choosing the maximal probability. Outliers are
    fixed by <oulier_tresh> and have cluster label (-1). Function also controls that there
    weren't "empty" clusters by filling empty clusters with the maximal probability vector.
    If probs_sums != NULL, filles it with the sums of probabilities for each sample (it is
    useful for normalizing probabilities' matrice of FCM) */
-void icvFindClusterLabels( const CvMat* probs, float outlier_thresh, float r,
-						   const CvMat* labels );
+void icvFindClusterLabels(const CvMat* probs, float outlier_thresh, float r,
+                          const CvMat* labels);
 
 typedef struct CvSparseVecElem32f {
-	int idx;
-	float val;
+    int idx;
+    float val;
 }
 CvSparseVecElem32f;
 
@@ -277,44 +277,44 @@ CvSparseVecElem32f;
 #define CV_TRAIN_STATMODEL_SPARSE_AS_SPARSE         128
 
 int
-cvPrepareTrainData( const char* /*funcname*/,
-					const CvMat* train_data, int tflag,
-					const CvMat* responses, int response_type,
-					const CvMat* var_idx,
-					const CvMat* sample_idx,
-					bool always_copy_data,
-					const float** * out_train_samples,
-					int* _sample_count,
-					int* _var_count,
-					int* _var_all,
-					CvMat** out_responses,
-					CvMat** out_response_map,
-					CvMat** out_var_idx,
-					CvMat** out_sample_idx = 0 );
+cvPrepareTrainData(const char* /*funcname*/,
+                   const CvMat* train_data, int tflag,
+                   const CvMat* responses, int response_type,
+                   const CvMat* var_idx,
+                   const CvMat* sample_idx,
+                   bool always_copy_data,
+                   const float** * out_train_samples,
+                   int* _sample_count,
+                   int* _var_count,
+                   int* _var_all,
+                   CvMat** out_responses,
+                   CvMat** out_response_map,
+                   CvMat** out_var_idx,
+                   CvMat** out_sample_idx = 0);
 
 void
-cvSortSamplesByClasses( const float** samples, const CvMat* classes,
-						int* class_ranges, const uchar** mask CV_DEFAULT(0) );
+cvSortSamplesByClasses(const float** samples, const CvMat* classes,
+                       int* class_ranges, const uchar** mask CV_DEFAULT(0));
 
 void
-cvCombineResponseMaps (CvMat*  _responses,
-					   const CvMat*  old_response_map,
-					   CvMat*  new_response_map,
-					   CvMat** out_response_map);
+cvCombineResponseMaps(CvMat*  _responses,
+                      const CvMat*  old_response_map,
+                      CvMat*  new_response_map,
+                      CvMat** out_response_map);
 
 void
-cvPreparePredictData( const CvArr* sample, int dims_all, const CvMat* comp_idx,
-					  int class_count, const CvMat* prob, float** row_sample,
-					  int as_sparse CV_DEFAULT(0) );
+cvPreparePredictData(const CvArr* sample, int dims_all, const CvMat* comp_idx,
+                     int class_count, const CvMat* prob, float** row_sample,
+                     int as_sparse CV_DEFAULT(0));
 
 /* copies clustering [or batch "predict"] results
    (labels and/or centers and/or probs) back to the output arrays */
 void
-cvWritebackLabels( const CvMat* labels, CvMat* dst_labels,
-				   const CvMat* centers, CvMat* dst_centers,
-				   const CvMat* probs, CvMat* dst_probs,
-				   const CvMat* sample_idx, int samples_all,
-				   const CvMat* comp_idx, int dims_all );
+cvWritebackLabels(const CvMat* labels, CvMat* dst_labels,
+                  const CvMat* centers, CvMat* dst_centers,
+                  const CvMat* probs, CvMat* dst_probs,
+                  const CvMat* sample_idx, int samples_all,
+                  const CvMat* comp_idx, int dims_all);
 #define cvWritebackResponses cvWritebackLabels
 
 #define XML_FIELD_NAME "_name"
@@ -323,46 +323,46 @@ CvFileNode* icvFileNodeGetChildArrayElem(CvFileNode* father, const char* name, i
 CvFileNode* icvFileNodeGetNext(CvFileNode* n, const char* name);
 
 
-void cvCheckTrainData( const CvMat* train_data, int tflag,
-					   const CvMat* missing_mask,
-					   int* var_all, int* sample_all );
+void cvCheckTrainData(const CvMat* train_data, int tflag,
+                      const CvMat* missing_mask,
+                      int* var_all, int* sample_all);
 
-CvMat* cvPreprocessIndexArray( const CvMat* idx_arr, int data_arr_size, bool check_for_duplicates = false );
+CvMat* cvPreprocessIndexArray(const CvMat* idx_arr, int data_arr_size, bool check_for_duplicates = false);
 
-CvMat* cvPreprocessVarType( const CvMat* type_mask, const CvMat* var_idx,
-							int var_all, int* response_type );
+CvMat* cvPreprocessVarType(const CvMat* type_mask, const CvMat* var_idx,
+                           int var_all, int* response_type);
 
-CvMat* cvPreprocessOrderedResponses( const CvMat* responses,
-									 const CvMat* sample_idx, int sample_all );
+CvMat* cvPreprocessOrderedResponses(const CvMat* responses,
+                                    const CvMat* sample_idx, int sample_all);
 
-CvMat* cvPreprocessCategoricalResponses( const CvMat* responses,
-		const CvMat* sample_idx, int sample_all,
-		CvMat** out_response_map, CvMat** class_counts = 0 );
+CvMat* cvPreprocessCategoricalResponses(const CvMat* responses,
+                                        const CvMat* sample_idx, int sample_all,
+                                        CvMat** out_response_map, CvMat** class_counts = 0);
 
-const float** cvGetTrainSamples( const CvMat* train_data, int tflag,
-								 const CvMat* var_idx, const CvMat* sample_idx,
-								 int* _var_count, int* _sample_count,
-								 bool always_copy_data = false );
+const float** cvGetTrainSamples(const CvMat* train_data, int tflag,
+                                const CvMat* var_idx, const CvMat* sample_idx,
+                                int* _var_count, int* _sample_count,
+                                bool always_copy_data = false);
 
 namespace cv {
 struct DTreeBestSplitFinder {
-	DTreeBestSplitFinder() { tree = 0; node = 0; }
-	DTreeBestSplitFinder( CvDTree* _tree, CvDTreeNode* _node);
-	DTreeBestSplitFinder( const DTreeBestSplitFinder& finder, Split );
-	virtual void operator()(const BlockedRange& range);
-	void join( DTreeBestSplitFinder& rhs );
-	Ptr<CvDTreeSplit> bestSplit;
-	Ptr<CvDTreeSplit> split;
-	int splitSize;
-	CvDTree* tree;
-	CvDTreeNode* node;
+    DTreeBestSplitFinder() { tree = 0; node = 0; }
+    DTreeBestSplitFinder(CvDTree* _tree, CvDTreeNode* _node);
+    DTreeBestSplitFinder(const DTreeBestSplitFinder& finder, Split);
+    virtual void operator()(const BlockedRange& range);
+    void join(DTreeBestSplitFinder& rhs);
+    Ptr<CvDTreeSplit> bestSplit;
+    Ptr<CvDTreeSplit> split;
+    int splitSize;
+    CvDTree* tree;
+    CvDTreeNode* node;
 };
 
 struct ForestTreeBestSplitFinder : DTreeBestSplitFinder {
-	ForestTreeBestSplitFinder() : DTreeBestSplitFinder() {}
-	ForestTreeBestSplitFinder( CvForestTree* _tree, CvDTreeNode* _node );
-	ForestTreeBestSplitFinder( const ForestTreeBestSplitFinder& finder, Split );
-	virtual void operator()(const BlockedRange& range);
+    ForestTreeBestSplitFinder() : DTreeBestSplitFinder() {}
+    ForestTreeBestSplitFinder(CvForestTree* _tree, CvDTreeNode* _node);
+    ForestTreeBestSplitFinder(const ForestTreeBestSplitFinder& finder, Split);
+    virtual void operator()(const BlockedRange& range);
 };
 }
 

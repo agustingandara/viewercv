@@ -31,24 +31,24 @@
  */
 typedef struct AVCLASS AVClass;
 struct AVCLASS {
-	/**
-	 * The name of the class; usually it is the same name as the
-	 * context structure type to which the AVClass is associated.
-	 */
-	const char* class_name;
+    /**
+     * The name of the class; usually it is the same name as the
+     * context structure type to which the AVClass is associated.
+     */
+    const char* class_name;
 
-	/**
-	 * A pointer to a function which returns the name of a context
-	 * instance \p ctx associated with the class.
-	 */
-	const char* (*item_name)(void* ctx);
+    /**
+     * A pointer to a function which returns the name of a context
+     * instance \p ctx associated with the class.
+     */
+    const char*(*item_name)(void* ctx);
 
-	/**
-	 * a pointer to the first option specified in the class if any or NULL
-	 *
-	 * @see av_set_default_options()
-	 */
-	const struct AVOption* option;
+    /**
+     * a pointer to the first option specified in the class if any or NULL
+     *
+     * @see av_set_default_options()
+     */
+    const struct AVOption* option;
 };
 
 /* av_log API */
@@ -116,7 +116,7 @@ extern int av_log_level;
  * @see av_vlog
  */
 #ifdef __GNUC__
-void av_log(void*, int level, const char* fmt, ...) __attribute__ ((__format__ (__printf__, 3, 4)));
+void av_log(void*, int level, const char* fmt, ...) __attribute__((__format__(__printf__, 3, 4)));
 #else
 void av_log(void*, int level, const char* fmt, ...);
 #endif

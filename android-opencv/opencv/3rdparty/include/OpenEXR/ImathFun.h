@@ -49,107 +49,107 @@ namespace Imath {
 
 template <class T>
 inline T
-abs (T a) {
-	return (a > 0) ? a : -a;
+abs(T a) {
+    return (a > 0) ? a : -a;
 }
 
 
 template <class T>
 inline int
-sign (T a) {
-	return (a > 0) ? 1 : ((a < 0) ? -1 : 0);
+sign(T a) {
+    return (a > 0) ? 1 : ((a < 0) ? -1 : 0);
 }
 
 
 template <class T, class Q>
 inline T
-lerp (T a, T b, Q t) {
-	return (T) (a + (b - a) * t);
+lerp(T a, T b, Q t) {
+    return (T)(a + (b - a) * t);
 }
 
 
 template <class T, class Q>
 inline T
-ulerp (T a, T b, Q t) {
-	return (T) ((a > b) ? (a - (a - b) * t) : (a + (b - a) * t));
+ulerp(T a, T b, Q t) {
+    return (T)((a > b) ? (a - (a - b) * t) : (a + (b - a) * t));
 }
 
 
 template <class T>
 inline T
 lerpfactor(T m, T a, T b) {
-	//
-	// Return how far m is between a and b, that is return t such that
-	// if:
-	//     t = lerpfactor(m, a, b);
-	// then:
-	//     m = lerp(a, b, t);
-	//
-	// If a==b, return 0.
-	//
+    //
+    // Return how far m is between a and b, that is return t such that
+    // if:
+    //     t = lerpfactor(m, a, b);
+    // then:
+    //     m = lerp(a, b, t);
+    //
+    // If a==b, return 0.
+    //
 
-	T d = b - a;
-	T n = m - a;
+    T d = b - a;
+    T n = m - a;
 
-	if (abs(d) > T(1) || abs(n) < limits<T>::max() * abs(d)) {
-		return n / d;
-	}
+    if (abs(d) > T(1) || abs(n) < limits<T>::max() * abs(d)) {
+        return n / d;
+    }
 
-	return T(0);
+    return T(0);
 }
 
 
 template <class T>
 inline T
-clamp (T a, T l, T h) {
-	return (a < l) ? l : ((a > h) ? h : a);
+clamp(T a, T l, T h) {
+    return (a < l) ? l : ((a > h) ? h : a);
 }
 
 
 template <class T>
 inline int
-cmp (T a, T b) {
-	return Imath::sign (a - b);
+cmp(T a, T b) {
+    return Imath::sign(a - b);
 }
 
 
 template <class T>
 inline int
-cmpt (T a, T b, T t) {
-	return (Imath::abs (a - b) <= t) ? 0 : cmp (a, b);
+cmpt(T a, T b, T t) {
+    return (Imath::abs(a - b) <= t) ? 0 : cmp(a, b);
 }
 
 
 template <class T>
 inline bool
-iszero (T a, T t) {
-	return (Imath::abs (a) <= t) ? 1 : 0;
+iszero(T a, T t) {
+    return (Imath::abs(a) <= t) ? 1 : 0;
 }
 
 
 template <class T1, class T2, class T3>
 inline bool
-equal (T1 a, T2 b, T3 t) {
-	return Imath::abs (a - b) <= t;
+equal(T1 a, T2 b, T3 t) {
+    return Imath::abs(a - b) <= t;
 }
 
 template <class T>
 inline int
-floor (T x) {
-	return (x >= 0) ? int (x) : -(int (-x) + (-x > int (-x)));
+floor(T x) {
+    return (x >= 0) ? int (x) : -(int (-x) + (-x > int (-x)));
 }
 
 
 template <class T>
 inline int
-ceil (T x) {
-	return -floor (-x);
+ceil(T x) {
+    return -floor(-x);
 }
 
 template <class T>
 inline int
-trunc (T x) {
-	return (x >= 0) ? int(x) : -int(-x);
+trunc(T x) {
+    return (x >= 0) ? int(x) : -int(-x);
 }
 
 
@@ -162,16 +162,16 @@ trunc (T x) {
 //
 
 inline int
-divs (int x, int y) {
-	return (x >= 0) ? ((y >= 0) ?  ( x / y) : -( x / -y)) :
-			   ((y >= 0) ? -(-x / y) :  (-x / -y));
+divs(int x, int y) {
+    return (x >= 0) ? ((y >= 0) ? (x / y) : -(x / -y)) :
+               ((y >= 0) ? -(-x / y) : (-x / -y));
 }
 
 
 inline int
-mods (int x, int y) {
-	return (x >= 0) ? ((y >= 0) ?  ( x % y) :  ( x % -y)) :
-			   ((y >= 0) ? -(-x % y) : -(-x % -y));
+mods(int x, int y) {
+    return (x >= 0) ? ((y >= 0) ? (x % y) : (x % -y)) :
+               ((y >= 0) ? -(-x % y) : -(-x % -y));
 }
 
 
@@ -184,15 +184,15 @@ mods (int x, int y) {
 //
 
 inline int
-divp (int x, int y) {
-	return (x >= 0) ? ((y >= 0) ?  (     x  / y) : -(      x  / -y)) :
-			   ((y >= 0) ? -((y - 1 - x) / y) :  ((-y - 1 - x) / -y));
+divp(int x, int y) {
+    return (x >= 0) ? ((y >= 0) ? (x  / y) : -(x  / -y)) :
+               ((y >= 0) ? -((y - 1 - x) / y) : ((-y - 1 - x) / -y));
 }
 
 
 inline int
-modp (int x, int y) {
-	return x - y * divp (x, y);
+modp(int x, int y) {
+    return x - y * divp(x, y);
 }
 
 //----------------------------------------------------------
@@ -216,36 +216,36 @@ modp (int x, int y) {
 //
 //----------------------------------------------------------
 
-float succf (float f);
-float predf (float f);
+float succf(float f);
+float predf(float f);
 
-double succd (double d);
-double predd (double d);
+double succd(double d);
+double predd(double d);
 
 //
 // Return true if the number is not a NaN or Infinity.
 //
 
 inline bool
-finitef (float f) {
-	union {float f; int i;} u;
-	u.f = f;
+finitef(float f) {
+    union {float f; int i;} u;
+    u.f = f;
 
-	return (u.i & 0x7f800000) != 0x7f800000;
+    return (u.i & 0x7f800000) != 0x7f800000;
 }
 
 inline bool
-finited (double d) {
+finited(double d) {
 #if ULONG_MAX == 18446744073709551615LU
-	typedef      long unsigned int Int64;
+    typedef      long unsigned int Int64;
 #else
-	typedef long long unsigned int Int64;
+    typedef long long unsigned int Int64;
 #endif
 
-	union {double d; Int64 i;} u;
-	u.d = d;
+    union {double d; Int64 i;} u;
+    u.d = d;
 
-	return (u.i & 0x7ff0000000000000LL) != 0x7ff0000000000000LL;
+    return (u.i & 0x7ff0000000000000LL) != 0x7ff0000000000000LL;
 }
 
 

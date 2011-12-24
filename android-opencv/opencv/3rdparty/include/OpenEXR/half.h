@@ -90,136 +90,136 @@
 class half {
 public:
 
-	//-------------
-	// Constructors
-	//-------------
+    //-------------
+    // Constructors
+    //-------------
 
-	half ();			// no initialization
-	half (float f);
-
-
-	//--------------------
-	// Conversion to float
-	//--------------------
-
-	operator		float () const;
+    half();			// no initialization
+    half(float f);
 
 
-	//------------
-	// Unary minus
-	//------------
+    //--------------------
+    // Conversion to float
+    //--------------------
 
-	half		operator - () const;
-
-
-	//-----------
-	// Assignment
-	//-----------
-
-	half& 		operator = (half  h);
-	half& 		operator = (float f);
-
-	half& 		operator += (half  h);
-	half& 		operator += (float f);
-
-	half& 		operator -= (half  h);
-	half& 		operator -= (float f);
-
-	half& 		operator *= (half  h);
-	half& 		operator *= (float f);
-
-	half& 		operator /= (half  h);
-	half& 		operator /= (float f);
+    operator		float() const;
 
 
-	//---------------------------------------------------------
-	// Round to n-bit precision (n should be between 0 and 10).
-	// After rounding, the significand's 10-n least significant
-	// bits will be zero.
-	//---------------------------------------------------------
+    //------------
+    // Unary minus
+    //------------
 
-	half		round (unsigned int n) const;
+    half		operator - () const;
 
 
-	//--------------------------------------------------------------------
-	// Classification:
-	//
-	//	h.isFinite()		returns true if h is a normalized number,
-	//				a denormalized number or zero
-	//
-	//	h.isNormalized()	returns true if h is a normalized number
-	//
-	//	h.isDenormalized()	returns true if h is a denormalized number
-	//
-	//	h.isZero()		returns true if h is zero
-	//
-	//	h.isNan()		returns true if h is a NAN
-	//
-	//	h.isInfinity()		returns true if h is a positive
-	//				or a negative infinity
-	//
-	//	h.isNegative()		returns true if the sign bit of h
-	//				is set (negative)
-	//--------------------------------------------------------------------
+    //-----------
+    // Assignment
+    //-----------
 
-	bool		isFinite () const;
-	bool		isNormalized () const;
-	bool		isDenormalized () const;
-	bool		isZero () const;
-	bool		isNan () const;
-	bool		isInfinity () const;
-	bool		isNegative () const;
+    half& 		operator = (half  h);
+    half& 		operator = (float f);
+
+    half& 		operator += (half  h);
+    half& 		operator += (float f);
+
+    half& 		operator -= (half  h);
+    half& 		operator -= (float f);
+
+    half& 		operator *= (half  h);
+    half& 		operator *= (float f);
+
+    half& 		operator /= (half  h);
+    half& 		operator /= (float f);
 
 
-	//--------------------------------------------
-	// Special values
-	//
-	//	posInf()	returns +infinity
-	//
-	//	negInf()	returns +infinity
-	//
-	//	qNan()		returns a NAN with the bit
-	//			pattern 0111111111111111
-	//
-	//	sNan()		returns a NAN with the bit
-	//			pattern 0111110111111111
-	//--------------------------------------------
+    //---------------------------------------------------------
+    // Round to n-bit precision (n should be between 0 and 10).
+    // After rounding, the significand's 10-n least significant
+    // bits will be zero.
+    //---------------------------------------------------------
 
-	static half		posInf ();
-	static half		negInf ();
-	static half		qNan ();
-	static half		sNan ();
+    half		round(unsigned int n) const;
 
 
-	//--------------------------------------
-	// Access to the internal representation
-	//--------------------------------------
+    //--------------------------------------------------------------------
+    // Classification:
+    //
+    //	h.isFinite()		returns true if h is a normalized number,
+    //				a denormalized number or zero
+    //
+    //	h.isNormalized()	returns true if h is a normalized number
+    //
+    //	h.isDenormalized()	returns true if h is a denormalized number
+    //
+    //	h.isZero()		returns true if h is zero
+    //
+    //	h.isNan()		returns true if h is a NAN
+    //
+    //	h.isInfinity()		returns true if h is a positive
+    //				or a negative infinity
+    //
+    //	h.isNegative()		returns true if the sign bit of h
+    //				is set (negative)
+    //--------------------------------------------------------------------
 
-	unsigned short	bits () const;
-	void		setBits (unsigned short bits);
+    bool		isFinite() const;
+    bool		isNormalized() const;
+    bool		isDenormalized() const;
+    bool		isZero() const;
+    bool		isNan() const;
+    bool		isInfinity() const;
+    bool		isNegative() const;
+
+
+    //--------------------------------------------
+    // Special values
+    //
+    //	posInf()	returns +infinity
+    //
+    //	negInf()	returns +infinity
+    //
+    //	qNan()		returns a NAN with the bit
+    //			pattern 0111111111111111
+    //
+    //	sNan()		returns a NAN with the bit
+    //			pattern 0111110111111111
+    //--------------------------------------------
+
+    static half		posInf();
+    static half		negInf();
+    static half		qNan();
+    static half		sNan();
+
+
+    //--------------------------------------
+    // Access to the internal representation
+    //--------------------------------------
+
+    unsigned short	bits() const;
+    void		setBits(unsigned short bits);
 
 
 public:
 
-	union uif {
-		unsigned int	i;
-		float		f;
-	};
+    union uif {
+        unsigned int	i;
+        float		f;
+    };
 
 private:
 
-	static short	convert (int i);
-	static float	overflow ();
+    static short	convert(int i);
+    static float	overflow();
 
-	unsigned short	_h;
+    unsigned short	_h;
 
-	//---------------------------------------------------
-	// Windows dynamic libraries don't like static
-	// member variables.
-	//---------------------------------------------------
+    //---------------------------------------------------
+    // Windows dynamic libraries don't like static
+    // member variables.
+    //---------------------------------------------------
 #ifndef OPENEXR_DLL
-	static const uif	        _toFloat[1 << 16];
-	static const unsigned short _eLut[1 << 9];
+    static const uif	        _toFloat[1 << 16];
+    static const unsigned short _eLut[1 << 9];
 #endif
 };
 
@@ -249,10 +249,10 @@ std::istream& 		operator >> (std::istream& is, half& h);
 // Debugging
 //----------
 
-void			printBits   (std::ostream& os, half  h);
-void			printBits   (std::ostream& os, float f);
-void			printBits   (char  c[19], half  h);
-void			printBits   (char  c[35], float f);
+void			printBits(std::ostream& os, half  h);
+void			printBits(std::ostream& os, float f);
+void			printBits(char  c[19], half  h);
+void			printBits(char  c[35], float f);
 
 
 //-------------------------------------------------------------------------
@@ -430,8 +430,8 @@ void			printBits   (char  c[35], float f);
 //--------------------
 
 inline
-half::half () {
-	// no initialization
+half::half() {
+    // no initialization
 }
 
 
@@ -440,54 +440,54 @@ half::half () {
 //----------------------------
 
 inline
-half::half (float f) {
-	if (f == 0) {
-		//
-		// Common special case - zero.
-		// For speed, we don't preserve the zero's sign.
-		//
+half::half(float f) {
+    if (f == 0) {
+        //
+        // Common special case - zero.
+        // For speed, we don't preserve the zero's sign.
+        //
 
-		_h = 0;
-	} else {
-		//
-		// We extract the combined sign and exponent, e, from our
-		// floating-point number, f.  Then we convert e to the sign
-		// and exponent of the half number via a table lookup.
-		//
-		// For the most common case, where a normalized half is produced,
-		// the table lookup returns a non-zero value; in this case, all
-		// we have to do, is round f's significand to 10 bits and combine
-		// the result with e.
-		//
-		// For all other cases (overflow, zeroes, denormalized numbers
-		// resulting from underflow, infinities and NANs), the table
-		// lookup returns zero, and we call a longer, non-inline function
-		// to do the float-to-half conversion.
-		//
+        _h = 0;
+    } else {
+        //
+        // We extract the combined sign and exponent, e, from our
+        // floating-point number, f.  Then we convert e to the sign
+        // and exponent of the half number via a table lookup.
+        //
+        // For the most common case, where a normalized half is produced,
+        // the table lookup returns a non-zero value; in this case, all
+        // we have to do, is round f's significand to 10 bits and combine
+        // the result with e.
+        //
+        // For all other cases (overflow, zeroes, denormalized numbers
+        // resulting from underflow, infinities and NANs), the table
+        // lookup returns zero, and we call a longer, non-inline function
+        // to do the float-to-half conversion.
+        //
 
-		uif x;
+        uif x;
 
-		x.f = f;
+        x.f = f;
 
-		register int e = (x.i >> 23) & 0x000001ff;
+        register int e = (x.i >> 23) & 0x000001ff;
 
-		e = _eLut[e];
+        e = _eLut[e];
 
-		if (e) {
-			//
-			// Simple case - round the significand and
-			// combine it with the sign and exponent.
-			//
+        if (e) {
+            //
+            // Simple case - round the significand and
+            // combine it with the sign and exponent.
+            //
 
-			_h = e + (((x.i & 0x007fffff) + 0x00001000) >> 13);
-		} else {
-			//
-			// Difficult case - call a function.
-			//
+            _h = e + (((x.i & 0x007fffff) + 0x00001000) >> 13);
+        } else {
+            //
+            // Difficult case - call a function.
+            //
 
-			_h = convert (x.i);
-		}
-	}
+            _h = convert(x.i);
+        }
+    }
 }
 
 
@@ -496,8 +496,8 @@ half::half (float f) {
 //------------------------------------------
 
 inline
-half::operator float () const {
-	return _toFloat[_h].f;
+half::operator float() const {
+    return _toFloat[_h].f;
 }
 
 
@@ -506,56 +506,56 @@ half::operator float () const {
 //-------------------------
 
 inline half
-half::round (unsigned int n) const {
-	//
-	// Parameter check.
-	//
+half::round(unsigned int n) const {
+    //
+    // Parameter check.
+    //
 
-	if (n >= 10) {
-		return *this;
-	}
+    if (n >= 10) {
+        return *this;
+    }
 
-	//
-	// Disassemble h into the sign, s,
-	// and the combined exponent and significand, e.
-	//
+    //
+    // Disassemble h into the sign, s,
+    // and the combined exponent and significand, e.
+    //
 
-	unsigned short s = _h & 0x8000;
-	unsigned short e = _h & 0x7fff;
+    unsigned short s = _h & 0x8000;
+    unsigned short e = _h & 0x7fff;
 
-	//
-	// Round the exponent and significand to the nearest value
-	// where ones occur only in the (10-n) most significant bits.
-	// Note that the exponent adjusts automatically if rounding
-	// up causes the significand to overflow.
-	//
+    //
+    // Round the exponent and significand to the nearest value
+    // where ones occur only in the (10-n) most significant bits.
+    // Note that the exponent adjusts automatically if rounding
+    // up causes the significand to overflow.
+    //
 
-	e >>= 9 - n;
-	e  += e & 1;
-	e <<= 9 - n;
+    e >>= 9 - n;
+    e  += e & 1;
+    e <<= 9 - n;
 
-	//
-	// Check for exponent overflow.
-	//
+    //
+    // Check for exponent overflow.
+    //
 
-	if (e >= 0x7c00) {
-		//
-		// Overflow occurred -- truncate instead of rounding.
-		//
+    if (e >= 0x7c00) {
+        //
+        // Overflow occurred -- truncate instead of rounding.
+        //
 
-		e = _h;
-		e >>= 10 - n;
-		e <<= 10 - n;
-	}
+        e = _h;
+        e >>= 10 - n;
+        e <<= 10 - n;
+    }
 
-	//
-	// Put the original sign bit back.
-	//
+    //
+    // Put the original sign bit back.
+    //
 
-	half h;
-	h._h = s | e;
+    half h;
+    h._h = s | e;
 
-	return h;
+    return h;
 }
 
 
@@ -565,173 +565,173 @@ half::round (unsigned int n) const {
 
 inline half
 half::operator - () const {
-	half h;
-	h._h = _h ^ 0x8000;
-	return h;
+    half h;
+    h._h = _h ^ 0x8000;
+    return h;
 }
 
 
 inline half &
 half::operator = (half h) {
-	_h = h._h;
-	return *this;
+    _h = h._h;
+    return *this;
 }
 
 
 inline half &
 half::operator = (float f) {
-	*this = half (f);
-	return *this;
+    *this = half(f);
+    return *this;
 }
 
 
 inline half &
 half::operator += (half h) {
-	*this = half (float (*this) + float (h));
-	return *this;
+    *this = half(float(*this) + float(h));
+    return *this;
 }
 
 
 inline half &
 half::operator += (float f) {
-	*this = half (float (*this) + f);
-	return *this;
+    *this = half(float(*this) + f);
+    return *this;
 }
 
 
 inline half &
 half::operator -= (half h) {
-	*this = half (float (*this) - float (h));
-	return *this;
+    *this = half(float(*this) - float(h));
+    return *this;
 }
 
 
 inline half &
 half::operator -= (float f) {
-	*this = half (float (*this) - f);
-	return *this;
+    *this = half(float(*this) - f);
+    return *this;
 }
 
 
 inline half &
 half::operator *= (half h) {
-	*this = half (float (*this) * float (h));
-	return *this;
+    *this = half(float(*this) * float(h));
+    return *this;
 }
 
 
 inline half &
 half::operator *= (float f) {
-	*this = half (float (*this) * f);
-	return *this;
+    *this = half(float(*this) * f);
+    return *this;
 }
 
 
 inline half &
 half::operator /= (half h) {
-	*this = half (float (*this) / float (h));
-	return *this;
+    *this = half(float(*this) / float(h));
+    return *this;
 }
 
 
 inline half &
 half::operator /= (float f) {
-	*this = half (float (*this) / f);
-	return *this;
+    *this = half(float(*this) / f);
+    return *this;
 }
 
 
 inline bool
-half::isFinite () const {
-	unsigned short e = (_h >> 10) & 0x001f;
-	return e < 31;
+half::isFinite() const {
+    unsigned short e = (_h >> 10) & 0x001f;
+    return e < 31;
 }
 
 
 inline bool
-half::isNormalized () const {
-	unsigned short e = (_h >> 10) & 0x001f;
-	return e > 0 && e < 31;
+half::isNormalized() const {
+    unsigned short e = (_h >> 10) & 0x001f;
+    return e > 0 && e < 31;
 }
 
 
 inline bool
-half::isDenormalized () const {
-	unsigned short e = (_h >> 10) & 0x001f;
-	unsigned short m =  _h & 0x3ff;
-	return e == 0 && m != 0;
+half::isDenormalized() const {
+    unsigned short e = (_h >> 10) & 0x001f;
+    unsigned short m =  _h & 0x3ff;
+    return e == 0 && m != 0;
 }
 
 
 inline bool
-half::isZero () const {
-	return (_h & 0x7fff) == 0;
+half::isZero() const {
+    return (_h & 0x7fff) == 0;
 }
 
 
 inline bool
-half::isNan () const {
-	unsigned short e = (_h >> 10) & 0x001f;
-	unsigned short m =  _h & 0x3ff;
-	return e == 31 && m != 0;
+half::isNan() const {
+    unsigned short e = (_h >> 10) & 0x001f;
+    unsigned short m =  _h & 0x3ff;
+    return e == 31 && m != 0;
 }
 
 
 inline bool
-half::isInfinity () const {
-	unsigned short e = (_h >> 10) & 0x001f;
-	unsigned short m =  _h & 0x3ff;
-	return e == 31 && m == 0;
+half::isInfinity() const {
+    unsigned short e = (_h >> 10) & 0x001f;
+    unsigned short m =  _h & 0x3ff;
+    return e == 31 && m == 0;
 }
 
 
 inline bool
-half::isNegative () const {
-	return (_h & 0x8000) != 0;
+half::isNegative() const {
+    return (_h & 0x8000) != 0;
 }
 
 
 inline half
-half::posInf () {
-	half h;
-	h._h = 0x7c00;
-	return h;
+half::posInf() {
+    half h;
+    h._h = 0x7c00;
+    return h;
 }
 
 
 inline half
-half::negInf () {
-	half h;
-	h._h = 0xfc00;
-	return h;
+half::negInf() {
+    half h;
+    h._h = 0xfc00;
+    return h;
 }
 
 
 inline half
-half::qNan () {
-	half h;
-	h._h = 0x7fff;
-	return h;
+half::qNan() {
+    half h;
+    h._h = 0x7fff;
+    return h;
 }
 
 
 inline half
-half::sNan () {
-	half h;
-	h._h = 0x7dff;
-	return h;
+half::sNan() {
+    half h;
+    h._h = 0x7dff;
+    return h;
 }
 
 
 inline unsigned short
-half::bits () const {
-	return _h;
+half::bits() const {
+    return _h;
 }
 
 
 inline void
-half::setBits (unsigned short bits) {
-	_h = bits;
+half::setBits(unsigned short bits) {
+    _h = bits;
 }
 
 #undef HALF_EXPORT_CONST

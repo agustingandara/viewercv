@@ -51,9 +51,9 @@ namespace Imf {
 
 
 typedef TypedAttribute<Compression> CompressionAttribute;
-template <> const char* CompressionAttribute::staticTypeName ();
-template <> void CompressionAttribute::writeValueTo (OStream&, int) const;
-template <> void CompressionAttribute::readValueFrom (IStream&, int, int);
+template <> const char* CompressionAttribute::staticTypeName();
+template <> void CompressionAttribute::writeValueTo(OStream&, int) const;
+template <> void CompressionAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

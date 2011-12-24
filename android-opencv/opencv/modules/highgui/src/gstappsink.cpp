@@ -427,7 +427,7 @@ gst_app_sink_render(GstBaseSink* psink, GstBuffer* buffer) {
     return GST_FLOW_OK;
 }
 
-static GstCaps*
+static GstCaps *
 gst_app_sink_getcaps(GstBaseSink* psink) {
     GstCaps* caps;
 
@@ -486,7 +486,7 @@ gst_app_sink_set_caps(GstAppSink* appsink, const GstCaps* caps) {
  *
  * Returns: the #GstCaps accepted by the sink. gst_caps_unref() after usage.
  */
-GstCaps*
+GstCaps *
 gst_app_sink_get_caps(GstAppSink* appsink) {
     GstCaps* caps;
 
@@ -568,7 +568,7 @@ not_started: {
  *
  * Returns: a #GstBuffer or NULL when the appsink is stopped or EOS.
  */
-GstBuffer*
+GstBuffer *
 gst_app_sink_pull_preroll(GstAppSink* appsink) {
     GstBuffer* buf = NULL;
 
@@ -634,7 +634,7 @@ not_started: {
  *
  * Returns: a #GstBuffer or NULL when the appsink is stopped or EOS.
  */
-GstBuffer*
+GstBuffer *
 gst_app_sink_pull_buffer(GstAppSink* appsink) {
     GstBuffer* buf = NULL;
 
@@ -699,7 +699,7 @@ not_started: {
  *
  * Returns: a #GstBuffer or NULL when the appsink is stopped or EOS.
  */
-GstBuffer*
+GstBuffer *
 gst_app_sink_peek_buffer(GstAppSink* appsink) {
     GstBuffer* buf = NULL;
 

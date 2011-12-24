@@ -96,17 +96,17 @@
 
 typedef struct jpc_tagtreenode_ {
 
-	/* The parent of this node. */
-	struct jpc_tagtreenode_ *parent_;
+    /* The parent of this node. */
+    struct jpc_tagtreenode_ *parent_;
 
-	/* The value associated with this node. */
-	int value_;
+    /* The value associated with this node. */
+    int value_;
 
-	/* The lower bound on the value associated with this node. */
-	int low_;
+    /* The lower bound on the value associated with this node. */
+    int low_;
 
-	/* A flag indicating if the value is known exactly. */
-	int known_;
+    /* A flag indicating if the value is known exactly. */
+    int known_;
 
 } jpc_tagtreenode_t;
 
@@ -116,17 +116,17 @@ typedef struct jpc_tagtreenode_ {
 
 typedef struct {
 
-	/* The number of leaves in the horizontal direction. */
-	int numleafsh_;
+    /* The number of leaves in the horizontal direction. */
+    int numleafsh_;
 
-	/* The number of leaves in the vertical direction. */
-	int numleafsv_;
+    /* The number of leaves in the vertical direction. */
+    int numleafsv_;
 
-	/* The total number of nodes in the tree. */
-	int numnodes_;
+    /* The total number of nodes in the tree. */
+    int numnodes_;
 
-	/* The nodes. */
-	jpc_tagtreenode_t* nodes_;
+    /* The nodes. */
+    jpc_tagtreenode_t* nodes_;
 
 } jpc_tagtree_t;
 
@@ -148,18 +148,18 @@ void jpc_tagtree_reset(jpc_tagtree_t* tree);
 
 /* Set the value associated with a particular leaf node of a tag tree. */
 void jpc_tagtree_setvalue(jpc_tagtree_t* tree, jpc_tagtreenode_t* leaf,
-						  int value);
+                          int value);
 
 /* Get a pointer to a particular leaf node. */
 jpc_tagtreenode_t* jpc_tagtree_getleaf(jpc_tagtree_t* tree, int n);
 
 /* Invoke the tag tree decoding procedure. */
 int jpc_tagtree_decode(jpc_tagtree_t* tree, jpc_tagtreenode_t* leaf,
-					   int threshold, jpc_bitstream_t* in);
+                       int threshold, jpc_bitstream_t* in);
 
 /* Invoke the tag tree encoding procedure. */
 int jpc_tagtree_encode(jpc_tagtree_t* tree, jpc_tagtreenode_t* leaf,
-					   int threshold, jpc_bitstream_t* out);
+                       int threshold, jpc_bitstream_t* out);
 
 /* Dump a tag tree (for debugging purposes). */
 void jpc_tagtree_dump(jpc_tagtree_t* tree, FILE* out);

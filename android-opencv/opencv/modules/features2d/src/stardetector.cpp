@@ -63,25 +63,25 @@ icvComputeIntegralImages(const CvMat* matI, CvMat* matS, CvMat* matT, CvMat* _FT
     S[0] = T[0] = 0;
     FT[0] = I[0];
     for (x = 1; x < cols; x++) {
-        S[x] = S[x - 1] + I[x - 1];
-        T[x] = I[x - 1];
-        FT[x] = I[x] + I[x - 1];
+        S[x] = S[x-1] + I[x-1];
+        T[x] = I[x-1];
+        FT[x] = I[x] + I[x-1];
     }
-    S[cols] = S[cols - 1] + I[cols - 1];
-    T[cols] = FT[cols] = I[cols - 1];
+    S[cols] = S[cols-1] + I[cols-1];
+    T[cols] = FT[cols] = I[cols-1];
 
     for (y = 2; y <= rows; y++) {
         I += istep, S += step, T += step, FT += step;
 
-        S[0] = S[-step]; S[1] = S[-step + 1] + I[0];
+        S[0] = S[-step]; S[1] = S[-step+1] + I[0];
         T[0] = T[-step + 1];
         T[1] = FT[0] = T[-step + 2] + I[-istep] + I[0];
         FT[1] = FT[-step + 2] + I[-istep] + I[1] + I[0];
 
         for (x = 2; x < cols; x++) {
             S[x] = S[x - 1] + S[-step + x] - S[-step + x - 1] + I[x - 1];
-            T[x] = T[-step + x - 1] + T[-step + x + 1] - T[-step * 2 + x] + I[-istep + x - 1] + I[x - 1];
-            FT[x] = FT[-step + x - 1] + FT[-step + x + 1] - FT[-step * 2 + x] + I[x] + I[x - 1];
+            T[x] = T[-step + x - 1] + T[-step + x + 1] - T[-step*2 + x] + I[-istep + x - 1] + I[x - 1];
+            FT[x] = FT[-step + x - 1] + FT[-step + x + 1] - FT[-step*2 + x] + I[x] + I[x-1];
         }
 
         S[cols] = S[cols - 1] + S[-step + cols] - S[-step + cols - 1] + I[cols - 1];
@@ -129,13 +129,13 @@ icvStarDetectorComputeResponses(const CvMat* img, CvMat* responses, CvMat* sizes
 
     while (pairs[i][0] >= 0 && !
             (sizes0[pairs[i][0]] >= params->maxSize
-             || sizes0[pairs[i + 1][0]] + sizes0[pairs[i + 1][0]] / 2 >= std::min(rows, cols))) {
+             || sizes0[pairs[i+1][0]] + sizes0[pairs[i+1][0]] / 2 >= std::min(rows, cols))) {
         ++i;
     }
 
     npatterns = i;
-    npatterns += (pairs[npatterns - 1][0] >= 0);
-    maxIdx = pairs[npatterns - 1][0];
+    npatterns += (pairs[npatterns-1][0] >= 0);
+    maxIdx = pairs[npatterns-1][0];
 
     sum = cvCreateMat(rows + 1, cols + 1, CV_32SC1);
     tilted = cvCreateMat(rows + 1, cols + 1, CV_32SC1);
@@ -202,7 +202,7 @@ icvStarDetectorComputeResponses(const CvMat* img, CvMat* responses, CvMat* sizes
     }
 
 #ifdef _OPENMP
-    #pragma omp parallel for num_threads(nthreads) schedule(static)
+#pragma omp parallel for num_threads(nthreads) schedule(static)
 #endif
     for (y = border; y < rows - border; y++) {
         int x = border, i;
@@ -297,30 +297,30 @@ icvStarDetectorSuppressLines(const CvMat* responses, const CvMat* sizes, CvPoint
     int rstep = responses->step / sizeof(r_ptr[0]);
     const short* s_ptr = sizes->data.s;
     int sstep = sizes->step / sizeof(s_ptr[0]);
-    int sz = s_ptr[pt.y * sstep + pt.x];
+    int sz = s_ptr[pt.y*sstep + pt.x];
     int x, y, delta = sz / 4, radius = delta * 4;
     float Lxx = 0, Lyy = 0, Lxy = 0;
     int Lxxb = 0, Lyyb = 0, Lxyb = 0;
 
     for (y = pt.y - radius; y <= pt.y + radius; y += delta)
         for (x = pt.x - radius; x <= pt.x + radius; x += delta) {
-            float Lx = r_ptr[y * rstep + x + 1] - r_ptr[y * rstep + x - 1];
-            float Ly = r_ptr[(y + 1) * rstep + x] - r_ptr[(y - 1) * rstep + x];
+            float Lx = r_ptr[y*rstep + x + 1] - r_ptr[y*rstep + x - 1];
+            float Ly = r_ptr[(y+1)*rstep + x] - r_ptr[(y-1)*rstep + x];
             Lxx += Lx * Lx; Lyy += Ly * Ly; Lxy += Lx * Ly;
         }
 
-    if ((Lxx + Lyy) * (Lxx + Lyy) >= params->lineThresholdProjected * (Lxx * Lyy - Lxy * Lxy)) {
+    if ((Lxx + Lyy)*(Lxx + Lyy) >= params->lineThresholdProjected*(Lxx * Lyy - Lxy * Lxy)) {
         return true;
     }
 
     for (y = pt.y - radius; y <= pt.y + radius; y += delta)
         for (x = pt.x - radius; x <= pt.x + radius; x += delta) {
-            int Lxb = (s_ptr[y * sstep + x + 1] == sz) - (s_ptr[y * sstep + x - 1] == sz);
-            int Lyb = (s_ptr[(y + 1) * sstep + x] == sz) - (s_ptr[(y - 1) * sstep + x] == sz);
+            int Lxb = (s_ptr[y* sstep + x + 1] == sz) - (s_ptr[y* sstep + x - 1] == sz);
+            int Lyb = (s_ptr[(y+1)*sstep + x] == sz) - (s_ptr[(y-1)*sstep + x] == sz);
             Lxxb += Lxb * Lxb; Lyyb += Lyb * Lyb; Lxyb += Lxb * Lyb;
         }
 
-    if ((Lxxb + Lyyb) * (Lxxb + Lyyb) >= params->lineThresholdBinarized * (Lxxb * Lyyb - Lxyb * Lxyb)) {
+    if ((Lxxb + Lyyb)*(Lxxb + Lyyb) >= params->lineThresholdBinarized*(Lxxb * Lyyb - Lxyb * Lxyb)) {
         return true;
     }
 
@@ -350,7 +350,7 @@ icvStarDetectorSuppressNonmax(const CvMat* responses, const CvMat* sizes,
 
             for (y1 = y; y1 <= tileEndY; y1++)
                 for (x1 = x; x1 <= tileEndX; x1++) {
-                    float val = r_ptr[y1 * rstep + x1];
+                    float val = r_ptr[y1*rstep + x1];
                     if (maxResponse < val) {
                         maxResponse = val;
                         maxPt = cvPoint(x1, y1);
@@ -363,13 +363,13 @@ icvStarDetectorSuppressNonmax(const CvMat* responses, const CvMat* sizes,
             if (maxPt.x >= 0) {
                 for (y1 = maxPt.y - delta; y1 <= maxPt.y + delta; y1++)
                     for (x1 = maxPt.x - delta; x1 <= maxPt.x + delta; x1++) {
-                        float val = r_ptr[y1 * rstep + x1];
+                        float val = r_ptr[y1*rstep + x1];
                         if (val >= maxResponse && (y1 != maxPt.y || x1 != maxPt.x)) {
                             goto skip_max;
                         }
                     }
 
-                if ((featureSize = s_ptr[maxPt.y * sstep + maxPt.x]) >= 4 &&
+                if ((featureSize = s_ptr[maxPt.y*sstep + maxPt.x]) >= 4 &&
                         !icvStarDetectorSuppressLines(responses, sizes, maxPt, params)) {
                     CvStarKeypoint kpt = cvStarKeypoint(maxPt, featureSize, maxResponse);
                     cvSeqPush(keypoints, &kpt);
@@ -379,13 +379,13 @@ skip_max:
             if (minPt.x >= 0) {
                 for (y1 = minPt.y - delta; y1 <= minPt.y + delta; y1++)
                     for (x1 = minPt.x - delta; x1 <= minPt.x + delta; x1++) {
-                        float val = r_ptr[y1 * rstep + x1];
+                        float val = r_ptr[y1*rstep + x1];
                         if (val <= minResponse && (y1 != minPt.y || x1 != minPt.x)) {
                             goto skip_min;
                         }
                     }
 
-                if ((featureSize = s_ptr[minPt.y * sstep + minPt.x]) >= 4 &&
+                if ((featureSize = s_ptr[minPt.y*sstep + minPt.x]) >= 4 &&
                         !icvStarDetectorSuppressLines(responses, sizes, minPt, params)) {
                     CvStarKeypoint kpt = cvStarKeypoint(minPt, featureSize, minResponse);
                     cvSeqPush(keypoints, &kpt);

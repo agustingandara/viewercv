@@ -314,10 +314,10 @@ Sift::getOctaveHeight(int o) const {
  ** @return pointer to octave @a o.
  **/
 inline
-VL::pixel_t*
+VL::pixel_t *
 Sift::getOctave(int o) {
     assert(omin <= o && o < omin + O) ;
-    return octaves[o - omin] ;
+    return octaves[o-omin] ;
 }
 
 /** @brief Get level
@@ -326,7 +326,7 @@ Sift::getOctave(int o) {
  ** @result pointer to level @c (o,s).
  **/
 inline
-VL::pixel_t*
+VL::pixel_t *
 Sift::getLevel(int o, int s) {
     assert(omin <= o && o <  omin + O) ;
     assert(smin <= s && s <= smax) ;
@@ -418,7 +418,7 @@ fast_expn(VL::float_t x) {
     VL::int32_t i = fast_floor(x) ;
     VL::float_t r = x - i ;
     VL::float_t a = VL::Detail::expnTable[i] ;
-    VL::float_t b = VL::Detail::expnTable[i + 1] ;
+    VL::float_t b = VL::Detail::expnTable[i+1] ;
     return a + r * (b - a) ;
 #else
     return exp(-x) ;
@@ -716,7 +716,7 @@ nconvolve(T*       dst_pt,
             TC* g     = filter_pt ;
             T   acc   = 0.0 ;
             while (stop != start) { acc += (*g++) * (*start++) ; }
-            *dst_pt = acc / scratch_pt [M - 1 - i];
+            *dst_pt = acc / scratch_pt [M-1-i];
             dst_pt += N ;
         }
 
@@ -906,7 +906,7 @@ extern "C" {
         if (filterReserved < W) {
             filterReserved = W ;
             if (filter) { delete [] filter ; }
-            filter = new pixel_t [ 2 * filterReserved + 1 ] ;
+            filter = new pixel_t [ 2* filterReserved + 1 ] ;
         }
 
         // pre-compute filter
@@ -1176,7 +1176,7 @@ extern "C" {
 
             for (int o = -1 ; o > omin ; --o) {
                 copyAndUpsampleRows(temp,       octaves[0], width  << -o,    height << -o) ;
-                copyAndUpsampleRows(octaves[0], temp,       height << -o, 2 * (width  << -o)) ;
+                copyAndUpsampleRows(octaves[0], temp,       height << -o, 2 *(width  << -o)) ;
             }
 
         } else if (omin > 0) {
@@ -1363,7 +1363,7 @@ extern "C" {
                     // must be exec. at least once
                     for (int iter = 0 ; iter < 5 ; ++iter) {
 
-                        VL::float_t A[3 * 3] ;
+                        VL::float_t A[3*3] ;
 
                         x += dx ;
                         y += dy ;
@@ -1487,7 +1487,7 @@ extern "C" {
                         VL::float_t sn = s + b[2] ;
 
                         if (fast_abs(val) > threshold &&
-                                score < (edgeThreshold + 1) * (edgeThreshold + 1) / edgeThreshold &&
+                                score < (edgeThreshold + 1)*(edgeThreshold + 1) / edgeThreshold &&
                                 score >= 0 &&
                                 fast_abs(b[0]) < 1.5 &&
                                 fast_abs(b[1]) < 1.5 &&
@@ -1561,8 +1561,8 @@ extern "C" {
                     pixel_t* end  = src + ow - 1 ;
                     pixel_t* grad = 2 * (xo + yo * y + (s - smin - 1) * so) + temp ;
                     while (src != end) {
-                        VL::float_t Gx = 0.5 * (*(src + xo) - * (src - xo)) ;
-                        VL::float_t Gy = 0.5 * (*(src + yo) - * (src - yo)) ;
+                        VL::float_t Gx = 0.5 * (*(src + xo) - *(src - xo)) ;
+                        VL::float_t Gy = 0.5 * (*(src + yo) - *(src - yo)) ;
                         VL::float_t m = fast_sqrt(Gx * Gx + Gy * Gy) ;
                         VL::float_t t = fast_mod_2pi(fast_atan2(Gy, Gx) + VL::float_t(2 * CV_PI));
                         *grad++ = pixel_t(m) ;
@@ -1680,7 +1680,7 @@ extern "C" {
         // Lowe's version apparently has a little issue with orientations
         // around + or - pi, which we reproduce here for compatibility
         for (int iter = 0; iter < 6; iter++) {
-            VL::float_t prev  = hist[nbins / 2] ;
+            VL::float_t prev  = hist[nbins/2] ;
             for (int i = nbins / 2 - 1; i >= -nbins / 2 ; --i) {
                 int const j  = (i     + nbins) % nbins ;
                 int const jp = (i - 1 + nbins) % nbins ;
@@ -1692,11 +1692,11 @@ extern "C" {
 #else
         // this is slightly more correct
         for (int iter = 0; iter < 6; iter++) {
-            VL::float_t prev  = hist[nbins - 1] ;
+            VL::float_t prev  = hist[nbins-1] ;
             VL::float_t first = hist[0] ;
             int i ;
             for (i = 0; i < nbins - 1; i++) {
-                VL::float_t newh = (prev + hist[i] + hist[(i + 1) % nbins]) / 3.0;
+                VL::float_t newh = (prev + hist[i] + hist[(i+1) % nbins]) / 3.0;
                 prev = hist[i] ;
                 hist[i] = newh ;
             }
@@ -1711,8 +1711,8 @@ extern "C" {
         int nangles = 0 ;
         for (int i = 0 ; i < nbins ; ++i) {
             VL::float_t h0 = hist [i] ;
-            VL::float_t hm = hist [(i - 1 + nbins) % nbins] ;
-            VL::float_t hp = hist [(i + 1 + nbins) % nbins] ;
+            VL::float_t hm = hist [(i-1+nbins) % nbins] ;
+            VL::float_t hp = hist [(i+1+nbins) % nbins] ;
 
             // is this a peak?
             if (h0 > 0.8 * maxh && h0 > hm && h0 > hp) {

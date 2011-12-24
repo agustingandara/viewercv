@@ -52,37 +52,37 @@ namespace cv {
 class Jpeg2KDecoder : public BaseImageDecoder {
 public:
 
-	Jpeg2KDecoder();
-	virtual ~Jpeg2KDecoder();
+    Jpeg2KDecoder();
+    virtual ~Jpeg2KDecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
-	ImageDecoder newDecoder() const;
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
+    ImageDecoder newDecoder() const;
 
 protected:
-	bool  readComponent8u( uchar* data, void* buffer, int step, int cmpt,
-						   int maxval, int offset, int ncmpts );
-	bool  readComponent16u( unsigned short* data, void* buffer, int step, int cmpt,
-							int maxval, int offset, int ncmpts );
+    bool  readComponent8u(uchar* data, void* buffer, int step, int cmpt,
+                          int maxval, int offset, int ncmpts);
+    bool  readComponent16u(unsigned short* data, void* buffer, int step, int cmpt,
+                           int maxval, int offset, int ncmpts);
 
-	void* m_stream;
-	void* m_image;
+    void* m_stream;
+    void* m_image;
 };
 
 
 class Jpeg2KEncoder : public BaseImageEncoder {
 public:
-	Jpeg2KEncoder();
-	virtual ~Jpeg2KEncoder();
+    Jpeg2KEncoder();
+    virtual ~Jpeg2KEncoder();
 
-	bool  isFormatSupported( int depth ) const;
-	bool  write( const Mat& img, const vector<int>& params );
-	ImageEncoder newEncoder() const;
+    bool  isFormatSupported(int depth) const;
+    bool  write(const Mat& img, const vector<int>& params);
+    ImageEncoder newEncoder() const;
 
 protected:
-	bool  writeComponent8u( void* img, const Mat& _img );
-	bool  writeComponent16u( void* img, const Mat& _img );
+    bool  writeComponent8u(void* img, const Mat& _img);
+    bool  writeComponent16u(void* img, const Mat& _img);
 };
 
 }

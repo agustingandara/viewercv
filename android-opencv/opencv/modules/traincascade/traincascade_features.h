@@ -30,68 +30,68 @@
     (p3) = (rect).x + (rect).width - (rect).height                        \
            + (step) * ((rect).y + (rect).width + (rect).height);
 
-float calcNormFactor( const Mat& sum, const Mat& sqSum );
+float calcNormFactor(const Mat& sum, const Mat& sqSum);
 
 template<class Feature>
-void _writeFeatures( const vector<Feature> features, FileStorage& fs, const Mat& featureMap ) {
-	fs << FEATURES << "[";
-	const Mat_<int>& featureMap_ = (const Mat_<int>&)featureMap;
-	for ( int fi = 0; fi < featureMap.cols; fi++ )
-		if ( featureMap_(0, fi) >= 0 ) {
-			fs << "{";
-			features[fi].write( fs );
-			fs << "}";
-		}
-	fs << "]";
+void _writeFeatures(const vector<Feature> features, FileStorage& fs, const Mat& featureMap) {
+    fs << FEATURES << "[";
+    const Mat_<int>& featureMap_ = (const Mat_<int>&)featureMap;
+    for (int fi = 0; fi < featureMap.cols; fi++)
+        if (featureMap_(0, fi) >= 0) {
+            fs << "{";
+            features[fi].write(fs);
+            fs << "}";
+        }
+    fs << "]";
 }
 
 class CvParams {
 public:
-	CvParams();
-	virtual ~CvParams() {}
-	// from|to file
-	virtual void write( FileStorage& fs ) const = 0;
-	virtual bool read( const FileNode& node ) = 0;
-	// from|to screen
-	virtual void printDefaults() const;
-	virtual void printAttrs() const;
-	virtual bool scanAttr( const String prmName, const String val );
-	String name;
+    CvParams();
+    virtual ~CvParams() {}
+    // from|to file
+    virtual void write(FileStorage& fs) const = 0;
+    virtual bool read(const FileNode& node) = 0;
+    // from|to screen
+    virtual void printDefaults() const;
+    virtual void printAttrs() const;
+    virtual bool scanAttr(const String prmName, const String val);
+    String name;
 };
 
 class CvFeatureParams : public CvParams {
 public:
-	enum { HAAR = 0, LBP = 1 };
-	CvFeatureParams();
-	virtual void init( const CvFeatureParams& fp );
-	virtual void write( FileStorage& fs ) const;
-	virtual bool read( const FileNode& node );
-	static Ptr<CvFeatureParams> create( int featureType );
-	int maxCatCount; // 0 in case of numerical features
+    enum { HAAR = 0, LBP = 1 };
+    CvFeatureParams();
+    virtual void init(const CvFeatureParams& fp);
+    virtual void write(FileStorage& fs) const;
+    virtual bool read(const FileNode& node);
+    static Ptr<CvFeatureParams> create(int featureType);
+    int maxCatCount; // 0 in case of numerical features
 };
 
 class CvFeatureEvaluator {
 public:
-	virtual ~CvFeatureEvaluator() {}
-	virtual void init(const CvFeatureParams* _featureParams,
-					  int _maxSampleCount, Size _winSize );
-	virtual void setImage(const Mat& img, uchar clsLabel, int idx);
-	virtual void writeFeatures( FileStorage& fs, const Mat& featureMap ) const = 0;
-	virtual float operator()(int featureIdx, int sampleIdx) const = 0;
-	static Ptr<CvFeatureEvaluator> create(int type);
+    virtual ~CvFeatureEvaluator() {}
+    virtual void init(const CvFeatureParams* _featureParams,
+                      int _maxSampleCount, Size _winSize);
+    virtual void setImage(const Mat& img, uchar clsLabel, int idx);
+    virtual void writeFeatures(FileStorage& fs, const Mat& featureMap) const = 0;
+    virtual float operator()(int featureIdx, int sampleIdx) const = 0;
+    static Ptr<CvFeatureEvaluator> create(int type);
 
-	int getNumFeatures() const { return numFeatures; }
-	int getMaxCatCount() const { return featureParams->maxCatCount; }
-	const Mat& getCls() const { return cls; }
-	float getCls(int si) const { return cls.at<float>(si, 0); }
+    int getNumFeatures() const { return numFeatures; }
+    int getMaxCatCount() const { return featureParams->maxCatCount; }
+    const Mat& getCls() const { return cls; }
+    float getCls(int si) const { return cls.at<float>(si, 0); }
 protected:
-	virtual void generateFeatures() = 0;
+    virtual void generateFeatures() = 0;
 
-	int npos, nneg;
-	int numFeatures;
-	Size winSize;
-	CvFeatureParams* featureParams;
-	Mat cls;
+    int npos, nneg;
+    int numFeatures;
+    Size winSize;
+    CvFeatureParams* featureParams;
+    Mat cls;
 };
 
 #endif

@@ -62,16 +62,16 @@ namespace Imf {
 
 
 int
-hufCompress (const unsigned short raw[/*nRaw*/],
-			 int nRaw,
-			 char compressed[/*2 * nRaw + 65536*/]);
+hufCompress(const unsigned short raw[/*nRaw*/],
+            int nRaw,
+            char compressed[/*2 * nRaw + 65536*/]);
 
 
 void
-hufUncompress (const char compressed[/*nCompressed*/],
-			   int nCompressed,
-			   unsigned short raw[/*nRaw*/],
-			   int nRaw);
+hufUncompress(const char compressed[/*nCompressed*/],
+              int nCompressed,
+              unsigned short raw[/*nRaw*/],
+              int nRaw);
 
 
 } // namespace Imf

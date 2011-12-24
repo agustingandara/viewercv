@@ -45,15 +45,15 @@
 #define __opencv_featuretree_h__
 
 struct CvFeatureTree {
-	CvFeatureTree(const CvFeatureTree& x);
-	CvFeatureTree& operator= (const CvFeatureTree& rhs);
+    CvFeatureTree(const CvFeatureTree& x);
+    CvFeatureTree& operator= (const CvFeatureTree& rhs);
 
-	CvFeatureTree() {}
-	virtual ~CvFeatureTree() {}
-	virtual void FindFeatures(const CvMat* d, int k, int emax, CvMat* results, CvMat* dist) = 0;
-	virtual int FindOrthoRange(CvMat* /*bounds_min*/, CvMat* /*bounds_max*/, CvMat* /*results*/) {
-		return 0;
-	}
+    CvFeatureTree() {}
+    virtual ~CvFeatureTree() {}
+    virtual void FindFeatures(const CvMat* d, int k, int emax, CvMat* results, CvMat* dist) = 0;
+    virtual int FindOrthoRange(CvMat* /*bounds_min*/, CvMat* /*bounds_max*/, CvMat* /*results*/) {
+        return 0;
+    }
 };
 
 #endif // __cv_featuretree_h__

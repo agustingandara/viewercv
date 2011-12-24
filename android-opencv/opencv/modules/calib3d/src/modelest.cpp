@@ -235,7 +235,7 @@ bool CvModelEstimator2::runLMeDS(const CvMat* m1, const CvMat* m2, CvMat* model,
             icvSortDistances(err->data.i, count, 0);
 
             double median = count % 2 != 0 ?
-                            err->data.fl[count / 2] : (err->data.fl[count / 2 - 1] + err->data.fl[count / 2]) * 0.5;
+                            err->data.fl[count/2] : (err->data.fl[count/2-1] + err->data.fl[count/2]) * 0.5;
 
             if (median < minMedian) {
                 minMedian = median;
@@ -279,8 +279,8 @@ bool CvModelEstimator2::getSubset(const CvMat* m1, const CvMat* m2,
                 continue;
             }
             for (k = 0; k < elemSize; k++) {
-                ms1ptr[i * elemSize + k] = m1ptr[idx_i * elemSize + k];
-                ms2ptr[i * elemSize + k] = m2ptr[idx_i * elemSize + k];
+                ms1ptr[i* elemSize + k] = m1ptr[idx_i*elemSize + k];
+                ms2ptr[i* elemSize + k] = m2ptr[idx_i*elemSize + k];
             }
             if (checkPartialSubsets && (!checkSubset(ms1, i + 1) || !checkSubset(ms2, i + 1))) {
                 iters++;
@@ -320,7 +320,7 @@ bool CvModelEstimator2::checkSubset(const CvMat* m, int count) {
             for (k = 0; k < j; k++) {
                 double dx2 = ptr[k].x - ptr[i].x;
                 double dy2 = ptr[k].y - ptr[i].y;
-                if (fabs(dx2 * dy1 - dy2 * dx1) <= FLT_EPSILON * (fabs(dx1) + fabs(dy1) + fabs(dx2) + fabs(dy2))) {
+                if (fabs(dx2 * dy1 - dy2 * dx1) <= FLT_EPSILON*(fabs(dx1) + fabs(dy1) + fabs(dx2) + fabs(dy2))) {
                     break;
                 }
             }

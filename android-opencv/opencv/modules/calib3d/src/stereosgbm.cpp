@@ -118,8 +118,8 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
     tab += tabOfs;
 
     for (c = 0; c < cn * 2; c++) {
-        prow1[width * c] = prow1[width * c + width - 1] =
-                               prow2[width * c] = prow2[width * c + width - 1] = tab[0];
+        prow1[width* c] = prow1[width* c + width-1] =
+                              prow2[width* c] = prow2[width* c + width-1] = tab[0];
     }
 
     int n1 = y > 0 ? -(int)img1.step : 0, s1 = y < img1.rows - 1 ? (int)img1.step : 0;
@@ -127,29 +127,29 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
 
     if (cn == 1) {
         for (x = 1; x < width - 1; x++) {
-            prow1[x] = tab[(row1[x + 1] - row1[x - 1]) * 2 + row1[x + n1 + 1] - row1[x + n1 - 1] + row1[x + s1 + 1] - row1[x + s1 - 1]];
-            prow2[width - 1 - x] = tab[(row2[x + 1] - row2[x - 1]) * 2 + row2[x + n2 + 1] - row2[x + n2 - 1] + row2[x + s2 + 1] - row2[x + s2 - 1]];
+            prow1[x] = tab[(row1[x+1] - row1[x-1]) * 2 + row1[x+n1+1] - row1[x+n1-1] + row1[x+s1+1] - row1[x+s1-1]];
+            prow2[width-1-x] = tab[(row2[x+1] - row2[x-1]) * 2 + row2[x+n2+1] - row2[x+n2-1] + row2[x+s2+1] - row2[x+s2-1]];
 
-            prow1[x + width] = row1[x];
-            prow2[width - 1 - x + width] = row2[x];
+            prow1[x+width] = row1[x];
+            prow2[width-1-x+width] = row2[x];
         }
     } else {
         for (x = 1; x < width - 1; x++) {
-            prow1[x] = tab[(row1[x * 3 + 3] - row1[x * 3 - 3]) * 2 + row1[x * 3 + n1 + 3] - row1[x * 3 + n1 - 3] + row1[x * 3 + s1 + 3] - row1[x * 3 + s1 - 3]];
-            prow1[x + width] = tab[(row1[x * 3 + 4] - row1[x * 3 - 2]) * 2 + row1[x * 3 + n1 + 4] - row1[x * 3 + n1 - 2] + row1[x * 3 + s1 + 4] - row1[x * 3 + s1 - 2]];
-            prow1[x + width * 2] = tab[(row1[x * 3 + 5] - row1[x * 3 - 1]) * 2 + row1[x * 3 + n1 + 5] - row1[x * 3 + n1 - 1] + row1[x * 3 + s1 + 5] - row1[x * 3 + s1 - 1]];
+            prow1[x] = tab[(row1[x*3+3] - row1[x*3-3]) * 2 + row1[x*3+n1+3] - row1[x*3+n1-3] + row1[x*3+s1+3] - row1[x*3+s1-3]];
+            prow1[x+width] = tab[(row1[x*3+4] - row1[x*3-2]) * 2 + row1[x*3+n1+4] - row1[x*3+n1-2] + row1[x*3+s1+4] - row1[x*3+s1-2]];
+            prow1[x+width*2] = tab[(row1[x*3+5] - row1[x*3-1]) * 2 + row1[x*3+n1+5] - row1[x*3+n1-1] + row1[x*3+s1+5] - row1[x*3+s1-1]];
 
-            prow2[width - 1 - x] = tab[(row2[x * 3 + 3] - row2[x * 3 - 3]) * 2 + row2[x * 3 + n2 + 3] - row2[x * 3 + n2 - 3] + row2[x * 3 + s2 + 3] - row2[x * 3 + s2 - 3]];
-            prow2[width - 1 - x + width] = tab[(row2[x * 3 + 4] - row2[x * 3 - 2]) * 2 + row2[x * 3 + n2 + 4] - row2[x * 3 + n2 - 2] + row2[x * 3 + s2 + 4] - row2[x * 3 + s2 - 2]];
-            prow2[width - 1 - x + width * 2] = tab[(row2[x * 3 + 5] - row2[x * 3 - 1]) * 2 + row2[x * 3 + n2 + 5] - row2[x * 3 + n2 - 1] + row2[x * 3 + s2 + 5] - row2[x * 3 + s2 - 1]];
+            prow2[width-1-x] = tab[(row2[x*3+3] - row2[x*3-3]) * 2 + row2[x*3+n2+3] - row2[x*3+n2-3] + row2[x*3+s2+3] - row2[x*3+s2-3]];
+            prow2[width-1-x+width] = tab[(row2[x*3+4] - row2[x*3-2]) * 2 + row2[x*3+n2+4] - row2[x*3+n2-2] + row2[x*3+s2+4] - row2[x*3+s2-2]];
+            prow2[width-1-x+width*2] = tab[(row2[x*3+5] - row2[x*3-1]) * 2 + row2[x*3+n2+5] - row2[x*3+n2-1] + row2[x*3+s2+5] - row2[x*3+s2-1]];
 
-            prow1[x + width * 3] = row1[x * 3];
-            prow1[x + width * 4] = row1[x * 3 + 1];
-            prow1[x + width * 5] = row1[x * 3 + 2];
+            prow1[x+width*3] = row1[x*3];
+            prow1[x+width*4] = row1[x*3+1];
+            prow1[x+width*5] = row1[x*3+2];
 
-            prow2[width - 1 - x + width * 3] = row2[x * 3];
-            prow2[width - 1 - x + width * 4] = row2[x * 3 + 1];
-            prow2[width - 1 - x + width * 5] = row2[x * 3 + 2];
+            prow2[width-1-x+width*3] = row2[x*3];
+            prow2[width-1-x+width*4] = row2[x*3+1];
+            prow2[width-1-x+width*5] = row2[x*3+2];
         }
     }
 
@@ -171,8 +171,8 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
         //   v1 = max(row2[x-1/2], row2[x], row2[x+1/2]) and
         for (x = minX2; x < maxX2; x++) {
             int v = prow2[x];
-            int vl = x > 0 ? (v + prow2[x - 1]) / 2 : v;
-            int vr = x < width - 1 ? (v + prow2[x + 1]) / 2 : v;
+            int vl = x > 0 ? (v + prow2[x-1]) / 2 : v;
+            int vr = x < width - 1 ? (v + prow2[x+1]) / 2 : v;
             int v0 = min(vl, vr); v0 = min(v0, v);
             int v1 = max(vl, vr); v1 = max(v1, v);
             buffer[x] = (PixType)v0;
@@ -181,8 +181,8 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
 
         for (x = minX1; x < maxX1; x++) {
             int u = prow1[x];
-            int ul = x > 0 ? (u + prow1[x - 1]) / 2 : u;
-            int ur = x < width - 1 ? (u + prow1[x + 1]) / 2 : u;
+            int ul = x > 0 ? (u + prow1[x-1]) / 2 : u;
+            int ur = x < width - 1 ? (u + prow1[x+1]) / 2 : u;
             int u0 = min(ul, ur); u0 = min(u0, u);
             int u1 = max(ul, ur); u1 = max(u1, u);
 
@@ -210,13 +210,13 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
 #endif
             {
                 for (int d = minD; d < maxD; d++) {
-                    int v = prow2[width - x - 1 + d];
-                    int v0 = buffer[width - x - 1 + d];
-                    int v1 = buffer[width - x - 1 + d + width2];
+                    int v = prow2[width-x-1 + d];
+                    int v0 = buffer[width-x-1 + d];
+                    int v1 = buffer[width-x-1 + d + width2];
                     int c0 = max(0, u - v1); c0 = max(c0, v0 - u);
                     int c1 = max(0, v - u1); c1 = max(c1, u0 - v);
 
-                    cost[x * D + d] = (CostType)(cost[x * D + d] + (min(c0, c1) >> diff_scale));
+                    cost[x* D + d] = (CostType)(cost[x*D+d] + (min(c0, c1) >> diff_scale));
                 }
             }
         }
@@ -242,8 +242,8 @@ static void calcPixelCostBT(const Mat& img1, const Mat& img2, int y,
 #endif
             {
                 for (int d = minD; d < maxD; d++) {
-                    int v = prow2[width - 1 - x + d];
-                    cost[x * D + d] = (CostType)(cost[x * D + d] + (CostType)std::abs(u - v));
+                    int v = prow2[width-1-x + d];
+                    cost[x* D + d] = (CostType)(cost[x*D + d] + (CostType)std::abs(u - v));
                 }
             }
         }
@@ -497,7 +497,7 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
             for (x = x1; x != x2; x += dx) {
                 int xm = x * NR2, xd = xm * D2;
 
-                int delta0 = minLr[0][xm - dx * NR2] + P2, delta1 = minLr[1][xm - NR2 + 1] + P2;
+                int delta0 = minLr[0][xm - dx* NR2] + P2, delta1 = minLr[1][xm - NR2 + 1] + P2;
                 int delta2 = minLr[1][xm + 2] + P2, delta3 = minLr[1][xm + NR2 + 3] + P2;
 
                 CostType* Lr_p0 = Lr[0] + xd - dx * NRD2;
@@ -585,10 +585,10 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
                     for (d = 0; d < D; d++) {
                         int Cpd = Cp[d], L0, L1, L2, L3;
 
-                        L0 = Cpd + min((int)Lr_p0[d], min(Lr_p0[d - 1] + P1, min(Lr_p0[d + 1] + P1, delta0))) - delta0;
-                        L1 = Cpd + min((int)Lr_p1[d], min(Lr_p1[d - 1] + P1, min(Lr_p1[d + 1] + P1, delta1))) - delta1;
-                        L2 = Cpd + min((int)Lr_p2[d], min(Lr_p2[d - 1] + P1, min(Lr_p2[d + 1] + P1, delta2))) - delta2;
-                        L3 = Cpd + min((int)Lr_p3[d], min(Lr_p3[d - 1] + P1, min(Lr_p3[d + 1] + P1, delta3))) - delta3;
+                        L0 = Cpd + min((int)Lr_p0[d], min(Lr_p0[d-1] + P1, min(Lr_p0[d+1] + P1, delta0))) - delta0;
+                        L1 = Cpd + min((int)Lr_p1[d], min(Lr_p1[d-1] + P1, min(Lr_p1[d+1] + P1, delta1))) - delta1;
+                        L2 = Cpd + min((int)Lr_p2[d], min(Lr_p2[d-1] + P1, min(Lr_p2[d+1] + P1, delta2))) - delta2;
+                        L3 = Cpd + min((int)Lr_p3[d], min(Lr_p3[d-1] + P1, min(Lr_p3[d+1] + P1, delta3))) - delta3;
 
                         Lr_p[d] = (CostType)L0;
                         minL0 = min(minL0, L0);
@@ -596,18 +596,18 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
                         Lr_p[d + D2] = (CostType)L1;
                         minL1 = min(minL1, L1);
 
-                        Lr_p[d + D2 * 2] = (CostType)L2;
+                        Lr_p[d + D2*2] = (CostType)L2;
                         minL2 = min(minL2, L2);
 
-                        Lr_p[d + D2 * 3] = (CostType)L3;
+                        Lr_p[d + D2*3] = (CostType)L3;
                         minL3 = min(minL3, L3);
 
                         Sp[d] = saturate_cast<CostType>(Sp[d] + L0 + L1 + L2 + L3);
                     }
                     minLr[0][xm] = (CostType)minL0;
-                    minLr[0][xm + 1] = (CostType)minL1;
-                    minLr[0][xm + 2] = (CostType)minL2;
-                    minLr[0][xm + 3] = (CostType)minL3;
+                    minLr[0][xm+1] = (CostType)minL1;
+                    minLr[0][xm+2] = (CostType)minL2;
+                    minLr[0][xm+3] = (CostType)minL3;
                 }
             }
 
@@ -684,7 +684,7 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
 #endif
                         {
                             for (d = 0; d < D; d++) {
-                                int L0 = Cp[d] + min((int)Lr_p0[d], min(Lr_p0[d - 1] + P1, min(Lr_p0[d + 1] + P1, delta0))) - delta0;
+                                int L0 = Cp[d] + min((int)Lr_p0[d], min(Lr_p0[d-1] + P1, min(Lr_p0[d+1] + P1, delta0))) - delta0;
 
                                 Lr_p[d] = (CostType)L0;
                                 minL0 = min(minL0, L0);
@@ -708,7 +708,7 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
                     }
 
                     for (d = 0; d < D; d++) {
-                        if (Sp[d] * (100 - uniquenessRatio) < minS * 100 && std::abs(bestDisp - d) > 1) {
+                        if (Sp[d]*(100 - uniquenessRatio) < minS * 100 && std::abs(bestDisp - d) > 1) {
                             break;
                         }
                     }
@@ -726,8 +726,8 @@ static void computeDisparitySGBM(const Mat& img1, const Mat& img2,
                         // do subpixel quadratic interpolation:
                         //   fit parabola into (x1=d-1, y1=Sp[d-1]), (x2=d, y2=Sp[d]), (x3=d+1, y3=Sp[d+1])
                         //   then find minimum of the parabola.
-                        int denom2 = max(Sp[d - 1] + Sp[d + 1] - 2 * Sp[d], 1);
-                        d = d * DISP_SCALE + ((Sp[d - 1] - Sp[d + 1]) * DISP_SCALE + denom2) / (denom2 * 2);
+                        int denom2 = max(Sp[d-1] + Sp[d+1] - 2 * Sp[d], 1);
+                        d = d * DISP_SCALE + ((Sp[d-1] - Sp[d+1]) * DISP_SCALE + denom2) / (denom2 * 2);
                     } else {
                         d *= DISP_SCALE;
                     }

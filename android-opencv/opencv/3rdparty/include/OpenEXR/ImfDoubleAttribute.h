@@ -50,7 +50,7 @@ namespace Imf {
 
 
 typedef TypedAttribute<double> DoubleAttribute;
-template <> const char* DoubleAttribute::staticTypeName ();
+template <> const char* DoubleAttribute::staticTypeName();
 
 
 } // namespace Imf

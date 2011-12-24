@@ -96,12 +96,12 @@ const int ALL_FLAGS		= TILED_FLAG;
 // Utility functions
 //
 
-inline bool  isTiled (int version)	{return !!(version & TILED_FLAG);}
-inline int   makeTiled (int version)	{return version | TILED_FLAG;}
-inline int   makeNotTiled (int version) {return version & ~TILED_FLAG;}
-inline int   getVersion (int version)	{return version & VERSION_NUMBER_FIELD;}
-inline int   getFlags (int version)	{return version & VERSION_FLAGS_FIELD;}
-inline bool  supportsFlags (int flags)	{return !(flags & ~ALL_FLAGS);}
+inline bool  isTiled(int version)	{return !!(version & TILED_FLAG);}
+inline int   makeTiled(int version)	{return version | TILED_FLAG;}
+inline int   makeNotTiled(int version) {return version & ~TILED_FLAG;}
+inline int   getVersion(int version)	{return version & VERSION_NUMBER_FIELD;}
+inline int   getFlags(int version)	{return version & VERSION_FLAGS_FIELD;}
+inline bool  supportsFlags(int flags)	{return !(flags & ~ALL_FLAGS);}
 
 
 //
@@ -109,7 +109,7 @@ inline bool  supportsFlags (int flags)	{return !(flags & ~ALL_FLAGS);}
 // file is probably an OpenEXR image file, false if not.
 //
 
-bool	     isImfMagic (const char bytes[4]);
+bool	     isImfMagic(const char bytes[4]);
 
 
 } // namespace Imf

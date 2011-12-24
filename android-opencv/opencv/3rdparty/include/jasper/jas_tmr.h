@@ -74,27 +74,27 @@ extern "C" {
 
 #if defined(HAVE_GETTIMEOFDAY)
 
-	typedef struct {
-		struct timeval start;
-		struct timeval stop;
-	} jas_tmr_t;
+    typedef struct {
+        struct timeval start;
+        struct timeval stop;
+    } jas_tmr_t;
 
 #elif defined(HAVE_GETRUSAGE)
 
-	typedef struct {
-		struct rusage start;
-		struct rusage stop;
-	} jas_tmr_t;
+    typedef struct {
+        struct rusage start;
+        struct rusage stop;
+    } jas_tmr_t;
 
 #else
 
-	typedef int jas_tmr_t;
+    typedef int jas_tmr_t;
 
 #endif
 
-	void jas_tmr_start(jas_tmr_t* tmr);
-	void jas_tmr_stop(jas_tmr_t* tmr);
-	double jas_tmr_get(jas_tmr_t* tmr);
+    void jas_tmr_start(jas_tmr_t* tmr);
+    void jas_tmr_stop(jas_tmr_t* tmr);
+    double jas_tmr_get(jas_tmr_t* tmr);
 
 #ifdef __cplusplus
 }

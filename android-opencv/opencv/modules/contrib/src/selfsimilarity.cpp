@@ -149,11 +149,11 @@ void SelfSimDescriptor::compute(const Mat& img, vector<float>& descriptors, Size
 
 #if 0 //def _OPENMP
     int nthreads = cvGetNumThreads();
-    #pragma omp parallel for num_threads(nthreads)
+#pragma omp parallel for num_threads(nthreads)
 #endif
     for (i = 0; i < nwindows; i++) {
         Point pt;
-        float* feature0 = &descriptors[fsize * i];
+        float* feature0 = &descriptors[fsize*i];
         float* feature = &tempFeature[0];
         int x, y, j;
 

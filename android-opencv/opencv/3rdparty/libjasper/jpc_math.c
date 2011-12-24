@@ -87,17 +87,17 @@
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */
 int jpc_floorlog2(int x) {
-	int y;
+    int y;
 
-	/* The argument must be positive. */
-	assert(x > 0);
+    /* The argument must be positive. */
+    assert(x > 0);
 
-	y = 0;
-	while (x > 1) {
-		x >>= 1;
-		++y;
-	}
-	return y;
+    y = 0;
+    while (x > 1) {
+        x >>= 1;
+        ++y;
+    }
+    return y;
 }
 
 /* Calculate the bit position of the first leading one in a nonnegative
@@ -105,15 +105,15 @@ int jpc_floorlog2(int x) {
 /* This function is the basically the same as ceillog2(x), except that the
   allowable range for x is slightly different. */
 int jpc_firstone(int x) {
-	int n;
+    int n;
 
-	/* The argument must be nonnegative. */
-	assert(x >= 0);
+    /* The argument must be nonnegative. */
+    assert(x >= 0);
 
-	n = -1;
-	while (x > 0) {
-		x >>= 1;
-		++n;
-	}
-	return n;
+    n = -1;
+    while (x > 0) {
+        x >>= 1;
+        ++n;
+    }
+    return n;
 }

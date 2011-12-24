@@ -53,13 +53,13 @@ namespace Imf {
 typedef TypedAttribute<KeyCode> KeyCodeAttribute;
 
 template <>
-const char* KeyCodeAttribute::staticTypeName ();
+const char* KeyCodeAttribute::staticTypeName();
 
 template <>
-void KeyCodeAttribute::writeValueTo (OStream&, int) const;
+void KeyCodeAttribute::writeValueTo(OStream&, int) const;
 
 template <>
-void KeyCodeAttribute::readValueFrom (IStream&, int, int);
+void KeyCodeAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

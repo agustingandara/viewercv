@@ -63,7 +63,7 @@ float* CSMatrixGenerator::getCSMatrix(int m, int n, PHI_DISTR_TYPE dt) {
 
     if (cs_phi_m_ != m || cs_phi_n_ != n || cs_phi_ == NULL) {
         if (cs_phi_) { delete [] cs_phi_; }
-        cs_phi_ = new float[m * n];
+        cs_phi_ = new float[m*n];
     }
 
 #if 0 // debug - load the random matrix from a file (for reproducability of results)
@@ -169,9 +169,9 @@ inline void sum_50t_176c(uchar** pp, uchar* sig, unsigned short* temp) {
 
         for (int i = j; i < j + 16; i += 4) { // 4 columns at a time, to 16
             acc1 = (__m128i*)pp[i];
-            acc2 = (__m128i*)pp[i + 1];
-            acc3 = (__m128i*)pp[i + 2];
-            acc4 = (__m128i*)pp[i + 3];
+            acc2 = (__m128i*)pp[i+1];
+            acc3 = (__m128i*)pp[i+2];
+            acc4 = (__m128i*)pp[i+3];
 
             // add next four columns
             acc = _mm_adds_epu8(acc1[0], acc2[0]);
@@ -458,7 +458,7 @@ void RandomizedTree::compressLeaves(size_t reduced_num_dim) {
     float* cs_posteriors = new float[num_leaves_ * reduced_num_dim];         // temp, num_leaves_ x reduced_num_dim
     for (int i = 0; i < num_leaves_; ++i) {
         float* post = getPosteriorByIndex(i);
-        float* prod = &cs_posteriors[i * reduced_num_dim];
+        float* prod = &cs_posteriors[i*reduced_num_dim];
         Mat A(reduced_num_dim, classes_, CV_32FC1, cs_phi);
         Mat X(classes_, 1, CV_32FC1, post);
         Mat Y(reduced_num_dim, 1, CV_32FC1, prod);
@@ -469,7 +469,7 @@ void RandomizedTree::compressLeaves(size_t reduced_num_dim) {
     freePosteriors(3);
     allocPosteriorsAligned(num_leaves_, reduced_num_dim);
     for (int i = 0; i < num_leaves_; ++i) {
-        memcpy(posteriors_[i], &cs_posteriors[i * reduced_num_dim], reduced_num_dim * sizeof(float));
+        memcpy(posteriors_[i], &cs_posteriors[i*reduced_num_dim], reduced_num_dim * sizeof(float));
     }
     classes_ = reduced_num_dim;
 
@@ -532,7 +532,7 @@ void RandomizedTree::quantizeVector(float* vec, int dim, int N, float bnds[2], i
         // 2: clamp upper values only
         else if (clamp_mode == 2) { *vec = (*vec > map_bnd[1]) ? map_bnd[1] : *vec; }
         // 4: no clamping
-        else if (clamp_mode == 4) { ; } // yep, nothing
+        else if (clamp_mode == 4) ; // yep, nothing
         else {
             printf("clamp_mode == %i is not valid (%s:%i).\n", clamp_mode, __FILE__, __LINE__);
             exit(1);

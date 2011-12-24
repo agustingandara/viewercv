@@ -47,7 +47,7 @@
 /*======================================================================================*/
 
 typedef struct CvMatrix4 {
-	float m[4][4];
+    float m[4][4];
 }
 CvMatrix4;
 
@@ -61,194 +61,194 @@ CvMatrix4;
 
 #define SIGN(x)				( (x)<0 ? -1:((x)>0?1:0 ) )
 
-CvStatus  icvMakeScanlinesLengths( int*        scanlines,
-								   int         numlines,
-								   int*        lens);
+CvStatus  icvMakeScanlinesLengths(int*        scanlines,
+                                  int         numlines,
+                                  int*        lens);
 
 /*=============================== PreWarp section ======================================*/
 
 CV_INLINE int icvGetColor(uchar* valueRGB);
 
 CvStatus  icvFindRunsInOneImage(
-	int     numLines,       /* number of scanlines		*/
-	uchar*  prewarp,        /* prewarp image 			*/
-	int*    line_lens,      /* line lengths in pixels	*/
-	int*    runs,           /* result runs				*/
-	int*    num_runs);
+    int     numLines,       /* number of scanlines		*/
+    uchar*  prewarp,        /* prewarp image 			*/
+    int*    line_lens,      /* line lengths in pixels	*/
+    int*    runs,           /* result runs				*/
+    int*    num_runs);
 
 /*================================ Morphing section ====================================*/
 
-CvStatus  icvMorphEpilines8uC3(    uchar*  first_pix, /* raster epiline from the first image       */
-								   uchar*  second_pix, /* raster epiline from the second image      */
-								   uchar*  dst_pix,    /* raster epiline from the destination image */
-								   /* (it's an output parameter)                */
-								   float   alpha,      /* relative position of camera               */
-								   int*    first,      /* first sequence of runs                    */
-								   int     first_runs, /* it's length                               */
-								   int*    second,     /* second sequence of runs                   */
-								   int     second_runs,
-								   int*    first_corr, /* correspond information for the 1st seq    */
-								   int*    second_corr,
-								   int     dst_len);   /* correspond information for the 2nd seq    */
+CvStatus  icvMorphEpilines8uC3(uchar*  first_pix,     /* raster epiline from the first image       */
+                               uchar*  second_pix, /* raster epiline from the second image      */
+                               uchar*  dst_pix,    /* raster epiline from the destination image */
+                               /* (it's an output parameter)                */
+                               float   alpha,      /* relative position of camera               */
+                               int*    first,      /* first sequence of runs                    */
+                               int     first_runs, /* it's length                               */
+                               int*    second,     /* second sequence of runs                   */
+                               int     second_runs,
+                               int*    first_corr, /* correspond information for the 1st seq    */
+                               int*    second_corr,
+                               int     dst_len);   /* correspond information for the 2nd seq    */
 
 /*========================== Dynamic correspond section ================================*/
 
-CvStatus  icvDynamicCorrespond(   int*  first,         /* first sequence of runs           */
-								  /* s0|w0|s1|w1|...|s(n-1)|w(n-1)|sn */
-								  int   first_runs,    /* number of runs                   */
-								  int*  second,        /* second sequence of runs          */
-								  int   second_runs,
-								  int*  first_corr,    /* s0'|e0'|s1'|e1'|...              */
-								  int*  second_corr );
+CvStatus  icvDynamicCorrespond(int*  first,            /* first sequence of runs           */
+                               /* s0|w0|s1|w1|...|s(n-1)|w(n-1)|sn */
+                               int   first_runs,    /* number of runs                   */
+                               int*  second,        /* second sequence of runs          */
+                               int   second_runs,
+                               int*  first_corr,    /* s0'|e0'|s1'|e1'|...              */
+                               int*  second_corr);
 
 /*============================= PostWarp Functions =====================================*/
 
 CvStatus  icvFetchLine8uC3R(
-	uchar*   src,  int   src_step,
-	uchar*   dst,  int*  dst_num,
-	CvSize  src_size,
-	CvPoint start,
-	CvPoint end );
+    uchar*   src,  int   src_step,
+    uchar*   dst,  int*  dst_num,
+    CvSize  src_size,
+    CvPoint start,
+    CvPoint end);
 
 CvStatus  icvDrawLine8uC3R(
-	uchar*   src,  int  src_num,
-	uchar*   dst,  int  dst_step,
-	CvSize  dst_size,
-	CvPoint start,
-	CvPoint end );
+    uchar*   src,  int  src_num,
+    uchar*   dst,  int  dst_step,
+    CvSize  dst_size,
+    CvPoint start,
+    CvPoint end);
 
 
 /*============================== Fundamental Matrix Functions ==========================*/
-CvStatus  icvPoint7(  int*        points1,
-					  int*        points2,
-					  double*     F,
-					  int*        amount
-				   );
+CvStatus  icvPoint7(int*        points1,
+                    int*        points2,
+                    double*     F,
+                    int*        amount
+                   );
 
-CvStatus  icvCubic(      double a2, double a1,
-						 double a0, double* squares );
+CvStatus  icvCubic(double a2, double a1,
+                   double a0, double* squares);
 
-double icvDet( double* M );
-double   icvMinor( double* M, int x, int y );
+double icvDet(double* M);
+double   icvMinor(double* M, int x, int y);
 
 int
-icvGaussMxN( double* A, double* B, int M, int N, double** solutions );
+icvGaussMxN(double* A, double* B, int M, int N, double** solutions);
 
 CvStatus
-icvGetCoef( double* f1, double* f2, double* a2, double* a1, double* a0 );
+icvGetCoef(double* f1, double* f2, double* a2, double* a1, double* a0);
 
 /*================================= Scanlines Functions ================================*/
 
-CvStatus  icvGetCoefficient(  CvMatrix3*     matrix,
-							  CvSize         imgSize,
-							  int*            scanlines_1,
-							  int*            scanlines_2,
-							  int*            numlines);
+CvStatus  icvGetCoefficient(CvMatrix3*     matrix,
+                            CvSize         imgSize,
+                            int*            scanlines_1,
+                            int*            scanlines_2,
+                            int*            numlines);
 
-CvStatus  icvGetCoefficientDefault(   CvMatrix3*     matrix,
-									  CvSize         imgSize,
-									  int*            scanlines_1,
-									  int*            scanlines_2,
-									  int*            numlines);
+CvStatus  icvGetCoefficientDefault(CvMatrix3*     matrix,
+                                   CvSize         imgSize,
+                                   int*            scanlines_1,
+                                   int*            scanlines_2,
+                                   int*            numlines);
 
-CvStatus  icvGetCoefficientStereo(    CvMatrix3*     matrix,
-									  CvSize         imgSize,
-									  float*          l_epipole,
-									  float*          r_epipole,
-									  int*            scanlines_1,
-									  int*            scanlines_2,
-									  int*            numlines
-								 );
+CvStatus  icvGetCoefficientStereo(CvMatrix3*     matrix,
+                                  CvSize         imgSize,
+                                  float*          l_epipole,
+                                  float*          r_epipole,
+                                  int*            scanlines_1,
+                                  int*            scanlines_2,
+                                  int*            numlines
+                                 );
 
-CvStatus  icvGetCoefficientOrto(  CvMatrix3*     matrix,
-								  CvSize         imgSize,
-								  int*            scanlines_1,
-								  int*            scanlines_2,
-								  int*            numlines);
+CvStatus  icvGetCoefficientOrto(CvMatrix3*     matrix,
+                                CvSize         imgSize,
+                                int*            scanlines_1,
+                                int*            scanlines_2,
+                                int*            numlines);
 
 
-CvStatus  icvGetCrossEpilineFrame(    CvSize     imgSize,
-									  float*      epiline,
-									  int*        x1,
-									  int*        y1,
-									  int*        x2,
-									  int*        y2
-								 );
+CvStatus  icvGetCrossEpilineFrame(CvSize     imgSize,
+                                  float*      epiline,
+                                  int*        x1,
+                                  int*        y1,
+                                  int*        x2,
+                                  int*        y2
+                                 );
 
 CvStatus  icvBuildScanlineLeftStereo(
-	CvSize         imgSize,
-	CvMatrix3*     matrix,
-	float*          l_epipole,
-	float*          l_angle,
-	float           l_radius,
-	int*            scanlines_1,
-	int*            scanlines_2,
-	int*            numlines);
+    CvSize         imgSize,
+    CvMatrix3*     matrix,
+    float*          l_epipole,
+    float*          l_angle,
+    float           l_radius,
+    int*            scanlines_1,
+    int*            scanlines_2,
+    int*            numlines);
 
 CvStatus  icvBuildScanlineRightStereo(
-	CvSize         imgSize,
-	CvMatrix3*     matrix,
-	float*          r_epipole,
-	float*          r_angle,
-	float           r_radius,
-	int*            scanlines_1,
-	int*            scanlines_2,
-	int*            numlines);
+    CvSize         imgSize,
+    CvMatrix3*     matrix,
+    float*          r_epipole,
+    float*          r_angle,
+    float           r_radius,
+    int*            scanlines_1,
+    int*            scanlines_2,
+    int*            numlines);
 
 CvStatus  icvGetStartEnd1(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	float*          l_start_end,
-	float*          r_start_end );
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    float*          l_start_end,
+    float*          r_start_end);
 
 CvStatus  icvGetStartEnd2(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	float*          l_start_end,
-	float*          r_start_end );
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    float*          l_start_end,
+    float*          r_start_end);
 
 CvStatus  icvGetStartEnd3(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	float*          l_start_end,
-	float*          r_start_end );
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    float*          l_start_end,
+    float*          r_start_end);
 
 CvStatus  icvGetStartEnd4(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	float*          l_start_end,
-	float*          r_start_end );
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    float*          l_start_end,
+    float*          r_start_end);
 
 CvStatus  icvBuildScanlineLeft(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	int*            scanlines_1,
-	int*            scanlines_2,
-	float*          l_start_end,
-	int*            numlines
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    int*            scanlines_1,
+    int*            scanlines_2,
+    float*          l_start_end,
+    int*            numlines
 );
 
 CvStatus  icvBuildScanlineRight(
-	CvMatrix3*     matrix,
-	CvSize         imgSize,
-	int*            scanlines_1,
-	int*            scanlines_2,
-	float*          r_start_end,
-	int*            numlines
+    CvMatrix3*     matrix,
+    CvSize         imgSize,
+    int*            scanlines_1,
+    int*            scanlines_2,
+    float*          r_start_end,
+    int*            numlines
 );
 
 
 /*=================================== LMedS Functions ==================================*/
 CvStatus  icvLMedS7(
-	int*            points1,
-	int*            points2,
-	CvMatrix3*     matrix);
+    int*            points1,
+    int*            points2,
+    CvMatrix3*     matrix);
 
 
-CvStatus  icvLMedS(   int*    points1,
-					  int*    points2,
-					  int     numPoints,
-					  CvMatrix3* fundamentalMatrix );
+CvStatus  icvLMedS(int*    points1,
+                   int*    points2,
+                   int     numPoints,
+                   CvMatrix3* fundamentalMatrix);
 
 
 /*
@@ -259,37 +259,37 @@ CvStatus  icvFindFundamentalMatrix(
                                     int             method,
                                     CvMatrix3*      matrix);
 */
-void   icvChoose7(	int*    ml,     int* mr,
-					int     num,	int* ml7,
-					int*   mr7 );
+void   icvChoose7(int*    ml,     int* mr,
+                  int     num,	int* ml7,
+                  int*   mr7);
 
-double icvMedian(	int* ml, int* mr,
-					int num, double* F );
+double icvMedian(int* ml, int* mr,
+                 int num, double* F);
 
-int icvBoltingPoints( int* ml,	    int* mr,
-					  int num,        double* F,
-					  double Mj,      int* *new_ml,
-					  int* *new_mr,   int* new_num);
+int icvBoltingPoints(int* ml,	    int* mr,
+                     int num,        double* F,
+                     double Mj,      int* *new_ml,
+                     int* *new_mr,   int* new_num);
 
-CvStatus  icvPoints8( int* ml, int* mr,
-					  int num, double* F );
+CvStatus  icvPoints8(int* ml, int* mr,
+                     int num, double* F);
 
-CvStatus  icvRank2Constraint( double* F );
+CvStatus  icvRank2Constraint(double* F);
 
-CvStatus  icvSort( double* array, int length );
+CvStatus  icvSort(double* array, int length);
 
-double icvAnalyticPoints8(	double* A,
-							int num, double* F );
+double icvAnalyticPoints8(double* A,
+                          int num, double* F);
 
-int icvSingularValueDecomposition(	int		M,
-									int		N,
-									double*	A,
-									double*	W,
-									int		get_U,
-									double*	U,
-									int		get_V,
-									double*	V
-								 );
+int icvSingularValueDecomposition(int		M,
+                                  int		N,
+                                  double*	A,
+                                  double*	W,
+                                  int		get_U,
+                                  double*	U,
+                                  int		get_V,
+                                  double*	V
+                                 );
 
 
 /*======================================================================================*/

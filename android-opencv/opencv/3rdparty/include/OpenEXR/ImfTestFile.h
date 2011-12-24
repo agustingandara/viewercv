@@ -50,12 +50,12 @@ namespace Imf {
 class IStream;
 
 
-bool isOpenExrFile (const char fileName[], bool& isTiled);
-bool isOpenExrFile (const char fileName[]);
-bool isTiledOpenExrFile (const char fileName[]);
-bool isOpenExrFile (IStream& is, bool& isTiled);
-bool isOpenExrFile (IStream& is);
-bool isTiledOpenExrFile (IStream& is);
+bool isOpenExrFile(const char fileName[], bool& isTiled);
+bool isOpenExrFile(const char fileName[]);
+bool isTiledOpenExrFile(const char fileName[]);
+bool isOpenExrFile(IStream& is, bool& isTiled);
+bool isOpenExrFile(IStream& is);
+bool isTiledOpenExrFile(IStream& is);
 
 
 } // namespace Imf

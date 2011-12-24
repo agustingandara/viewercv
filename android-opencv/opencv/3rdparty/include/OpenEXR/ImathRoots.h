@@ -80,10 +80,10 @@ namespace Imath {
 //
 //--------------------------------------------------------------------------
 
-template <class T> int	solveLinear (T a, T b, T& x);
-template <class T> int	solveQuadratic (T a, T b, T c, T x[2]);
-template <class T> int	solveNormalizedCubic (T r, T s, T t, T x[3]);
-template <class T> int	solveCubic (T a, T b, T c, T d, T x[3]);
+template <class T> int	solveLinear(T a, T b, T& x);
+template <class T> int	solveQuadratic(T a, T b, T c, T x[2]);
+template <class T> int	solveNormalizedCubic(T r, T s, T t, T x[3]);
+template <class T> int	solveCubic(T a, T b, T c, T d, T x[3]);
 
 
 //---------------
@@ -92,98 +92,98 @@ template <class T> int	solveCubic (T a, T b, T c, T d, T x[3]);
 
 template <class T>
 int
-solveLinear (T a, T b, T& x) {
-	if (a != 0) {
-		x = -b / a;
-		return 1;
-	} else if (b != 0) {
-		return 0;
-	} else {
-		return -1;
-	}
+solveLinear(T a, T b, T& x) {
+    if (a != 0) {
+        x = -b / a;
+        return 1;
+    } else if (b != 0) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 
 template <class T>
 int
-solveQuadratic (T a, T b, T c, T x[2]) {
-	if (a == 0) {
-		return solveLinear (b, c, x[0]);
-	} else {
-		T D = b * b - 4 * a * c;
+solveQuadratic(T a, T b, T c, T x[2]) {
+    if (a == 0) {
+        return solveLinear(b, c, x[0]);
+    } else {
+        T D = b * b - 4 * a * c;
 
-		if (D > 0) {
-			T s = sqrt (D);
+        if (D > 0) {
+            T s = sqrt(D);
 
-			x[0] = (-b + s) / (2 * a);
-			x[1] = (-b - s) / (2 * a);
-			return 2;
-		}
-		if (D == 0) {
-			x[0] = -b / (2 * a);
-			return 1;
-		} else {
-			return 0;
-		}
-	}
+            x[0] = (-b + s) / (2 * a);
+            x[1] = (-b - s) / (2 * a);
+            return 2;
+        }
+        if (D == 0) {
+            x[0] = -b / (2 * a);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
 
 
 template <class T>
 int
-solveNormalizedCubic (T r, T s, T t, T x[3]) {
-	T p  = (3 * s - r * r) / 3;
-	T q  = 2 * r * r * r / 27 - r * s / 3 + t;
-	T p3 = p / 3;
-	T q2 = q / 2;
-	T D  = p3 * p3 * p3 + q2 * q2;
+solveNormalizedCubic(T r, T s, T t, T x[3]) {
+    T p  = (3 * s - r * r) / 3;
+    T q  = 2 * r * r * r / 27 - r * s / 3 + t;
+    T p3 = p / 3;
+    T q2 = q / 2;
+    T D  = p3 * p3 * p3 + q2 * q2;
 
-	if (D == 0 && p3 == 0) {
-		x[0] = -r / 3;
-		x[1] = -r / 3;
-		x[2] = -r / 3;
-		return 1;
-	}
+    if (D == 0 && p3 == 0) {
+        x[0] = -r / 3;
+        x[1] = -r / 3;
+        x[2] = -r / 3;
+        return 1;
+    }
 
-	std::complex<T> u = std::pow (-q / 2 + std::sqrt (std::complex<T> (D)),
-								  T (1) / T (3));
+    std::complex<T> u = std::pow(-q / 2 + std::sqrt(std::complex<T> (D)),
+                                 T(1) / T(3));
 
-	std::complex<T> v = -p / (T (3) * u);
+    std::complex<T> v = -p / (T(3) * u);
 
-	const T sqrt3 = T (1.73205080756887729352744634150587); // enough digits
-	// for long double
-	std::complex<T> y0 (u + v);
+    const T sqrt3 = T(1.73205080756887729352744634150587);  // enough digits
+    // for long double
+    std::complex<T> y0(u + v);
 
-	std::complex<T> y1 (-(u + v) / T (2) +
-						(u - v) / T (2) * std::complex<T> (0, sqrt3));
+    std::complex<T> y1(-(u + v) / T(2) +
+                       (u - v) / T(2) * std::complex<T> (0, sqrt3));
 
-	std::complex<T> y2 (-(u + v) / T (2) -
-						(u - v) / T (2) * std::complex<T> (0, sqrt3));
+    std::complex<T> y2(-(u + v) / T(2) -
+                       (u - v) / T(2) * std::complex<T> (0, sqrt3));
 
-	if (D > 0) {
-		x[0] = y0.real() - r / 3;
-		return 1;
-	} else if (D == 0) {
-		x[0] = y0.real() - r / 3;
-		x[1] = y1.real() - r / 3;
-		return 2;
-	} else {
-		x[0] = y0.real() - r / 3;
-		x[1] = y1.real() - r / 3;
-		x[2] = y2.real() - r / 3;
-		return 3;
-	}
+    if (D > 0) {
+        x[0] = y0.real() - r / 3;
+        return 1;
+    } else if (D == 0) {
+        x[0] = y0.real() - r / 3;
+        x[1] = y1.real() - r / 3;
+        return 2;
+    } else {
+        x[0] = y0.real() - r / 3;
+        x[1] = y1.real() - r / 3;
+        x[2] = y2.real() - r / 3;
+        return 3;
+    }
 }
 
 
 template <class T>
 int
-solveCubic (T a, T b, T c, T d, T x[3]) {
-	if (a == 0) {
-		return solveQuadratic (b, c, d, x);
-	} else {
-		return solveNormalizedCubic (b / a, c / a, d / a, x);
-	}
+solveCubic(T a, T b, T c, T d, T x[3]) {
+    if (a == 0) {
+        return solveQuadratic(b, c, d, x);
+    } else {
+        return solveNormalizedCubic(b / a, c / a, d / a, x);
+    }
 }
 
 

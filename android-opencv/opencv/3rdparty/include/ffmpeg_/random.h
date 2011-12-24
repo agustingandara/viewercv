@@ -30,8 +30,8 @@
 #include "common.h"
 
 typedef struct {
-	unsigned int mt[AV_RANDOM_N]; ///< the array for the state vector
-	int index; ///< Current untempered value we use as the base.
+    unsigned int mt[AV_RANDOM_N]; ///< the array for the state vector
+    int index; ///< Current untempered value we use as the base.
 } AVRandomState;
 
 
@@ -50,29 +50,29 @@ void av_random_generate_untempered_numbers(AVRandomState* state); ///< Regenerat
  * some evidence that it makes a difference for the case where you use it.
  */
 static inline unsigned int av_random(AVRandomState* state) {
-	unsigned int y;
+    unsigned int y;
 
-	// Regenerate the untempered numbers if we should...
-	if (state->index >= AV_RANDOM_N) {
-		av_random_generate_untempered_numbers(state);
-	}
+    // Regenerate the untempered numbers if we should...
+    if (state->index >= AV_RANDOM_N) {
+        av_random_generate_untempered_numbers(state);
+    }
 
-	// Grab one...
-	y = state->mt[state->index++];
+    // Grab one...
+    y = state->mt[state->index++];
 
-	/* Now temper (Mersenne Twister coefficients). The coefficients for MT19937 are.. */
-	y ^= (y >> 11);
-	y ^= (y << 7) & 0x9d2c5680;
-	y ^= (y << 15) & 0xefc60000;
-	y ^= (y >> 18);
+    /* Now temper (Mersenne Twister coefficients). The coefficients for MT19937 are.. */
+    y ^= (y >> 11);
+    y ^= (y << 7) & 0x9d2c5680;
+    y ^= (y << 15) & 0xefc60000;
+    y ^= (y >> 18);
 
-	return y;
+    return y;
 }
 
 /** Returns a random number in the range [0-1] as double. */
 static inline double av_random_real1(AVRandomState* state) {
-	/* divided by 2^32-1 */
-	return av_random(state) * (1.0 / 4294967296.0);
+    /* divided by 2^32-1 */
+    return av_random(state) * (1.0 / 4294967296.0);
 }
 
 #endif /* AVUTIL_RANDOM_H */

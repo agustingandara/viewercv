@@ -58,50 +58,50 @@ template <class T>
 class Interval {
 public:
 
-	//-------------------------
-	//  Data Members are public
-	//-------------------------
+    //-------------------------
+    //  Data Members are public
+    //-------------------------
 
-	T				min;
-	T				max;
+    T				min;
+    T				max;
 
-	//-----------------------------------------------------
-	//	Constructors - an "empty" Interval is created by default
-	//-----------------------------------------------------
+    //-----------------------------------------------------
+    //	Constructors - an "empty" Interval is created by default
+    //-----------------------------------------------------
 
-	Interval();
-	Interval(const T& point);
-	Interval(const T& minT, const T& maxT);
+    Interval();
+    Interval(const T& point);
+    Interval(const T& minT, const T& maxT);
 
-	//--------------------------------
-	//  Operators:  we get != from STL
-	//--------------------------------
+    //--------------------------------
+    //  Operators:  we get != from STL
+    //--------------------------------
 
-	bool                        operator == (const Interval<T> &src) const;
+    bool                        operator == (const Interval<T> &src) const;
 
-	//------------------
-	//	Interval manipulation
-	//------------------
+    //------------------
+    //	Interval manipulation
+    //------------------
 
-	void			makeEmpty();
-	void			extendBy(const T& point);
-	void			extendBy(const Interval<T>& interval);
+    void			makeEmpty();
+    void			extendBy(const T& point);
+    void			extendBy(const Interval<T>& interval);
 
-	//---------------------------------------------------
-	//	Query functions - these compute results each time
-	//---------------------------------------------------
+    //---------------------------------------------------
+    //	Query functions - these compute results each time
+    //---------------------------------------------------
 
-	T				size() const;
-	T				center() const;
-	bool			intersects(const T& point) const;
-	bool			intersects(const Interval<T> &interval) const;
+    T				size() const;
+    T				center() const;
+    bool			intersects(const T& point) const;
+    bool			intersects(const Interval<T> &interval) const;
 
-	//----------------
-	//	Classification
-	//----------------
+    //----------------
+    //	Classification
+    //----------------
 
-	bool			hasVolume() const;
-	bool			isEmpty() const;
+    bool			hasVolume() const;
+    bool			isEmpty() const;
 };
 
 
@@ -122,91 +122,91 @@ typedef Interval <int>    Intervali;
 
 template <class T>
 inline Interval<T>::Interval() {
-	makeEmpty();
+    makeEmpty();
 }
 
 template <class T>
 inline Interval<T>::Interval(const T& point) {
-	min = point;
-	max = point;
+    min = point;
+    max = point;
 }
 
 template <class T>
 inline Interval<T>::Interval(const T& minV, const T& maxV) {
-	min = minV;
-	max = maxV;
+    min = minV;
+    max = maxV;
 }
 
 template <class T>
 inline bool
 Interval<T>::operator == (const Interval<T> &src) const {
-	return (min == src.min && max == src.max);
+    return (min == src.min && max == src.max);
 }
 
 template <class T>
 inline void
 Interval<T>::makeEmpty() {
-	min = limits<T>::max();
-	max = limits<T>::min();
+    min = limits<T>::max();
+    max = limits<T>::min();
 }
 
 template <class T>
 inline void
 Interval<T>::extendBy(const T& point) {
-	if ( point < min ) {
-		min = point;
-	}
+    if (point < min) {
+        min = point;
+    }
 
-	if ( point > max ) {
-		max = point;
-	}
+    if (point > max) {
+        max = point;
+    }
 }
 
 template <class T>
 inline void
 Interval<T>::extendBy(const Interval<T>& interval) {
-	if ( interval.min < min ) {
-		min = interval.min;
-	}
+    if (interval.min < min) {
+        min = interval.min;
+    }
 
-	if ( interval.max > max ) {
-		max = interval.max;
-	}
+    if (interval.max > max) {
+        max = interval.max;
+    }
 }
 
 template <class T>
 inline bool
 Interval<T>::intersects(const T& point) const {
-	return point >= min && point <= max;
+    return point >= min && point <= max;
 }
 
 template <class T>
 inline bool
 Interval<T>::intersects(const Interval<T>& interval) const {
-	return interval.max >= min && interval.min <= max;
+    return interval.max >= min && interval.min <= max;
 }
 
 template <class T>
 inline T
 Interval<T>::size() const {
-	return max - min;
+    return max - min;
 }
 
 template <class T>
 inline T
 Interval<T>::center() const {
-	return (max + min) / 2;
+    return (max + min) / 2;
 }
 
 template <class T>
 inline bool
 Interval<T>::isEmpty() const {
-	return max < min;
+    return max < min;
 }
 
 template <class T>
 inline bool Interval<T>::hasVolume() const {
-	return max > min;
+    return max > min;
 }
 
 } // namespace Imath

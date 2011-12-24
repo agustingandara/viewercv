@@ -77,14 +77,14 @@ namespace Imf {
 // compression and decompression of OpenEXR files.
 //-----------------------------------------------------------------------------
 
-int     globalThreadCount ();
+int     globalThreadCount();
 
 
 //-----------------------------------------------------------------------------
 // Change the number of Imf-global worker threads
 //-----------------------------------------------------------------------------
 
-void    setGlobalThreadCount (int count);
+void    setGlobalThreadCount(int count);
 
 
 } // namespace Imf

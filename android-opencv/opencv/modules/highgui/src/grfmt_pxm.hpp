@@ -51,37 +51,37 @@ namespace cv {
 class PxMDecoder : public BaseImageDecoder {
 public:
 
-	PxMDecoder();
-	virtual ~PxMDecoder();
+    PxMDecoder();
+    virtual ~PxMDecoder();
 
-	bool  readData( Mat& img );
-	bool  readHeader();
-	void  close();
+    bool  readData(Mat& img);
+    bool  readHeader();
+    void  close();
 
-	size_t signatureLength() const;
-	bool checkSignature( const string& signature ) const;
-	ImageDecoder newDecoder() const;
+    size_t signatureLength() const;
+    bool checkSignature(const string& signature) const;
+    ImageDecoder newDecoder() const;
 
 protected:
 
-	RLByteStream    m_strm;
-	PaletteEntry    m_palette[256];
-	int             m_bpp;
-	int             m_offset;
-	bool            m_binary;
-	int             m_maxval;
+    RLByteStream    m_strm;
+    PaletteEntry    m_palette[256];
+    int             m_bpp;
+    int             m_offset;
+    bool            m_binary;
+    int             m_maxval;
 };
 
 
 class PxMEncoder : public BaseImageEncoder {
 public:
-	PxMEncoder();
-	virtual ~PxMEncoder();
+    PxMEncoder();
+    virtual ~PxMEncoder();
 
-	bool  isFormatSupported( int depth ) const;
-	bool  write( const Mat& img, const vector<int>& params );
+    bool  isFormatSupported(int depth) const;
+    bool  write(const Mat& img, const vector<int>& params);
 
-	ImageEncoder newEncoder() const;
+    ImageEncoder newEncoder() const;
 };
 
 }

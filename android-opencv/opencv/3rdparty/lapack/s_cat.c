@@ -12,48 +12,48 @@
 #include "string.h"
 
 void s_cat(char* lp, char* rpp[], ftnint rnp[], ftnint* np, ftnlen ll) {
-	ftnlen i, nc;
-	char* rp;
-	ftnlen n = *np;
-	ftnlen L, m;
-	char* lp0, *lp1;
+    ftnlen i, nc;
+    char* rp;
+    ftnlen n = *np;
+    ftnlen L, m;
+    char* lp0, *lp1;
 
-	lp0 = 0;
-	lp1 = lp;
-	L = ll;
-	i = 0;
-	while (i < n) {
-		rp = rpp[i];
-		m = rnp[i++];
-		if (rp >= lp1 || rp + m <= lp) {
-			if ((L -= m) <= 0) {
-				n = i;
-				break;
-			}
-			lp1 += m;
-			continue;
-		}
-		lp0 = lp;
-		lp = lp1 = F77_aloc(L = ll, "s_cat");
-		break;
-	}
-	lp1 = lp;
-	for (i = 0 ; i < n ; ++i) {
-		nc = ll;
-		if (rnp[i] < nc) {
-			nc = rnp[i];
-		}
-		ll -= nc;
-		rp = rpp[i];
-		while (--nc >= 0) {
-			*lp++ = *rp++;
-		}
-	}
-	while (--ll >= 0) {
-		*lp++ = ' ';
-	}
-	if (lp0) {
-		memcpy(lp0, lp1, L);
-		free(lp1);
-	}
+    lp0 = 0;
+    lp1 = lp;
+    L = ll;
+    i = 0;
+    while (i < n) {
+        rp = rpp[i];
+        m = rnp[i++];
+        if (rp >= lp1 || rp + m <= lp) {
+            if ((L -= m) <= 0) {
+                n = i;
+                break;
+            }
+            lp1 += m;
+            continue;
+        }
+        lp0 = lp;
+        lp = lp1 = F77_aloc(L = ll, "s_cat");
+        break;
+    }
+    lp1 = lp;
+    for (i = 0 ; i < n ; ++i) {
+        nc = ll;
+        if (rnp[i] < nc) {
+            nc = rnp[i];
+        }
+        ll -= nc;
+        rp = rpp[i];
+        while (--nc >= 0) {
+            *lp++ = *rp++;
+        }
+    }
+    while (--ll >= 0) {
+        *lp++ = ' ';
+    }
+    if (lp0) {
+        memcpy(lp0, lp1, L);
+        free(lp1);
+    }
 }

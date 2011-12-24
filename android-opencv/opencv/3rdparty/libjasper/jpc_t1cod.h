@@ -286,10 +286,10 @@ int JPC_SEGTYPE(int passno, int firstpassno, int bypass);
 
 /* Get the number of coding passess in the segment. */
 int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass,
-				   int termall);
+                   int termall);
 
 /* Is the coding pass terminated? */
 int JPC_ISTERMINATED(int passno, int firstpassno, int numpasses, int termall,
-					 int lazy);
+                     int lazy);
 
 #endif

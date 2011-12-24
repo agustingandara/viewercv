@@ -98,35 +98,35 @@
 
 typedef struct {
 
-	/* The C register. */
-	uint_fast32_t creg;
+    /* The C register. */
+    uint_fast32_t creg;
 
-	/* The A register. */
-	uint_fast32_t areg;
+    /* The A register. */
+    uint_fast32_t areg;
 
-	/* The CT register. */
-	uint_fast32_t ctreg;
+    /* The CT register. */
+    uint_fast32_t ctreg;
 
-	/* The maximum number of contexts. */
-	int maxctxs;
+    /* The maximum number of contexts. */
+    int maxctxs;
 
-	/* The per-context information. */
-	jpc_mqstate_t** ctxs;
+    /* The per-context information. */
+    jpc_mqstate_t** ctxs;
 
-	/* The current context. */
-	jpc_mqstate_t** curctx;
+    /* The current context. */
+    jpc_mqstate_t** curctx;
 
-	/* The stream for encoder output. */
-	jas_stream_t* out;
+    /* The stream for encoder output. */
+    jas_stream_t* out;
 
-	/* The byte buffer (i.e., the B variable in the standard). */
-	int_fast16_t outbuf;
+    /* The byte buffer (i.e., the B variable in the standard). */
+    int_fast16_t outbuf;
 
-	/* The last byte output. */
-	int_fast16_t lastbyte;
+    /* The last byte output. */
+    int_fast16_t lastbyte;
 
-	/* The error indicator. */
-	int err;
+    /* The error indicator. */
+    int err;
 
 } jpc_mqenc_t;
 
@@ -134,17 +134,17 @@ typedef struct {
 
 typedef struct {
 
-	/* The A register. */
-	unsigned areg;
+    /* The A register. */
+    unsigned areg;
 
-	/* The C register. */
-	unsigned creg;
+    /* The C register. */
+    unsigned creg;
 
-	/* The CT register. */
-	unsigned ctreg;
+    /* The CT register. */
+    unsigned ctreg;
 
-	/* The last byte output by the encoder. */
-	int lastbyte;
+    /* The last byte output by the encoder. */
+    int lastbyte;
 
 } jpc_mqencstate_t;
 

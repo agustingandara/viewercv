@@ -72,8 +72,8 @@ GCEdge;
 typedef struct CvStereoGCState2 {
     int Ithreshold, interactionRadius;
     int lambda, lambda1, lambda2, K;
-    int dataCostFuncTab[CUTOFF + 1];
-    int smoothnessR[CUTOFF * 2 + 1];
+    int dataCostFuncTab[CUTOFF+1];
+    int smoothnessR[CUTOFF*2+1];
     int smoothnessGrayDiff[512];
     GCVtx** orphans;
     int maxOrphans;
@@ -168,7 +168,7 @@ static int64 icvGCMaxFlow(GCVtx* vtx, int nvtx, GCEdge* edges, GCVtx** & _orphan
             if (v->parent) {
                 vt = v->t;
                 for (ei = v->first; ei != 0; ei = edges[ei].next) {
-                    if (edges[ei ^ vt].weight == 0) {
+                    if (edges[ei^vt].weight == 0) {
                         continue;
                     }
                     u = edges[ei].dst;
@@ -214,11 +214,11 @@ static int64 icvGCMaxFlow(GCVtx* vtx, int nvtx, GCEdge* edges, GCVtx** & _orphan
         assert(min_weight > 0);
         // k = 1: source tree, k = 0: destination tree
         for (k = 1; k >= 0; k--) {
-            for (v = edges[e0 ^ k].dst;; v = edges[ei].dst) {
+            for (v = edges[e0^k].dst;; v = edges[ei].dst) {
                 if ((ei = v->parent) < 0) {
                     break;
                 }
-                weight = edges[ei ^ k].weight;
+                weight = edges[ei^k].weight;
                 min_weight = MIN(min_weight, weight);
                 assert(min_weight > 0);
             }
@@ -229,17 +229,17 @@ static int64 icvGCMaxFlow(GCVtx* vtx, int nvtx, GCEdge* edges, GCVtx** & _orphan
 
         // modify weights of the edges along the path and collect orphans
         edges[e0].weight -= min_weight;
-        edges[e0 ^ 1].weight += min_weight;
+        edges[e0^1].weight += min_weight;
         flow += min_weight;
 
         // k = 1: source tree, k = 0: destination tree
         for (k = 1; k >= 0; k--) {
-            for (v = edges[e0 ^ k].dst;; v = edges[ei].dst) {
+            for (v = edges[e0^k].dst;; v = edges[ei].dst) {
                 if ((ei = v->parent) < 0) {
                     break;
                 }
-                edges[ei ^(k ^ 1)].weight += min_weight;
-                if ((edges[ei ^ k].weight -= min_weight) == 0) {
+                edges[ei^(k^1)].weight += min_weight;
+                if ((edges[ei^k].weight -= min_weight) == 0) {
                     if (norphans >= maxOrphans) {
                         maxOrphans = icvGCResizeOrphansBuf(orphans, norphans);
                     }
@@ -267,7 +267,7 @@ static int64 icvGCMaxFlow(GCVtx* vtx, int nvtx, GCEdge* edges, GCVtx** & _orphan
             vt = v->t;
 
             for (ei = v->first; ei != 0; ei = edges[ei].next) {
-                if (edges[ei ^(vt ^ 1)].weight == 0) {
+                if (edges[ei^(vt^1)].weight == 0) {
                     continue;
                 }
                 u = edges[ei].dst;
@@ -321,7 +321,7 @@ static int64 icvGCMaxFlow(GCVtx* vtx, int nvtx, GCEdge* edges, GCVtx** & _orphan
                 if (u->t != vt || !ej) {
                     continue;
                 }
-                if (edges[ei ^(vt ^ 1)].weight && !u->next) {
+                if (edges[ei^(vt^1)].weight && !u->next) {
                     u->next = nilNode;
                     last = last->next = u;
                 }
@@ -433,7 +433,7 @@ static void icvInitGraySubpix(const CvMat* left, const CvMat* right,
                 v1 = (v + sptr_next[x]) / 2;
                 minv = MIN(minv, v1); maxv = MAX(maxv, v1);
                 if (x < cols - 1) {
-                    v1 = (v + sptr[x + 1]) / 2;
+                    v1 = (v + sptr[x+1]) / 2;
                     minv = MIN(minv, v1); maxv = MAX(maxv, v1);
                 }
                 v_prev = v;
@@ -519,17 +519,17 @@ static int64 icvComputeEnergy(const CvStereoGCState* state, const CvStereoGCStat
                 }
                 d1 = dright[x1];
                 if (d == -d1) {
-                    E += dtab[icvDataCostFuncGraySubpix(left + x * 3, right + x1 * 3)];
+                    E += dtab[icvDataCostFuncGraySubpix(left + x*3, right + x1*3)];
                 }
             }
 
             if (x < cols - 1) {
-                d1 = dleft[x + 1];
-                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[left[x * 3] - left[x * 3 + 3]]);
+                d1 = dleft[x+1];
+                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[left[x*3] - left[x*3+3]]);
             }
             if (y < rows - 1) {
-                d1 = dleft[x + dstep];
-                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[left[x * 3] - left[x * 3 + step]]);
+                d1 = dleft[x+dstep];
+                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[left[x*3] - left[x*3+step]]);
             }
 
             d = dright[x];
@@ -538,12 +538,12 @@ static int64 icvComputeEnergy(const CvStereoGCState* state, const CvStereoGCStat
             }
 
             if (x < cols - 1) {
-                d1 = dright[x + 1];
-                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[right[x * 3] - right[x * 3 + 3]]);
+                d1 = dright[x+1];
+                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[right[x*3] - right[x*3+3]]);
             }
             if (y < rows - 1) {
-                d1 = dright[x + dstep];
-                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[right[x * 3] - right[x * 3 + step]]);
+                d1 = dright[x+dstep];
+                E += icvSmoothnessCostFunc(d, d1, maxR, stabR, stabI[right[x*3] - right[x*3+step]]);
             }
             assert(E >= 0);
         }
@@ -679,7 +679,7 @@ static int64 icvAlphaExpand(int64 Eprev, int alpha, CvStereoGCState* state, CvSt
                     delta = IS_BLOCKED(alpha, d) ? INFINITY : 0;
                     //add inter edge
                     E += icvAddTerm(var, var1,
-                                    dtab[icvDataCostFuncGraySubpix(left + x * 3, right + x1 * 3)],
+                                    dtab[icvDataCostFuncGraySubpix(left + x*3, right + x1*3)],
                                     delta, delta, 0, ebuf, nedges);
                 } else if (IS_BLOCKED(alpha, d)) {
                     E += icvAddTerm(var, var1, 0, INFINITY, 0, 0, ebuf, nedges);
@@ -694,7 +694,7 @@ static int64 icvAlphaExpand(int64 Eprev, int alpha, CvStereoGCState* state, CvSt
 
                 E0a = IS_BLOCKED(d, alpha) ? INFINITY : 0;
                 Ea0 = IS_BLOCKED(-d1, alpha) ? INFINITY : 0;
-                Eaa = dtab[icvDataCostFuncGraySubpix(left + x * 3, right + x1 * 3)];
+                Eaa = dtab[icvDataCostFuncGraySubpix(left + x*3, right + x1*3)];
                 E += icvAddTerm(var, var1, 0, E0a, Ea0, Eaa, ebuf, nedges);
             }
 
@@ -709,8 +709,8 @@ static int64 icvAlphaExpand(int64 Eprev, int alpha, CvStereoGCState* state, CvSt
                 a = aa[k];
 
                 if (x < cols - 1) {
-                    var1 = p[x + 1];
-                    d1 = disp[x + 1];
+                    var1 = p[x+1];
+                    d1 = disp[x+1];
                     scale = stabI[img[0] - img[3]];
                     E0a = icvSmoothnessCostFunc(d, a, maxR, stabR, scale);
                     Ea0 = icvSmoothnessCostFunc(a, d1, maxR, stabR, scale);
@@ -719,8 +719,8 @@ static int64 icvAlphaExpand(int64 Eprev, int alpha, CvStereoGCState* state, CvSt
                 }
 
                 if (y < rows - 1) {
-                    var1 = p[x + pstep];
-                    d1 = disp[x + dstep];
+                    var1 = p[x+pstep];
+                    d1 = disp[x+dstep];
                     scale = stabI[img[0] - img[step]];
                     E0a = icvSmoothnessCostFunc(d, a, maxR, stabR, scale);
                     Ea0 = icvSmoothnessCostFunc(a, d1, maxR, stabR, scale);

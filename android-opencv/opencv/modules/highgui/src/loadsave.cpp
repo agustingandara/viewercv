@@ -120,7 +120,7 @@ ImageEncoder findEncoder(const string& _ext) {
     }
     int len = 0;
     for (ext++; isalnum(ext[len]) && len < 128; len++)
-        { ; }
+        ;
 
     for (size_t i = 0; i < encoders.size(); i++) {
         string description = encoders[i]->getDescription();
@@ -297,7 +297,7 @@ imdecode_(const Mat& buf, int flags, int hdrtype, Mat* mat = 0) {
     IplImage* image = 0;
     CvMat* matrix = 0;
     Mat temp, *data = &temp;
-    char fnamebuf[L_tmpnam + 1];
+    char fnamebuf[L_tmpnam+1];
     const char* filename = 0;
 
     ImageDecoder decoder = findDecoder(buf);
@@ -455,7 +455,7 @@ cvSaveImage(const char* filename, const CvArr* arr, const int* _params) {
     int i = 0;
     if (_params) {
         for (; _params[i] > 0; i += 2)
-            { ; }
+            ;
     }
     return cv::imwrite_(filename, cv::cvarrToMat(arr),
                         i > 0 ? cv::vector<int>(_params, _params + i) : cv::vector<int>(),
@@ -482,7 +482,7 @@ cvEncodeImage(const char* ext, const CvArr* arr, const int* _params) {
     int i = 0;
     if (_params) {
         for (; _params[i] > 0; i += 2)
-            { ; }
+            ;
     }
     cv::Mat img = cv::cvarrToMat(arr);
     if (CV_IS_IMAGE(arr) && ((const IplImage*)arr)->origin == IPL_ORIGIN_BL) {

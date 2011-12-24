@@ -346,12 +346,12 @@ bitwiseSOp_(const Mat& srcmat, Mat& dstmat, const Scalar& _scalar) {
             while ((len -= delta) >= 0) {
                 for (i = 0; i < delta; i += 4) {
                     uchar t0 = opb(src[i], scalar[i]);
-                    uchar t1 = opb(src[i + 1], scalar[i + 1]);
-                    dst[i] = t0; dst[i + 1] = t1;
+                    uchar t1 = opb(src[i+1], scalar[i+1]);
+                    dst[i] = t0; dst[i+1] = t1;
 
-                    t0 = opb(src[i + 2], scalar[i + 2]);
-                    t1 = opb(src[i + 3], scalar[i + 3]);
-                    dst[i + 2] = t0; dst[i + 3] = t1;
+                    t0 = opb(src[i+2], scalar[i+2]);
+                    t1 = opb(src[i+3], scalar[i+3]);
+                    dst[i+2] = t0; dst[i+3] = t1;
                 }
                 src += delta;
                 dst += delta;
@@ -585,12 +585,12 @@ mul_(const Mat& srcmat1, const Mat& srcmat2, Mat& dstmat, double _scale) {
             int i;
             for (i = 0; i <= size.width - 4; i += 4) {
                 T t0 = saturate_cast<T>(src1[i] * src2[i]);
-                T t1 = saturate_cast<T>(src1[i + 1] * src2[i + 1]);
-                dst[i] = t0; dst[i + 1] = t1;
+                T t1 = saturate_cast<T>(src1[i+1] * src2[i+1]);
+                dst[i] = t0; dst[i+1] = t1;
 
-                t0 = saturate_cast<T>(src1[i + 2] * src2[i + 2]);
-                t1 = saturate_cast<T>(src1[i + 3] * src2[i + 3]);
-                dst[i + 2] = t0; dst[i + 3] = t1;
+                t0 = saturate_cast<T>(src1[i+2] * src2[i+2]);
+                t1 = saturate_cast<T>(src1[i+3] * src2[i+3]);
+                dst[i+2] = t0; dst[i+3] = t1;
             }
 
             for (; i < size.width; i++) {
@@ -603,12 +603,12 @@ mul_(const Mat& srcmat1, const Mat& srcmat2, Mat& dstmat, double _scale) {
             int i;
             for (i = 0; i <= size.width - 4; i += 4) {
                 T t0 = saturate_cast<T>(scale * (WT)src1[i] * src2[i]);
-                T t1 = saturate_cast<T>(scale * (WT)src1[i + 1] * src2[i + 1]);
-                dst[i] = t0; dst[i + 1] = t1;
+                T t1 = saturate_cast<T>(scale * (WT)src1[i+1] * src2[i+1]);
+                dst[i] = t0; dst[i+1] = t1;
 
-                t0 = saturate_cast<T>(scale * (WT)src1[i + 2] * src2[i + 2]);
-                t1 = saturate_cast<T>(scale * (WT)src1[i + 3] * src2[i + 3]);
-                dst[i + 2] = t0; dst[i + 3] = t1;
+                t0 = saturate_cast<T>(scale * (WT)src1[i+2] * src2[i+2]);
+                t1 = saturate_cast<T>(scale * (WT)src1[i+3] * src2[i+3]);
+                dst[i+2] = t0; dst[i+3] = t1;
             }
 
             for (; i < size.width; i++) {
@@ -647,28 +647,28 @@ div_(const Mat& srcmat1, const Mat& srcmat2, Mat& dstmat, double scale) {
     for (; size.height--; src1 += step1, src2 += step2, dst += step) {
         int i = 0;
         for (; i <= size.width - 4; i += 4) {
-            if (src2[i] != 0 && src2[i + 1] != 0 && src2[i + 2] != 0 && src2[i + 3] != 0) {
-                double a = (double)src2[i] * src2[i + 1];
-                double b = (double)src2[i + 2] * src2[i + 3];
+            if (src2[i] != 0 && src2[i+1] != 0 && src2[i+2] != 0 && src2[i+3] != 0) {
+                double a = (double)src2[i] * src2[i+1];
+                double b = (double)src2[i+2] * src2[i+3];
                 double d = scale / (a * b);
                 b *= d;
                 a *= d;
 
-                T z0 = saturate_cast<T>(src2[i + 1] * src1[i] * b);
-                T z1 = saturate_cast<T>(src2[i] * src1[i + 1] * b);
-                T z2 = saturate_cast<T>(src2[i + 3] * src1[i + 2] * a);
-                T z3 = saturate_cast<T>(src2[i + 2] * src1[i + 3] * a);
+                T z0 = saturate_cast<T>(src2[i+1] * src1[i] * b);
+                T z1 = saturate_cast<T>(src2[i] * src1[i+1] * b);
+                T z2 = saturate_cast<T>(src2[i+3] * src1[i+2] * a);
+                T z3 = saturate_cast<T>(src2[i+2] * src1[i+3] * a);
 
-                dst[i] = z0; dst[i + 1] = z1;
-                dst[i + 2] = z2; dst[i + 3] = z3;
+                dst[i] = z0; dst[i+1] = z1;
+                dst[i+2] = z2; dst[i+3] = z3;
             } else {
                 T z0 = src2[i] != 0 ? saturate_cast<T>(src1[i] * scale / src2[i]) : 0;
-                T z1 = src2[i + 1] != 0 ? saturate_cast<T>(src1[i + 1] * scale / src2[i + 1]) : 0;
-                T z2 = src2[i + 2] != 0 ? saturate_cast<T>(src1[i + 2] * scale / src2[i + 2]) : 0;
-                T z3 = src2[i + 3] != 0 ? saturate_cast<T>(src1[i + 3] * scale / src2[i + 3]) : 0;
+                T z1 = src2[i+1] != 0 ? saturate_cast<T>(src1[i+1] * scale / src2[i+1]) : 0;
+                T z2 = src2[i+2] != 0 ? saturate_cast<T>(src1[i+2] * scale / src2[i+2]) : 0;
+                T z3 = src2[i+3] != 0 ? saturate_cast<T>(src1[i+3] * scale / src2[i+3]) : 0;
 
-                dst[i] = z0; dst[i + 1] = z1;
-                dst[i + 2] = z2; dst[i + 3] = z3;
+                dst[i] = z0; dst[i+1] = z1;
+                dst[i+2] = z2; dst[i+3] = z3;
             }
         }
 
@@ -702,28 +702,28 @@ recip_(double scale, const Mat& srcmat2, Mat& dstmat) {
     for (; size.height--; src2 += step2, dst += step) {
         int i = 0;
         for (; i <= size.width - 4; i += 4) {
-            if (src2[i] != 0 && src2[i + 1] != 0 && src2[i + 2] != 0 && src2[i + 3] != 0) {
-                double a = (double)src2[i] * src2[i + 1];
-                double b = (double)src2[i + 2] * src2[i + 3];
+            if (src2[i] != 0 && src2[i+1] != 0 && src2[i+2] != 0 && src2[i+3] != 0) {
+                double a = (double)src2[i] * src2[i+1];
+                double b = (double)src2[i+2] * src2[i+3];
                 double d = scale / (a * b);
                 b *= d;
                 a *= d;
 
-                T z0 = saturate_cast<T>(src2[i + 1] * b);
+                T z0 = saturate_cast<T>(src2[i+1] * b);
                 T z1 = saturate_cast<T>(src2[i] * b);
-                T z2 = saturate_cast<T>(src2[i + 3] * a);
-                T z3 = saturate_cast<T>(src2[i + 2] * a);
+                T z2 = saturate_cast<T>(src2[i+3] * a);
+                T z3 = saturate_cast<T>(src2[i+2] * a);
 
-                dst[i] = z0; dst[i + 1] = z1;
-                dst[i + 2] = z2; dst[i + 3] = z3;
+                dst[i] = z0; dst[i+1] = z1;
+                dst[i+2] = z2; dst[i+3] = z3;
             } else {
                 T z0 = src2[i] != 0 ? saturate_cast<T>(scale / src2[i]) : 0;
-                T z1 = src2[i + 1] != 0 ? saturate_cast<T>(scale / src2[i + 1]) : 0;
-                T z2 = src2[i + 2] != 0 ? saturate_cast<T>(scale / src2[i + 2]) : 0;
-                T z3 = src2[i + 3] != 0 ? saturate_cast<T>(scale / src2[i + 3]) : 0;
+                T z1 = src2[i+1] != 0 ? saturate_cast<T>(scale / src2[i+1]) : 0;
+                T z2 = src2[i+2] != 0 ? saturate_cast<T>(scale / src2[i+2]) : 0;
+                T z3 = src2[i+3] != 0 ? saturate_cast<T>(scale / src2[i+3]) : 0;
 
-                dst[i] = z0; dst[i + 1] = z1;
-                dst[i + 2] = z2; dst[i + 3] = z3;
+                dst[i] = z0; dst[i+1] = z1;
+                dst[i+2] = z2; dst[i+3] = z3;
             }
         }
 
@@ -767,12 +767,12 @@ addWeighted_(const Mat& srcmat1, double _alpha, const Mat& srcmat2,
         int i = 0;
         for (; i <= size.width - 4; i += 4) {
             T t0 = saturate_cast<T>(src1[i] * alpha + src2[i] * beta + gamma);
-            T t1 = saturate_cast<T>(src1[i + 1] * alpha + src2[i + 1] * beta + gamma);
-            dst[i] = t0; dst[i + 1] = t1;
+            T t1 = saturate_cast<T>(src1[i+1] * alpha + src2[i+1] * beta + gamma);
+            dst[i] = t0; dst[i+1] = t1;
 
-            t0 = saturate_cast<T>(src1[i + 2] * alpha + src2[i + 2] * beta + gamma);
-            t1 = saturate_cast<T>(src1[i + 3] * alpha + src2[i + 3] * beta + gamma);
-            dst[i + 2] = t0; dst[i + 3] = t1;
+            t0 = saturate_cast<T>(src1[i+2] * alpha + src2[i+2] * beta + gamma);
+            t1 = saturate_cast<T>(src1[i+3] * alpha + src2[i+3] * beta + gamma);
+            dst[i+2] = t0; dst[i+3] = t1;
         }
 
         for (; i < size.width; i++) {
@@ -828,16 +828,16 @@ addWeighted8u(const Mat& srcmat1, double alpha,
 
             for (i = 0; i <= size.width - 4; i += 4) {
                 t0 = CV_FAST_CAST_8U((tab1[src1[i]] + tab2[src2[i]]) >> shift);
-                t1 = CV_FAST_CAST_8U((tab1[src1[i + 1]] + tab2[src2[i + 1]]) >> shift);
+                t1 = CV_FAST_CAST_8U((tab1[src1[i+1]] + tab2[src2[i+1]]) >> shift);
 
                 dst[i] = (uchar)t0;
-                dst[i + 1] = (uchar)t1;
+                dst[i+1] = (uchar)t1;
 
-                t0 = CV_FAST_CAST_8U((tab1[src1[i + 2]] + tab2[src2[i + 2]]) >> shift);
-                t1 = CV_FAST_CAST_8U((tab1[src1[i + 3]] + tab2[src2[i + 3]]) >> shift);
+                t0 = CV_FAST_CAST_8U((tab1[src1[i+2]] + tab2[src2[i+2]]) >> shift);
+                t1 = CV_FAST_CAST_8U((tab1[src1[i+3]] + tab2[src2[i+3]]) >> shift);
 
-                dst[i + 2] = (uchar)t0;
-                dst[i + 3] = (uchar)t1;
+                dst[i+2] = (uchar)t0;
+                dst[i+3] = (uchar)t1;
             }
 
             for (; i < size.width; i++) {
@@ -852,16 +852,16 @@ addWeighted8u(const Mat& srcmat1, double alpha,
 
             for (i = 0; i <= size.width - 4; i += 4) {
                 t0 = (tab1[src1[i]] + tab2[src2[i]]) >> shift;
-                t1 = (tab1[src1[i + 1]] + tab2[src2[i + 1]]) >> shift;
+                t1 = (tab1[src1[i+1]] + tab2[src2[i+1]]) >> shift;
 
                 dst[i] = CV_CAST_8U(t0);
-                dst[i + 1] = CV_CAST_8U(t1);
+                dst[i+1] = CV_CAST_8U(t1);
 
-                t0 = (tab1[src1[i + 2]] + tab2[src2[i + 2]]) >> shift;
-                t1 = (tab1[src1[i + 3]] + tab2[src2[i + 3]]) >> shift;
+                t0 = (tab1[src1[i+2]] + tab2[src2[i+2]]) >> shift;
+                t1 = (tab1[src1[i+3]] + tab2[src2[i+3]]) >> shift;
 
-                dst[i + 2] = CV_CAST_8U(t0);
-                dst[i + 3] = CV_CAST_8U(t1);
+                dst[i+2] = CV_CAST_8U(t0);
+                dst[i+3] = CV_CAST_8U(t1);
             }
 
             for (; i < size.width; i++) {

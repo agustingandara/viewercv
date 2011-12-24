@@ -134,7 +134,7 @@ static const int N2 = N / 2;
 // factors for computing a pixels's luminance, Y, from R, G and B
 //
 
-Imath::V3f computeYw (const Chromaticities& cr);
+Imath::V3f computeYw(const Chromaticities& cr);
 
 
 //
@@ -148,11 +148,11 @@ Imath::V3f computeYw (const Chromaticities& cr);
 // yw is a set of RGB-to-Y weighting factors, as computed by computeYw().
 //
 
-void RGBAtoYCA (const Imath::V3f& yw,
-				int n,
-				bool aIsValid,
-				const Rgba rgbaIn[/*n*/],
-				Rgba ycaOut[/*n*/]);
+void RGBAtoYCA(const Imath::V3f& yw,
+               int n,
+               bool aIsValid,
+               const Rgba rgbaIn[/*n*/],
+               Rgba ycaOut[/*n*/]);
 
 //
 // Perform horizontal low-pass filtering and subsampling of
@@ -164,9 +164,9 @@ void RGBAtoYCA (const Imath::V3f& yw,
 // "real" input pixel.
 //
 
-void decimateChromaHoriz (int n,
-						  const Rgba ycaIn[/*n+N-1*/],
-						  Rgba ycaOut[/*n*/]);
+void decimateChromaHoriz(int n,
+                         const Rgba ycaIn[/*n+N-1*/],
+                         Rgba ycaOut[/*n*/]);
 
 //
 // Perform vertical chroma channel low-pass filtering and subsampling.
@@ -174,9 +174,9 @@ void decimateChromaHoriz (int n,
 // of output pixels.
 //
 
-void decimateChromaVert (int n,
-						 const Rgba* const ycaIn[N],
-						 Rgba ycaOut[/*n*/]);
+void decimateChromaVert(int n,
+                        const Rgba* const ycaIn[N],
+                        Rgba ycaOut[/*n*/]);
 
 //
 // Round the luminance and chroma channels of an array of YCA
@@ -185,29 +185,29 @@ void decimateChromaVert (int n,
 // are rounded to roundY and roundC bits respectively.
 //
 
-void roundYCA (int n,
-			   unsigned int roundY,
-			   unsigned int roundC,
-			   const Rgba ycaIn[/*n*/],
-			   Rgba ycaOut[/*n*/]);
+void roundYCA(int n,
+              unsigned int roundY,
+              unsigned int roundC,
+              const Rgba ycaIn[/*n*/],
+              Rgba ycaOut[/*n*/]);
 
 //
 // For a scan line that has valid chroma data only for every other pixel,
 // reconstruct the missing chroma values.
 //
 
-void reconstructChromaHoriz (int n,
-							 const Rgba ycaIn[/*n+N-1*/],
-							 Rgba ycaOut[/*n*/]);
+void reconstructChromaHoriz(int n,
+                            const Rgba ycaIn[/*n+N-1*/],
+                            Rgba ycaOut[/*n*/]);
 
 //
 // For a scan line that has only luminance and no valid chroma data,
 // reconstruct chroma from the surronding N scan lines.
 //
 
-void reconstructChromaVert (int n,
-							const Rgba* const ycaIn[N],
-							Rgba ycaOut[/*n*/]);
+void reconstructChromaVert(int n,
+                           const Rgba* const ycaIn[N],
+                           Rgba ycaOut[/*n*/]);
 
 //
 // Convert an array of n YCA (luminance/chroma/alpha) pixels to RGBA.
@@ -215,10 +215,10 @@ void reconstructChromaVert (int n,
 // yw is a set of RGB-to-Y weighting factors, as computed by computeYw().
 //
 
-void YCAtoRGBA (const Imath::V3f& yw,
-				int n,
-				const Rgba ycaIn[/*n*/],
-				Rgba rgbaOut[/*n*/]);
+void YCAtoRGBA(const Imath::V3f& yw,
+               int n,
+               const Rgba ycaIn[/*n*/],
+               Rgba rgbaOut[/*n*/]);
 
 //
 // Eliminate super-saturated pixels:
@@ -237,10 +237,10 @@ void YCAtoRGBA (const Imath::V3f& yw,
 // saturation of rgbaIn[1], and stores the result in rgbaOut.
 //
 
-void fixSaturation (const Imath::V3f& yw,
-					int n,
-					const Rgba* const rgbaIn[3],
-					Rgba rgbaOut[/*n*/]);
+void fixSaturation(const Imath::V3f& yw,
+                   int n,
+                   const Rgba* const rgbaIn[3],
+                   Rgba rgbaOut[/*n*/]);
 
 } // namespace RgbaYca
 } // namespace Imf

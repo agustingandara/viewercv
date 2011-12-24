@@ -186,9 +186,9 @@ static  CvStatus  icvPOSIT(CvPOSITObject* pObject, CvPoint2D32f* imagePoints,
         /* calculate I and J vectors */
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
-                rotation[3 * i + j] /*[i][j]*/ = 0;
+                rotation[3*i+j] /*[i][j]*/ = 0;
                 for (k = 0; k < N; k++) {
-                    rotation[3 * i + j] /*[i][j]*/ += invMatrix[j * N + k] * imgVectors[i * N + k];
+                    rotation[3*i+j] /*[i][j]*/ += invMatrix[j * N + k] * imgVectors[i * N + k];
                 }
             }
         }
@@ -325,7 +325,7 @@ icvPseudoInverse3D(float* a, float* b, int n, int method) {
     return;
 }
 
-CV_IMPL CvPOSITObject*
+CV_IMPL CvPOSITObject *
 cvCreatePOSITObject(CvPoint3D32f* points, int numPoints) {
     CvPOSITObject* pObject = 0;
     IPPI_CALL(icvCreatePOSITObject(points, numPoints, &pObject));

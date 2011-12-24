@@ -131,8 +131,8 @@ template <class T>  bool        extractScaling
  Vec3<T> &scl,
  bool exc = true);
 
-template <class T>  Matrix44<T> sansScaling (const Matrix44<T> &mat,
-		bool exc = true);
+template <class T>  Matrix44<T> sansScaling(const Matrix44<T> &mat,
+        bool exc = true);
 
 template <class T>  bool        removeScaling
 (Matrix44<T> &mat,
@@ -166,7 +166,7 @@ template <class T>  void	extractEulerZYX
 (const Matrix44<T> &mat,
  Vec3<T> &rot);
 
-template <class T>  Quat<T>	extractQuat (const Matrix44<T> &mat);
+template <class T>  Quat<T>	extractQuat(const Matrix44<T> &mat);
 
 template <class T>  bool	extractSHRT
 (const Matrix44<T> &mat,
@@ -207,8 +207,8 @@ template <class T>  bool	checkForZeroScaleInRow
 // vector.
 //
 
-template <class T> Matrix44<T>	rotationMatrix (const Vec3<T> &fromDirection,
-		const Vec3<T> &toDirection);
+template <class T> Matrix44<T>	rotationMatrix(const Vec3<T> &fromDirection,
+        const Vec3<T> &toDirection);
 
 
 
@@ -256,8 +256,8 @@ template <class T>  bool        extractScaling
  Vec2<T> &scl,
  bool exc = true);
 
-template <class T>  Matrix33<T> sansScaling (const Matrix33<T> &mat,
-		bool exc = true);
+template <class T>  Matrix33<T> sansScaling(const Matrix33<T> &mat,
+        bool exc = true);
 
 template <class T>  bool        removeScaling
 (Matrix33<T> &mat,
@@ -287,12 +287,12 @@ template <class T>  void	extractEuler
 (const Matrix33<T> &mat,
  T&       rot);
 
-template <class T>  bool	extractSHRT (const Matrix33<T> &mat,
-		Vec2<T> &s,
-		T&       h,
-		T&       r,
-		Vec2<T> &t,
-		bool exc = true);
+template <class T>  bool	extractSHRT(const Matrix33<T> &mat,
+                                        Vec2<T> &s,
+                                        T&       h,
+                                        T&       r,
+                                        Vec2<T> &t,
+                                        bool exc = true);
 
 template <class T>  bool	checkForZeroScaleInRow
 (const T&       scl,
@@ -309,536 +309,536 @@ template <class T>  bool	checkForZeroScaleInRow
 
 template <class T>
 bool
-extractScaling (const Matrix44<T> &mat, Vec3<T> &scl, bool exc) {
-	Vec3<T> shr;
-	Matrix44<T> M (mat);
+extractScaling(const Matrix44<T> &mat, Vec3<T> &scl, bool exc) {
+    Vec3<T> shr;
+    Matrix44<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 Matrix44<T>
-sansScaling (const Matrix44<T> &mat, bool exc) {
-	Vec3<T> scl;
-	Vec3<T> shr;
-	Vec3<T> rot;
-	Vec3<T> tran;
+sansScaling(const Matrix44<T> &mat, bool exc) {
+    Vec3<T> scl;
+    Vec3<T> shr;
+    Vec3<T> rot;
+    Vec3<T> tran;
 
-	if (! extractSHRT (mat, scl, shr, rot, tran, exc)) {
-		return mat;
-	}
+    if (! extractSHRT(mat, scl, shr, rot, tran, exc)) {
+        return mat;
+    }
 
-	Matrix44<T> M;
+    Matrix44<T> M;
 
-	M.translate (tran);
-	M.rotate (rot);
-	M.shear (shr);
+    M.translate(tran);
+    M.rotate(rot);
+    M.shear(shr);
 
-	return M;
+    return M;
 }
 
 
 template <class T>
 bool
-removeScaling (Matrix44<T> &mat, bool exc) {
-	Vec3<T> scl;
-	Vec3<T> shr;
-	Vec3<T> rot;
-	Vec3<T> tran;
+removeScaling(Matrix44<T> &mat, bool exc) {
+    Vec3<T> scl;
+    Vec3<T> shr;
+    Vec3<T> rot;
+    Vec3<T> tran;
 
-	if (! extractSHRT (mat, scl, shr, rot, tran, exc)) {
-		return false;
-	}
+    if (! extractSHRT(mat, scl, shr, rot, tran, exc)) {
+        return false;
+    }
 
-	mat.makeIdentity ();
-	mat.translate (tran);
-	mat.rotate (rot);
-	mat.shear (shr);
+    mat.makeIdentity();
+    mat.translate(tran);
+    mat.rotate(rot);
+    mat.shear(shr);
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 bool
-extractScalingAndShear (const Matrix44<T> &mat,
-						Vec3<T> &scl, Vec3<T> &shr, bool exc) {
-	Matrix44<T> M (mat);
+extractScalingAndShear(const Matrix44<T> &mat,
+                       Vec3<T> &scl, Vec3<T> &shr, bool exc) {
+    Matrix44<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 Matrix44<T>
-sansScalingAndShear (const Matrix44<T> &mat, bool exc) {
-	Vec3<T> scl;
-	Vec3<T> shr;
-	Matrix44<T> M (mat);
+sansScalingAndShear(const Matrix44<T> &mat, bool exc) {
+    Vec3<T> scl;
+    Vec3<T> shr;
+    Matrix44<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return mat;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return mat;
+    }
 
-	return M;
+    return M;
 }
 
 
 template <class T>
 bool
-removeScalingAndShear (Matrix44<T> &mat, bool exc) {
-	Vec3<T> scl;
-	Vec3<T> shr;
+removeScalingAndShear(Matrix44<T> &mat, bool exc) {
+    Vec3<T> scl;
+    Vec3<T> shr;
 
-	if (! extractAndRemoveScalingAndShear (mat, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(mat, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 bool
-extractAndRemoveScalingAndShear (Matrix44<T> &mat,
-								 Vec3<T> &scl, Vec3<T> &shr, bool exc) {
-	//
-	// This implementation follows the technique described in the paper by
-	// Spencer W. Thomas in the Graphics Gems II article: "Decomposing a
-	// Matrix into Simple Transformations", p. 320.
-	//
+extractAndRemoveScalingAndShear(Matrix44<T> &mat,
+                                Vec3<T> &scl, Vec3<T> &shr, bool exc) {
+    //
+    // This implementation follows the technique described in the paper by
+    // Spencer W. Thomas in the Graphics Gems II article: "Decomposing a
+    // Matrix into Simple Transformations", p. 320.
+    //
 
-	Vec3<T> row[3];
+    Vec3<T> row[3];
 
-	row[0] = Vec3<T> (mat[0][0], mat[0][1], mat[0][2]);
-	row[1] = Vec3<T> (mat[1][0], mat[1][1], mat[1][2]);
-	row[2] = Vec3<T> (mat[2][0], mat[2][1], mat[2][2]);
+    row[0] = Vec3<T> (mat[0][0], mat[0][1], mat[0][2]);
+    row[1] = Vec3<T> (mat[1][0], mat[1][1], mat[1][2]);
+    row[2] = Vec3<T> (mat[2][0], mat[2][1], mat[2][2]);
 
-	T maxVal = 0;
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			if (Imath::abs (row[i][j]) > maxVal) {
-				maxVal = Imath::abs (row[i][j]);
-			}
+    T maxVal = 0;
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (Imath::abs(row[i][j]) > maxVal) {
+                maxVal = Imath::abs(row[i][j]);
+            }
 
-	//
-	// We normalize the 3x3 matrix here.
-	// It was noticed that this can improve numerical stability significantly,
-	// especially when many of the upper 3x3 matrix's coefficients are very
-	// close to zero; we correct for this step at the end by multiplying the
-	// scaling factors by maxVal at the end (shear and rotation are not
-	// affected by the normalization).
+    //
+    // We normalize the 3x3 matrix here.
+    // It was noticed that this can improve numerical stability significantly,
+    // especially when many of the upper 3x3 matrix's coefficients are very
+    // close to zero; we correct for this step at the end by multiplying the
+    // scaling factors by maxVal at the end (shear and rotation are not
+    // affected by the normalization).
 
-	if (maxVal != 0) {
-		for (int i = 0; i < 3; i++)
-			if (! checkForZeroScaleInRow (maxVal, row[i], exc)) {
-				return false;
-			} else {
-				row[i] /= maxVal;
-			}
-	}
+    if (maxVal != 0) {
+        for (int i = 0; i < 3; i++)
+            if (! checkForZeroScaleInRow(maxVal, row[i], exc)) {
+                return false;
+            } else {
+                row[i] /= maxVal;
+            }
+    }
 
-	// Compute X scale factor.
-	scl.x = row[0].length ();
-	if (! checkForZeroScaleInRow (scl.x, row[0], exc)) {
-		return false;
-	}
+    // Compute X scale factor.
+    scl.x = row[0].length();
+    if (! checkForZeroScaleInRow(scl.x, row[0], exc)) {
+        return false;
+    }
 
-	// Normalize first row.
-	row[0] /= scl.x;
+    // Normalize first row.
+    row[0] /= scl.x;
 
-	// An XY shear factor will shear the X coord. as the Y coord. changes.
-	// There are 6 combinations (XY, XZ, YZ, YX, ZX, ZY), although we only
-	// extract the first 3 because we can effect the last 3 by shearing in
-	// XY, XZ, YZ combined rotations and scales.
-	//
-	// shear matrix <   1,  YX,  ZX,  0,
-	//                 XY,   1,  ZY,  0,
-	//                 XZ,  YZ,   1,  0,
-	//                  0,   0,   0,  1 >
+    // An XY shear factor will shear the X coord. as the Y coord. changes.
+    // There are 6 combinations (XY, XZ, YZ, YX, ZX, ZY), although we only
+    // extract the first 3 because we can effect the last 3 by shearing in
+    // XY, XZ, YZ combined rotations and scales.
+    //
+    // shear matrix <   1,  YX,  ZX,  0,
+    //                 XY,   1,  ZY,  0,
+    //                 XZ,  YZ,   1,  0,
+    //                  0,   0,   0,  1 >
 
-	// Compute XY shear factor and make 2nd row orthogonal to 1st.
-	shr[0]  = row[0].dot (row[1]);
-	row[1] -= shr[0] * row[0];
+    // Compute XY shear factor and make 2nd row orthogonal to 1st.
+    shr[0]  = row[0].dot(row[1]);
+    row[1] -= shr[0] * row[0];
 
-	// Now, compute Y scale.
-	scl.y = row[1].length ();
-	if (! checkForZeroScaleInRow (scl.y, row[1], exc)) {
-		return false;
-	}
+    // Now, compute Y scale.
+    scl.y = row[1].length();
+    if (! checkForZeroScaleInRow(scl.y, row[1], exc)) {
+        return false;
+    }
 
-	// Normalize 2nd row and correct the XY shear factor for Y scaling.
-	row[1] /= scl.y;
-	shr[0] /= scl.y;
+    // Normalize 2nd row and correct the XY shear factor for Y scaling.
+    row[1] /= scl.y;
+    shr[0] /= scl.y;
 
-	// Compute XZ and YZ shears, orthogonalize 3rd row.
-	shr[1]  = row[0].dot (row[2]);
-	row[2] -= shr[1] * row[0];
-	shr[2]  = row[1].dot (row[2]);
-	row[2] -= shr[2] * row[1];
+    // Compute XZ and YZ shears, orthogonalize 3rd row.
+    shr[1]  = row[0].dot(row[2]);
+    row[2] -= shr[1] * row[0];
+    shr[2]  = row[1].dot(row[2]);
+    row[2] -= shr[2] * row[1];
 
-	// Next, get Z scale.
-	scl.z = row[2].length ();
-	if (! checkForZeroScaleInRow (scl.z, row[2], exc)) {
-		return false;
-	}
+    // Next, get Z scale.
+    scl.z = row[2].length();
+    if (! checkForZeroScaleInRow(scl.z, row[2], exc)) {
+        return false;
+    }
 
-	// Normalize 3rd row and correct the XZ and YZ shear factors for Z scaling.
-	row[2] /= scl.z;
-	shr[1] /= scl.z;
-	shr[2] /= scl.z;
+    // Normalize 3rd row and correct the XZ and YZ shear factors for Z scaling.
+    row[2] /= scl.z;
+    shr[1] /= scl.z;
+    shr[2] /= scl.z;
 
-	// At this point, the upper 3x3 matrix in mat is orthonormal.
-	// Check for a coordinate system flip. If the determinant
-	// is less than zero, then negate the matrix and the scaling factors.
-	if (row[0].dot (row[1].cross (row[2])) < 0)
-		for (int  i = 0; i < 3; i++) {
-			scl[i] *= -1;
-			row[i] *= -1;
-		}
+    // At this point, the upper 3x3 matrix in mat is orthonormal.
+    // Check for a coordinate system flip. If the determinant
+    // is less than zero, then negate the matrix and the scaling factors.
+    if (row[0].dot(row[1].cross(row[2])) < 0)
+        for (int  i = 0; i < 3; i++) {
+            scl[i] *= -1;
+            row[i] *= -1;
+        }
 
-	// Copy over the orthonormal rows into the returned matrix.
-	// The upper 3x3 matrix in mat is now a rotation matrix.
-	for (int i = 0; i < 3; i++) {
-		mat[i][0] = row[i][0];
-		mat[i][1] = row[i][1];
-		mat[i][2] = row[i][2];
-	}
+    // Copy over the orthonormal rows into the returned matrix.
+    // The upper 3x3 matrix in mat is now a rotation matrix.
+    for (int i = 0; i < 3; i++) {
+        mat[i][0] = row[i][0];
+        mat[i][1] = row[i][1];
+        mat[i][2] = row[i][2];
+    }
 
-	// Correct the scaling factors for the normalization step that we
-	// performed above; shear and rotation are not affected by the
-	// normalization.
-	scl *= maxVal;
+    // Correct the scaling factors for the normalization step that we
+    // performed above; shear and rotation are not affected by the
+    // normalization.
+    scl *= maxVal;
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 void
-extractEulerXYZ (const Matrix44<T> &mat, Vec3<T> &rot) {
-	//
-	// Normalize the local x, y and z axes to remove scaling.
-	//
+extractEulerXYZ(const Matrix44<T> &mat, Vec3<T> &rot) {
+    //
+    // Normalize the local x, y and z axes to remove scaling.
+    //
 
-	Vec3<T> i (mat[0][0], mat[0][1], mat[0][2]);
-	Vec3<T> j (mat[1][0], mat[1][1], mat[1][2]);
-	Vec3<T> k (mat[2][0], mat[2][1], mat[2][2]);
+    Vec3<T> i(mat[0][0], mat[0][1], mat[0][2]);
+    Vec3<T> j(mat[1][0], mat[1][1], mat[1][2]);
+    Vec3<T> k(mat[2][0], mat[2][1], mat[2][2]);
 
-	i.normalize();
-	j.normalize();
-	k.normalize();
+    i.normalize();
+    j.normalize();
+    k.normalize();
 
-	Matrix44<T> M (i[0], i[1], i[2], 0,
-				   j[0], j[1], j[2], 0,
-				   k[0], k[1], k[2], 0,
-				   0,    0,    0,    1);
+    Matrix44<T> M(i[0], i[1], i[2], 0,
+                  j[0], j[1], j[2], 0,
+                  k[0], k[1], k[2], 0,
+                  0,    0,    0,    1);
 
-	//
-	// Extract the first angle, rot.x.
-	//
+    //
+    // Extract the first angle, rot.x.
+    //
 
-	rot.x = Math<T>::atan2 (M[1][2], M[2][2]);
+    rot.x = Math<T>::atan2(M[1][2], M[2][2]);
 
-	//
-	// Remove the rot.x rotation from M, so that the remaining
-	// rotation, N, is only around two axes, and gimbal lock
-	// cannot occur.
-	//
+    //
+    // Remove the rot.x rotation from M, so that the remaining
+    // rotation, N, is only around two axes, and gimbal lock
+    // cannot occur.
+    //
 
-	Matrix44<T> N;
-	N.rotate (Vec3<T> (-rot.x, 0, 0));
-	N = N * M;
+    Matrix44<T> N;
+    N.rotate(Vec3<T> (-rot.x, 0, 0));
+    N = N * M;
 
-	//
-	// Extract the other two angles, rot.y and rot.z, from N.
-	//
+    //
+    // Extract the other two angles, rot.y and rot.z, from N.
+    //
 
-	T cy = Math<T>::sqrt (N[0][0] * N[0][0] + N[0][1] * N[0][1]);
-	rot.y = Math<T>::atan2 (-N[0][2], cy);
-	rot.z = Math<T>::atan2 (-N[1][0], N[1][1]);
+    T cy = Math<T>::sqrt(N[0][0] * N[0][0] + N[0][1] * N[0][1]);
+    rot.y = Math<T>::atan2(-N[0][2], cy);
+    rot.z = Math<T>::atan2(-N[1][0], N[1][1]);
 }
 
 
 template <class T>
 void
-extractEulerZYX (const Matrix44<T> &mat, Vec3<T> &rot) {
-	//
-	// Normalize the local x, y and z axes to remove scaling.
-	//
+extractEulerZYX(const Matrix44<T> &mat, Vec3<T> &rot) {
+    //
+    // Normalize the local x, y and z axes to remove scaling.
+    //
 
-	Vec3<T> i (mat[0][0], mat[0][1], mat[0][2]);
-	Vec3<T> j (mat[1][0], mat[1][1], mat[1][2]);
-	Vec3<T> k (mat[2][0], mat[2][1], mat[2][2]);
+    Vec3<T> i(mat[0][0], mat[0][1], mat[0][2]);
+    Vec3<T> j(mat[1][0], mat[1][1], mat[1][2]);
+    Vec3<T> k(mat[2][0], mat[2][1], mat[2][2]);
 
-	i.normalize();
-	j.normalize();
-	k.normalize();
+    i.normalize();
+    j.normalize();
+    k.normalize();
 
-	Matrix44<T> M (i[0], i[1], i[2], 0,
-				   j[0], j[1], j[2], 0,
-				   k[0], k[1], k[2], 0,
-				   0,    0,    0,    1);
+    Matrix44<T> M(i[0], i[1], i[2], 0,
+                  j[0], j[1], j[2], 0,
+                  k[0], k[1], k[2], 0,
+                  0,    0,    0,    1);
 
-	//
-	// Extract the first angle, rot.x.
-	//
+    //
+    // Extract the first angle, rot.x.
+    //
 
-	rot.x = -Math<T>::atan2 (M[1][0], M[0][0]);
+    rot.x = -Math<T>::atan2(M[1][0], M[0][0]);
 
-	//
-	// Remove the x rotation from M, so that the remaining
-	// rotation, N, is only around two axes, and gimbal lock
-	// cannot occur.
-	//
+    //
+    // Remove the x rotation from M, so that the remaining
+    // rotation, N, is only around two axes, and gimbal lock
+    // cannot occur.
+    //
 
-	Matrix44<T> N;
-	N.rotate (Vec3<T> (0, 0, -rot.x));
-	N = N * M;
+    Matrix44<T> N;
+    N.rotate(Vec3<T> (0, 0, -rot.x));
+    N = N * M;
 
-	//
-	// Extract the other two angles, rot.y and rot.z, from N.
-	//
+    //
+    // Extract the other two angles, rot.y and rot.z, from N.
+    //
 
-	T cy = Math<T>::sqrt (N[2][2] * N[2][2] + N[2][1] * N[2][1]);
-	rot.y = -Math<T>::atan2 (-N[2][0], cy);
-	rot.z = -Math<T>::atan2 (-N[1][2], N[1][1]);
+    T cy = Math<T>::sqrt(N[2][2] * N[2][2] + N[2][1] * N[2][1]);
+    rot.y = -Math<T>::atan2(-N[2][0], cy);
+    rot.z = -Math<T>::atan2(-N[1][2], N[1][1]);
 }
 
 
 template <class T>
 Quat<T>
-extractQuat (const Matrix44<T> &mat) {
-	Matrix44<T> rot;
+extractQuat(const Matrix44<T> &mat) {
+    Matrix44<T> rot;
 
-	T        tr, s;
-	T         q[4];
-	int    i, j, k;
-	Quat<T>   quat;
+    T        tr, s;
+    T         q[4];
+    int    i, j, k;
+    Quat<T>   quat;
 
-	int nxt[3] = {1, 2, 0};
-	tr = mat[0][0] + mat[1][1] + mat[2][2];
+    int nxt[3] = {1, 2, 0};
+    tr = mat[0][0] + mat[1][1] + mat[2][2];
 
-	// check the diagonal
-	if (tr > 0.0) {
-		s = Math<T>::sqrt (tr + 1.0);
-		quat.r = s / 2.0;
-		s = 0.5 / s;
+    // check the diagonal
+    if (tr > 0.0) {
+        s = Math<T>::sqrt(tr + 1.0);
+        quat.r = s / 2.0;
+        s = 0.5 / s;
 
-		quat.v.x = (mat[1][2] - mat[2][1]) * s;
-		quat.v.y = (mat[2][0] - mat[0][2]) * s;
-		quat.v.z = (mat[0][1] - mat[1][0]) * s;
-	} else {
-		// diagonal is negative
-		i = 0;
-		if (mat[1][1] > mat[0][0]) {
-			i = 1;
-		}
-		if (mat[2][2] > mat[i][i]) {
-			i = 2;
-		}
+        quat.v.x = (mat[1][2] - mat[2][1]) * s;
+        quat.v.y = (mat[2][0] - mat[0][2]) * s;
+        quat.v.z = (mat[0][1] - mat[1][0]) * s;
+    } else {
+        // diagonal is negative
+        i = 0;
+        if (mat[1][1] > mat[0][0]) {
+            i = 1;
+        }
+        if (mat[2][2] > mat[i][i]) {
+            i = 2;
+        }
 
-		j = nxt[i];
-		k = nxt[j];
-		s = Math<T>::sqrt ((mat[i][i] - (mat[j][j] + mat[k][k])) + 1.0);
+        j = nxt[i];
+        k = nxt[j];
+        s = Math<T>::sqrt((mat[i][i] - (mat[j][j] + mat[k][k])) + 1.0);
 
-		q[i] = s * 0.5;
-		if (s != 0.0) {
-			s = 0.5 / s;
-		}
+        q[i] = s * 0.5;
+        if (s != 0.0) {
+            s = 0.5 / s;
+        }
 
-		q[3] = (mat[j][k] - mat[k][j]) * s;
-		q[j] = (mat[i][j] + mat[j][i]) * s;
-		q[k] = (mat[i][k] + mat[k][i]) * s;
+        q[3] = (mat[j][k] - mat[k][j]) * s;
+        q[j] = (mat[i][j] + mat[j][i]) * s;
+        q[k] = (mat[i][k] + mat[k][i]) * s;
 
-		quat.v.x = q[0];
-		quat.v.y = q[1];
-		quat.v.z = q[2];
-		quat.r = q[3];
-	}
+        quat.v.x = q[0];
+        quat.v.y = q[1];
+        quat.v.z = q[2];
+        quat.r = q[3];
+    }
 
-	return quat;
+    return quat;
 }
 
 template <class T>
 bool
-extractSHRT (const Matrix44<T> &mat,
-			 Vec3<T> &s,
-			 Vec3<T> &h,
-			 Vec3<T> &r,
-			 Vec3<T> &t,
-			 bool exc /* = true */ ,
-			 typename Euler<T>::Order rOrder /* = Euler<T>::XYZ */ ) {
-	Matrix44<T> rot;
+extractSHRT(const Matrix44<T> &mat,
+            Vec3<T> &s,
+            Vec3<T> &h,
+            Vec3<T> &r,
+            Vec3<T> &t,
+            bool exc /* = true */ ,
+            typename Euler<T>::Order rOrder /* = Euler<T>::XYZ */) {
+    Matrix44<T> rot;
 
-	rot = mat;
-	if (! extractAndRemoveScalingAndShear (rot, s, h, exc)) {
-		return false;
-	}
+    rot = mat;
+    if (! extractAndRemoveScalingAndShear(rot, s, h, exc)) {
+        return false;
+    }
 
-	extractEulerXYZ (rot, r);
+    extractEulerXYZ(rot, r);
 
-	t.x = mat[3][0];
-	t.y = mat[3][1];
-	t.z = mat[3][2];
+    t.x = mat[3][0];
+    t.y = mat[3][1];
+    t.z = mat[3][2];
 
-	if (rOrder != Euler<T>::XYZ) {
-		Imath::Euler<T> eXYZ (r, Imath::Euler<T>::XYZ);
-		Imath::Euler<T> e (eXYZ, rOrder);
-		r = e.toXYZVector ();
-	}
+    if (rOrder != Euler<T>::XYZ) {
+        Imath::Euler<T> eXYZ(r, Imath::Euler<T>::XYZ);
+        Imath::Euler<T> e(eXYZ, rOrder);
+        r = e.toXYZVector();
+    }
 
-	return true;
+    return true;
 }
 
 template <class T>
 bool
-extractSHRT (const Matrix44<T> &mat,
-			 Vec3<T> &s,
-			 Vec3<T> &h,
-			 Vec3<T> &r,
-			 Vec3<T> &t,
-			 bool exc) {
-	return extractSHRT(mat, s, h, r, t, exc, Imath::Euler<T>::XYZ);
+extractSHRT(const Matrix44<T> &mat,
+            Vec3<T> &s,
+            Vec3<T> &h,
+            Vec3<T> &r,
+            Vec3<T> &t,
+            bool exc) {
+    return extractSHRT(mat, s, h, r, t, exc, Imath::Euler<T>::XYZ);
 }
 
 template <class T>
 bool
-extractSHRT (const Matrix44<T> &mat,
-			 Vec3<T> &s,
-			 Vec3<T> &h,
-			 Euler<T> &r,
-			 Vec3<T> &t,
-			 bool exc /* = true */) {
-	return extractSHRT (mat, s, h, r, t, exc, r.order ());
+extractSHRT(const Matrix44<T> &mat,
+            Vec3<T> &s,
+            Vec3<T> &h,
+            Euler<T> &r,
+            Vec3<T> &t,
+            bool exc /* = true */) {
+    return extractSHRT(mat, s, h, r, t, exc, r.order());
 }
 
 
 template <class T>
 bool
-checkForZeroScaleInRow (const T& scl,
-						const Vec3<T> &row,
-						bool exc /* = true */ ) {
-	for (int i = 0; i < 3; i++) {
-		if ((abs (scl) < 1 && abs (row[i]) >= limits<T>::max() * abs (scl))) {
-			if (exc)
-				throw Imath::ZeroScaleExc ("Cannot remove zero scaling "
-										   "from matrix.");
-			else {
-				return false;
-			}
-		}
-	}
+checkForZeroScaleInRow(const T& scl,
+                       const Vec3<T> &row,
+                       bool exc /* = true */) {
+    for (int i = 0; i < 3; i++) {
+        if ((abs(scl) < 1 && abs(row[i]) >= limits<T>::max() * abs(scl))) {
+            if (exc)
+                throw Imath::ZeroScaleExc("Cannot remove zero scaling "
+                                          "from matrix.");
+            else {
+                return false;
+            }
+        }
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 Matrix44<T>
-rotationMatrix (const Vec3<T> &from, const Vec3<T> &to) {
-	Quat<T> q;
-	q.setRotation(from, to);
-	return q.toMatrix44();
+rotationMatrix(const Vec3<T> &from, const Vec3<T> &to) {
+    Quat<T> q;
+    q.setRotation(from, to);
+    return q.toMatrix44();
 }
 
 
 template <class T>
 Matrix44<T>
-rotationMatrixWithUpDir (const Vec3<T> &fromDir,
-						 const Vec3<T> &toDir,
-						 const Vec3<T> &upDir) {
-	//
-	// The goal is to obtain a rotation matrix that takes
-	// "fromDir" to "toDir".  We do this in two steps and
-	// compose the resulting rotation matrices;
-	//    (a) rotate "fromDir" into the z-axis
-	//    (b) rotate the z-axis into "toDir"
-	//
+rotationMatrixWithUpDir(const Vec3<T> &fromDir,
+                        const Vec3<T> &toDir,
+                        const Vec3<T> &upDir) {
+    //
+    // The goal is to obtain a rotation matrix that takes
+    // "fromDir" to "toDir".  We do this in two steps and
+    // compose the resulting rotation matrices;
+    //    (a) rotate "fromDir" into the z-axis
+    //    (b) rotate the z-axis into "toDir"
+    //
 
-	// The from direction must be non-zero; but we allow zero to and up dirs.
-	if (fromDir.length () == 0) {
-		return Matrix44<T> ();
-	}
+    // The from direction must be non-zero; but we allow zero to and up dirs.
+    if (fromDir.length() == 0) {
+        return Matrix44<T> ();
+    }
 
-	else {
-		Matrix44<T> zAxis2FromDir  = alignZAxisWithTargetDir
-									 (fromDir, Vec3<T> (0, 1, 0));
+    else {
+        Matrix44<T> zAxis2FromDir  = alignZAxisWithTargetDir
+                                     (fromDir, Vec3<T> (0, 1, 0));
 
-		Matrix44<T> fromDir2zAxis  = zAxis2FromDir.transposed ();
+        Matrix44<T> fromDir2zAxis  = zAxis2FromDir.transposed();
 
-		Matrix44<T> zAxis2ToDir    = alignZAxisWithTargetDir (toDir, upDir);
+        Matrix44<T> zAxis2ToDir    = alignZAxisWithTargetDir(toDir, upDir);
 
-		return fromDir2zAxis * zAxis2ToDir;
-	}
+        return fromDir2zAxis * zAxis2ToDir;
+    }
 }
 
 
 template <class T>
 Matrix44<T>
-alignZAxisWithTargetDir (Vec3<T> targetDir, Vec3<T> upDir) {
-	//
-	// Ensure that the target direction is non-zero.
-	//
+alignZAxisWithTargetDir(Vec3<T> targetDir, Vec3<T> upDir) {
+    //
+    // Ensure that the target direction is non-zero.
+    //
 
-	if ( targetDir.length () == 0 ) {
-		targetDir = Vec3<T> (0, 0, 1);
-	}
+    if (targetDir.length() == 0) {
+        targetDir = Vec3<T> (0, 0, 1);
+    }
 
-	//
-	// Ensure that the up direction is non-zero.
-	//
+    //
+    // Ensure that the up direction is non-zero.
+    //
 
-	if ( upDir.length () == 0 ) {
-		upDir = Vec3<T> (0, 1, 0);
-	}
+    if (upDir.length() == 0) {
+        upDir = Vec3<T> (0, 1, 0);
+    }
 
-	//
-	// Check for degeneracies.  If the upDir and targetDir are parallel
-	// or opposite, then compute a new, arbitrary up direction that is
-	// not parallel or opposite to the targetDir.
-	//
+    //
+    // Check for degeneracies.  If the upDir and targetDir are parallel
+    // or opposite, then compute a new, arbitrary up direction that is
+    // not parallel or opposite to the targetDir.
+    //
 
-	if (upDir.cross (targetDir).length () == 0) {
-		upDir = targetDir.cross (Vec3<T> (1, 0, 0));
-		if (upDir.length() == 0) {
-			upDir = targetDir.cross(Vec3<T> (0, 0, 1));
-		}
-	}
+    if (upDir.cross(targetDir).length() == 0) {
+        upDir = targetDir.cross(Vec3<T> (1, 0, 0));
+        if (upDir.length() == 0) {
+            upDir = targetDir.cross(Vec3<T> (0, 0, 1));
+        }
+    }
 
-	//
-	// Compute the x-, y-, and z-axis vectors of the new coordinate system.
-	//
+    //
+    // Compute the x-, y-, and z-axis vectors of the new coordinate system.
+    //
 
-	Vec3<T> targetPerpDir = upDir.cross (targetDir);
-	Vec3<T> targetUpDir   = targetDir.cross (targetPerpDir);
+    Vec3<T> targetPerpDir = upDir.cross(targetDir);
+    Vec3<T> targetUpDir   = targetDir.cross(targetPerpDir);
 
-	//
-	// Rotate the x-axis into targetPerpDir (row 0),
-	// rotate the y-axis into targetUpDir   (row 1),
-	// rotate the z-axis into targetDir     (row 2).
-	//
+    //
+    // Rotate the x-axis into targetPerpDir (row 0),
+    // rotate the y-axis into targetUpDir   (row 1),
+    // rotate the z-axis into targetDir     (row 2).
+    //
 
-	Vec3<T> row[3];
-	row[0] = targetPerpDir.normalized ();
-	row[1] = targetUpDir  .normalized ();
-	row[2] = targetDir    .normalized ();
+    Vec3<T> row[3];
+    row[0] = targetPerpDir.normalized();
+    row[1] = targetUpDir  .normalized();
+    row[2] = targetDir    .normalized();
 
-	Matrix44<T> mat ( row[0][0],  row[0][1],  row[0][2],  0,
-					  row[1][0],  row[1][1],  row[1][2],  0,
-					  row[2][0],  row[2][1],  row[2][2],  0,
-					  0,          0,          0,          1 );
+    Matrix44<T> mat(row[0][0],  row[0][1],  row[0][2],  0,
+                    row[1][0],  row[1][1],  row[1][2],  0,
+                    row[2][0],  row[2][1],  row[2][2],  0,
+                    0,          0,          0,          1);
 
-	return mat;
+    return mat;
 }
 
 
@@ -850,253 +850,253 @@ alignZAxisWithTargetDir (Vec3<T> targetDir, Vec3<T> upDir) {
 
 template <class T>
 bool
-extractScaling (const Matrix33<T> &mat, Vec2<T> &scl, bool exc) {
-	T shr;
-	Matrix33<T> M (mat);
+extractScaling(const Matrix33<T> &mat, Vec2<T> &scl, bool exc) {
+    T shr;
+    Matrix33<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 Matrix33<T>
-sansScaling (const Matrix33<T> &mat, bool exc) {
-	Vec2<T> scl;
-	T shr;
-	T rot;
-	Vec2<T> tran;
+sansScaling(const Matrix33<T> &mat, bool exc) {
+    Vec2<T> scl;
+    T shr;
+    T rot;
+    Vec2<T> tran;
 
-	if (! extractSHRT (mat, scl, shr, rot, tran, exc)) {
-		return mat;
-	}
+    if (! extractSHRT(mat, scl, shr, rot, tran, exc)) {
+        return mat;
+    }
 
-	Matrix33<T> M;
+    Matrix33<T> M;
 
-	M.translate (tran);
-	M.rotate (rot);
-	M.shear (shr);
+    M.translate(tran);
+    M.rotate(rot);
+    M.shear(shr);
 
-	return M;
+    return M;
 }
 
 
 template <class T>
 bool
-removeScaling (Matrix33<T> &mat, bool exc) {
-	Vec2<T> scl;
-	T shr;
-	T rot;
-	Vec2<T> tran;
+removeScaling(Matrix33<T> &mat, bool exc) {
+    Vec2<T> scl;
+    T shr;
+    T rot;
+    Vec2<T> tran;
 
-	if (! extractSHRT (mat, scl, shr, rot, tran, exc)) {
-		return false;
-	}
+    if (! extractSHRT(mat, scl, shr, rot, tran, exc)) {
+        return false;
+    }
 
-	mat.makeIdentity ();
-	mat.translate (tran);
-	mat.rotate (rot);
-	mat.shear (shr);
+    mat.makeIdentity();
+    mat.translate(tran);
+    mat.rotate(rot);
+    mat.shear(shr);
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 bool
-extractScalingAndShear (const Matrix33<T> &mat, Vec2<T> &scl, T& shr, bool exc) {
-	Matrix33<T> M (mat);
+extractScalingAndShear(const Matrix33<T> &mat, Vec2<T> &scl, T& shr, bool exc) {
+    Matrix33<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 Matrix33<T>
-sansScalingAndShear (const Matrix33<T> &mat, bool exc) {
-	Vec2<T> scl;
-	T shr;
-	Matrix33<T> M (mat);
+sansScalingAndShear(const Matrix33<T> &mat, bool exc) {
+    Vec2<T> scl;
+    T shr;
+    Matrix33<T> M(mat);
 
-	if (! extractAndRemoveScalingAndShear (M, scl, shr, exc)) {
-		return mat;
-	}
+    if (! extractAndRemoveScalingAndShear(M, scl, shr, exc)) {
+        return mat;
+    }
 
-	return M;
+    return M;
 }
 
 
 template <class T>
 bool
-removeScalingAndShear (Matrix33<T> &mat, bool exc) {
-	Vec2<T> scl;
-	T shr;
+removeScalingAndShear(Matrix33<T> &mat, bool exc) {
+    Vec2<T> scl;
+    T shr;
 
-	if (! extractAndRemoveScalingAndShear (mat, scl, shr, exc)) {
-		return false;
-	}
+    if (! extractAndRemoveScalingAndShear(mat, scl, shr, exc)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 template <class T>
 bool
-extractAndRemoveScalingAndShear (Matrix33<T> &mat,
-								 Vec2<T> &scl, T& shr, bool exc) {
-	Vec2<T> row[2];
+extractAndRemoveScalingAndShear(Matrix33<T> &mat,
+                                Vec2<T> &scl, T& shr, bool exc) {
+    Vec2<T> row[2];
 
-	row[0] = Vec2<T> (mat[0][0], mat[0][1]);
-	row[1] = Vec2<T> (mat[1][0], mat[1][1]);
+    row[0] = Vec2<T> (mat[0][0], mat[0][1]);
+    row[1] = Vec2<T> (mat[1][0], mat[1][1]);
 
-	T maxVal = 0;
-	for (int i = 0; i < 2; i++)
-		for (int j = 0; j < 2; j++)
-			if (Imath::abs (row[i][j]) > maxVal) {
-				maxVal = Imath::abs (row[i][j]);
-			}
+    T maxVal = 0;
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            if (Imath::abs(row[i][j]) > maxVal) {
+                maxVal = Imath::abs(row[i][j]);
+            }
 
-	//
-	// We normalize the 2x2 matrix here.
-	// It was noticed that this can improve numerical stability significantly,
-	// especially when many of the upper 2x2 matrix's coefficients are very
-	// close to zero; we correct for this step at the end by multiplying the
-	// scaling factors by maxVal at the end (shear and rotation are not
-	// affected by the normalization).
+    //
+    // We normalize the 2x2 matrix here.
+    // It was noticed that this can improve numerical stability significantly,
+    // especially when many of the upper 2x2 matrix's coefficients are very
+    // close to zero; we correct for this step at the end by multiplying the
+    // scaling factors by maxVal at the end (shear and rotation are not
+    // affected by the normalization).
 
-	if (maxVal != 0) {
-		for (int i = 0; i < 2; i++)
-			if (! checkForZeroScaleInRow (maxVal, row[i], exc)) {
-				return false;
-			} else {
-				row[i] /= maxVal;
-			}
-	}
+    if (maxVal != 0) {
+        for (int i = 0; i < 2; i++)
+            if (! checkForZeroScaleInRow(maxVal, row[i], exc)) {
+                return false;
+            } else {
+                row[i] /= maxVal;
+            }
+    }
 
-	// Compute X scale factor.
-	scl.x = row[0].length ();
-	if (! checkForZeroScaleInRow (scl.x, row[0], exc)) {
-		return false;
-	}
+    // Compute X scale factor.
+    scl.x = row[0].length();
+    if (! checkForZeroScaleInRow(scl.x, row[0], exc)) {
+        return false;
+    }
 
-	// Normalize first row.
-	row[0] /= scl.x;
+    // Normalize first row.
+    row[0] /= scl.x;
 
-	// An XY shear factor will shear the X coord. as the Y coord. changes.
-	// There are 2 combinations (XY, YX), although we only extract the XY
-	// shear factor because we can effect the an YX shear factor by
-	// shearing in XY combined with rotations and scales.
-	//
-	// shear matrix <   1,  YX,  0,
-	//                 XY,   1,  0,
-	//                  0,   0,  1 >
+    // An XY shear factor will shear the X coord. as the Y coord. changes.
+    // There are 2 combinations (XY, YX), although we only extract the XY
+    // shear factor because we can effect the an YX shear factor by
+    // shearing in XY combined with rotations and scales.
+    //
+    // shear matrix <   1,  YX,  0,
+    //                 XY,   1,  0,
+    //                  0,   0,  1 >
 
-	// Compute XY shear factor and make 2nd row orthogonal to 1st.
-	shr     = row[0].dot (row[1]);
-	row[1] -= shr * row[0];
+    // Compute XY shear factor and make 2nd row orthogonal to 1st.
+    shr     = row[0].dot(row[1]);
+    row[1] -= shr * row[0];
 
-	// Now, compute Y scale.
-	scl.y = row[1].length ();
-	if (! checkForZeroScaleInRow (scl.y, row[1], exc)) {
-		return false;
-	}
+    // Now, compute Y scale.
+    scl.y = row[1].length();
+    if (! checkForZeroScaleInRow(scl.y, row[1], exc)) {
+        return false;
+    }
 
-	// Normalize 2nd row and correct the XY shear factor for Y scaling.
-	row[1] /= scl.y;
-	shr    /= scl.y;
+    // Normalize 2nd row and correct the XY shear factor for Y scaling.
+    row[1] /= scl.y;
+    shr    /= scl.y;
 
-	// At this point, the upper 2x2 matrix in mat is orthonormal.
-	// Check for a coordinate system flip. If the determinant
-	// is -1, then flip the rotation matrix and adjust the scale(Y)
-	// and shear(XY) factors to compensate.
-	if (row[0][0] * row[1][1] - row[0][1] * row[1][0] < 0) {
-		row[1][0] *= -1;
-		row[1][1] *= -1;
-		scl[1] *= -1;
-		shr *= -1;
-	}
+    // At this point, the upper 2x2 matrix in mat is orthonormal.
+    // Check for a coordinate system flip. If the determinant
+    // is -1, then flip the rotation matrix and adjust the scale(Y)
+    // and shear(XY) factors to compensate.
+    if (row[0][0] * row[1][1] - row[0][1] * row[1][0] < 0) {
+        row[1][0] *= -1;
+        row[1][1] *= -1;
+        scl[1] *= -1;
+        shr *= -1;
+    }
 
-	// Copy over the orthonormal rows into the returned matrix.
-	// The upper 2x2 matrix in mat is now a rotation matrix.
-	for (int i = 0; i < 2; i++) {
-		mat[i][0] = row[i][0];
-		mat[i][1] = row[i][1];
-	}
+    // Copy over the orthonormal rows into the returned matrix.
+    // The upper 2x2 matrix in mat is now a rotation matrix.
+    for (int i = 0; i < 2; i++) {
+        mat[i][0] = row[i][0];
+        mat[i][1] = row[i][1];
+    }
 
-	scl *= maxVal;
+    scl *= maxVal;
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 void
-extractEuler (const Matrix33<T> &mat, T& rot) {
-	//
-	// Normalize the local x and y axes to remove scaling.
-	//
+extractEuler(const Matrix33<T> &mat, T& rot) {
+    //
+    // Normalize the local x and y axes to remove scaling.
+    //
 
-	Vec2<T> i (mat[0][0], mat[0][1]);
-	Vec2<T> j (mat[1][0], mat[1][1]);
+    Vec2<T> i(mat[0][0], mat[0][1]);
+    Vec2<T> j(mat[1][0], mat[1][1]);
 
-	i.normalize();
-	j.normalize();
+    i.normalize();
+    j.normalize();
 
-	//
-	// Extract the angle, rot.
-	//
+    //
+    // Extract the angle, rot.
+    //
 
-	rot = - Math<T>::atan2 (j[0], i[0]);
+    rot = - Math<T>::atan2(j[0], i[0]);
 }
 
 
 template <class T>
 bool
-extractSHRT (const Matrix33<T> &mat,
-			 Vec2<T> &s,
-			 T&       h,
-			 T&       r,
-			 Vec2<T> &t,
-			 bool    exc) {
-	Matrix33<T> rot;
+extractSHRT(const Matrix33<T> &mat,
+            Vec2<T> &s,
+            T&       h,
+            T&       r,
+            Vec2<T> &t,
+            bool    exc) {
+    Matrix33<T> rot;
 
-	rot = mat;
-	if (! extractAndRemoveScalingAndShear (rot, s, h, exc)) {
-		return false;
-	}
+    rot = mat;
+    if (! extractAndRemoveScalingAndShear(rot, s, h, exc)) {
+        return false;
+    }
 
-	extractEuler (rot, r);
+    extractEuler(rot, r);
 
-	t.x = mat[2][0];
-	t.y = mat[2][1];
+    t.x = mat[2][0];
+    t.y = mat[2][1];
 
-	return true;
+    return true;
 }
 
 
 template <class T>
 bool
-checkForZeroScaleInRow (const T& scl,
-						const Vec2<T> &row,
-						bool exc /* = true */ ) {
-	for (int i = 0; i < 2; i++) {
-		if ((abs (scl) < 1 && abs (row[i]) >= limits<T>::max() * abs (scl))) {
-			if (exc)
-				throw Imath::ZeroScaleExc ("Cannot remove zero scaling "
-										   "from matrix.");
-			else {
-				return false;
-			}
-		}
-	}
+checkForZeroScaleInRow(const T& scl,
+                       const Vec2<T> &row,
+                       bool exc /* = true */) {
+    for (int i = 0; i < 2; i++) {
+        if ((abs(scl) < 1 && abs(row[i]) >= limits<T>::max() * abs(scl))) {
+            if (exc)
+                throw Imath::ZeroScaleExc("Cannot remove zero scaling "
+                                          "from matrix.");
+            else {
+                return false;
+            }
+        }
+    }
 
-	return true;
+    return true;
 }
 
 

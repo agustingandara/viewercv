@@ -26,8 +26,8 @@
 
 /* IEEE 80 bits extended float */
 typedef struct AVExtFloat  {
-	uint8_t exponent[2];
-	uint8_t mantissa[8];
+    uint8_t exponent[2];
+    uint8_t mantissa[8];
 } AVExtFloat;
 
 double av_int2dbl(int64_t v) av_const;

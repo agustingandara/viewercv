@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
     int* numclassifiers = new int[cascade->count];
     numclassifiers[0] = cascade->stage_classifier[0].count;
     for (i = 1; i < cascade->count; i++) {
-        numclassifiers[i] = numclassifiers[i - 1] + cascade->stage_classifier[i].count;
+        numclassifiers[i] = numclassifiers[i-1] + cascade->stage_classifier[i].count;
     }
 
     storage = cvCreateMemStorage();
@@ -306,8 +306,8 @@ int main(int argc, char* argv[]) {
 
         /* print ROC to stdout */
         for (i = rocsize - 1; i > 0; i--) {
-            pos[i - 1] += pos[i];
-            neg[i - 1] += neg[i];
+            pos[i-1] += pos[i];
+            neg[i-1] += neg[i];
         }
         fprintf(stderr, "%d\n", nos);
         for (i = 0; i < rocsize; i++) {

@@ -47,7 +47,7 @@ using namespace cv;
 template<typename T> int icvCompressPoints(T* ptr, const uchar* mask, int mstep, int count) {
     int i, j;
     for (i = j = 0; i < count; i++)
-        if (mask[i * mstep]) {
+        if (mask[i*mstep]) {
             if (i > j) {
                 ptr[j] = ptr[i];
             }
@@ -188,7 +188,7 @@ bool CvHomographyEstimator::refine(const CvMat* m1, const CvMat* m2, CvMat* mode
 
                 for (j = 0; j < 8; j++) {
                     for (k = j; k < 8; k++) {
-                        _JtJ->data.db[j * 8 + k] += J[0][j] * J[0][k] + J[1][j] * J[1][k];
+                        _JtJ->data.db[j*8+k] += J[0][j] * J[0][k] + J[1][j] * J[1][k];
                     }
                     _JtErr->data.db[j] += J[0][j] * err[0] + J[1][j] * err[1];
                 }
@@ -307,7 +307,7 @@ int CvFMEstimator::runKernel(const CvMat* m1, const CvMat* m2, CvMat* model) {
 }
 
 int CvFMEstimator::run7Point(const CvMat* _m1, const CvMat* _m2, CvMat* _fmatrix) {
-    double a[7 * 9], w[7], v[9 * 9], c[4], r[3];
+    double a[7*9], w[7], v[9*9], c[4], r[3];
     double* f1, *f2;
     double t0, t1, t2;
     CvMat A = cvMat(7, 9, CV_64F, a);
@@ -326,15 +326,15 @@ int CvFMEstimator::run7Point(const CvMat* _m1, const CvMat* _m2, CvMat* _fmatrix
         double x0 = m1[i].x, y0 = m1[i].y;
         double x1 = m2[i].x, y1 = m2[i].y;
 
-        a[i * 9 + 0] = x1 * x0;
-        a[i * 9 + 1] = x1 * y0;
-        a[i * 9 + 2] = x1;
-        a[i * 9 + 3] = y1 * x0;
-        a[i * 9 + 4] = y1 * y0;
-        a[i * 9 + 5] = y1;
-        a[i * 9 + 6] = x0;
-        a[i * 9 + 7] = y0;
-        a[i * 9 + 8] = 1;
+        a[i*9+0] = x1 * x0;
+        a[i*9+1] = x1 * y0;
+        a[i*9+2] = x1;
+        a[i*9+3] = y1 * x0;
+        a[i*9+4] = y1 * y0;
+        a[i*9+5] = y1;
+        a[i*9+6] = x0;
+        a[i*9+7] = y0;
+        a[i*9+8] = 1;
     }
 
     // A*(f11 f12 ... f33)' = 0 is singular (7 equations for 9 variables), so
@@ -414,7 +414,7 @@ int CvFMEstimator::run7Point(const CvMat* _m1, const CvMat* _m2, CvMat* _fmatrix
 
 
 int CvFMEstimator::run8Point(const CvMat* _m1, const CvMat* _m2, CvMat* _fmatrix) {
-    double a[9 * 9], w[9], v[9 * 9];
+    double a[9*9], w[9], v[9*9];
     CvMat W = cvMat(1, 9, CV_64F, w);
     CvMat V = cvMat(9, 9, CV_64F, v);
     CvMat A = cvMat(9, 9, CV_64F, a);
@@ -475,7 +475,7 @@ int CvFMEstimator::run8Point(const CvMat* _m1, const CvMat* _m2, CvMat* _fmatrix
         double r[9] = { x1* x0, x1* y0, x1, y1* x0, y1* y0, y1, x0, y0, 1 };
         for (j = 0; j < 9; j++)
             for (k = 0; k < 9; k++) {
-                a[j * 9 + k] += r[j] * r[k];
+                a[j*9+k] += r[j] * r[k];
             }
     }
 
@@ -571,7 +571,7 @@ CV_IMPL int cvFindFundamentalMat(const CvMat* points1, const CvMat* points2,
     int result = 0;
     Ptr<CvMat> m1, m2, tempMask;
 
-    double F[3 * 9];
+    double F[3*9];
     CvMat _F3x3 = cvMat(3, 3, CV_64FC1, F), _F9x3 = cvMat(9, 3, CV_64FC1, F);
     int count;
 

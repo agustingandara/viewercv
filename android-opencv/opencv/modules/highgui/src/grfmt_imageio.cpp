@@ -272,13 +272,13 @@ bool  ImageIOEncoder::write(const Mat& img, const vector<int>& params) {
     }
 
     context = CGBitmapContextCreate(bitmapData,
-                                    width,
-                                    height,
-                                    8,
-                                    bpp * width,
-                                    colorSpace,
-                                    (bpp == 1) ? kCGImageAlphaNone :
-                                    kCGImageAlphaNoneSkipLast);
+    width,
+    height,
+    8,
+    bpp * width,
+    colorSpace,
+    (bpp == 1) ? kCGImageAlphaNone :
+    kCGImageAlphaNoneSkipLast);
     CGColorSpaceRelease(colorSpace);
     if (!context) {
         free(bitmapData);
@@ -321,7 +321,7 @@ bool  ImageIOEncoder::write(const Mat& img, const vector<int>& params) {
 
     // Write the imageRef to a file based on the UTI
     CFURLRef imageURLRef = CFURLCreateFromFileSystemRepresentation(NULL,
-                           (const UInt8*)m_filename.c_str(), m_filename.size(), false);
+    (const UInt8*)m_filename.c_str(), m_filename.size(), false);
     if (!imageURLRef) {
         CGImageRelease(imageRef);
         free(bitmapData);
@@ -329,9 +329,9 @@ bool  ImageIOEncoder::write(const Mat& img, const vector<int>& params) {
     }
 
     CGImageDestinationRef destRef = CGImageDestinationCreateWithURL(imageURLRef,
-                                    imageUTI,
-                                    1,
-                                    NULL);
+    imageUTI,
+    1,
+    NULL);
     CFRelease(imageURLRef);
     if (!destRef) {
         CGImageRelease(imageRef);

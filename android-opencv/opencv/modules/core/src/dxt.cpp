@@ -148,7 +148,7 @@ DFTFactorize(int n, int* factors) {
 
     f = (factors[0] & 1) == 0;
     for (i = f; i < (nf + f) / 2; i++) {
-        CV_SWAP(factors[i], factors[nf - i - 1 + f], j);
+        CV_SWAP(factors[i], factors[nf-i-1+f], j);
     }
 
     return nf;
@@ -165,7 +165,7 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
 
     if (n0 <= 5) {
         itab[0] = 0;
-        itab[n0 - 1] = n0 - 1;
+        itab[n0-1] = n0 - 1;
 
         if (n0 != 4) {
             for (i = 1; i < n0 - 1; i++) {
@@ -193,28 +193,28 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
         digits[nf] = 0;
         for (i = 0; i < nf; i++) {
             digits[i] = 0;
-            radix[nf - i - 1] = radix[nf - i] * factors[nf - i - 1];
+            radix[nf-i-1] = radix[nf-i] * factors[nf-i-1];
         }
 
-        if (inv_itab && factors[0] != factors[nf - 1]) {
+        if (inv_itab && factors[0] != factors[nf-1]) {
             itab = (int*)_wave;
         }
 
         if ((n & 1) == 0) {
             int a = radix[1], na2 = n * a >> 1, na4 = na2 >> 1;
             for (m = 0; (unsigned)(1 << m) < (unsigned)n; m++)
-                { ; }
+                ;
             if (n <= 2) {
                 itab[0] = 0;
                 itab[1] = na2;
             } else if (n <= 256) {
                 int shift = 10 - m;
                 for (i = 0; i <= n - 4; i += 4) {
-                    j = (bitrevTab[i >> 2] >> shift) * a;
+                    j = (bitrevTab[i>>2] >> shift) * a;
                     itab[i] = j;
-                    itab[i + 1] = j + na2;
-                    itab[i + 2] = j + na4;
-                    itab[i + 3] = j + na2 + na4;
+                    itab[i+1] = j + na2;
+                    itab[i+2] = j + na4;
+                    itab[i+3] = j + na2 + na4;
                 }
             } else {
                 int shift = 34 - m;
@@ -222,9 +222,9 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
                     int i4 = i >> 2;
                     j = BitRev(i4, shift) * a;
                     itab[i] = j;
-                    itab[i + 1] = j + na2;
-                    itab[i + 2] = j + na4;
-                    itab[i + 3] = j + na2 + na4;
+                    itab[i+1] = j + na2;
+                    itab[i+2] = j + na4;
+                    itab[i+3] = j + na2 + na4;
                 }
             }
 
@@ -233,7 +233,7 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
             if (nf >= 2) {
                 for (i = n, j = radix[2]; i < n0;) {
                     for (k = 0; k < n; k++) {
-                        itab[i + k] = itab[k] + j;
+                        itab[i+k] = itab[k] + j;
                     }
                     if ((i += n) >= n0) {
                         break;
@@ -241,7 +241,7 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
                     j += radix[2];
                     for (k = 1; ++digits[k] >= factors[k]; k++) {
                         digits[k] = 0;
-                        j += radix[k + 2] - radix[k];
+                        j += radix[k+2] - radix[k];
                     }
                 }
             }
@@ -254,7 +254,7 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
                 j += radix[1];
                 for (k = 0; ++digits[k] >= factors[k]; k++) {
                     digits[k] = 0;
-                    j += radix[k + 2] - radix[k];
+                    j += radix[k+2] - radix[k];
                 }
             }
         }
@@ -263,7 +263,7 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
             itab0[0] = 0;
             for (i = n0 & 1; i < n0; i += 2) {
                 int k0 = itab[i];
-                int k1 = itab[i + 1];
+                int k1 = itab[i+1];
                 itab0[k0] = i;
                 itab0[k1] = i + 1;
             }
@@ -293,8 +293,8 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
 
         for (i = 1; i < n; i++) {
             wave[i] = w;
-            wave[n0 - i].re = w.re;
-            wave[n0 - i].im = -w.im;
+            wave[n0-i].re = w.re;
+            wave[n0-i].im = -w.im;
 
             t = w.re * w1.re - w.im * w1.im;
             w.im = w.re * w1.im + w.im * w1.re;
@@ -315,8 +315,8 @@ DFTInit(int n0, int nf, int* factors, int* itab, int elem_size, void* _wave, int
         for (i = 1; i < n; i++) {
             wave[i].re = (float)w.re;
             wave[i].im = (float)w.im;
-            wave[n0 - i].re = (float)w.re;
-            wave[n0 - i].im = (float) - w.im;
+            wave[n0-i].re = (float)w.re;
+            wave[n0-i].im = (float) - w.im;
 
             t = w.re * w1.re - w.im * w1.im;
             w.im = w.re * w1.im + w.im * w1.re;
@@ -373,9 +373,9 @@ template<> struct DFT_VecR4<float> {
                     v1 = v0 + nx * 2;
 
                     x13 = _mm_loadl_pi(x13, (const __m64*)&v0[nx]);
-                    w23 = _mm_loadl_pi(w23, (const __m64*)&wave[dw * 2]);
+                    w23 = _mm_loadl_pi(w23, (const __m64*)&wave[dw*2]);
                     x13 = _mm_loadh_pi(x13, (const __m64*)&v1[nx]); // x1, x3 = r1 i1 r3 i3
-                    w23 = _mm_loadh_pi(w23, (const __m64*)&wave[dw * 3]); // w2, w3 = wr2 wi2 wr3 wi3
+                    w23 = _mm_loadh_pi(w23, (const __m64*)&wave[dw*3]); // w2, w3 = wr2 wi2 wr3 wi3
 
                     t0 = _mm_mul_ps(_mm_moveldup_ps(x13), w23);
                     t1 = _mm_mul_ps(_mm_movehdup_ps(x13), _mm_shuffle_ps(w23, w23, _MM_SHUFFLE(2, 3, 0, 1)));
@@ -505,11 +505,11 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
             for (i = 0; i <= n - 2; i += 2, itab += 2 * tab_step) {
                 int k0 = itab[0], k1 = itab[tab_step];
                 assert((unsigned)k0 < (unsigned)n && (unsigned)k1 < (unsigned)n);
-                dst[i] = src[k0]; dst[i + 1] = src[k1];
+                dst[i] = src[k0]; dst[i+1] = src[k1];
             }
 
             if (i < n) {
-                dst[n - 1] = src[n - 1];
+                dst[n-1] = src[n-1];
             }
         } else {
             for (i = 0; i <= n - 2; i += 2, itab += 2 * tab_step) {
@@ -518,17 +518,17 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                 t.re = src[k0].re; t.im = -src[k0].im;
                 dst[i] = t;
                 t.re = src[k1].re; t.im = -src[k1].im;
-                dst[i + 1] = t;
+                dst[i+1] = t;
             }
 
             if (i < n) {
-                t.re = src[n - 1].re; t.im = -src[n - 1].im;
+                t.re = src[n-1].re; t.im = -src[n-1].im;
                 dst[i] = t;
             }
         }
     } else {
         if ((flags & DFT_NO_PERMUTE) == 0) {
-            CV_Assert(factors[0] == factors[nf - 1]);
+            CV_Assert(factors[0] == factors[nf-1]);
             if (nf == 1) {
                 if ((n & 3) == 0) {
                     int n2 = n / 2;
@@ -538,10 +538,10 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                         j = itab[0];
                         assert((unsigned)j < (unsigned)n2);
 
-                        CV_SWAP(dst[i + 1], dsth[j], t);
+                        CV_SWAP(dst[i+1], dsth[j], t);
                         if (j > i) {
                             CV_SWAP(dst[i], dst[j], t);
-                            CV_SWAP(dsth[i + 1], dsth[j + 1], t);
+                            CV_SWAP(dsth[i+1], dsth[j+1], t);
                         }
                     }
                 }
@@ -560,12 +560,12 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
         if (inv) {
             for (i = 0; i <= n - 2; i += 2) {
                 T t0 = -dst[i].im;
-                T t1 = -dst[i + 1].im;
-                dst[i].im = t0; dst[i + 1].im = t1;
+                T t1 = -dst[i+1].im;
+                dst[i].im = t0; dst[i+1].im = t1;
             }
 
             if (i < n) {
-                dst[n - 1].im = -dst[n - 1].im;
+                dst[n-1].im = -dst[n-1].im;
             }
         }
     }
@@ -612,12 +612,12 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                     v0 = dst + i + j;
                     v1 = v0 + nx * 2;
 
-                    r2 = v0[nx].re * wave[dw * 2].re - v0[nx].im * wave[dw * 2].im;
-                    i2 = v0[nx].re * wave[dw * 2].im + v0[nx].im * wave[dw * 2].re;
+                    r2 = v0[nx].re * wave[dw*2].re - v0[nx].im * wave[dw*2].im;
+                    i2 = v0[nx].re * wave[dw*2].im + v0[nx].im * wave[dw*2].re;
                     r0 = v1[0].re * wave[dw].im + v1[0].im * wave[dw].re;
                     i0 = v1[0].re * wave[dw].re - v1[0].im * wave[dw].im;
-                    r3 = v1[nx].re * wave[dw * 3].im + v1[nx].im * wave[dw * 3].re;
-                    i3 = v1[nx].re * wave[dw * 3].re - v1[nx].im * wave[dw * 3].im;
+                    r3 = v1[nx].re * wave[dw*3].im + v1[nx].im * wave[dw*3].re;
+                    i3 = v1[nx].re * wave[dw*3].re - v1[nx].im * wave[dw*3].im;
 
                     r1 = i0 + i3; i1 = r0 + r3;
                     r3 = r0 - r3; i3 = i3 - i0;
@@ -674,23 +674,23 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
             for (i = 0; i < n0; i += n) {
                 Complex<T>* v = dst + i;
 
-                T r1 = v[nx].re + v[nx * 2].re;
-                T i1 = v[nx].im + v[nx * 2].im;
+                T r1 = v[nx].re + v[nx*2].re;
+                T i1 = v[nx].im + v[nx*2].im;
                 T r0 = v[0].re;
                 T i0 = v[0].im;
-                T r2 = sin_120 * (v[nx].im - v[nx * 2].im);
-                T i2 = sin_120 * (v[nx * 2].re - v[nx].re);
+                T r2 = sin_120 * (v[nx].im - v[nx*2].im);
+                T i2 = sin_120 * (v[nx*2].re - v[nx].re);
                 v[0].re = r0 + r1; v[0].im = i0 + i1;
                 r0 -= (T)0.5 * r1; i0 -= (T)0.5 * i1;
                 v[nx].re = r0 + r2; v[nx].im = i0 + i2;
-                v[nx * 2].re = r0 - r2; v[nx * 2].im = i0 - i2;
+                v[nx*2].re = r0 - r2; v[nx*2].im = i0 - i2;
 
                 for (j = 1, dw = dw0; j < nx; j++, dw += dw0) {
                     v = dst + i + j;
                     r0 = v[nx].re * wave[dw].re - v[nx].im * wave[dw].im;
                     i0 = v[nx].re * wave[dw].im + v[nx].im * wave[dw].re;
-                    i2 = v[nx * 2].re * wave[dw * 2].re - v[nx * 2].im * wave[dw * 2].im;
-                    r2 = v[nx * 2].re * wave[dw * 2].im + v[nx * 2].im * wave[dw * 2].re;
+                    i2 = v[nx*2].re * wave[dw*2].re - v[nx*2].im * wave[dw*2].im;
+                    r2 = v[nx*2].re * wave[dw*2].im + v[nx*2].im * wave[dw*2].re;
                     r1 = r0 + i2; i1 = i0 + r2;
 
                     r2 = sin_120 * (i0 - r2); i2 = sin_120 * (i2 - r0);
@@ -698,7 +698,7 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                     v[0].re = r0 + r1; v[0].im = i0 + i1;
                     r0 -= (T)0.5 * r1; i0 -= (T)0.5 * i1;
                     v[nx].re = r0 + r2; v[nx].im = i0 + i2;
-                    v[nx * 2].re = r0 - r2; v[nx * 2].im = i0 - i2;
+                    v[nx*2].re = r0 - r2; v[nx*2].im = i0 - i2;
                 }
             }
         } else if (factor == 5) {
@@ -713,16 +713,16 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
 
                     r3 = v0[nx].re * wave[dw].re - v0[nx].im * wave[dw].im;
                     i3 = v0[nx].re * wave[dw].im + v0[nx].im * wave[dw].re;
-                    r2 = v2[0].re * wave[dw * 4].re - v2[0].im * wave[dw * 4].im;
-                    i2 = v2[0].re * wave[dw * 4].im + v2[0].im * wave[dw * 4].re;
+                    r2 = v2[0].re * wave[dw*4].re - v2[0].im * wave[dw*4].im;
+                    i2 = v2[0].re * wave[dw*4].im + v2[0].im * wave[dw*4].re;
 
                     r1 = r3 + r2; i1 = i3 + i2;
                     r3 -= r2; i3 -= i2;
 
-                    r4 = v1[nx].re * wave[dw * 3].re - v1[nx].im * wave[dw * 3].im;
-                    i4 = v1[nx].re * wave[dw * 3].im + v1[nx].im * wave[dw * 3].re;
-                    r0 = v1[0].re * wave[dw * 2].re - v1[0].im * wave[dw * 2].im;
-                    i0 = v1[0].re * wave[dw * 2].im + v1[0].im * wave[dw * 2].re;
+                    r4 = v1[nx].re * wave[dw*3].re - v1[nx].im * wave[dw*3].im;
+                    i4 = v1[nx].re * wave[dw*3].im + v1[nx].im * wave[dw*3].re;
+                    r0 = v1[0].re * wave[dw*2].re - v1[0].im * wave[dw*2].im;
+                    i0 = v1[0].re * wave[dw*2].im + v1[0].im * wave[dw*2].re;
 
                     r2 = r4 + r0; i2 = i4 + i0;
                     r4 -= r0; i4 -= i0;
@@ -767,14 +767,14 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
 
                     if (j == 0) {
                         for (p = 1, k = nx; p <= factor2; p++, k += nx) {
-                            T r0 = v[k].re + v[n - k].re;
-                            T i0 = v[k].im - v[n - k].im;
-                            T r1 = v[k].re - v[n - k].re;
-                            T i1 = v[k].im + v[n - k].im;
+                            T r0 = v[k].re + v[n-k].re;
+                            T i0 = v[k].im - v[n-k].im;
+                            T r1 = v[k].re - v[n-k].re;
+                            T i1 = v[k].im + v[n-k].im;
 
                             vn_0.re += r0; vn_0.im += i1;
-                            a[p - 1].re = r0; a[p - 1].im = i0;
-                            b[p - 1].re = r1; b[p - 1].im = i1;
+                            a[p-1].re = r0; a[p-1].im = i0;
+                            b[p-1].re = r1; b[p-1].im = i1;
                         }
                     } else {
                         const Complex<T>* wave_ = wave + dw * factor;
@@ -784,8 +784,8 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                             T r2 = v[k].re * wave[d].re - v[k].im * wave[d].im;
                             T i2 = v[k].re * wave[d].im + v[k].im * wave[d].re;
 
-                            T r1 = v[n - k].re * wave_[-d].re - v[n - k].im * wave_[-d].im;
-                            T i1 = v[n - k].re * wave_[-d].im + v[n - k].im * wave_[-d].re;
+                            T r1 = v[n-k].re * wave_[-d].re - v[n-k].im * wave_[-d].im;
+                            T i1 = v[n-k].re * wave_[-d].im + v[n-k].im * wave_[-d].re;
 
                             T r0 = r2 + r1;
                             T i0 = i2 - i1;
@@ -793,8 +793,8 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                             i1 = i2 + i1;
 
                             vn_0.re += r0; vn_0.im += i1;
-                            a[p - 1].re = r0; a[p - 1].im = i0;
-                            b[p - 1].re = r1; b[p - 1].im = i1;
+                            a[p-1].re = r0; a[p-1].im = i0;
+                            b[p-1].re = r1; b[p-1].im = i1;
                         }
                     }
 
@@ -818,7 +818,7 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
                         }
 
                         v[k] = s0;
-                        v[n - k] = s1;
+                        v[n-k] = s1;
                     }
                 }
             }
@@ -840,13 +840,13 @@ DFT(const Complex<T>* src, Complex<T>* dst, int n,
     } else if (inv) {
         for (i = 0; i <= n0 - 2; i += 2) {
             T t0 = -dst[i].im;
-            T t1 = -dst[i + 1].im;
+            T t1 = -dst[i+1].im;
             dst[i].im = t0;
-            dst[i + 1].im = t1;
+            dst[i+1].im = t1;
         }
 
         if (i < n0) {
-            dst[n0 - 1].im = -dst[n0 - 1].im;
+            dst[n0-1].im = -dst[n0-1].im;
         }
     }
 }
@@ -890,11 +890,11 @@ RealDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
         _dst[0].im = 0;
         for (j = 1; j < n; j += 2) {
             T t0 = src[itab[j]] * scale;
-            T t1 = src[itab[j + 1]] * scale;
+            T t1 = src[itab[j+1]] * scale;
             _dst[j].re = t0;
             _dst[j].im = 0;
-            _dst[j + 1].re = t1;
-            _dst[j + 1].im = 0;
+            _dst[j+1].re = t1;
+            _dst[j+1].im = 0;
         }
         DFT(_dst, _dst, n, nf, factors, itab, wave,
             tab_size, 0, buf, DFT_NO_PERMUTE, 1);
@@ -917,32 +917,32 @@ RealDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
         dst[1] = t * scale;
 
         t0 = dst[n2];
-        t = dst[n - 1];
-        dst[n - 1] = dst[1];
+        t = dst[n-1];
+        dst[n-1] = dst[1];
 
         for (j = 2, wave++; j < n2; j += 2, wave++) {
             /* calc odd */
-            h2_re = scale2 * (dst[j + 1] + t);
-            h2_im = scale2 * (dst[n - j] - dst[j]);
+            h2_re = scale2 * (dst[j+1] + t);
+            h2_im = scale2 * (dst[n-j] - dst[j]);
 
             /* calc even */
-            h1_re = scale2 * (dst[j] + dst[n - j]);
-            h1_im = scale2 * (dst[j + 1] - t);
+            h1_re = scale2 * (dst[j] + dst[n-j]);
+            h1_im = scale2 * (dst[j+1] - t);
 
             /* rotate */
             t = h2_re * wave->re - h2_im * wave->im;
             h2_im = h2_re * wave->im + h2_im * wave->re;
             h2_re = t;
-            t = dst[n - j - 1];
+            t = dst[n-j-1];
 
-            dst[j - 1] = h1_re + h2_re;
-            dst[n - j - 1] = h1_re - h2_re;
+            dst[j-1] = h1_re + h2_re;
+            dst[n-j-1] = h1_re - h2_re;
             dst[j] = h1_im + h2_im;
-            dst[n - j] = h2_im - h1_im;
+            dst[n-j] = h2_im - h1_im;
         }
 
         if (j <= n2) {
-            dst[n2 - 1] = t0 * scale;
+            dst[n2-1] = t0 * scale;
             dst[n2] = -t * scale;
         }
     }
@@ -1005,7 +1005,7 @@ CCSIDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
         _dst[0].re = src[0];
         _dst[0].im = 0;
         for (j = 1; j < n2; j++) {
-            int k0 = itab[j], k1 = itab[n - j];
+            int k0 = itab[j], k1 = itab[n-j];
             t0 = _src[j].re; t1 = _src[j].im;
             _dst[k0].re = t0; _dst[k0].im = -t1;
             _dst[k1].re = t0; _dst[k1].im = t1;
@@ -1015,35 +1015,35 @@ CCSIDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
             tab_size, 0, buf, DFT_NO_PERMUTE, 1.);
         dst[0] *= scale;
         for (j = 1; j < n; j += 2) {
-            t0 = dst[j * 2] * scale;
-            t1 = dst[j * 2 + 2] * scale;
+            t0 = dst[j*2] * scale;
+            t1 = dst[j*2+2] * scale;
             dst[j] = t0;
-            dst[j + 1] = t1;
+            dst[j+1] = t1;
         }
     } else {
         int inplace = src == dst;
         const Complex<T>* w = wave;
 
         t = src[1];
-        t0 = (src[0] + src[n - 1]);
-        t1 = (src[n - 1] - src[0]);
+        t0 = (src[0] + src[n-1]);
+        t1 = (src[n-1] - src[0]);
         dst[0] = t0;
         dst[1] = t1;
 
         for (j = 2, w++; j < n2; j += 2, w++) {
             T h1_re, h1_im, h2_re, h2_im;
 
-            h1_re = (t + src[n - j - 1]);
-            h1_im = (src[j] - src[n - j]);
+            h1_re = (t + src[n-j-1]);
+            h1_im = (src[j] - src[n-j]);
 
-            h2_re = (t - src[n - j - 1]);
-            h2_im = (src[j] + src[n - j]);
+            h2_re = (t - src[n-j-1]);
+            h2_im = (src[j] + src[n-j]);
 
             t = h2_re * w->re + h2_im * w->im;
             h2_im = h2_im * w->re - h2_re * w->im;
             h2_re = t;
 
-            t = src[j + 1];
+            t = src[j+1];
             t0 = h1_re - h2_im;
             t1 = -h1_im - h2_re;
             t2 = h1_re + h2_im;
@@ -1051,17 +1051,17 @@ CCSIDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
 
             if (inplace) {
                 dst[j] = t0;
-                dst[j + 1] = t1;
-                dst[n - j] = t2;
-                dst[n - j + 1] = t3;
+                dst[j+1] = t1;
+                dst[n-j] = t2;
+                dst[n-j+1] = t3;
             } else {
                 int j2 = j >> 1;
                 k = itab[j2];
                 dst[k] = t0;
-                dst[k + 1] = t1;
-                k = itab[n2 - j2];
+                dst[k+1] = t1;
+                k = itab[n2-j2];
                 dst[k] = t2;
-                dst[k + 1] = t3;
+                dst[k+1] = t3;
             }
         }
 
@@ -1071,11 +1071,11 @@ CCSIDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
 
             if (inplace) {
                 dst[n2] = t0;
-                dst[n2 + 1] = t1;
+                dst[n2+1] = t1;
             } else {
                 k = itab[n2];
-                dst[k * 2] = t0;
-                dst[k * 2 + 1] = t1;
+                dst[k*2] = t0;
+                dst[k*2+1] = t1;
             }
         }
 
@@ -1089,9 +1089,9 @@ CCSIDFT(const T* src, T* dst, int n, int nf, int* factors, const int* itab,
 
         for (j = 0; j < n; j += 2) {
             t0 = dst[j] * scale;
-            t1 = dst[j + 1] * (-scale);
+            t1 = dst[j+1] * (-scale);
             dst[j] = t0;
-            dst[j + 1] = t1;
+            dst[j+1] = t1;
         }
     }
 
@@ -1151,20 +1151,20 @@ CopyFrom2Columns(const uchar* _src, size_t src_step,
     } else if (elem_size == sizeof(int) * 2) {
         for (i = 0; i < len * 2; i += 2, src += src_step) {
             t0 = src[0]; t1 = src[1];
-            dst0[i] = t0; dst0[i + 1] = t1;
+            dst0[i] = t0; dst0[i+1] = t1;
             t0 = src[2]; t1 = src[3];
-            dst1[i] = t0; dst1[i + 1] = t1;
+            dst1[i] = t0; dst1[i+1] = t1;
         }
     } else if (elem_size == sizeof(int) * 4) {
         for (i = 0; i < len * 4; i += 4, src += src_step) {
             t0 = src[0]; t1 = src[1];
-            dst0[i] = t0; dst0[i + 1] = t1;
+            dst0[i] = t0; dst0[i+1] = t1;
             t0 = src[2]; t1 = src[3];
-            dst0[i + 2] = t0; dst0[i + 3] = t1;
+            dst0[i+2] = t0; dst0[i+3] = t1;
             t0 = src[4]; t1 = src[5];
-            dst1[i] = t0; dst1[i + 1] = t1;
+            dst1[i] = t0; dst1[i+1] = t1;
             t0 = src[6]; t1 = src[7];
-            dst1[i + 2] = t0; dst1[i + 3] = t1;
+            dst1[i+2] = t0; dst1[i+3] = t1;
         }
     }
 }
@@ -1187,20 +1187,20 @@ CopyTo2Columns(const uchar* _src0, const uchar* _src1,
         }
     } else if (elem_size == sizeof(int) * 2) {
         for (i = 0; i < len * 2; i += 2, dst += dst_step) {
-            t0 = src0[i]; t1 = src0[i + 1];
+            t0 = src0[i]; t1 = src0[i+1];
             dst[0] = t0; dst[1] = t1;
-            t0 = src1[i]; t1 = src1[i + 1];
+            t0 = src1[i]; t1 = src1[i+1];
             dst[2] = t0; dst[3] = t1;
         }
     } else if (elem_size == sizeof(int) * 4) {
         for (i = 0; i < len * 4; i += 4, dst += dst_step) {
-            t0 = src0[i]; t1 = src0[i + 1];
+            t0 = src0[i]; t1 = src0[i+1];
             dst[0] = t0; dst[1] = t1;
-            t0 = src0[i + 2]; t1 = src0[i + 3];
+            t0 = src0[i+2]; t1 = src0[i+3];
             dst[2] = t0; dst[3] = t1;
-            t0 = src1[i]; t1 = src1[i + 1];
+            t0 = src1[i]; t1 = src1[i+1];
             dst[4] = t0; dst[5] = t1;
-            t0 = src1[i + 2]; t1 = src1[i + 3];
+            t0 = src1[i+2]; t1 = src1[i+3];
             dst[6] = t0; dst[7] = t1;
         }
     }
@@ -1224,7 +1224,7 @@ ExpandCCS(uchar* _ptr, int len, int elem_size) {
             Complex<float> t;
             t.re = ptr[i].re;
             t.im = -ptr[i].im;
-            ptr[len - i] = t;
+            ptr[len-i] = t;
         }
     } else {
         Complex<double>* ptr = (Complex<double>*)_ptr;
@@ -1233,7 +1233,7 @@ ExpandCCS(uchar* _ptr, int len, int elem_size) {
             Complex<double> t;
             t.re = ptr[i].re;
             t.im = -ptr[i].im;
-            ptr[len - i] = t;
+            ptr[len-i] = t;
         }
     }
 }
@@ -1417,7 +1417,7 @@ void dft(const Mat& src0, Mat& dst, int flags, int nonzero_rows) {
                 nf = DFTFactorize(len, factors);
             }
 
-            inplace_transform = factors[0] == factors[nf - 1];
+            inplace_transform = factors[0] == factors[nf-1];
             sz += len * (complex_elem_size + sizeof(int));
             i = nf > 1 && (factors[0] & 1) == 0;
             if ((factors[i] & 1) != 0 && factors[i] > 5) {
@@ -1470,7 +1470,7 @@ void dft(const Mat& src0, Mat& dst, int flags, int nonzero_rows) {
                 dst_full_len += (len & 1) ? elem_size : complex_elem_size;
             }
 
-            dft_func = dft_tbl[(!real_transform ? 0 : !inv ? 1 : 2) + (depth == CV_64F) * 3];
+            dft_func = dft_tbl[(!real_transform ? 0 : !inv ? 1 : 2) + (depth == CV_64F)*3];
 
             if (count > 1 && !(flags & DFT_ROWS) && (!inv || !real_transform)) {
                 stage = 1;
@@ -1523,7 +1523,7 @@ void dft(const Mat& src0, Mat& dst, int flags, int nonzero_rows) {
                 ptr += len * complex_elem_size;
             }
 
-            dft_func = dft_tbl[(depth == CV_64F) * 3];
+            dft_func = dft_tbl[(depth == CV_64F)*3];
 
             if (real_transform && inv && src.cols > 1) {
                 stage = 0;
@@ -1693,23 +1693,23 @@ void mulSpectrums(const Mat& srcA, const Mat& srcB,
                 }
                 dataC[0] = dataA[0] * dataB[0];
                 if (rows % 2 == 0) {
-                    dataC[(rows - 1)*stepC] = dataA[(rows - 1) * stepA] * dataB[(rows - 1) * stepB];
+                    dataC[(rows-1)*stepC] = dataA[(rows-1)*stepA] * dataB[(rows-1)*stepB];
                 }
                 if (!conjB)
                     for (j = 1; j <= rows - 2; j += 2) {
-                        double re = (double)dataA[j * stepA] * dataB[j * stepB] -
-                                    (double)dataA[(j + 1) * stepA] * dataB[(j + 1) * stepB];
-                        double im = (double)dataA[j * stepA] * dataB[(j + 1) * stepB] +
-                                    (double)dataA[(j + 1) * stepA] * dataB[j * stepB];
-                        dataC[j * stepC] = (float)re; dataC[(j + 1)*stepC] = (float)im;
+                        double re = (double)dataA[j*stepA] * dataB[j*stepB] -
+                                    (double)dataA[(j+1)*stepA] * dataB[(j+1)*stepB];
+                        double im = (double)dataA[j*stepA] * dataB[(j+1)*stepB] +
+                                    (double)dataA[(j+1)*stepA] * dataB[j*stepB];
+                        dataC[j* stepC] = (float)re; dataC[(j+1)*stepC] = (float)im;
                     }
                 else
                     for (j = 1; j <= rows - 2; j += 2) {
-                        double re = (double)dataA[j * stepA] * dataB[j * stepB] +
-                                    (double)dataA[(j + 1) * stepA] * dataB[(j + 1) * stepB];
-                        double im = (double)dataA[(j + 1) * stepA] * dataB[j * stepB] -
-                                    (double)dataA[j * stepA] * dataB[(j + 1) * stepB];
-                        dataC[j * stepC] = (float)re; dataC[(j + 1)*stepC] = (float)im;
+                        double re = (double)dataA[j*stepA] * dataB[j*stepB] +
+                                    (double)dataA[(j+1)*stepA] * dataB[(j+1)*stepB];
+                        double im = (double)dataA[(j+1)*stepA] * dataB[j*stepB] -
+                                    (double)dataA[j*stepA] * dataB[(j+1)*stepB];
+                        dataC[j* stepC] = (float)re; dataC[(j+1)*stepC] = (float)im;
                     }
                 if (k == 1) {
                     dataA -= cols - 1, dataB -= cols - 1, dataC -= cols - 1;
@@ -1727,15 +1727,15 @@ void mulSpectrums(const Mat& srcA, const Mat& srcB,
 
             if (!conjB)
                 for (j = j0; j < j1; j += 2) {
-                    double re = (double)dataA[j] * dataB[j] - (double)dataA[j + 1] * dataB[j + 1];
-                    double im = (double)dataA[j + 1] * dataB[j] + (double)dataA[j] * dataB[j + 1];
-                    dataC[j] = (float)re; dataC[j + 1] = (float)im;
+                    double re = (double)dataA[j] * dataB[j] - (double)dataA[j+1] * dataB[j+1];
+                    double im = (double)dataA[j+1] * dataB[j] + (double)dataA[j] * dataB[j+1];
+                    dataC[j] = (float)re; dataC[j+1] = (float)im;
                 }
             else
                 for (j = j0; j < j1; j += 2) {
-                    double re = (double)dataA[j] * dataB[j] + (double)dataA[j + 1] * dataB[j + 1];
-                    double im = (double)dataA[j + 1] * dataB[j] - (double)dataA[j] * dataB[j + 1];
-                    dataC[j] = (float)re; dataC[j + 1] = (float)im;
+                    double re = (double)dataA[j] * dataB[j] + (double)dataA[j+1] * dataB[j+1];
+                    double im = (double)dataA[j+1] * dataB[j] - (double)dataA[j] * dataB[j+1];
+                    dataC[j] = (float)re; dataC[j+1] = (float)im;
                 }
         }
     } else {
@@ -1754,23 +1754,23 @@ void mulSpectrums(const Mat& srcA, const Mat& srcB,
                 }
                 dataC[0] = dataA[0] * dataB[0];
                 if (rows % 2 == 0) {
-                    dataC[(rows - 1)*stepC] = dataA[(rows - 1) * stepA] * dataB[(rows - 1) * stepB];
+                    dataC[(rows-1)*stepC] = dataA[(rows-1)*stepA] * dataB[(rows-1)*stepB];
                 }
                 if (!conjB)
                     for (j = 1; j <= rows - 2; j += 2) {
-                        double re = dataA[j * stepA] * dataB[j * stepB] -
-                                    dataA[(j + 1) * stepA] * dataB[(j + 1) * stepB];
-                        double im = dataA[j * stepA] * dataB[(j + 1) * stepB] +
-                                    dataA[(j + 1) * stepA] * dataB[j * stepB];
-                        dataC[j * stepC] = re; dataC[(j + 1)*stepC] = im;
+                        double re = dataA[j*stepA] * dataB[j*stepB] -
+                                    dataA[(j+1)*stepA] * dataB[(j+1)*stepB];
+                        double im = dataA[j*stepA] * dataB[(j+1)*stepB] +
+                                    dataA[(j+1)*stepA] * dataB[j*stepB];
+                        dataC[j* stepC] = re; dataC[(j+1)*stepC] = im;
                     }
                 else
                     for (j = 1; j <= rows - 2; j += 2) {
-                        double re = dataA[j * stepA] * dataB[j * stepB] +
-                                    dataA[(j + 1) * stepA] * dataB[(j + 1) * stepB];
-                        double im = dataA[(j + 1) * stepA] * dataB[j * stepB] -
-                                    dataA[j * stepA] * dataB[(j + 1) * stepB];
-                        dataC[j * stepC] = re; dataC[(j + 1)*stepC] = im;
+                        double re = dataA[j*stepA] * dataB[j*stepB] +
+                                    dataA[(j+1)*stepA] * dataB[(j+1)*stepB];
+                        double im = dataA[(j+1)*stepA] * dataB[j*stepB] -
+                                    dataA[j*stepA] * dataB[(j+1)*stepB];
+                        dataC[j* stepC] = re; dataC[(j+1)*stepC] = im;
                     }
                 if (k == 1) {
                     dataA -= cols - 1, dataB -= cols - 1, dataC -= cols - 1;
@@ -1788,15 +1788,15 @@ void mulSpectrums(const Mat& srcA, const Mat& srcB,
 
             if (!conjB)
                 for (j = j0; j < j1; j += 2) {
-                    double re = dataA[j] * dataB[j] - dataA[j + 1] * dataB[j + 1];
-                    double im = dataA[j + 1] * dataB[j] + dataA[j] * dataB[j + 1];
-                    dataC[j] = re; dataC[j + 1] = im;
+                    double re = dataA[j] * dataB[j] - dataA[j+1] * dataB[j+1];
+                    double im = dataA[j+1] * dataB[j] + dataA[j] * dataB[j+1];
+                    dataC[j] = re; dataC[j+1] = im;
                 }
             else
                 for (j = j0; j < j1; j += 2) {
-                    double re = dataA[j] * dataB[j] + dataA[j + 1] * dataB[j + 1];
-                    double im = dataA[j + 1] * dataB[j] - dataA[j] * dataB[j + 1];
-                    dataC[j] = re; dataC[j + 1] = im;
+                    double re = dataA[j] * dataB[j] + dataA[j+1] * dataB[j+1];
+                    double im = dataA[j+1] * dataB[j] - dataA[j] * dataB[j+1];
+                    dataC[j] = re; dataC[j+1] = im;
                 }
         }
     }
@@ -1828,7 +1828,7 @@ DCT(const T* src, int src_step, T* dft_src, T* dft_dst, T* dst, int dst_step,
 
     for (j = 0; j < n2; j++, src += src_step * 2) {
         dft_src[j] = src[0];
-        dft_src[n - j - 1] = src[src_step];
+        dft_src[n-j-1] = src[src_step];
     }
 
     RealDFT(dft_src, dft_dst, n, nf, factors,
@@ -1839,13 +1839,13 @@ DCT(const T* src, int src_step, T* dft_src, T* dft_dst, T* dst, int dst_step,
     dst += dst_step;
     for (j = 1, dct_wave++; j < n2; j++, dct_wave++,
             dst += dst_step, dst1 -= dst_step) {
-        T t0 = dct_wave->re * src[j * 2 - 1] - dct_wave->im * src[j * 2];
-        T t1 = -dct_wave->im * src[j * 2 - 1] - dct_wave->re * src[j * 2];
+        T t0 = dct_wave->re * src[j*2-1] - dct_wave->im * src[j*2];
+        T t1 = -dct_wave->im * src[j*2-1] - dct_wave->re * src[j*2];
         dst[0] = t0;
         dst1[0] = t1;
     }
 
-    dst[0] = src[n - 1] * dct_wave->re;
+    dst[0] = src[n-1] * dct_wave->re;
 }
 
 
@@ -1871,17 +1871,17 @@ IDCT(const T* src, int src_step, T* dft_src, T* dft_dst, T* dst, int dst_step,
             src += src_step, src1 -= src_step) {
         T t0 = dct_wave->re * src[0] - dct_wave->im * src1[0];
         T t1 = -dct_wave->im * src[0] - dct_wave->re * src1[0];
-        dft_src[j * 2 - 1] = t0;
-        dft_src[j * 2] = t1;
+        dft_src[j*2-1] = t0;
+        dft_src[j*2] = t1;
     }
 
-    dft_src[n - 1] = (T)(src[0] * 2 * dct_wave->re);
+    dft_src[n-1] = (T)(src[0] * 2 * dct_wave->re);
     CCSIDFT(dft_src, dft_dst, n, nf, factors, itab,
             dft_wave, n, spec, buf, 0, 1.0);
 
     for (j = 0; j < n2; j++, dst += dst_step * 2) {
         dst[0] = dft_dst[j];
-        dst[dst_step] = dft_dst[n - j - 1];
+        dst[dst_step] = dft_dst[n-j-1];
     }
 }
 
@@ -1914,10 +1914,10 @@ DCTInit(int n, int elem_size, void* _wave, int inv) {
     if ((n & (n - 1)) == 0) {
         int m;
         for (m = 0; (unsigned)(1 << m) < (unsigned)n; m++)
-            { ; }
+            ;
         scale = (!inv ? 2 : 1) * DctScale[m];
-        w1.re = DFTTab[m + 2][0];
-        w1.im = -DFTTab[m + 2][1];
+        w1.re = DFTTab[m+2][0];
+        w1.im = -DFTTab[m+2][1];
     } else {
         t = 1. / (2 * n);
         scale = (!inv ? 2 : 1) * std::sqrt(t);
@@ -2020,7 +2020,7 @@ void dct(const Mat& src0, Mat& dst, int flags) {
     CV_Assert(type == CV_32FC1 || type == CV_64FC1);
     dst.create(src.rows, src.cols, type);
 
-    DCTFunc dct_func = dct_tbl[inv + (depth == CV_64F) * 2];
+    DCTFunc dct_func = dct_tbl[inv + (depth == CV_64F)*2];
 
     if ((flags & DFT_ROWS) || src.rows == 1 ||
             (src.cols == 1 && (src.isContinuous() && dst.isContinuous()))) {
@@ -2089,7 +2089,7 @@ void dct(const Mat& src0, Mat& dst, int flags) {
                 sz += len * (complex_elem_size + sizeof(int)) + complex_elem_size;
 
                 nf = DFTFactorize(len, factors);
-                inplace_transform = factors[0] == factors[nf - 1];
+                inplace_transform = factors[0] == factors[nf-1];
 
                 i = nf > 1 && (factors[0] & 1) == 0;
                 if ((factors[i] & 1) != 0 && factors[i] > 5) {

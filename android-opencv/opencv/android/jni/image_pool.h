@@ -15,8 +15,8 @@ extern "C" {
 //		JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_);
 
 
-	JNIEXPORT void JNICALL Java_com_opencv_jni_opencvJNI_addYUVtoPool
-	(JNIEnv*, jclass, jlong, jobject, jbyteArray, jint, jint, jint, jboolean);
+    JNIEXPORT void JNICALL Java_com_opencv_jni_opencvJNI_addYUVtoPool
+    (JNIEnv*, jclass, jlong, jobject, jbyteArray, jint, jint, jint, jboolean);
 
 #ifdef __cplusplus
 }
@@ -26,36 +26,36 @@ extern "C" {
 
 
 class image_pool {
-	std::map<int, Ptr< Mat> > imagesmap;
-	std::map<int, Ptr< Mat> > yuvImagesMap;
-	//uchar * mbuffer;
-	//int length;
+    std::map<int, Ptr< Mat> > imagesmap;
+    std::map<int, Ptr< Mat> > yuvImagesMap;
+    //uchar * mbuffer;
+    //int length;
 public:
-	image_pool();
-	~image_pool();
-	cv::Ptr<Mat> getImage(int i);
+    image_pool();
+    ~image_pool();
+    cv::Ptr<Mat> getImage(int i);
 
-	void getGrey(int i, Mat& grey);
-	cv::Ptr<Mat> getYUV(int i);
+    void getGrey(int i, Mat& grey);
+    cv::Ptr<Mat> getYUV(int i);
 
-	int getCount() {
-		return imagesmap.size();
-	}
+    int getCount() {
+        return imagesmap.size();
+    }
 
-	void addImage(int i, Ptr< Mat> mat);
-	/** this function stores the given matrix in the the yuvImagesMap. Also,
-	 * after this call getGrey will work, as the grey image is just the top
-	 * half of the YUV mat.
-	 *
-	 * \param i index to store yuv image at
-	 * \param mat the yuv matrix to store
-	 */
-	void addYUVMat(int i, Ptr< Mat> mat);
+    void addImage(int i, Ptr< Mat> mat);
+    /** this function stores the given matrix in the the yuvImagesMap. Also,
+     * after this call getGrey will work, as the grey image is just the top
+     * half of the YUV mat.
+     *
+     * \param i index to store yuv image at
+     * \param mat the yuv matrix to store
+     */
+    void addYUVMat(int i, Ptr< Mat> mat);
 
 
-	int addYUV(uchar* buffer, int size, int width, int height, bool grey, int idx);
+    int addYUV(uchar* buffer, int size, int width, int height, bool grey, int idx);
 
-	void getBitmap(int* outintarray, int size, int idx);
+    void getBitmap(int* outintarray, int size, int idx);
 
 
 };

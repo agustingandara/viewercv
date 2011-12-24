@@ -51,9 +51,9 @@ namespace Imf {
 
 
 typedef TypedAttribute<ChannelList> ChannelListAttribute;
-template <> const char* ChannelListAttribute::staticTypeName ();
-template <> void ChannelListAttribute::writeValueTo (OStream&, int) const;
-template <> void ChannelListAttribute::readValueFrom (IStream&, int, int);
+template <> const char* ChannelListAttribute::staticTypeName();
+template <> void ChannelListAttribute::writeValueTo(OStream&, int) const;
+template <> void ChannelListAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

@@ -63,59 +63,59 @@ namespace Iex {
 class BaseExc: public std::string, public std::exception {
 public:
 
-	//----------------------------
-	// Constructors and destructor
-	//----------------------------
+    //----------------------------
+    // Constructors and destructor
+    //----------------------------
 
-	BaseExc (const char* s = 0) throw();	// std::string (s)
-	BaseExc (const std::string& s) throw();	// std::string (s)
-	BaseExc (std::stringstream& s) throw();	// std::string (s.str())
+    BaseExc(const char* s = 0) throw();	// std::string (s)
+    BaseExc(const std::string& s) throw();	// std::string (s)
+    BaseExc(std::stringstream& s) throw();	// std::string (s.str())
 
-	BaseExc (const BaseExc& be) throw();
-	virtual ~BaseExc () throw ();
+    BaseExc(const BaseExc& be) throw();
+    virtual ~BaseExc() throw();
 
-	//--------------------------------------------
-	// what() method -- e.what() returns e.c_str()
-	//--------------------------------------------
+    //--------------------------------------------
+    // what() method -- e.what() returns e.c_str()
+    //--------------------------------------------
 
-	virtual const char* what () const throw ();
-
-
-	//--------------------------------------------------
-	// Convenient methods to change the exception's text
-	//--------------------------------------------------
-
-	BaseExc& 		assign (std::stringstream& s);	// assign (s.str())
-	BaseExc& 		operator = (std::stringstream& s);
-
-	BaseExc& 		append (std::stringstream& s);	// append (s.str())
-	BaseExc& 		operator += (std::stringstream& s);
+    virtual const char* what() const throw();
 
 
-	//--------------------------------------------------
-	// These methods from the base class get obscured by
-	// the definitions above.
-	//--------------------------------------------------
+    //--------------------------------------------------
+    // Convenient methods to change the exception's text
+    //--------------------------------------------------
 
-	BaseExc& 		assign (const char* s);
-	BaseExc& 		operator = (const char* s);
+    BaseExc& 		assign(std::stringstream& s);	// assign (s.str())
+    BaseExc& 		operator = (std::stringstream& s);
 
-	BaseExc& 		append (const char* s);
-	BaseExc& 		operator += (const char* s);
+    BaseExc& 		append(std::stringstream& s);	// append (s.str())
+    BaseExc& 		operator += (std::stringstream& s);
 
 
-	//--------------------------------------------------
-	// Stack trace for the point at which the exception
-	// was thrown.  The stack trace will be an empty
-	// string unless a working stack-tracing routine
-	// has been installed (see below, setStackTracer()).
-	//--------------------------------------------------
+    //--------------------------------------------------
+    // These methods from the base class get obscured by
+    // the definitions above.
+    //--------------------------------------------------
 
-	const std::string& 	stackTrace () const;
+    BaseExc& 		assign(const char* s);
+    BaseExc& 		operator = (const char* s);
+
+    BaseExc& 		append(const char* s);
+    BaseExc& 		operator += (const char* s);
+
+
+    //--------------------------------------------------
+    // Stack trace for the point at which the exception
+    // was thrown.  The stack trace will be an empty
+    // string unless a working stack-tracing routine
+    // has been installed (see below, setStackTracer()).
+    //--------------------------------------------------
+
+    const std::string& 	stackTrace() const;
 
 private:
 
-	std::string		_stackTrace;
+    std::string		_stackTrace;
 };
 
 
@@ -138,35 +138,35 @@ private:
 // Some exceptions which should be useful in most programs
 //--------------------------------------------------------
 
-DEFINE_EXC (ArgExc,   BaseExc) 	 // Invalid arguments to a function call
+DEFINE_EXC(ArgExc,   BaseExc) 	  // Invalid arguments to a function call
 
-DEFINE_EXC (LogicExc, BaseExc) 	 // General error in a program's logic,
+DEFINE_EXC(LogicExc, BaseExc) 	  // General error in a program's logic,
 // for example, a function was called
 // in a context where the call does
 // not make sense.
 
-DEFINE_EXC (InputExc, BaseExc) 	 // Invalid input data, e.g. from a file
+DEFINE_EXC(InputExc, BaseExc) 	  // Invalid input data, e.g. from a file
 
-DEFINE_EXC (IoExc, BaseExc) 	 // Input or output operation failed
+DEFINE_EXC(IoExc, BaseExc) 	  // Input or output operation failed
 
-DEFINE_EXC (MathExc,  BaseExc) 	 // Arithmetic exception; more specific
+DEFINE_EXC(MathExc,  BaseExc) 	  // Arithmetic exception; more specific
 // exceptions derived from this class
 // are defined in ExcMath.h
 
-DEFINE_EXC (ErrnoExc, BaseExc) 	 // Base class for exceptions corresponding
+DEFINE_EXC(ErrnoExc, BaseExc) 	  // Base class for exceptions corresponding
 // to errno values (see errno.h); more
 // specific exceptions derived from this
 // class are defined in ExcErrno.h
 
-DEFINE_EXC (NoImplExc, BaseExc)  // Missing method exception e.g. from a
+DEFINE_EXC(NoImplExc, BaseExc)   // Missing method exception e.g. from a
 // call to a method that is only partially
 // or not at all implemented. A reminder
 // to lazy software people to get back
 // to work.
 
-DEFINE_EXC (NullExc, BaseExc) 	 // A pointer is inappropriately null.
+DEFINE_EXC(NullExc, BaseExc) 	  // A pointer is inappropriately null.
 
-DEFINE_EXC (TypeExc, BaseExc) 	 // An object is an inappropriate type,
+DEFINE_EXC(TypeExc, BaseExc) 	  // An object is an inappropriate type,
 // i.e. a dynamnic_cast failed.
 
 
@@ -196,10 +196,10 @@ DEFINE_EXC (TypeExc, BaseExc) 	 // An object is an inappropriate type,
 //
 //----------------------------------------------------------------------
 
-typedef std::string (* StackTracer) ();
+typedef std::string(* StackTracer)();
 
-void		setStackTracer (StackTracer stackTracer);
-StackTracer	stackTracer ();
+void		setStackTracer(StackTracer stackTracer);
+StackTracer	stackTracer();
 
 
 //-----------------
@@ -208,45 +208,45 @@ StackTracer	stackTracer ();
 
 inline BaseExc &
 BaseExc::operator = (std::stringstream& s) {
-	return assign (s);
+    return assign(s);
 }
 
 
 inline BaseExc &
 BaseExc::operator += (std::stringstream& s) {
-	return append (s);
+    return append(s);
 }
 
 
 inline BaseExc &
-BaseExc::assign (const char* s) {
-	std::string::assign(s);
-	return *this;
+BaseExc::assign(const char* s) {
+    std::string::assign(s);
+    return *this;
 }
 
 
 inline BaseExc &
 BaseExc::operator = (const char* s) {
-	return assign(s);
+    return assign(s);
 }
 
 
 inline BaseExc &
-BaseExc::append (const char* s) {
-	std::string::append(s);
-	return *this;
+BaseExc::append(const char* s) {
+    std::string::append(s);
+    return *this;
 }
 
 
 inline BaseExc &
 BaseExc::operator += (const char* s) {
-	return append(s);
+    return append(s);
 }
 
 
 inline const std::string &
-BaseExc::stackTrace () const {
-	return _stackTrace;
+BaseExc::stackTrace() const {
+    return _stackTrace;
 }
 
 #if (defined _WIN32 || defined _WIN64) && defined _MSC_VER

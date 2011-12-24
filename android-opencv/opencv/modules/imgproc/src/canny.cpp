@@ -111,7 +111,7 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
         high = cvFloor(high_thresh);
     }
 
-    buffer.allocate((size.width + 2) * (size.height + 2) + (size.width + 2) * 3 * sizeof(int));
+    buffer.allocate((size.width + 2)*(size.height + 2) + (size.width + 2) * 3 * sizeof(int));
 
     mag_buf[0] = (int*)(char*)buffer;
     mag_buf[1] = mag_buf[0] + size.width + 2;
@@ -125,7 +125,7 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
 
     memset(mag_buf[0], 0, (size.width + 2)*sizeof(int));
     memset(map, 1, mapstep);
-    memset(map + mapstep * (size.height + 1), 1, mapstep);
+    memset(map + mapstep*(size.height + 1), 1, mapstep);
 
     /* sector numbers
        (Top-Left Origin)
@@ -229,8 +229,8 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
                 y <<= CANNY_SHIFT;
 
                 if (y < tg22x) {
-                    if (m > _mag[j - 1] && m >= _mag[j + 1]) {
-                        if (m > high && !prev_flag && _map[j - mapstep] != 2) {
+                    if (m > _mag[j-1] && m >= _mag[j+1]) {
+                        if (m > high && !prev_flag && _map[j-mapstep] != 2) {
                             CANNY_PUSH(_map + j);
                             prev_flag = 1;
                         } else {
@@ -239,8 +239,8 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
                         continue;
                     }
                 } else if (y > tg67x) {
-                    if (m > _mag[j + magstep2] && m >= _mag[j + magstep1]) {
-                        if (m > high && !prev_flag && _map[j - mapstep] != 2) {
+                    if (m > _mag[j+magstep2] && m >= _mag[j+magstep1]) {
+                        if (m > high && !prev_flag && _map[j-mapstep] != 2) {
                             CANNY_PUSH(_map + j);
                             prev_flag = 1;
                         } else {
@@ -250,8 +250,8 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
                     }
                 } else {
                     s = s < 0 ? -1 : 1;
-                    if (m > _mag[j + magstep2 - s] && m > _mag[j + magstep1 + s]) {
-                        if (m > high && !prev_flag && _map[j - mapstep] != 2) {
+                    if (m > _mag[j+magstep2-s] && m > _mag[j+magstep1+s]) {
+                        if (m > high && !prev_flag && _map[j-mapstep] != 2) {
                             CANNY_PUSH(_map + j);
                             prev_flag = 1;
                         } else {
@@ -291,22 +291,22 @@ CV_IMPL void cvCanny(const void* srcarr, void* dstarr,
         if (!m[1]) {
             CANNY_PUSH(m + 1);
         }
-        if (!m[-mapstep - 1]) {
+        if (!m[-mapstep-1]) {
             CANNY_PUSH(m - mapstep - 1);
         }
         if (!m[-mapstep]) {
             CANNY_PUSH(m - mapstep);
         }
-        if (!m[-mapstep + 1]) {
+        if (!m[-mapstep+1]) {
             CANNY_PUSH(m - mapstep + 1);
         }
-        if (!m[mapstep - 1]) {
+        if (!m[mapstep-1]) {
             CANNY_PUSH(m + mapstep - 1);
         }
         if (!m[mapstep]) {
             CANNY_PUSH(m + mapstep);
         }
-        if (!m[mapstep + 1]) {
+        if (!m[mapstep+1]) {
             CANNY_PUSH(m + mapstep + 1);
         }
     }

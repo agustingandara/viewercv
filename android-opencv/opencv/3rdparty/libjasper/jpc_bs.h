@@ -111,20 +111,20 @@
 
 typedef struct {
 
-	/* Some miscellaneous flags. */
-	int flags_;
+    /* Some miscellaneous flags. */
+    int flags_;
 
-	/* The input/output buffer. */
-	uint_fast16_t buf_;
+    /* The input/output buffer. */
+    uint_fast16_t buf_;
 
-	/* The number of bits remaining in the byte being read/written. */
-	int cnt_;
+    /* The number of bits remaining in the byte being read/written. */
+    int cnt_;
 
-	/* The underlying stream associated with this bit stream. */
-	jas_stream_t* stream_;
+    /* The underlying stream associated with this bit stream. */
+    jas_stream_t* stream_;
 
-	/* The mode in which this bit stream was opened. */
-	int openmode_;
+    /* The mode in which this bit stream was opened. */
+    int openmode_;
 
 } jpc_bitstream_t;
 
@@ -178,7 +178,7 @@ int jpc_bitstream_align(jpc_bitstream_t* bitstream);
   ensuring that certain bits consumed in the process match a particular
   pattern. */
 int jpc_bitstream_inalign(jpc_bitstream_t* bitstream, int fillmask,
-						  int filldata);
+                          int filldata);
 
 /* Align the current position in the bit stream with the next byte boundary,
   writing bits from the specified pattern (if necessary) in the process. */

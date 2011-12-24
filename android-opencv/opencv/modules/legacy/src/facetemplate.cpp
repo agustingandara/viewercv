@@ -47,28 +47,28 @@
 
 ///class FaceFeature
 FaceFeature::FaceFeature(double dWeight, void* lpContour, bool bIsFeature) {
-	m_lpContour = lpContour;
-	m_dWeight = dWeight;
-	m_bIsFaceFeature = bIsFeature;
+    m_lpContour = lpContour;
+    m_dWeight = dWeight;
+    m_bIsFaceFeature = bIsFeature;
 }//FaceFeature::FaceFeature(long lWeight,void * lpContour)
 
 FaceFeature::~FaceFeature() {
-	if (m_lpContour) {
-		delete (char*)m_lpContour;
-	}
+    if (m_lpContour) {
+        delete(char*)m_lpContour;
+    }
 }//FaceFeature::~FaceFeature()
 
 FaceFeature::FaceFeature() {
-	m_lpContour = NULL;
-	m_dWeight = 0;
-	m_bIsFaceFeature = false;
+    m_lpContour = NULL;
+    m_dWeight = 0;
+    m_bIsFaceFeature = false;
 }
 
 
 ////class FaceTemplate
 
 FaceTemplate::~FaceTemplate() {
-	delete [] m_lpFeaturesList;
+    delete [] m_lpFeaturesList;
 }//FaceTemplate::~FaceTemplate()
 
 

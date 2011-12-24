@@ -101,10 +101,10 @@ any particular platform.  Hopefully, it is not too unreasonable, however. */
 #endif
 
 typedef struct {
-	int (*analyze)(int*, int, int, int, int, int);
-	int (*synthesize)(int*, int, int, int, int, int);
-	double* lpenergywts;
-	double* hpenergywts;
+    int (*analyze)(int*, int, int, int, int, int);
+    int (*synthesize)(int*, int, int, int, int, int);
+    double* lpenergywts;
+    double* hpenergywts;
 } jpc_qmfb2d_t;
 
 extern jpc_qmfb2d_t jpc_ft_qmfb2d;

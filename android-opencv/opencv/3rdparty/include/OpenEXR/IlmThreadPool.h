@@ -69,82 +69,82 @@ class Task;
 class ThreadPool {
 public:
 
-	//-------------------------------------------------------
-	// Constructor -- creates numThreads worker threads which
-	// wait until a task is available.
-	//-------------------------------------------------------
+    //-------------------------------------------------------
+    // Constructor -- creates numThreads worker threads which
+    // wait until a task is available.
+    //-------------------------------------------------------
 
-	ThreadPool (unsigned numThreads = 0);
-
-
-	//-----------------------------------------------------------
-	// Destructor -- waits for all tasks to complete, joins all
-	// the threads to the calling thread, and then destroys them.
-	//-----------------------------------------------------------
-
-	virtual ~ThreadPool ();
+    ThreadPool(unsigned numThreads = 0);
 
 
-	//--------------------------------------------------------
-	// Query and set the number of worker threads in the pool.
-	//
-	// Warning: never call setNumThreads from within a worker
-	// thread as this will almost certainly cause a deadlock
-	// or crash.
-	//--------------------------------------------------------
+    //-----------------------------------------------------------
+    // Destructor -- waits for all tasks to complete, joins all
+    // the threads to the calling thread, and then destroys them.
+    //-----------------------------------------------------------
 
-	int		numThreads () const;
-	void	setNumThreads (int count);
+    virtual ~ThreadPool();
 
 
-	//------------------------------------------------------------
-	// Add a task for processing.  The ThreadPool can handle any
-	// number of tasks regardless of the number of worker threads.
-	// The tasks are first added onto a queue, and are executed
-	// by threads as they become available, in FIFO order.
-	//------------------------------------------------------------
+    //--------------------------------------------------------
+    // Query and set the number of worker threads in the pool.
+    //
+    // Warning: never call setNumThreads from within a worker
+    // thread as this will almost certainly cause a deadlock
+    // or crash.
+    //--------------------------------------------------------
 
-	void addTask (Task* task);
+    int		numThreads() const;
+    void	setNumThreads(int count);
 
 
-	//-------------------------------------------
-	// Access functions for the global threadpool
-	//-------------------------------------------
+    //------------------------------------------------------------
+    // Add a task for processing.  The ThreadPool can handle any
+    // number of tasks regardless of the number of worker threads.
+    // The tasks are first added onto a queue, and are executed
+    // by threads as they become available, in FIFO order.
+    //------------------------------------------------------------
 
-	static ThreadPool&	globalThreadPool ();
-	static void		addGlobalTask (Task* task);
+    void addTask(Task* task);
 
-	struct Data;
+
+    //-------------------------------------------
+    // Access functions for the global threadpool
+    //-------------------------------------------
+
+    static ThreadPool&	globalThreadPool();
+    static void		addGlobalTask(Task* task);
+
+    struct Data;
 
 protected:
 
-	Data* 		_data;
+    Data* 		_data;
 };
 
 
 class Task {
 public:
 
-	Task (TaskGroup* g);
-	virtual ~Task ();
+    Task(TaskGroup* g);
+    virtual ~Task();
 
-	virtual void	execute () = 0;
-	TaskGroup* 		group();
+    virtual void	execute() = 0;
+    TaskGroup* 		group();
 
 protected:
 
-	TaskGroup* 		_group;
+    TaskGroup* 		_group;
 };
 
 
 class TaskGroup {
 public:
 
-	TaskGroup();
-	~TaskGroup();
+    TaskGroup();
+    ~TaskGroup();
 
-	struct Data;
-	Data* const		_data;
+    struct Data;
+    Data* const		_data;
 };
 
 

@@ -74,13 +74,13 @@
 extern "C" {
 #endif
 
-	/******************************************************************************\
-	* Constants and types.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Constants and types.
+    \******************************************************************************/
 
 #if !defined(JAS_VERSION)
-	/* The version information below should match that specified in
-	  the "configure.in" file! */
+    /* The version information below should match that specified in
+      the "configure.in" file! */
 #define	JAS_VERSION		"unknown"
 #endif
 
@@ -104,14 +104,14 @@ extern "C" {
 	"Please send any bug reports to:\n" \
 	"    mdadams@ieee.org\n"
 
-	/******************************************************************************\
-	* Functions.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Functions.
+    \******************************************************************************/
 
-	const char* jas_getversion(void);
-	/* Get the version information for the JasPer library. */
-	/* Note:  Since libjasper can be built as a shared library, the version
-	  returned by this function may not necessarily correspond to JAS_VERSION. */
+    const char* jas_getversion(void);
+    /* Get the version information for the JasPer library. */
+    /* Note:  Since libjasper can be built as a shared library, the version
+      returned by this function may not necessarily correspond to JAS_VERSION. */
 
 #ifdef __cplusplus
 }

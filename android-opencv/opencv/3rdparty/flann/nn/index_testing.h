@@ -43,13 +43,13 @@ namespace cvflann {
 void search_for_neighbors(NNIndex& index, const Matrix<float>& testset, Matrix<int>& result, Matrix<float>& dists, const SearchParams& searchParams, int skip = 0);
 
 float test_index_checks(NNIndex& index, const Matrix<float>& inputData, const Matrix<float>& testData, const Matrix<int>& matches,
-						int checks, float& precision, int nn = 1, int skipMatches = 0);
+                        int checks, float& precision, int nn = 1, int skipMatches = 0);
 
 float test_index_precision(NNIndex& index, const Matrix<float>& inputData, const Matrix<float>& testData, const Matrix<int>& matches,
-						   float precision, int& checks, int nn = 1, int skipMatches = 0);
+                           float precision, int& checks, int nn = 1, int skipMatches = 0);
 
 float test_index_precisions(NNIndex& index, const Matrix<float>& inputData, const Matrix<float>& testData, const Matrix<int>& matches,
-							float* precisions, int precisions_length, int nn = 1, int skipMatches = 0, float maxTime = 0);
+                            float* precisions, int precisions_length, int nn = 1, int skipMatches = 0, float maxTime = 0);
 
 }
 

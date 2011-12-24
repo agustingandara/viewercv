@@ -281,7 +281,7 @@ static CvSeq* icvFastHessianDetector(const CvMat* sum, const CvMat* mask_sum,
             icvResizeHaarPattern(dm, &Dm, NM, 9, size, mask_sum ? mask_sum->cols : sum->cols);
 
             /* Ignore pixels without a 3x3 neighbourhood in the layer above */
-            margin = (sizes[layer + 1] / 2) / sampleStep + 1;
+            margin = (sizes[layer+1] / 2) / sampleStep + 1;
             for (i = margin; i < rows - margin; i++) {
                 det_ptr = dets[layer]->data.fl + i * dets[layer]->cols;
                 trace_ptr = traces[layer]->data.fl + i * traces[layer]->cols;
@@ -297,23 +297,23 @@ static CvSeq* icvFastHessianDetector(const CvMat* sum, const CvMat* mask_sum,
                         /* The 3x3x3 neighbouring samples around the maxima.
                            The maxima is included at N9[1][4] */
                         int c = dets[layer]->cols;
-                        const float* det1 = dets[layer - 1]->data.fl + i * c + j;
+                        const float* det1 = dets[layer-1]->data.fl + i * c + j;
                         const float* det2 = dets[layer]->data.fl   + i * c + j;
-                        const float* det3 = dets[layer + 1]->data.fl + i * c + j;
+                        const float* det3 = dets[layer+1]->data.fl + i * c + j;
                         float N9[3][9] = { {
-                                det1[-c - 1], det1[-c], det1[-c + 1],
+                                det1[-c-1], det1[-c], det1[-c+1],
                                 det1[-1]  , det1[0] , det1[1],
-                                det1[c - 1] , det1[c] , det1[c + 1]
+                                det1[c-1] , det1[c] , det1[c+1]
                             },
                             {
-                                det2[-c - 1], det2[-c], det2[-c + 1],
+                                det2[-c-1], det2[-c], det2[-c+1],
                                 det2[-1]  , det2[0] , det2[1],
-                                det2[c - 1] , det2[c] , det2[c + 1 ]
+                                det2[c-1] , det2[c] , det2[c+1 ]
                             },
                             {
-                                det3[-c - 1], det3[-c], det3[-c + 1],
+                                det3[-c-1], det3[-c], det3[-c+1],
                                 det3[-1  ], det3[0] , det3[1],
-                                det3[c - 1] , det3[c] , det3[c + 1 ]
+                                det3[c-1] , det3[c] , det3[c+1 ]
                             }
                         };
 
@@ -344,7 +344,7 @@ static CvSeq* icvFastHessianDetector(const CvMat* sum, const CvMat* mask_sum,
                                                             CV_SIGN(trace_ptr[j]), sizes[layer], 0, val0);
 
                             /* Interpolate maxima location within the 3x3x3 neighbourhood  */
-                            int ds = sizes[layer] - sizes[layer - 1];
+                            int ds = sizes[layer] - sizes[layer-1];
                             int interp_ok = icvInterpolateKeypoint(N9, sampleStep, sampleStep, ds, &point);
 
                             /* Sometimes the interpolation step gives a negative size etc. */
@@ -406,7 +406,7 @@ struct SURFInvoker {
 
         const int max_ori_samples = (2 * ORI_RADIUS + 1) * (2 * ORI_RADIUS + 1);
         float X[max_ori_samples], Y[max_ori_samples], angle[max_ori_samples];
-        uchar PATCH[PATCH_SZ + 1][PATCH_SZ + 1];
+        uchar PATCH[PATCH_SZ+1][PATCH_SZ+1];
         float DX[PATCH_SZ][PATCH_SZ], DY[PATCH_SZ][PATCH_SZ];
 
         CvMat matX = cvMat(1, max_ori_samples, CV_32F, X);
@@ -460,7 +460,7 @@ struct SURFInvoker {
                 x = cvRound(center.x + apt[kk].x * s - (float)(grad_wav_size - 1) / 2);
                 y = cvRound(center.y + apt[kk].y * s - (float)(grad_wav_size - 1) / 2);
                 if ((unsigned)y >= (unsigned)(sum->rows - grad_wav_size) ||
-                        (unsigned)x >= (unsigned)(sum->cols - grad_wav_size)) {
+                (unsigned)x >= (unsigned)(sum->cols - grad_wav_size)) {
                     continue;
                 }
                 ptr = sum_ptr + x + y * sum_cols;
@@ -535,7 +535,7 @@ struct SURFInvoker {
                 for (j = 0; j < win_size; j++, pixel_x += cos_dir, pixel_y -= sin_dir) {
                     int x = std::min(std::max(cvRound(pixel_x), 0), img->cols - 1);
                     int y = std::min(std::max(cvRound(pixel_y), 0), img->rows - 1);
-                    WIN[i * win_size + j] = img->data.ptr[y * img->step + x];
+                    WIN[i* win_size + j] = img->data.ptr[y*img->step + x];
                 }
             }
 
@@ -546,9 +546,9 @@ struct SURFInvoker {
             /* Calculate gradients in x and y with wavelets of size 2s */
             for (i = 0; i < PATCH_SZ; i++)
                 for (j = 0; j < PATCH_SZ; j++) {
-                    float dw = DW[i * PATCH_SZ + j];
-                    float vx = (PATCH[i][j + 1] - PATCH[i][j] + PATCH[i + 1][j + 1] - PATCH[i + 1][j]) * dw;
-                    float vy = (PATCH[i + 1][j] - PATCH[i][j] + PATCH[i + 1][j + 1] - PATCH[i][j + 1]) * dw;
+                    float dw = DW[i*PATCH_SZ + j];
+                    float vx = (PATCH[i][j+1] - PATCH[i][j] + PATCH[i+1][j+1] - PATCH[i+1][j]) * dw;
+                    float vy = (PATCH[i+1][j] - PATCH[i][j] + PATCH[i+1][j+1] - PATCH[i][j+1]) * dw;
                     DX[i][j] = vx;
                     DY[i][j] = vy;
                 }
@@ -633,9 +633,9 @@ const float SURFInvoker::DESC_SIGMA = 3.3f;
 
 CV_IMPL void
 cvExtractSURF(const CvArr* _img, const CvArr* _mask,
-              CvSeq** _keypoints, CvSeq** _descriptors,
-              CvMemStorage* storage, CvSURFParams params,
-              int useProvidedKeyPts) {
+CvSeq** _keypoints, CvSeq** _descriptors,
+CvMemStorage* storage, CvSURFParams params,
+int useProvidedKeyPts) {
     const int ORI_RADIUS = cv::SURFInvoker::ORI_RADIUS;
     const float ORI_SIGMA = cv::SURFInvoker::ORI_SIGMA;
     const float DESC_SIGMA = cv::SURFInvoker::DESC_SIGMA;
@@ -691,7 +691,7 @@ cvExtractSURF(const CvArr* _img, const CvArr* _mask,
     N = keypoints->total;
     if (_descriptors) {
         descriptors = cvCreateSeq(0, sizeof(CvSeq),
-                                  descriptor_size * CV_ELEM_SIZE(descriptor_data_type), storage);
+        descriptor_size * CV_ELEM_SIZE(descriptor_data_type), storage);
         cvSeqPushMulti(descriptors, 0, N);
     }
 
@@ -703,7 +703,7 @@ cvExtractSURF(const CvArr* _img, const CvArr* _mask,
         for (j = -ORI_RADIUS; j <= ORI_RADIUS; j++) {
             if (i* i + j* j <= ORI_RADIUS * ORI_RADIUS) {
                 apt[nangle0] = cvPoint(j, i);
-                aptw[nangle0++] = G[i + ORI_RADIUS] * G[j + ORI_RADIUS];
+                aptw[nangle0++] = G[i+ORI_RADIUS] * G[j+ORI_RADIUS];
             }
         }
     }
@@ -723,8 +723,8 @@ cvExtractSURF(const CvArr* _img, const CvArr* _mask,
 
     if (N > 0)
         cv::parallel_for(cv::BlockedRange(0, N),
-                         cv::SURFInvoker(&params, keypoints, descriptors, img, sum,
-                                         apt, aptw, nangle0, &DW[0][0]));
+        cv::SURFInvoker(&params, keypoints, descriptors, img, sum,
+        apt, aptw, nangle0, &DW[0][0]));
     //cv::SURFInvoker(&params, keypoints, descriptors, img, sum,
     //                apt, aptw, nangle0, &DW[0][0])(cv::BlockedRange(0, N));
 
@@ -792,7 +792,7 @@ static int getPointOctave(const CvSURFPoint& kpt, const CvSURFParams& params) {
 
 
 void SURF::operator()(const Mat& img, const Mat& mask,
-                      vector<KeyPoint>& keypoints) const {
+vector<KeyPoint>& keypoints) const {
     CvMat _img = img, _mask, *pmask = 0;
     if (mask.data) {
         pmask = &(_mask = mask);
@@ -806,14 +806,14 @@ void SURF::operator()(const Mat& img, const Mat& mask,
     for (i = 0; i < n; i++, ++it) {
         const CvSURFPoint& kpt = *it;
         keypoints[i] = KeyPoint(kpt.pt, (float)kpt.size, kpt.dir,
-                                kpt.hessian, getPointOctave(kpt, *this));
+        kpt.hessian, getPointOctave(kpt, *this));
     }
 }
 
 void SURF::operator()(const Mat& img, const Mat& mask,
-                      vector<KeyPoint>& keypoints,
-                      vector<float>& descriptors,
-                      bool useProvidedKeypoints) const {
+vector<KeyPoint>& keypoints,
+vector<float>& descriptors,
+bool useProvidedKeypoints) const {
     CvMat _img = img, _mask, *pmask = 0;
     if (mask.data) {
         pmask = &(_mask = mask);
@@ -832,7 +832,7 @@ void SURF::operator()(const Mat& img, const Mat& mask,
     }
 
     cvExtractSURF(&_img, pmask, &kp.seq, &d, storage,
-                  *(const CvSURFParams*)this, useProvidedKeypoints);
+    *(const CvSURFParams*)this, useProvidedKeypoints);
     if (!useProvidedKeypoints) {
         Seq<CvSURFPoint>::iterator it = kp.begin();
         size_t i, n = kp.size();
@@ -840,7 +840,7 @@ void SURF::operator()(const Mat& img, const Mat& mask,
         for (i = 0; i < n; i++, ++it) {
             const CvSURFPoint& kpt = *it;
             keypoints[i] = KeyPoint(kpt.pt, (float)kpt.size, kpt.dir,
-                                    kpt.hessian, getPointOctave(kpt, *this));
+            kpt.hessian, getPointOctave(kpt, *this));
         }
     }
     descriptors.resize(d ? d->total * d->elem_size / sizeof(float) : 0);

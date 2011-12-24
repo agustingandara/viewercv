@@ -691,7 +691,7 @@ CvIntHaarClassifier* icvLoadTreeCascadeClassifier(const char* filename, int step
     for (i = 0; i < num; i++) {
         if (nodes[i]->next) {
             (*splits)++;
-            nodes[i]->next = nodes[i + 1];
+            nodes[i]->next = nodes[i+1];
         }
         if (nodes[i]->parent && nodes[i]->parent->child == NULL) {
             nodes[i]->parent->child = nodes[i];

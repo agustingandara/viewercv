@@ -106,7 +106,7 @@ cvCreateMemStorage(int block_size) {
 
 
 /* Create child memory storage: */
-CV_IMPL CvMemStorage*
+CV_IMPL CvMemStorage *
 cvCreateChildMemStorage(CvMemStorage* parent) {
     if (!parent) {
         CV_Error(CV_StsNullPtr, "");
@@ -348,7 +348,7 @@ cvMemStorageAllocString(CvMemStorage* storage, const char* ptr, int len) {
 \****************************************************************************************/
 
 /* Create empty sequence: */
-CV_IMPL CvSeq*
+CV_IMPL CvSeq *
 cvCreateSeq(int seq_flags, int header_size, int elem_size, CvMemStorage* storage) {
     CvSeq* seq = 0;
 
@@ -824,7 +824,7 @@ cvFlushSeqWriter(CvSeqWriter* writer) {
 
 
 /* Calls icvFlushSeqWriter and finishes writing process: */
-CV_IMPL CvSeq*
+CV_IMPL CvSeq *
 cvEndWriteSeq(CvSeqWriter* writer) {
     if (!writer) {
         CV_Error(CV_StsNullPtr, "");
@@ -2418,7 +2418,7 @@ cvClearSet(CvSet* set) {
 \****************************************************************************************/
 
 /* Create a new graph: */
-CV_IMPL CvGraph*
+CV_IMPL CvGraph *
 cvCreateGraph(int graph_type, int header_size,
               int vtx_size, int edge_size, CvMemStorage* storage) {
     CvGraph* graph = 0;
@@ -2577,7 +2577,7 @@ cvFindGraphEdgeByPtr(const CvGraph* graph,
 
 
 /* Find an edge in the graph given indices of the ending vertices: */
-CV_IMPL CvGraphEdge*
+CV_IMPL CvGraphEdge *
 cvFindGraphEdge(const CvGraph* graph, int start_idx, int end_idx) {
     CvGraphVtx* start_vtx;
     CvGraphVtx* end_vtx;
@@ -3435,13 +3435,13 @@ computeSums(const Mat& points, const size_t* ofs, int a, int b, double* sums) {
     int i, j, dims = points.cols;
     const float* data = points.ptr<float>(0);
     for (j = 0; j < dims; j++) {
-        sums[j * 2] = sums[j * 2 + 1] = 0;
+        sums[j*2] = sums[j*2+1] = 0;
     }
     for (i = a; i <= b; i++) {
         const float* row = data + ofs[i];
         for (j = 0; j < dims; j++) {
-            double t = row[j], s = sums[j * 2] + t, s2 = sums[j * 2 + 1] + t * t;
-            sums[j * 2] = s; sums[j * 2 + 1] = s2;
+            double t = row[j], s = sums[j*2] + t, s2 = sums[j*2+1] + t * t;
+            sums[j*2] = s; sums[j*2+1] = s2;
         }
     }
 }
@@ -3466,7 +3466,7 @@ void KDTree::build(const Mat& _points, bool _copyData) {
     int ptpos = 0;
 
     Mat sumstack(MAX_TREE_DEPTH * 2, dims * 2, CV_64F);
-    SubTree stack[MAX_TREE_DEPTH * 2];
+    SubTree stack[MAX_TREE_DEPTH*2];
 
     vector<size_t> _ptofs(n);
     size_t* ptofs = &_ptofs[0];
@@ -3503,8 +3503,8 @@ void KDTree::build(const Mat& _points, bool _copyData) {
 
         // find the dimensionality with the biggest variance
         for (j = 0; j < dims; j++) {
-            double m = sums[j * 2] * invCount;
-            double varj = sums[j * 2 + 1] * invCount - m * m;
+            double m = sums[j*2] * invCount;
+            double varj = sums[j*2+1] * invCount - m * m;
             if (maxVar < varj) {
                 maxVar = varj;
                 dim = j;
@@ -3544,8 +3544,8 @@ int KDTree::findNearest(const float* vec, int K, int emax,
     if (dist) {
         dist->resize(K);
     }
-    K = findNearest(vec, K, emax, neighborsIdx ? & (*neighborsIdx)[0] : 0,
-                    neighbors, dist ? & (*dist)[0] : 0);
+    K = findNearest(vec, K, emax, neighborsIdx ? &(*neighborsIdx)[0] : 0,
+                    neighbors, dist ? &(*dist)[0] : 0);
     if (neighborsIdx) {
         neighborsIdx->resize(K);
     }
@@ -3574,7 +3574,7 @@ int KDTree::findNearest(const float* vec, int K, int emax,
 
     CV_Assert(K > 0 && (normType == NORM_L2 || normType == NORM_L1));
 
-    AutoBuffer<uchar> _buf((K + 1) * (sizeof(float) + sizeof(int)));
+    AutoBuffer<uchar> _buf((K + 1)*(sizeof(float) + sizeof(int)));
     int* idx = (int*)(uchar*)_buf;
     float* dist = (float*)(idx + K + 1);
     int i, j, ncount = 0, e = 0;
@@ -3616,7 +3616,7 @@ int KDTree::findNearest(const float* vec, int K, int emax,
                 }
             }
 
-            if (ncount == K && alt_d > dist[ncount - 1]) {
+            if (ncount == K && alt_d > dist[ncount-1]) {
                 continue;
             }
         }
@@ -3646,8 +3646,8 @@ int KDTree::findNearest(const float* vec, int K, int emax,
                     if (dist[i] <= d) {
                         break;
                     }
-                    std::swap(dist[i], dist[i + 1]);
-                    std::swap(idx[i], idx[i + 1]);
+                    std::swap(dist[i], dist[i+1]);
+                    std::swap(idx[i], idx[i+1]);
                 }
                 ncount += ncount < K;
                 e++;
@@ -3670,7 +3670,7 @@ int KDTree::findNearest(const float* vec, int K, int emax,
                 d = std::abs(d) + alt_d;
             }
             // subtree prunning
-            if (ncount == K && d > dist[ncount - 1]) {
+            if (ncount == K && d > dist[ncount-1]) {
                 continue;
             }
             // add alternative subtree to the priority queue

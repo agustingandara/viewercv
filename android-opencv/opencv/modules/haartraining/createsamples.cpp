@@ -121,9 +121,9 @@ int main(int argc, char* argv[]) {
             maxzangle = atof(argv[++i]);
         } else if (!strcmp(argv[i], "-show")) {
             showsamples = 1;
-            if (i + 1 < argc && strlen(argv[i + 1]) > 0 && argv[i + 1][0] != '-') {
+            if (i + 1 < argc && strlen(argv[i+1]) > 0 && argv[i+1][0] != '-') {
                 double d;
-                d = strtod(argv[i + 1], 0);
+                d = strtod(argv[i+1], 0);
                 if (d != -HUGE_VAL && d != HUGE_VAL && d > 0) { scale = d; }
                 ++i;
             }

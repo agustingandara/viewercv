@@ -78,95 +78,95 @@
 #define icvCheckVector_64f( ptr, len )
 #define icvCheckVector_32f( ptr, len )
 
-CV_INLINE double icvSum_32f( const float* src, int len ) {
-	double s = 0;
-	for ( int i = 0; i < len; i++ ) { s += src[i]; }
+CV_INLINE double icvSum_32f(const float* src, int len) {
+    double s = 0;
+    for (int i = 0; i < len; i++) { s += src[i]; }
 
-	icvCheckVector_64f( &s, 1 );
+    icvCheckVector_64f(&s, 1);
 
-	return s;
+    return s;
 }
 
-CV_INLINE double icvDotProduct_32f( const float* src1, const float* src2, int len ) {
-	double s = 0;
-	for ( int i = 0; i < len; i++ ) { s += src1[i] * src2[i]; }
+CV_INLINE double icvDotProduct_32f(const float* src1, const float* src2, int len) {
+    double s = 0;
+    for (int i = 0; i < len; i++) { s += src1[i] * src2[i]; }
 
-	icvCheckVector_64f( &s, 1 );
+    icvCheckVector_64f(&s, 1);
 
-	return s;
-}
-
-
-CV_INLINE double icvDotProduct_64f( const double* src1, const double* src2, int len ) {
-	double s = 0;
-	for ( int i = 0; i < len; i++ ) { s += src1[i] * src2[i]; }
-
-	icvCheckVector_64f( &s, 1 );
-
-	return s;
+    return s;
 }
 
 
-CV_INLINE void icvMulVectors_32f( const float* src1, const float* src2,
-								  float* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] * src2[i];
-	}
+CV_INLINE double icvDotProduct_64f(const double* src1, const double* src2, int len) {
+    double s = 0;
+    for (int i = 0; i < len; i++) { s += src1[i] * src2[i]; }
 
-	icvCheckVector_32f( dst, len );
-}
+    icvCheckVector_64f(&s, 1);
 
-CV_INLINE void icvMulVectors_64d( const double* src1, const double* src2,
-								  double* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] * src2[i];
-	}
-
-	icvCheckVector_64f( dst, len );
+    return s;
 }
 
 
-CV_INLINE void icvAddVector_32f( const float* src1, const float* src2,
-								 float* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] + src2[i];
-	}
+CV_INLINE void icvMulVectors_32f(const float* src1, const float* src2,
+                                 float* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] * src2[i];
+    }
 
-	icvCheckVector_32f( dst, len );
+    icvCheckVector_32f(dst, len);
 }
 
-CV_INLINE void icvAddVector_64d( const double* src1, const double* src2,
-								 double* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] + src2[i];
-	}
+CV_INLINE void icvMulVectors_64d(const double* src1, const double* src2,
+                                 double* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] * src2[i];
+    }
 
-	icvCheckVector_64f( dst, len );
+    icvCheckVector_64f(dst, len);
 }
 
 
-CV_INLINE void icvSubVector_32f( const float* src1, const float* src2,
-								 float* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] - src2[i];
-	}
+CV_INLINE void icvAddVector_32f(const float* src1, const float* src2,
+                                float* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] + src2[i];
+    }
 
-	icvCheckVector_32f( dst, len );
+    icvCheckVector_32f(dst, len);
 }
 
-CV_INLINE void icvSubVector_64d( const double* src1, const double* src2,
-								 double* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src1[i] - src2[i];
-	}
+CV_INLINE void icvAddVector_64d(const double* src1, const double* src2,
+                                double* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] + src2[i];
+    }
 
-	icvCheckVector_64f( dst, len );
+    icvCheckVector_64f(dst, len);
+}
+
+
+CV_INLINE void icvSubVector_32f(const float* src1, const float* src2,
+                                float* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] - src2[i];
+    }
+
+    icvCheckVector_32f(dst, len);
+}
+
+CV_INLINE void icvSubVector_64d(const double* src1, const double* src2,
+                                double* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src1[i] - src2[i];
+    }
+
+    icvCheckVector_64f(dst, len);
 }
 
 
@@ -177,148 +177,148 @@ CV_INLINE void icvSubVector_64d( const double* src1, const double* src2,
     icvSubVector_64d( (src1), (src2), (dst), (w)*(h))
 
 
-CV_INLINE void icvSetIdentity_32f( float* dst, int w, int h ) {
-	int i, len = MIN( w, h );
-	icvSetZero_32f( dst, w, h );
-	for ( i = 0; len--; i += w + 1 ) {
-		dst[i] = 1.f;
-	}
+CV_INLINE void icvSetIdentity_32f(float* dst, int w, int h) {
+    int i, len = MIN(w, h);
+    icvSetZero_32f(dst, w, h);
+    for (i = 0; len--; i += w + 1) {
+        dst[i] = 1.f;
+    }
 }
 
 
-CV_INLINE void icvSetIdentity_64d( double* dst, int w, int h ) {
-	int i, len = MIN( w, h );
-	icvSetZero_64d( dst, w, h );
-	for ( i = 0; len--; i += w + 1 ) {
-		dst[i] = 1.;
-	}
+CV_INLINE void icvSetIdentity_64d(double* dst, int w, int h) {
+    int i, len = MIN(w, h);
+    icvSetZero_64d(dst, w, h);
+    for (i = 0; len--; i += w + 1) {
+        dst[i] = 1.;
+    }
 }
 
 
-CV_INLINE void icvTrace_32f( const float* src, int w, int h, float* trace ) {
-	int i, len = MIN( w, h );
-	double sum = 0;
-	for ( i = 0; len--; i += w + 1 ) {
-		sum += src[i];
-	}
-	*trace = (float)sum;
+CV_INLINE void icvTrace_32f(const float* src, int w, int h, float* trace) {
+    int i, len = MIN(w, h);
+    double sum = 0;
+    for (i = 0; len--; i += w + 1) {
+        sum += src[i];
+    }
+    *trace = (float)sum;
 
-	icvCheckVector_64f( &sum, 1 );
+    icvCheckVector_64f(&sum, 1);
 }
 
 
-CV_INLINE void icvTrace_64d( const double* src, int w, int h, double* trace ) {
-	int i, len = MIN( w, h );
-	double sum = 0;
-	for ( i = 0; len--; i += w + 1 ) {
-		sum += src[i];
-	}
-	*trace = sum;
+CV_INLINE void icvTrace_64d(const double* src, int w, int h, double* trace) {
+    int i, len = MIN(w, h);
+    double sum = 0;
+    for (i = 0; len--; i += w + 1) {
+        sum += src[i];
+    }
+    *trace = sum;
 
-	icvCheckVector_64f( &sum, 1 );
+    icvCheckVector_64f(&sum, 1);
 }
 
 
-CV_INLINE void icvScaleVector_32f( const float* src, float* dst,
-								   int len, double scale ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = (float)(src[i] * scale);
-	}
+CV_INLINE void icvScaleVector_32f(const float* src, float* dst,
+                                  int len, double scale) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = (float)(src[i] * scale);
+    }
 
-	icvCheckVector_32f( dst, len );
+    icvCheckVector_32f(dst, len);
 }
 
 
-CV_INLINE void icvScaleVector_64d( const double* src, double* dst,
-								   int len, double scale ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src[i] * scale;
-	}
+CV_INLINE void icvScaleVector_64d(const double* src, double* dst,
+                                  int len, double scale) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src[i] * scale;
+    }
 
-	icvCheckVector_64f( dst, len );
+    icvCheckVector_64f(dst, len);
 }
 
 
-CV_INLINE void icvTransposeMatrix_32f( const float* src, int w, int h, float* dst ) {
-	int i, j;
+CV_INLINE void icvTransposeMatrix_32f(const float* src, int w, int h, float* dst) {
+    int i, j;
 
-	for ( i = 0; i < w; i++ )
-		for ( j = 0; j < h; j++ ) {
-			*dst++ = src[j*w + i];
-		}
+    for (i = 0; i < w; i++)
+        for (j = 0; j < h; j++) {
+            *dst++ = src[j*w + i];
+        }
 
-	icvCheckVector_32f( dst, w * h );
+    icvCheckVector_32f(dst, w * h);
 }
 
-CV_INLINE void icvTransposeMatrix_64d( const double* src, int w, int h, double* dst ) {
-	int i, j;
+CV_INLINE void icvTransposeMatrix_64d(const double* src, int w, int h, double* dst) {
+    int i, j;
 
-	for ( i = 0; i < w; i++ )
-		for ( j = 0; j < h; j++ ) {
-			*dst++ = src[j*w + i];
-		}
+    for (i = 0; i < w; i++)
+        for (j = 0; j < h; j++) {
+            *dst++ = src[j*w + i];
+        }
 
-	icvCheckVector_64f( dst, w * h );
+    icvCheckVector_64f(dst, w * h);
 }
 
-CV_INLINE void icvDetMatrix3x3_64d( const double* mat, double* det ) {
+CV_INLINE void icvDetMatrix3x3_64d(const double* mat, double* det) {
 #define m(y,x) mat[(y)*3 + (x)]
 
-	*det = m(0, 0) * (m(1, 1) * m(2, 2) - m(1, 2) * m(2, 1)) -
-		   m(0, 1) * (m(1, 0) * m(2, 2) - m(1, 2) * m(2, 0)) +
-		   m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0));
+    *det = m(0, 0) * (m(1, 1) * m(2, 2) - m(1, 2) * m(2, 1)) -
+           m(0, 1) * (m(1, 0) * m(2, 2) - m(1, 2) * m(2, 0)) +
+           m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0));
 
 #undef m
 
-	icvCheckVector_64f( det, 1 );
+    icvCheckVector_64f(det, 1);
 }
 
 
-CV_INLINE void icvMulMatrix_32f( const float* src1, int w1, int h1,
-								 const float* src2, int w2, int h2,
-								 float* dst ) {
-	int i, j, k;
+CV_INLINE void icvMulMatrix_32f(const float* src1, int w1, int h1,
+                                const float* src2, int w2, int h2,
+                                float* dst) {
+    int i, j, k;
 
-	if ( w1 != h2 ) {
-		assert(0);
-		return;
-	}
+    if (w1 != h2) {
+        assert(0);
+        return;
+    }
 
-	for ( i = 0; i < h1; i++, src1 += w1, dst += w2 )
-		for ( j = 0; j < w2; j++ ) {
-			double s = 0;
-			for ( k = 0; k < w1; k++ ) {
-				s += src1[k] * src2[j + k*w2];
-			}
-			dst[j] = (float)s;
-		}
+    for (i = 0; i < h1; i++, src1 += w1, dst += w2)
+        for (j = 0; j < w2; j++) {
+            double s = 0;
+            for (k = 0; k < w1; k++) {
+                s += src1[k] * src2[j + k*w2];
+            }
+            dst[j] = (float)s;
+        }
 
-	icvCheckVector_32f( dst, h1 * w2 );
+    icvCheckVector_32f(dst, h1 * w2);
 }
 
 
-CV_INLINE void icvMulMatrix_64d( const double* src1, int w1, int h1,
-								 const double* src2, int w2, int h2,
-								 double* dst ) {
-	int i, j, k;
+CV_INLINE void icvMulMatrix_64d(const double* src1, int w1, int h1,
+                                const double* src2, int w2, int h2,
+                                double* dst) {
+    int i, j, k;
 
-	if ( w1 != h2 ) {
-		assert(0);
-		return;
-	}
+    if (w1 != h2) {
+        assert(0);
+        return;
+    }
 
-	for ( i = 0; i < h1; i++, src1 += w1, dst += w2 )
-		for ( j = 0; j < w2; j++ ) {
-			double s = 0;
-			for ( k = 0; k < w1; k++ ) {
-				s += src1[k] * src2[j + k*w2];
-			}
-			dst[j] = s;
-		}
+    for (i = 0; i < h1; i++, src1 += w1, dst += w2)
+        for (j = 0; j < w2; j++) {
+            double s = 0;
+            for (k = 0; k < w1; k++) {
+                s += src1[k] * src2[j + k*w2];
+            }
+            dst[j] = s;
+        }
 
-	icvCheckVector_64f( dst, h1 * w2 );
+    icvCheckVector_64f(dst, h1 * w2);
 }
 
 
@@ -338,53 +338,53 @@ CV_INLINE void icvMulMatrix_64d( const double* src1, int w1, int h1,
 #define icvDotProduct_64d icvDotProduct_64f
 
 
-CV_INLINE void icvInvertMatrix_64d( double* A, int n, double* invA ) {
-	CvMat Am = cvMat( n, n, CV_64F, A );
-	CvMat invAm = cvMat( n, n, CV_64F, invA );
+CV_INLINE void icvInvertMatrix_64d(double* A, int n, double* invA) {
+    CvMat Am = cvMat(n, n, CV_64F, A);
+    CvMat invAm = cvMat(n, n, CV_64F, invA);
 
-	cvInvert( &Am, &invAm, CV_SVD );
+    cvInvert(&Am, &invAm, CV_SVD);
 }
 
-CV_INLINE void icvMulTransMatrixR_64d( double* src, int width, int height, double* dst ) {
-	CvMat srcMat = cvMat( height, width, CV_64F, src );
-	CvMat dstMat = cvMat( width, width, CV_64F, dst );
+CV_INLINE void icvMulTransMatrixR_64d(double* src, int width, int height, double* dst) {
+    CvMat srcMat = cvMat(height, width, CV_64F, src);
+    CvMat dstMat = cvMat(width, width, CV_64F, dst);
 
-	cvMulTransposed( &srcMat, &dstMat, 1 );
+    cvMulTransposed(&srcMat, &dstMat, 1);
 }
 
-CV_INLINE void icvMulTransMatrixL_64d( double* src, int width, int height, double* dst ) {
-	CvMat srcMat = cvMat( height, width, CV_64F, src );
-	CvMat dstMat = cvMat( height, height, CV_64F, dst );
+CV_INLINE void icvMulTransMatrixL_64d(double* src, int width, int height, double* dst) {
+    CvMat srcMat = cvMat(height, width, CV_64F, src);
+    CvMat dstMat = cvMat(height, height, CV_64F, dst);
 
-	cvMulTransposed( &srcMat, &dstMat, 0 );
+    cvMulTransposed(&srcMat, &dstMat, 0);
 }
 
-CV_INLINE void icvMulTransMatrixR_32f( float* src, int width, int height, float* dst ) {
-	CvMat srcMat = cvMat( height, width, CV_32F, src );
-	CvMat dstMat = cvMat( width, width, CV_32F, dst );
+CV_INLINE void icvMulTransMatrixR_32f(float* src, int width, int height, float* dst) {
+    CvMat srcMat = cvMat(height, width, CV_32F, src);
+    CvMat dstMat = cvMat(width, width, CV_32F, dst);
 
-	cvMulTransposed( &srcMat, &dstMat, 1 );
+    cvMulTransposed(&srcMat, &dstMat, 1);
 }
 
-CV_INLINE void icvMulTransMatrixL_32f( float* src, int width, int height, float* dst ) {
-	CvMat srcMat = cvMat( height, width, CV_32F, src );
-	CvMat dstMat = cvMat( height, height, CV_32F, dst );
+CV_INLINE void icvMulTransMatrixL_32f(float* src, int width, int height, float* dst) {
+    CvMat srcMat = cvMat(height, width, CV_32F, src);
+    CvMat dstMat = cvMat(height, height, CV_32F, dst);
 
-	cvMulTransposed( &srcMat, &dstMat, 0 );
+    cvMulTransposed(&srcMat, &dstMat, 0);
 }
 
-CV_INLINE void icvCvt_32f_64d( const float* src, double* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = src[i];
-	}
+CV_INLINE void icvCvt_32f_64d(const float* src, double* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = src[i];
+    }
 }
 
-CV_INLINE void icvCvt_64d_32f( const double* src, float* dst, int len ) {
-	int i;
-	for ( i = 0; i < len; i++ ) {
-		dst[i] = (float)src[i];
-	}
+CV_INLINE void icvCvt_64d_32f(const double* src, float* dst, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        dst[i] = (float)src[i];
+    }
 }
 
 #endif/*_CV_MATRIX_H_*/

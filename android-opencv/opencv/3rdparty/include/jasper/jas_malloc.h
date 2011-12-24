@@ -83,13 +83,13 @@
 extern "C" {
 #endif
 
-	/******************************************************************************\
-	* Hack follows...
-	\******************************************************************************/
+    /******************************************************************************\
+    * Hack follows...
+    \******************************************************************************/
 
 #if defined(DEBUG_MEMALLOC)
-	/* This is somewhat of a hack, but it's a useful hack. :-) */
-	/* Use my own custom memory allocator for debugging. */
+    /* This is somewhat of a hack, but it's a useful hack. :-) */
+    /* Use my own custom memory allocator for debugging. */
 #include "../../../../local/src/memalloc.h"
 #define jas_malloc	MEMALLOC
 #define	jas_free	MEMFREE
@@ -97,23 +97,23 @@ extern "C" {
 #define	jas_calloc	MEMCALLOC
 #endif
 
-	/******************************************************************************\
-	* Functions.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Functions.
+    \******************************************************************************/
 
 #if !defined(DEBUG_MEMALLOC)
 
-	/* Allocate memory. */
-	void* jas_malloc(size_t size);
+    /* Allocate memory. */
+    void* jas_malloc(size_t size);
 
-	/* Free memory. */
-	void jas_free(void* ptr);
+    /* Free memory. */
+    void jas_free(void* ptr);
 
-	/* Resize a block of allocated memory. */
-	void* jas_realloc(void* ptr, size_t size);
+    /* Resize a block of allocated memory. */
+    void* jas_realloc(void* ptr, size_t size);
 
-	/* Allocate a block of memory and initialize the contents to zero. */
-	void* jas_calloc(size_t nmemb, size_t size);
+    /* Allocate a block of memory and initialize the contents to zero. */
+    void* jas_calloc(size_t nmemb, size_t size);
 
 #endif
 

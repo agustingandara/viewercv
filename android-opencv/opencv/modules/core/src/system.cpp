@@ -139,7 +139,7 @@ struct HWFeatures {
     }
 
     int x86_family;
-    bool have[MAX_FEATURE + 1];
+    bool have[MAX_FEATURE+1];
 };
 
 static HWFeatures featuresEnabled = HWFeatures::initialize(), featuresDisabled = HWFeatures();
@@ -557,7 +557,7 @@ CvModule::~CvModule() {
     if (info) {
         CvModuleInfo* p = first;
         for (; p != 0 && p->next != info; p = p->next)
-            { ; }
+            ;
         if (p) {
             p->next = info->next;
         }

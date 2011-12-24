@@ -37,68 +37,68 @@
 namespace cvflann {
 
 class CompositeIndex : public NNIndex {
-	KMeansIndex* kmeans;
-	KDTreeIndex* kdtree;
+    KMeansIndex* kmeans;
+    KDTreeIndex* kdtree;
 
-	const Matrix<float> dataset;
+    const Matrix<float> dataset;
 
 
 public:
 
-	CompositeIndex(const Matrix<float>& inputData, const CompositeIndexParams& params = CompositeIndexParams() ) : dataset(inputData) {
-		KDTreeIndexParams kdtree_params(params.trees);
-		KMeansIndexParams kmeans_params(params.branching, params.iterations, params.centers_init, params.cb_index);
+    CompositeIndex(const Matrix<float>& inputData, const CompositeIndexParams& params = CompositeIndexParams()) : dataset(inputData) {
+        KDTreeIndexParams kdtree_params(params.trees);
+        KMeansIndexParams kmeans_params(params.branching, params.iterations, params.centers_init, params.cb_index);
 
-		kdtree = new KDTreeIndex(inputData, kdtree_params);
-		kmeans = new KMeansIndex(inputData, kmeans_params);
+        kdtree = new KDTreeIndex(inputData, kdtree_params);
+        kmeans = new KMeansIndex(inputData, kmeans_params);
 
-	}
+    }
 
-	virtual ~CompositeIndex() {
-		delete kdtree;
-		delete kmeans;
-	}
-
-
-	flann_algorithm_t getType() const {
-		return COMPOSITE;
-	}
+    virtual ~CompositeIndex() {
+        delete kdtree;
+        delete kmeans;
+    }
 
 
-	int size() const {
-		return dataset.rows;
-	}
-
-	int veclen() const {
-		return dataset.cols;
-	}
+    flann_algorithm_t getType() const {
+        return COMPOSITE;
+    }
 
 
-	int usedMemory() const {
-		return kmeans->usedMemory() + kdtree->usedMemory();
-	}
+    int size() const {
+        return dataset.rows;
+    }
 
-	void buildIndex() {
-		logger.info("Building kmeans tree...\n");
-		kmeans->buildIndex();
-		logger.info("Building kdtree tree...\n");
-		kdtree->buildIndex();
-	}
+    int veclen() const {
+        return dataset.cols;
+    }
 
 
-	void saveIndex(FILE* /*stream*/) {
+    int usedMemory() const {
+        return kmeans->usedMemory() + kdtree->usedMemory();
+    }
 
-	}
+    void buildIndex() {
+        logger.info("Building kmeans tree...\n");
+        kmeans->buildIndex();
+        logger.info("Building kdtree tree...\n");
+        kdtree->buildIndex();
+    }
 
 
-	void loadIndex(FILE* /*stream*/) {
+    void saveIndex(FILE* /*stream*/) {
 
-	}
+    }
 
-	void findNeighbors(ResultSet& result, const float* vec, const SearchParams& searchParams) {
-		kmeans->findNeighbors(result, vec, searchParams);
-		kdtree->findNeighbors(result, vec, searchParams);
-	}
+
+    void loadIndex(FILE* /*stream*/) {
+
+    }
+
+    void findNeighbors(ResultSet& result, const float* vec, const SearchParams& searchParams) {
+        kmeans->findNeighbors(result, vec, searchParams);
+        kdtree->findNeighbors(result, vec, searchParams);
+    }
 
 
 //    Params estimateSearchParams(float precision, Dataset<float>* testset = NULL)

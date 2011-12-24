@@ -126,10 +126,10 @@ acc_(const Mat& _src, Mat& _dst) {
         AT* dst = (AT*)(_dst.data + _dst.step * i);
 
         for (j = 0; j <= size.width - 4; j += 4) {
-            AT t0 = dst[j] + src[j], t1 = dst[j + 1] + src[j + 1];
-            dst[j] = t0; dst[j + 1] = t1;
-            t0 = dst[j + 2] + src[j + 2]; t1 = dst[j + 3] + src[j + 3];
-            dst[j + 2] = t0; dst[j + 3] = t1;
+            AT t0 = dst[j] + src[j], t1 = dst[j+1] + src[j+1];
+            dst[j] = t0; dst[j+1] = t1;
+            t0 = dst[j+2] + src[j+2]; t1 = dst[j+3] + src[j+3];
+            dst[j+2] = t0; dst[j+3] = t1;
         }
 
         for (; j < size.width; j++) {
@@ -155,10 +155,10 @@ accSqr_(const Mat& _src, Mat& _dst) {
         AT* dst = (AT*)(_dst.data + _dst.step * i);
 
         for (j = 0; j <= size.width - 4; j += 4) {
-            AT t0 = dst[j] + sqr(src[j]), t1 = dst[j + 1] + sqr(src[j + 1]);
-            dst[j] = t0; dst[j + 1] = t1;
-            t0 = dst[j + 2] + sqr(src[j + 2]); t1 = dst[j + 3] + sqr(src[j + 3]);
-            dst[j + 2] = t0; dst[j + 3] = t1;
+            AT t0 = dst[j] + sqr(src[j]), t1 = dst[j+1] + sqr(src[j+1]);
+            dst[j] = t0; dst[j+1] = t1;
+            t0 = dst[j+2] + sqr(src[j+2]); t1 = dst[j+3] + sqr(src[j+3]);
+            dst[j+2] = t0; dst[j+3] = t1;
         }
 
         for (; j < size.width; j++) {
@@ -187,11 +187,11 @@ accProd_(const Mat& _src1, const Mat& _src2, Mat& _dst) {
         for (j = 0; j <= size.width - 4; j += 4) {
             AT t0, t1;
             t0 = dst[j] + multiply(src1[j], src2[j]);
-            t1 = dst[j + 1] + multiply(src1[j + 1], src2[j + 1]);
-            dst[j] = t0; dst[j + 1] = t1;
-            t0 = dst[j + 2] + multiply(src1[j + 2], src2[j + 2]);
-            t1 = dst[j + 3] + multiply(src1[j + 3], src2[j + 3]);
-            dst[j + 2] = t0; dst[j + 3] = t1;
+            t1 = dst[j+1] + multiply(src1[j+1], src2[j+1]);
+            dst[j] = t0; dst[j+1] = t1;
+            t0 = dst[j+2] + multiply(src1[j+2], src2[j+2]);
+            t1 = dst[j+3] + multiply(src1[j+3], src2[j+3]);
+            dst[j+2] = t0; dst[j+3] = t1;
         }
 
         for (; j < size.width; j++) {
@@ -220,11 +220,11 @@ accW_(const Mat& _src, Mat& _dst, double _alpha) {
         for (j = 0; j <= size.width - 4; j += 4) {
             AT t0, t1;
             t0 = addw(src[j], alpha, dst[j], beta);
-            t1 = addw(src[j + 1], alpha, dst[j + 1], beta);
-            dst[j] = t0; dst[j + 1] = t1;
-            t0 = addw(src[j + 2], alpha, dst[j + 2], beta);
-            t1 = addw(src[j + 3], alpha, dst[j + 3], beta);
-            dst[j + 2] = t0; dst[j + 3] = t1;
+            t1 = addw(src[j+1], alpha, dst[j+1], beta);
+            dst[j] = t0; dst[j+1] = t1;
+            t0 = addw(src[j+2], alpha, dst[j+2], beta);
+            t1 = addw(src[j+3], alpha, dst[j+3], beta);
+            dst[j+2] = t0; dst[j+3] = t1;
         }
 
         for (; j < size.width; j++) {

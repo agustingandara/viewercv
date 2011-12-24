@@ -45,9 +45,9 @@
 inline
 void
 gluLookAt(const Imath::V3f& pos, const Imath::V3f& interest, const Imath::V3f& up) {
-	gluLookAt(pos.x,      pos.y,      pos.z,
-			  interest.x, interest.y, interest.z,
-			  up.x,       up.y,       up.z);
+    gluLookAt(pos.x,      pos.y,      pos.z,
+              interest.x, interest.y, interest.z,
+              up.x,       up.y,       up.z);
 }
 
 #endif

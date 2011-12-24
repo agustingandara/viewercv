@@ -42,41 +42,41 @@
 #include "precomp.hpp"
 
 CV_IMPL void
-cvDeInterlace( const CvArr* framearr, CvArr* fieldEven, CvArr* fieldOdd ) {
-	CV_FUNCNAME("cvDeInterlace");
+cvDeInterlace(const CvArr* framearr, CvArr* fieldEven, CvArr* fieldOdd) {
+    CV_FUNCNAME("cvDeInterlace");
 
-	__BEGIN__;
+    __BEGIN__;
 
-	CvMat frame_stub, *frame = (CvMat*)framearr;
-	CvMat even_stub, *even = (CvMat*)fieldEven;
-	CvMat odd_stub, *odd = (CvMat*)fieldOdd;
-	CvSize size;
-	int y;
+    CvMat frame_stub, *frame = (CvMat*)framearr;
+    CvMat even_stub, *even = (CvMat*)fieldEven;
+    CvMat odd_stub, *odd = (CvMat*)fieldOdd;
+    CvSize size;
+    int y;
 
-	CV_CALL( frame = cvGetMat( frame, &frame_stub ));
-	CV_CALL( even = cvGetMat( even, &even_stub ));
-	CV_CALL( odd = cvGetMat( odd, &odd_stub ));
+    CV_CALL(frame = cvGetMat(frame, &frame_stub));
+    CV_CALL(even = cvGetMat(even, &even_stub));
+    CV_CALL(odd = cvGetMat(odd, &odd_stub));
 
-	if ( !CV_ARE_TYPES_EQ( frame, even ) || !CV_ARE_TYPES_EQ( frame, odd )) {
-		CV_ERROR( CV_StsUnmatchedFormats, "All the input images must have the same type" );
-	}
+    if (!CV_ARE_TYPES_EQ(frame, even) || !CV_ARE_TYPES_EQ(frame, odd)) {
+        CV_ERROR(CV_StsUnmatchedFormats, "All the input images must have the same type");
+    }
 
-	if ( frame->cols != even->cols || frame->cols != odd->cols ||
-			frame->rows != even->rows * 2 || odd->rows != even->rows ) {
-		CV_ERROR( CV_StsUnmatchedSizes, "Uncorrelated sizes of the input image and output fields" );
-	}
+    if (frame->cols != even->cols || frame->cols != odd->cols ||
+            frame->rows != even->rows * 2 || odd->rows != even->rows) {
+        CV_ERROR(CV_StsUnmatchedSizes, "Uncorrelated sizes of the input image and output fields");
+    }
 
-	size = cvGetMatSize( even );
-	size.width *= CV_ELEM_SIZE( even->type );
+    size = cvGetMatSize(even);
+    size.width *= CV_ELEM_SIZE(even->type);
 
-	for ( y = 0; y < size.height; y++ ) {
-		memcpy( even->data.ptr + even->step * y,
-				frame->data.ptr + frame->step * y * 2, size.width );
-		memcpy( odd->data.ptr + even->step * y,
-				frame->data.ptr + frame->step*(y * 2 + 1), size.width );
-	}
+    for (y = 0; y < size.height; y++) {
+        memcpy(even->data.ptr + even->step * y,
+               frame->data.ptr + frame->step * y * 2, size.width);
+        memcpy(odd->data.ptr + even->step * y,
+               frame->data.ptr + frame->step*(y * 2 + 1), size.width);
+    }
 
-	__END__;
+    __END__;
 }
 
 /* End of file. */

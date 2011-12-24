@@ -54,73 +54,73 @@ namespace Imf {
 class Attribute {
 public:
 
-	//---------------------------
-	// Constructor and destructor
-	//---------------------------
+    //---------------------------
+    // Constructor and destructor
+    //---------------------------
 
-	Attribute ();
-	virtual ~Attribute ();
-
-
-	//-------------------------------
-	// Get this attribute's type name
-	//-------------------------------
-
-	virtual const char* 	typeName () const = 0;
+    Attribute();
+    virtual ~Attribute();
 
 
-	//------------------------------
-	// Make a copy of this attribute
-	//------------------------------
+    //-------------------------------
+    // Get this attribute's type name
+    //-------------------------------
 
-	virtual Attribute* 		copy () const = 0;
-
-
-	//----------------------------------------
-	// Type-specific attribute I/O and copying
-	//----------------------------------------
-
-	virtual void		writeValueTo (OStream& os,
-									  int version) const = 0;
-
-	virtual void		readValueFrom (IStream& is,
-									   int size,
-									   int version) = 0;
-
-	virtual void		copyValueFrom (const Attribute& other) = 0;
+    virtual const char* 	typeName() const = 0;
 
 
-	//------------------
-	// Attribute factory
-	//------------------
+    //------------------------------
+    // Make a copy of this attribute
+    //------------------------------
 
-	static Attribute* 		newAttribute (const char typeName[]);
+    virtual Attribute* 		copy() const = 0;
 
 
-	//-----------------------------------------------------------
-	// Test if a given attribute type has already been registered
-	//-----------------------------------------------------------
+    //----------------------------------------
+    // Type-specific attribute I/O and copying
+    //----------------------------------------
 
-	static bool			knownType (const char typeName[]);
+    virtual void		writeValueTo(OStream& os,
+                                     int version) const = 0;
+
+    virtual void		readValueFrom(IStream& is,
+                                      int size,
+                                      int version) = 0;
+
+    virtual void		copyValueFrom(const Attribute& other) = 0;
+
+
+    //------------------
+    // Attribute factory
+    //------------------
+
+    static Attribute* 		newAttribute(const char typeName[]);
+
+
+    //-----------------------------------------------------------
+    // Test if a given attribute type has already been registered
+    //-----------------------------------------------------------
+
+    static bool			knownType(const char typeName[]);
 
 
 protected:
 
-	//--------------------------------------------------
-	// Register an attribute type so that newAttribute()
-	// knows how to make objects of this type.
-	//--------------------------------------------------
+    //--------------------------------------------------
+    // Register an attribute type so that newAttribute()
+    // knows how to make objects of this type.
+    //--------------------------------------------------
 
-	static void		registerAttributeType (const char typeName[],
-										   Attribute *(*newAttribute)());
+    static void		registerAttributeType(const char typeName[],
+                                          Attribute *(*newAttribute)());
 
-	//------------------------------------------------------
-	// Un-register an attribute type so that newAttribute()
-	// no longer knows how to make objects of this type (for
-	// debugging only).
-	//------------------------------------------------------
+    //------------------------------------------------------
+    // Un-register an attribute type so that newAttribute()
+    // no longer knows how to make objects of this type (for
+    // debugging only).
+    //------------------------------------------------------
 
-	static void		unRegisterAttributeType (const char typeName[]);
+    static void		unRegisterAttributeType(const char typeName[]);
 };
 
 
@@ -132,103 +132,103 @@ template <class T>
 class TypedAttribute: public Attribute {
 public:
 
-	//----------------------------
-	// Constructors and destructor
-	//------------_---------------
+    //----------------------------
+    // Constructors and destructor
+    //------------_---------------
 
-	TypedAttribute ();
-	TypedAttribute (const T& value);
-	TypedAttribute (const TypedAttribute<T> &other);
-	virtual ~TypedAttribute ();
-
-
-	//--------------------------------
-	// Access to the attribute's value
-	//--------------------------------
-
-	T& 					value ();
-	const T& 				value () const;
+    TypedAttribute();
+    TypedAttribute(const T& value);
+    TypedAttribute(const TypedAttribute<T> &other);
+    virtual ~TypedAttribute();
 
 
-	//--------------------------------
-	// Get this attribute's type name.
-	//--------------------------------
+    //--------------------------------
+    // Access to the attribute's value
+    //--------------------------------
 
-	virtual const char* 		typeName () const;
-
-
-	//---------------------------------------------------------
-	// Static version of typeName()
-	// This function must be specialized for each value type T.
-	//---------------------------------------------------------
-
-	static const char* 			staticTypeName ();
+    T& 					value();
+    const T& 				value() const;
 
 
-	//---------------------
-	// Make a new attribute
-	//---------------------
+    //--------------------------------
+    // Get this attribute's type name.
+    //--------------------------------
 
-	static Attribute* 			makeNewAttribute ();
-
-
-	//------------------------------
-	// Make a copy of this attribute
-	//------------------------------
-
-	virtual Attribute* 			copy () const;
+    virtual const char* 		typeName() const;
 
 
-	//-----------------------------------------------------------------
-	// Type-specific attribute I/O and copying.
-	// Depending on type T, these functions may have to be specialized.
-	//-----------------------------------------------------------------
+    //---------------------------------------------------------
+    // Static version of typeName()
+    // This function must be specialized for each value type T.
+    //---------------------------------------------------------
 
-	virtual void		writeValueTo (OStream& os,
-									  int version) const;
-
-	virtual void		readValueFrom (IStream& is,
-									   int size,
-									   int version);
-
-	virtual void		copyValueFrom (const Attribute& other);
+    static const char* 			staticTypeName();
 
 
-	//------------------------------------------------------------
-	// Dynamic casts that throw exceptions instead of returning 0.
-	//------------------------------------------------------------
+    //---------------------
+    // Make a new attribute
+    //---------------------
 
-	static TypedAttribute* 		cast (Attribute* attribute);
-	static const TypedAttribute* 	cast (const Attribute* attribute);
-	static TypedAttribute& 		cast (Attribute& attribute);
-	static const TypedAttribute& 	cast (const Attribute& attribute);
+    static Attribute* 			makeNewAttribute();
 
 
-	//---------------------------------------------------------------
-	// Register this attribute type so that Attribute::newAttribute()
-	// knows how to make objects of this type.
-	//
-	// Note that this function is not thread-safe because it modifies
-	// a global variable in the IlmIlm library.  A thread in a multi-
-	// threaded program may call registerAttributeType() only when no
-	// other thread is accessing any functions or classes in the
-	// IlmImf library.
-	//
-	//---------------------------------------------------------------
+    //------------------------------
+    // Make a copy of this attribute
+    //------------------------------
 
-	static void				registerAttributeType ();
+    virtual Attribute* 			copy() const;
 
 
-	//-----------------------------------------------------
-	// Un-register this attribute type (for debugging only)
-	//-----------------------------------------------------
+    //-----------------------------------------------------------------
+    // Type-specific attribute I/O and copying.
+    // Depending on type T, these functions may have to be specialized.
+    //-----------------------------------------------------------------
 
-	static void				 unRegisterAttributeType ();
+    virtual void		writeValueTo(OStream& os,
+                                     int version) const;
+
+    virtual void		readValueFrom(IStream& is,
+                                      int size,
+                                      int version);
+
+    virtual void		copyValueFrom(const Attribute& other);
+
+
+    //------------------------------------------------------------
+    // Dynamic casts that throw exceptions instead of returning 0.
+    //------------------------------------------------------------
+
+    static TypedAttribute* 		cast(Attribute* attribute);
+    static const TypedAttribute* 	cast(const Attribute* attribute);
+    static TypedAttribute& 		cast(Attribute& attribute);
+    static const TypedAttribute& 	cast(const Attribute& attribute);
+
+
+    //---------------------------------------------------------------
+    // Register this attribute type so that Attribute::newAttribute()
+    // knows how to make objects of this type.
+    //
+    // Note that this function is not thread-safe because it modifies
+    // a global variable in the IlmIlm library.  A thread in a multi-
+    // threaded program may call registerAttributeType() only when no
+    // other thread is accessing any functions or classes in the
+    // IlmImf library.
+    //
+    //---------------------------------------------------------------
+
+    static void				registerAttributeType();
+
+
+    //-----------------------------------------------------
+    // Un-register this attribute type (for debugging only)
+    //-----------------------------------------------------
+
+    static void				 unRegisterAttributeType();
 
 
 private:
 
-	T					_value;
+    T					_value;
 };
 
 
@@ -237,141 +237,141 @@ private:
 //------------------------------------
 
 template <class T>
-TypedAttribute<T>::TypedAttribute (): _value (T()) {
-	// empty
+TypedAttribute<T>::TypedAttribute(): _value(T()) {
+    // empty
 }
 
 
 template <class T>
-TypedAttribute<T>::TypedAttribute (const T& value): _value (value) {
-	// empty
+TypedAttribute<T>::TypedAttribute(const T& value): _value(value) {
+    // empty
 }
 
 
 template <class T>
-TypedAttribute<T>::TypedAttribute (const TypedAttribute<T> &other):
-	_value () {
-	copyValueFrom (other);
+TypedAttribute<T>::TypedAttribute(const TypedAttribute<T> &other):
+    _value() {
+    copyValueFrom(other);
 }
 
 
 template <class T>
-TypedAttribute<T>::~TypedAttribute () {
-	// empty
+TypedAttribute<T>::~TypedAttribute() {
+    // empty
 }
 
 
 template <class T>
 inline T &
-TypedAttribute<T>::value () {
-	return _value;
+TypedAttribute<T>::value() {
+    return _value;
 }
 
 
 template <class T>
 inline const T &
-TypedAttribute<T>::value () const {
-	return _value;
+TypedAttribute<T>::value() const {
+    return _value;
 }
 
 
 template <class T>
 const char *
-TypedAttribute<T>::typeName () const {
-	return staticTypeName();
+TypedAttribute<T>::typeName() const {
+    return staticTypeName();
 }
 
 
 template <class T>
 Attribute *
-TypedAttribute<T>::makeNewAttribute () {
-	return new TypedAttribute<T>();
+TypedAttribute<T>::makeNewAttribute() {
+    return new TypedAttribute<T>();
 }
 
 
 template <class T>
 Attribute *
-TypedAttribute<T>::copy () const {
-	Attribute* attribute = new TypedAttribute<T>();
-	attribute->copyValueFrom (*this);
-	return attribute;
+TypedAttribute<T>::copy() const {
+    Attribute* attribute = new TypedAttribute<T>();
+    attribute->copyValueFrom(*this);
+    return attribute;
 }
 
 
 template <class T>
 void
-TypedAttribute<T>::writeValueTo (OStream& os, int version) const {
-	Xdr::write <StreamIO> (os, _value);
+TypedAttribute<T>::writeValueTo(OStream& os, int version) const {
+    Xdr::write <StreamIO> (os, _value);
 }
 
 
 template <class T>
 void
-TypedAttribute<T>::readValueFrom (IStream& is, int size, int version) {
-	Xdr::read <StreamIO> (is, _value);
+TypedAttribute<T>::readValueFrom(IStream& is, int size, int version) {
+    Xdr::read <StreamIO> (is, _value);
 }
 
 
 template <class T>
 void
-TypedAttribute<T>::copyValueFrom (const Attribute& other) {
-	_value = cast(other)._value;
+TypedAttribute<T>::copyValueFrom(const Attribute& other) {
+    _value = cast(other)._value;
 }
 
 
 template <class T>
 TypedAttribute<T> *
-TypedAttribute<T>::cast (Attribute* attribute) {
-	TypedAttribute<T> *t =
-		dynamic_cast <TypedAttribute<T> *> (attribute);
+TypedAttribute<T>::cast(Attribute* attribute) {
+    TypedAttribute<T> *t =
+        dynamic_cast <TypedAttribute<T> *>(attribute);
 
-	if (t == 0) {
-		throw Iex::TypeExc ("Unexpected attribute type.");
-	}
+    if (t == 0) {
+        throw Iex::TypeExc("Unexpected attribute type.");
+    }
 
-	return t;
+    return t;
 }
 
 
 template <class T>
 const TypedAttribute<T> *
-TypedAttribute<T>::cast (const Attribute* attribute) {
-	const TypedAttribute<T> *t =
-		dynamic_cast <const TypedAttribute<T> *> (attribute);
+TypedAttribute<T>::cast(const Attribute* attribute) {
+    const TypedAttribute<T> *t =
+        dynamic_cast <const TypedAttribute<T> *>(attribute);
 
-	if (t == 0) {
-		throw Iex::TypeExc ("Unexpected attribute type.");
-	}
+    if (t == 0) {
+        throw Iex::TypeExc("Unexpected attribute type.");
+    }
 
-	return t;
+    return t;
 }
 
 
 template <class T>
 inline TypedAttribute<T> &
-TypedAttribute<T>::cast (Attribute& attribute) {
-	return *cast (&attribute);
+TypedAttribute<T>::cast(Attribute& attribute) {
+    return *cast(&attribute);
 }
 
 
 template <class T>
 inline const TypedAttribute<T> &
-TypedAttribute<T>::cast (const Attribute& attribute) {
-	return *cast (&attribute);
+TypedAttribute<T>::cast(const Attribute& attribute) {
+    return *cast(&attribute);
 }
 
 
 template <class T>
 inline void
-TypedAttribute<T>::registerAttributeType () {
-	Attribute::registerAttributeType (staticTypeName(), makeNewAttribute);
+TypedAttribute<T>::registerAttributeType() {
+    Attribute::registerAttributeType(staticTypeName(), makeNewAttribute);
 }
 
 
 template <class T>
 inline void
-TypedAttribute<T>::unRegisterAttributeType () {
-	Attribute::unRegisterAttributeType (staticTypeName());
+TypedAttribute<T>::unRegisterAttributeType() {
+    Attribute::unRegisterAttributeType(staticTypeName());
 }
 
 

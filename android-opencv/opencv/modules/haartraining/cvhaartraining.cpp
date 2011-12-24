@@ -646,7 +646,7 @@ void icvPrecalculate(CvHaarTrainingData* data, CvIntHaarFeatures* haarFeatures,
         userdata = cvUserdata(data, haarFeatures);
 
 #ifdef CV_OPENMP
-        #pragma omp parallel for private(t_data, t_idx, first, t_portion)
+#pragma omp parallel for private(t_data, t_idx, first, t_portion)
         for (first = 0; first < numprecalculated; first += portion) {
             t_data = *data->valcache;
             t_idx = *data->idxcache;
@@ -1236,7 +1236,7 @@ void icvGetNextFromBackgroundData(CvBackgroundData* data,
     }
 
 #ifdef CV_OPENMP
-    #pragma omp critical(c_background_data)
+#pragma omp critical(c_background_data)
 #endif /* CV_OPENMP */
     {
         for (i = 0; i < data->count; i++) {
@@ -1384,11 +1384,11 @@ int icvInitBackgroundReaders(const char* filename, CvSize winsize) {
     if (cvbgdata) {
 
 #ifdef CV_OPENMP
-        #pragma omp parallel
+#pragma omp parallel
 #endif /* CV_OPENMP */
         {
 #ifdef CV_OPENMP
-            #pragma omp critical(c_create_bg_data)
+#pragma omp critical(c_create_bg_data)
 #endif /* CV_OPENMP */
             {
                 if (cvbgreader == NULL) {
@@ -1412,11 +1412,11 @@ static
 void icvDestroyBackgroundReaders() {
     /* release background reader in each thread */
 #ifdef CV_OPENMP
-    #pragma omp parallel
+#pragma omp parallel
 #endif /* CV_OPENMP */
     {
 #ifdef CV_OPENMP
-        #pragma omp critical(c_release_bg_data)
+#pragma omp critical(c_release_bg_data)
 #endif /* CV_OPENMP */
         {
             if (cvbgreader != NULL) {
@@ -1519,8 +1519,8 @@ int icvGetHaarTrainingData(CvHaarTrainingData* data, int first, int count,
     CCOUNTER_SET_ZERO(thread_consumed_count);
 
 #ifdef CV_OPENMP
-    #pragma omp parallel private(img, sum, tilted, sqsum, sumdata, tilteddata, \
-    normfactor, thread_consumed_count, thread_getcount)
+#pragma omp parallel private(img, sum, tilted, sqsum, sumdata, tilteddata, \
+                                 normfactor, thread_consumed_count, thread_getcount)
 #endif /* CV_OPENMP */
     {
         sumdata    = NULL;
@@ -1542,7 +1542,7 @@ int icvGetHaarTrainingData(CvHaarTrainingData* data, int first, int count,
                               * (data->winsize.width + 1)));
 
 #ifdef CV_OPENMP
-        #pragma omp for schedule(static, 1)
+#pragma omp for schedule(static, 1)
 #endif /* CV_OPENMP */
         for (i = first; (i < first + count); i++) {
             if (!ok) {
@@ -1570,7 +1570,7 @@ int icvGetHaarTrainingData(CvHaarTrainingData* data, int first, int count,
 
 #ifdef CV_VERBOSE
             if ((i - first) % 500 == 0) {
-                fprintf(stderr, "%3d%%\r", (int)(100.0 * (i - first) / count));
+                fprintf(stderr, "%3d%%\r", (int)(100.0 *(i - first) / count));
                 fflush(stderr);
             }
 #endif /* CV_VERBOSE */
@@ -1580,7 +1580,7 @@ int icvGetHaarTrainingData(CvHaarTrainingData* data, int first, int count,
         cvFree(&(sqsum.data.ptr));
 
 #ifdef CV_OPENMP
-        #pragma omp critical (c_consumed_count)
+#pragma omp critical (c_consumed_count)
 #endif /* CV_OPENMP */
         {
             /* consumed_count += thread_consumed_count; */
@@ -1590,12 +1590,12 @@ int icvGetHaarTrainingData(CvHaarTrainingData* data, int first, int count,
     } /* omp parallel */
 
     if (consumed != NULL) {
-    *consumed = (int)consumed_count;
+        *consumed = (int)consumed_count;
     }
 
     if (acceptance_ratio != NULL) {
-    /* *acceptance_ratio = ((double) count) / consumed_count; */
-    *acceptance_ratio = CCOUNTER_DIV(count, consumed_count);
+        /* *acceptance_ratio = ((double) count) / consumed_count; */
+        *acceptance_ratio = CCOUNTER_DIV(count, consumed_count);
     }
 
     return static_cast<int>(getcount);
@@ -1749,7 +1749,7 @@ int icvGetHaarTrainingDataFromBGCallback(CvMat* img, void* /*userdata*/) {
 
     // just in case icvGetBackgroundImage is not thread-safe ...
 #ifdef CV_OPENMP
-    #pragma omp critical (get_background_image_callback)
+#pragma omp critical (get_background_image_callback)
 #endif /* CV_OPENMP */
     {
         icvGetBackgroundImage(cvbgdata, cvbgreader, img);
@@ -2026,7 +2026,7 @@ void cvCreateCascadeClassifier(const char* dirname,
             int len = (int)strlen(dirname);
             CvHaarClassifierCascade* cascade = 0;
             strcpy(xml_path, dirname);
-            if (xml_path[len - 1] == '\\' || xml_path[len - 1] == '/') {
+            if (xml_path[len-1] == '\\' || xml_path[len-1] == '/') {
                 len--;
             }
             strcpy(xml_path + len, ".xml");
@@ -2128,7 +2128,7 @@ CvMat* icvGetUsedValues(CvHaarTrainingData* training_data,
 
 
 #ifdef CV_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (r = start; r < start + num; r++) {
         int c;
@@ -2574,7 +2574,7 @@ void cvCreateTreeCascadeClassifier(const char* dirname,
             int len = (int)strlen(dirname);
             CvHaarClassifierCascade* cascade = 0;
             strcpy(xml_path, dirname);
-            if (xml_path[len - 1] == '\\' || xml_path[len - 1] == '/') {
+            if (xml_path[len-1] == '\\' || xml_path[len-1] == '/') {
                 len--;
             }
             strcpy(xml_path + len, ".xml");

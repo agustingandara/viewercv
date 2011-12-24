@@ -52,15 +52,15 @@ namespace Imf {
 
 
 typedef TypedAttribute<Imath::M33f> M33fAttribute;
-template <> const char* M33fAttribute::staticTypeName ();
-template <> void M33fAttribute::writeValueTo (OStream&, int) const;
-template <> void M33fAttribute::readValueFrom (IStream&, int, int);
+template <> const char* M33fAttribute::staticTypeName();
+template <> void M33fAttribute::writeValueTo(OStream&, int) const;
+template <> void M33fAttribute::readValueFrom(IStream&, int, int);
 
 
 typedef TypedAttribute<Imath::M44f> M44fAttribute;
-template <> const char* M44fAttribute::staticTypeName ();
-template <> void M44fAttribute::writeValueTo (OStream&, int) const;
-template <> void M44fAttribute::readValueFrom (IStream&, int, int);
+template <> const char* M44fAttribute::staticTypeName();
+template <> void M44fAttribute::writeValueTo(OStream&, int) const;
+template <> void M44fAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

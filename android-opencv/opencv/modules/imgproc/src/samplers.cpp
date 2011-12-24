@@ -46,85 +46,85 @@
 \**************************************************************************************/
 
 CV_IMPL int
-cvSampleLine( const void* img, CvPoint pt1, CvPoint pt2,
-			  void* _buffer, int connectivity ) {
-	int count = -1;
+cvSampleLine(const void* img, CvPoint pt1, CvPoint pt2,
+             void* _buffer, int connectivity) {
+    int count = -1;
 
-	int i, coi = 0, pix_size;
-	CvMat stub, *mat = cvGetMat( img, &stub, &coi );
-	CvLineIterator iterator;
-	uchar* buffer = (uchar*)_buffer;
+    int i, coi = 0, pix_size;
+    CvMat stub, *mat = cvGetMat(img, &stub, &coi);
+    CvLineIterator iterator;
+    uchar* buffer = (uchar*)_buffer;
 
-	if ( coi != 0 ) {
-		CV_Error( CV_BadCOI, "" );
-	}
+    if (coi != 0) {
+        CV_Error(CV_BadCOI, "");
+    }
 
-	if ( !buffer ) {
-		CV_Error( CV_StsNullPtr, "" );
-	}
+    if (!buffer) {
+        CV_Error(CV_StsNullPtr, "");
+    }
 
-	count = cvInitLineIterator( mat, pt1, pt2, &iterator, connectivity );
+    count = cvInitLineIterator(mat, pt1, pt2, &iterator, connectivity);
 
-	pix_size = CV_ELEM_SIZE(mat->type);
-	for ( i = 0; i < count; i++ ) {
-		for ( int j = 0; j < pix_size; j++ ) {
-			buffer[j] = iterator.ptr[j];
-		}
-		buffer += pix_size;
-		CV_NEXT_LINE_POINT( iterator );
-	}
+    pix_size = CV_ELEM_SIZE(mat->type);
+    for (i = 0; i < count; i++) {
+        for (int j = 0; j < pix_size; j++) {
+            buffer[j] = iterator.ptr[j];
+        }
+        buffer += pix_size;
+        CV_NEXT_LINE_POINT(iterator);
+    }
 
-	return count;
+    return count;
 }
 
 
 static const void*
-icvAdjustRect( const void* srcptr, int src_step, int pix_size,
-			   CvSize src_size, CvSize win_size,
-			   CvPoint ip, CvRect* pRect ) {
-	CvRect rect;
-	const char* src = (const char*)srcptr;
+icvAdjustRect(const void* srcptr, int src_step, int pix_size,
+              CvSize src_size, CvSize win_size,
+              CvPoint ip, CvRect* pRect) {
+    CvRect rect;
+    const char* src = (const char*)srcptr;
 
-	if ( ip.x >= 0 ) {
-		src += ip.x * pix_size;
-		rect.x = 0;
-	} else {
-		rect.x = -ip.x;
-		if ( rect.x > win_size.width ) {
-			rect.x = win_size.width;
-		}
-	}
+    if (ip.x >= 0) {
+        src += ip.x * pix_size;
+        rect.x = 0;
+    } else {
+        rect.x = -ip.x;
+        if (rect.x > win_size.width) {
+            rect.x = win_size.width;
+        }
+    }
 
-	if ( ip.x + win_size.width < src_size.width ) {
-		rect.width = win_size.width;
-	} else {
-		rect.width = src_size.width - ip.x - 1;
-		if ( rect.width < 0 ) {
-			src += rect.width * pix_size;
-			rect.width = 0;
-		}
-		assert( rect.width <= win_size.width );
-	}
+    if (ip.x + win_size.width < src_size.width) {
+        rect.width = win_size.width;
+    } else {
+        rect.width = src_size.width - ip.x - 1;
+        if (rect.width < 0) {
+            src += rect.width * pix_size;
+            rect.width = 0;
+        }
+        assert(rect.width <= win_size.width);
+    }
 
-	if ( ip.y >= 0 ) {
-		src += ip.y * src_step;
-		rect.y = 0;
-	} else {
-		rect.y = -ip.y;
-	}
+    if (ip.y >= 0) {
+        src += ip.y * src_step;
+        rect.y = 0;
+    } else {
+        rect.y = -ip.y;
+    }
 
-	if ( ip.y + win_size.height < src_size.height ) {
-		rect.height = win_size.height;
-	} else {
-		rect.height = src_size.height - ip.y - 1;
-		if ( rect.height < 0 ) {
-			src += rect.height * src_step;
-			rect.height = 0;
-		}
-	}
+    if (ip.y + win_size.height < src_size.height) {
+        rect.height = win_size.height;
+    } else {
+        rect.height = src_size.height - ip.y - 1;
+        if (rect.height < 0) {
+            src += rect.height * src_step;
+            rect.height = 0;
+        }
+    }
 
-	*pRect = rect;
-	return src - rect.x * pix_size;
+    *pRect = rect;
+    return src - rect.x * pix_size;
 }
 
 
@@ -370,101 +370,101 @@ static CvStatus CV_STDCALL icvGetRectSubPix_##flavor##_C3R                  \
 
 
 CvStatus CV_STDCALL icvGetRectSubPix_8u32f_C1R
-( const uchar* src, int src_step, CvSize src_size,
-  float* dst, int dst_step, CvSize win_size, CvPoint2D32f center ) {
-	CvPoint ip;
-	float  a12, a22, b1, b2;
-	float a, b;
-	double s = 0;
-	int i, j;
+(const uchar* src, int src_step, CvSize src_size,
+ float* dst, int dst_step, CvSize win_size, CvPoint2D32f center) {
+    CvPoint ip;
+    float  a12, a22, b1, b2;
+    float a, b;
+    double s = 0;
+    int i, j;
 
-	center.x -= (win_size.width - 1) * 0.5f;
-	center.y -= (win_size.height - 1) * 0.5f;
+    center.x -= (win_size.width - 1) * 0.5f;
+    center.y -= (win_size.height - 1) * 0.5f;
 
-	ip.x = cvFloor( center.x );
-	ip.y = cvFloor( center.y );
+    ip.x = cvFloor(center.x);
+    ip.y = cvFloor(center.y);
 
-	if ( win_size.width <= 0 || win_size.height <= 0 ) {
-		return CV_BADRANGE_ERR;
-	}
+    if (win_size.width <= 0 || win_size.height <= 0) {
+        return CV_BADRANGE_ERR;
+    }
 
-	a = center.x - ip.x;
-	b = center.y - ip.y;
-	a = MAX(a, 0.0001f);
-	a12 = a * (1.f - b);
-	a22 = a * b;
-	b1 = 1.f - b;
-	b2 = b;
-	s = (1. - a) / a;
+    a = center.x - ip.x;
+    b = center.y - ip.y;
+    a = MAX(a, 0.0001f);
+    a12 = a * (1.f - b);
+    a22 = a * b;
+    b1 = 1.f - b;
+    b2 = b;
+    s = (1. - a) / a;
 
-	src_step /= sizeof(src[0]);
-	dst_step /= sizeof(dst[0]);
+    src_step /= sizeof(src[0]);
+    dst_step /= sizeof(dst[0]);
 
-	if ( 0 <= ip.x && ip.x + win_size.width < src_size.width &&
-			0 <= ip.y && ip.y + win_size.height < src_size.height ) {
-		// extracted rectangle is totally inside the image
-		src += ip.y * src_step + ip.x;
+    if (0 <= ip.x && ip.x + win_size.width < src_size.width &&
+            0 <= ip.y && ip.y + win_size.height < src_size.height) {
+        // extracted rectangle is totally inside the image
+        src += ip.y * src_step + ip.x;
 
 #if 0
-		if ( icvCopySubpix_8u32f_C1R_p &&
-				icvCopySubpix_8u32f_C1R_p( src, src_step, dst,
-										   dst_step * sizeof(dst[0]), win_size, a, b ) >= 0 ) {
-			return CV_OK;
-		}
+        if (icvCopySubpix_8u32f_C1R_p &&
+                icvCopySubpix_8u32f_C1R_p(src, src_step, dst,
+                                          dst_step * sizeof(dst[0]), win_size, a, b) >= 0) {
+            return CV_OK;
+        }
 #endif
 
-		for ( ; win_size.height--; src += src_step, dst += dst_step ) {
-			float prev = (1 - a) * (b1 * CV_8TO32F(src[0]) + b2 * CV_8TO32F(src[src_step]));
-			for ( j = 0; j < win_size.width; j++ ) {
-				float t = a12 * CV_8TO32F(src[j+1]) + a22 * CV_8TO32F(src[j+1+src_step]);
-				dst[j] = prev + t;
-				prev = (float)(t * s);
-			}
-		}
-	} else {
-		CvRect r;
+        for (; win_size.height--; src += src_step, dst += dst_step) {
+            float prev = (1 - a) * (b1 * CV_8TO32F(src[0]) + b2 * CV_8TO32F(src[src_step]));
+            for (j = 0; j < win_size.width; j++) {
+                float t = a12 * CV_8TO32F(src[j+1]) + a22 * CV_8TO32F(src[j+1+src_step]);
+                dst[j] = prev + t;
+                prev = (float)(t * s);
+            }
+        }
+    } else {
+        CvRect r;
 
-		src = (const uchar*)icvAdjustRect( src, src_step * sizeof(*src),
-										   sizeof(*src), src_size, win_size, ip, &r);
+        src = (const uchar*)icvAdjustRect(src, src_step * sizeof(*src),
+                                          sizeof(*src), src_size, win_size, ip, &r);
 
-		for ( i = 0; i < win_size.height; i++, dst += dst_step ) {
-			const uchar* src2 = src + src_step;
+        for (i = 0; i < win_size.height; i++, dst += dst_step) {
+            const uchar* src2 = src + src_step;
 
-			if ( i < r.y || i >= r.height ) {
-				src2 -= src_step;
-			}
+            if (i < r.y || i >= r.height) {
+                src2 -= src_step;
+            }
 
-			for ( j = 0; j < r.x; j++ ) {
-				float s0 = CV_8TO32F(src[r.x]) * b1 +
-						   CV_8TO32F(src2[r.x]) * b2;
+            for (j = 0; j < r.x; j++) {
+                float s0 = CV_8TO32F(src[r.x]) * b1 +
+                           CV_8TO32F(src2[r.x]) * b2;
 
-				dst[j] = (float)(s0);
-			}
+                dst[j] = (float)(s0);
+            }
 
-			if ( j < r.width ) {
-				float prev = (1 - a) * (b1 * CV_8TO32F(src[j]) + b2 * CV_8TO32F(src2[j]));
+            if (j < r.width) {
+                float prev = (1 - a) * (b1 * CV_8TO32F(src[j]) + b2 * CV_8TO32F(src2[j]));
 
-				for ( ; j < r.width; j++ ) {
-					float t = a12 * CV_8TO32F(src[j+1]) + a22 * CV_8TO32F(src2[j+1]);
-					dst[j] = prev + t;
-					prev = (float)(t * s);
-				}
-			}
+                for (; j < r.width; j++) {
+                    float t = a12 * CV_8TO32F(src[j+1]) + a22 * CV_8TO32F(src2[j+1]);
+                    dst[j] = prev + t;
+                    prev = (float)(t * s);
+                }
+            }
 
-			for ( ; j < win_size.width; j++ ) {
-				float s0 = CV_8TO32F(src[r.width]) * b1 +
-						   CV_8TO32F(src2[r.width]) * b2;
+            for (; j < win_size.width; j++) {
+                float s0 = CV_8TO32F(src[r.width]) * b1 +
+                           CV_8TO32F(src2[r.width]) * b2;
 
-				dst[j] = (float)(s0);
-			}
+                dst[j] = (float)(s0);
+            }
 
-			if ( i < r.height ) {
-				src = src2;
-			}
-		}
-	}
+            if (i < r.height) {
+                src = src2;
+            }
+        }
+    }
 
-	return CV_OK;
+    return CV_OK;
 }
 
 
@@ -478,13 +478,13 @@ CvStatus CV_STDCALL icvGetRectSubPix_8u32f_C1R
 icvCopySubpix_8u32f_C1R_t icvCopySubpix_8u32f_C1R_p = 0;
 icvCopySubpix_32f_C1R_t icvCopySubpix_32f_C1R_p = 0;*/
 
-ICV_DEF_GET_RECT_SUB_PIX_FUNC( 8u, uchar, uchar, int, CV_NOP, ICV_SCALE, ICV_DESCALE )
+ICV_DEF_GET_RECT_SUB_PIX_FUNC(8u, uchar, uchar, int, CV_NOP, ICV_SCALE, ICV_DESCALE)
 //ICV_DEF_GET_RECT_SUB_PIX_FUNC( 8u32f, uchar, float, float, CV_8TO32F, CV_NOP, CV_NOP )
-ICV_DEF_GET_RECT_SUB_PIX_FUNC( 32f, float, float, float, CV_NOP, CV_NOP, CV_NOP )
+ICV_DEF_GET_RECT_SUB_PIX_FUNC(32f, float, float, float, CV_NOP, CV_NOP, CV_NOP)
 
-ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3( 8u, uchar, uchar, int, CV_NOP, ICV_SCALE, ICV_MUL_SCALE )
-ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3( 8u32f, uchar, float, float, CV_8TO32F, CV_NOP, CV_MUL )
-ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3( 32f, float, float, float, CV_NOP, CV_NOP, CV_MUL )
+ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3(8u, uchar, uchar, int, CV_NOP, ICV_SCALE, ICV_MUL_SCALE)
+ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3(8u32f, uchar, float, float, CV_8TO32F, CV_NOP, CV_MUL)
+ICV_DEF_GET_RECT_SUB_PIX_FUNC_C3(32f, float, float, float, CV_NOP, CV_NOP, CV_MUL)
 
 
 #define  ICV_DEF_INIT_SUBPIX_TAB( FUNCNAME, FLAG )                  \
@@ -497,69 +497,69 @@ static void icvInit##FUNCNAME##FLAG##Table( CvFuncTable* tab )      \
 }
 
 
-ICV_DEF_INIT_SUBPIX_TAB( GetRectSubPix, C1R )
-ICV_DEF_INIT_SUBPIX_TAB( GetRectSubPix, C3R )
+ICV_DEF_INIT_SUBPIX_TAB(GetRectSubPix, C1R)
+ICV_DEF_INIT_SUBPIX_TAB(GetRectSubPix, C3R)
 
-typedef CvStatus (CV_STDCALL* CvGetRectSubPixFunc)( const void* src, int src_step,
-		CvSize src_size, void* dst,
-		int dst_step, CvSize win_size,
-		CvPoint2D32f center );
+typedef CvStatus(CV_STDCALL* CvGetRectSubPixFunc)(const void* src, int src_step,
+        CvSize src_size, void* dst,
+        int dst_step, CvSize win_size,
+        CvPoint2D32f center);
 
 CV_IMPL void
-cvGetRectSubPix( const void* srcarr, void* dstarr, CvPoint2D32f center ) {
-	static CvFuncTable gr_tab[2];
-	static int inittab = 0;
+cvGetRectSubPix(const void* srcarr, void* dstarr, CvPoint2D32f center) {
+    static CvFuncTable gr_tab[2];
+    static int inittab = 0;
 
-	CvMat srcstub, *src = (CvMat*)srcarr;
-	CvMat dststub, *dst = (CvMat*)dstarr;
-	CvSize src_size, dst_size;
-	CvGetRectSubPixFunc func;
-	int cn, src_step, dst_step;
+    CvMat srcstub, *src = (CvMat*)srcarr;
+    CvMat dststub, *dst = (CvMat*)dstarr;
+    CvSize src_size, dst_size;
+    CvGetRectSubPixFunc func;
+    int cn, src_step, dst_step;
 
-	if ( !inittab ) {
-		icvInitGetRectSubPixC1RTable( gr_tab + 0 );
-		icvInitGetRectSubPixC3RTable( gr_tab + 1 );
-		inittab = 1;
-	}
+    if (!inittab) {
+        icvInitGetRectSubPixC1RTable(gr_tab + 0);
+        icvInitGetRectSubPixC3RTable(gr_tab + 1);
+        inittab = 1;
+    }
 
-	if ( !CV_IS_MAT(src)) {
-		src = cvGetMat( src, &srcstub );
-	}
+    if (!CV_IS_MAT(src)) {
+        src = cvGetMat(src, &srcstub);
+    }
 
-	if ( !CV_IS_MAT(dst)) {
-		dst = cvGetMat( dst, &dststub );
-	}
+    if (!CV_IS_MAT(dst)) {
+        dst = cvGetMat(dst, &dststub);
+    }
 
-	cn = CV_MAT_CN( src->type );
+    cn = CV_MAT_CN(src->type);
 
-	if ( (cn != 1 && cn != 3) || !CV_ARE_CNS_EQ( src, dst )) {
-		CV_Error( CV_StsUnsupportedFormat, "" );
-	}
+    if ((cn != 1 && cn != 3) || !CV_ARE_CNS_EQ(src, dst)) {
+        CV_Error(CV_StsUnsupportedFormat, "");
+    }
 
-	src_size = cvGetMatSize( src );
-	dst_size = cvGetMatSize( dst );
-	src_step = src->step ? src->step : CV_STUB_STEP;
-	dst_step = dst->step ? dst->step : CV_STUB_STEP;
+    src_size = cvGetMatSize(src);
+    dst_size = cvGetMatSize(dst);
+    src_step = src->step ? src->step : CV_STUB_STEP;
+    dst_step = dst->step ? dst->step : CV_STUB_STEP;
 
-	//if( dst_size.width > src_size.width || dst_size.height > src_size.height )
-	//    CV_ERROR( CV_StsBadSize, "destination ROI must be smaller than source ROI" );
+    //if( dst_size.width > src_size.width || dst_size.height > src_size.height )
+    //    CV_ERROR( CV_StsBadSize, "destination ROI must be smaller than source ROI" );
 
-	if ( CV_ARE_DEPTHS_EQ( src, dst )) {
-		func = (CvGetRectSubPixFunc)(gr_tab[cn != 1].fn_2d[CV_MAT_DEPTH(src->type)]);
-	} else {
-		if ( CV_MAT_DEPTH( src->type ) != CV_8U || CV_MAT_DEPTH( dst->type ) != CV_32F ) {
-			CV_Error( CV_StsUnsupportedFormat, "" );
-		}
+    if (CV_ARE_DEPTHS_EQ(src, dst)) {
+        func = (CvGetRectSubPixFunc)(gr_tab[cn != 1].fn_2d[CV_MAT_DEPTH(src->type)]);
+    } else {
+        if (CV_MAT_DEPTH(src->type) != CV_8U || CV_MAT_DEPTH(dst->type) != CV_32F) {
+            CV_Error(CV_StsUnsupportedFormat, "");
+        }
 
-		func = (CvGetRectSubPixFunc)(gr_tab[cn != 1].fn_2d[1]);
-	}
+        func = (CvGetRectSubPixFunc)(gr_tab[cn != 1].fn_2d[1]);
+    }
 
-	if ( !func ) {
-		CV_Error( CV_StsUnsupportedFormat, "" );
-	}
+    if (!func) {
+        CV_Error(CV_StsUnsupportedFormat, "");
+    }
 
-	IPPI_CALL( func( src->data.ptr, src_step, src_size,
-					 dst->data.ptr, dst_step, dst_size, center ));
+    IPPI_CALL(func(src->data.ptr, src_step, src_size,
+                   dst->data.ptr, dst_step, dst_size, center));
 }
 
 
@@ -753,108 +753,108 @@ icvGetQuadrangleSubPix_##flavor##_C3R                                       \
 #undef cvt
 #undef cast_macro*/
 
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC( 8u, uchar, uchar, double, ICV_32F8U, CV_8TO32F )
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC( 32f, float, float, double, CV_CAST_32F, CV_NOP )
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC( 8u32f, uchar, float, double, CV_CAST_32F, CV_8TO32F )
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC(8u, uchar, uchar, double, ICV_32F8U, CV_8TO32F)
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC(32f, float, float, double, CV_CAST_32F, CV_NOP)
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC(8u32f, uchar, float, double, CV_CAST_32F, CV_8TO32F)
 
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3( 8u, uchar, uchar, double, ICV_32F8U, CV_8TO32F )
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3( 32f, float, float, double, CV_CAST_32F, CV_NOP )
-ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3( 8u32f, uchar, float, double, CV_CAST_32F, CV_8TO32F )
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3(8u, uchar, uchar, double, ICV_32F8U, CV_8TO32F)
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3(32f, float, float, double, CV_CAST_32F, CV_NOP)
+ICV_DEF_GET_QUADRANGLE_SUB_PIX_FUNC_C3(8u32f, uchar, float, double, CV_CAST_32F, CV_8TO32F)
 
-ICV_DEF_INIT_SUBPIX_TAB( GetQuadrangleSubPix, C1R )
-ICV_DEF_INIT_SUBPIX_TAB( GetQuadrangleSubPix, C3R )
+ICV_DEF_INIT_SUBPIX_TAB(GetQuadrangleSubPix, C1R)
+ICV_DEF_INIT_SUBPIX_TAB(GetQuadrangleSubPix, C3R)
 
-typedef CvStatus (CV_STDCALL* CvGetQuadrangleSubPixFunc)(
-	const void* src, int src_step,
-	CvSize src_size, void* dst,
-	int dst_step, CvSize win_size,
-	const float* matrix );
+typedef CvStatus(CV_STDCALL* CvGetQuadrangleSubPixFunc)(
+    const void* src, int src_step,
+    CvSize src_size, void* dst,
+    int dst_step, CvSize win_size,
+    const float* matrix);
 
 CV_IMPL void
-cvGetQuadrangleSubPix( const void* srcarr, void* dstarr, const CvMat* mat ) {
-	static  CvFuncTable  gq_tab[2];
-	static  int inittab = 0;
+cvGetQuadrangleSubPix(const void* srcarr, void* dstarr, const CvMat* mat) {
+    static  CvFuncTable  gq_tab[2];
+    static  int inittab = 0;
 
-	CvMat srcstub, *src = (CvMat*)srcarr;
-	CvMat dststub, *dst = (CvMat*)dstarr;
-	CvSize src_size, dst_size;
-	CvGetQuadrangleSubPixFunc func;
-	float m[6];
-	int k, cn;
+    CvMat srcstub, *src = (CvMat*)srcarr;
+    CvMat dststub, *dst = (CvMat*)dstarr;
+    CvSize src_size, dst_size;
+    CvGetQuadrangleSubPixFunc func;
+    float m[6];
+    int k, cn;
 
-	if ( !inittab ) {
-		icvInitGetQuadrangleSubPixC1RTable( gq_tab + 0 );
-		icvInitGetQuadrangleSubPixC3RTable( gq_tab + 1 );
-		inittab = 1;
-	}
+    if (!inittab) {
+        icvInitGetQuadrangleSubPixC1RTable(gq_tab + 0);
+        icvInitGetQuadrangleSubPixC3RTable(gq_tab + 1);
+        inittab = 1;
+    }
 
-	if ( !CV_IS_MAT(src)) {
-		src = cvGetMat( src, &srcstub );
-	}
+    if (!CV_IS_MAT(src)) {
+        src = cvGetMat(src, &srcstub);
+    }
 
-	if ( !CV_IS_MAT(dst)) {
-		dst = cvGetMat( dst, &dststub );
-	}
+    if (!CV_IS_MAT(dst)) {
+        dst = cvGetMat(dst, &dststub);
+    }
 
-	if ( !CV_IS_MAT(mat)) {
-		CV_Error( CV_StsBadArg, "map matrix is not valid" );
-	}
+    if (!CV_IS_MAT(mat)) {
+        CV_Error(CV_StsBadArg, "map matrix is not valid");
+    }
 
-	cn = CV_MAT_CN( src->type );
+    cn = CV_MAT_CN(src->type);
 
-	if ( (cn != 1 && cn != 3) || !CV_ARE_CNS_EQ( src, dst )) {
-		CV_Error( CV_StsUnsupportedFormat, "" );
-	}
+    if ((cn != 1 && cn != 3) || !CV_ARE_CNS_EQ(src, dst)) {
+        CV_Error(CV_StsUnsupportedFormat, "");
+    }
 
-	src_size = cvGetMatSize( src );
-	dst_size = cvGetMatSize( dst );
+    src_size = cvGetMatSize(src);
+    dst_size = cvGetMatSize(dst);
 
-	/*if( dst_size.width > src_size.width || dst_size.height > src_size.height )
-	    CV_ERROR( CV_StsBadSize, "destination ROI must not be larger than source ROI" );*/
+    /*if( dst_size.width > src_size.width || dst_size.height > src_size.height )
+        CV_ERROR( CV_StsBadSize, "destination ROI must not be larger than source ROI" );*/
 
-	if ( mat->rows != 2 || mat->cols != 3 )
-		CV_Error( CV_StsBadArg,
-				  "Transformation matrix must be 2x3" );
+    if (mat->rows != 2 || mat->cols != 3)
+        CV_Error(CV_StsBadArg,
+                 "Transformation matrix must be 2x3");
 
-	if ( CV_MAT_TYPE( mat->type ) == CV_32FC1 ) {
-		for ( k = 0; k < 3; k++ ) {
-			m[k] = mat->data.fl[k];
-			m[3 + k] = ((float*)(mat->data.ptr + mat->step))[k];
-		}
-	} else if ( CV_MAT_TYPE( mat->type ) == CV_64FC1 ) {
-		for ( k = 0; k < 3; k++ ) {
-			m[k] = (float)mat->data.db[k];
-			m[3 + k] = (float)((double*)(mat->data.ptr + mat->step))[k];
-		}
-	} else
-		CV_Error( CV_StsUnsupportedFormat,
-				  "The transformation matrix should have 32fC1 or 64fC1 type" );
+    if (CV_MAT_TYPE(mat->type) == CV_32FC1) {
+        for (k = 0; k < 3; k++) {
+            m[k] = mat->data.fl[k];
+            m[3 + k] = ((float*)(mat->data.ptr + mat->step))[k];
+        }
+    } else if (CV_MAT_TYPE(mat->type) == CV_64FC1) {
+        for (k = 0; k < 3; k++) {
+            m[k] = (float)mat->data.db[k];
+            m[3 + k] = (float)((double*)(mat->data.ptr + mat->step))[k];
+        }
+    } else
+        CV_Error(CV_StsUnsupportedFormat,
+                 "The transformation matrix should have 32fC1 or 64fC1 type");
 
-	if ( CV_ARE_DEPTHS_EQ( src, dst )) {
-		func = (CvGetQuadrangleSubPixFunc)(gq_tab[cn != 1].fn_2d[CV_MAT_DEPTH(src->type)]);
-	} else {
-		if ( CV_MAT_DEPTH( src->type ) != CV_8U || CV_MAT_DEPTH( dst->type ) != CV_32F ) {
-			CV_Error( CV_StsUnsupportedFormat, "" );
-		}
+    if (CV_ARE_DEPTHS_EQ(src, dst)) {
+        func = (CvGetQuadrangleSubPixFunc)(gq_tab[cn != 1].fn_2d[CV_MAT_DEPTH(src->type)]);
+    } else {
+        if (CV_MAT_DEPTH(src->type) != CV_8U || CV_MAT_DEPTH(dst->type) != CV_32F) {
+            CV_Error(CV_StsUnsupportedFormat, "");
+        }
 
-		func = (CvGetQuadrangleSubPixFunc)(gq_tab[cn != 1].fn_2d[1]);
-	}
+        func = (CvGetQuadrangleSubPixFunc)(gq_tab[cn != 1].fn_2d[1]);
+    }
 
-	if ( !func ) {
-		CV_Error( CV_StsUnsupportedFormat, "" );
-	}
+    if (!func) {
+        CV_Error(CV_StsUnsupportedFormat, "");
+    }
 
-	IPPI_CALL( func( src->data.ptr, src->step, src_size,
-					 dst->data.ptr, dst->step, dst_size, m ));
+    IPPI_CALL(func(src->data.ptr, src->step, src_size,
+                   dst->data.ptr, dst->step, dst_size, m));
 }
 
 
-void cv::getRectSubPix( const Mat& image, Size patchSize, Point2f center,
-						Mat& patch, int patchType ) {
-	patch.create(patchSize, patchType < 0 ? image.type() :
-				 CV_MAKETYPE(CV_MAT_DEPTH(patchType), image.channels()));
-	CvMat _image = image, _patch = patch;
-	cvGetRectSubPix(&_image, &_patch, center);
+void cv::getRectSubPix(const Mat& image, Size patchSize, Point2f center,
+                       Mat& patch, int patchType) {
+    patch.create(patchSize, patchType < 0 ? image.type() :
+                 CV_MAKETYPE(CV_MAT_DEPTH(patchType), image.channels()));
+    CvMat _image = image, _patch = patch;
+    cvGetRectSubPix(&_image, &_patch, center);
 }
 
 /* End of file. */

@@ -58,13 +58,13 @@ GEMM_CopyBlock(const uchar* src, size_t src_step,
     for (; size.height--; src += src_step, dst += dst_step) {
         for (j = 0; j <= size.width - 4; j += 4) {
             int t0 = ((const int*)src)[j];
-            int t1 = ((const int*)src)[j + 1];
+            int t1 = ((const int*)src)[j+1];
             ((int*)dst)[j] = t0;
-            ((int*)dst)[j + 1] = t1;
-            t0 = ((const int*)src)[j + 2];
-            t1 = ((const int*)src)[j + 3];
-            ((int*)dst)[j + 2] = t0;
-            ((int*)dst)[j + 3] = t1;
+            ((int*)dst)[j+1] = t1;
+            t0 = ((const int*)src)[j+2];
+            t1 = ((const int*)src)[j+3];
+            ((int*)dst)[j+2] = t0;
+            ((int*)dst)[j+3] = t1;
         }
 
         for (; j < size.width; j++) {
@@ -92,7 +92,7 @@ GEMM_TransposeBlock(const uchar* src, size_t src_step,
                 int t0 = ((int*)_src)[0];
                 int t1 = ((int*)_src)[1];
                 ((int*)dst)[j] = t0;
-                ((int*)dst)[j + 1] = t1;
+                ((int*)dst)[j+1] = t1;
             }
             break;
         case sizeof(int)*4:
@@ -100,11 +100,11 @@ GEMM_TransposeBlock(const uchar* src, size_t src_step,
                 int t0 = ((int*)_src)[0];
                 int t1 = ((int*)_src)[1];
                 ((int*)dst)[j] = t0;
-                ((int*)dst)[j + 1] = t1;
+                ((int*)dst)[j+1] = t1;
                 t0 = ((int*)_src)[2];
                 t1 = ((int*)_src)[3];
-                ((int*)dst)[j + 2] = t0;
-                ((int*)dst)[j + 3] = t1;
+                ((int*)dst)[j+2] = t0;
+                ((int*)dst)[j+3] = t1;
             }
             break;
         default:
@@ -156,7 +156,7 @@ GEMMSingleMul(const T* a_data, size_t a_step,
         if (a_step > 1 && a_size.height > 1) {
             a_buf = (T*)cvStackAlloc(drows * sizeof(a_data[0]));
             for (k = 0; k < drows; k++) {
-                a_buf[k] = a_data[a_step * k];
+                a_buf[k] = a_data[a_step*k];
             }
             a_data = a_buf;
         }
@@ -164,7 +164,7 @@ GEMMSingleMul(const T* a_data, size_t a_step,
         if (b_step > 1) {
             b_buf = (T*)cvStackAlloc(d_size.width * sizeof(b_buf[0]));
             for (j = 0; j < d_size.width; j++) {
-                b_buf[j] = b_data[j * b_step];
+                b_buf[j] = b_data[j*b_step];
             }
             b_data = b_buf;
         }
@@ -174,13 +174,13 @@ GEMMSingleMul(const T* a_data, size_t a_step,
             c_data = _c_data;
             for (j = 0; j <= d_size.width - 2; j += 2, c_data += 2 * c_step1) {
                 WT s0 = al * WT(b_data[j]);
-                WT s1 = al * WT(b_data[j + 1]);
+                WT s1 = al * WT(b_data[j+1]);
                 if (!c_data) {
                     d_data[j] = T(s0);
-                    d_data[j + 1] = T(s1);
+                    d_data[j+1] = T(s1);
                 } else {
                     d_data[j] = T(s0 + WT(c_data[0]) * beta);
-                    d_data[j + 1] = T(s1 + WT(c_data[c_step1]) * beta);
+                    d_data[j+1] = T(s1 + WT(c_data[c_step1]) * beta);
                 }
             }
 
@@ -201,7 +201,7 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
             if (a_buf) {
                 for (k = 0; k < n; k++) {
-                    a_buf[k] = a_data[a_step1 * k];
+                    a_buf[k] = a_data[a_step1*k];
                 }
                 a_data = a_buf;
             }
@@ -212,9 +212,9 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
                 for (k = 0; k <= n - 4; k += 4) {
                     s0 += WT(a_data[k]) * WT(b_data[k]);
-                    s1 += WT(a_data[k + 1]) * WT(b_data[k + 1]);
-                    s2 += WT(a_data[k + 2]) * WT(b_data[k + 2]);
-                    s3 += WT(a_data[k + 3]) * WT(b_data[k + 3]);
+                    s1 += WT(a_data[k+1]) * WT(b_data[k+1]);
+                    s2 += WT(a_data[k+2]) * WT(b_data[k+2]);
+                    s3 += WT(a_data[k+3]) * WT(b_data[k+3]);
                 }
 
                 for (; k < n; k++) {
@@ -237,7 +237,7 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
             if (a_buf) {
                 for (k = 0; k < n; k++) {
-                    a_buf[k] = a_data[a_step1 * k];
+                    a_buf[k] = a_data[a_step1*k];
                 }
                 a_data = a_buf;
             }
@@ -254,16 +254,16 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
                 if (!c_data) {
                     d_data[j] = T(s0 * alpha);
-                    d_data[j + 1] = T(s1 * alpha);
-                    d_data[j + 2] = T(s2 * alpha);
-                    d_data[j + 3] = T(s3 * alpha);
+                    d_data[j+1] = T(s1 * alpha);
+                    d_data[j+2] = T(s2 * alpha);
+                    d_data[j+3] = T(s3 * alpha);
                 } else {
                     s0 = s0 * alpha; s1 = s1 * alpha;
                     s2 = s2 * alpha; s3 = s3 * alpha;
                     d_data[j] = T(s0 + WT(c_data[0]) * beta);
-                    d_data[j + 1] = T(s1 + WT(c_data[c_step1]) * beta);
-                    d_data[j + 2] = T(s2 + WT(c_data[c_step1 * 2]) * beta);
-                    d_data[j + 3] = T(s3 + WT(c_data[c_step1 * 3]) * beta);
+                    d_data[j+1] = T(s1 + WT(c_data[c_step1]) * beta);
+                    d_data[j+2] = T(s2 + WT(c_data[c_step1*2]) * beta);
+                    d_data[j+3] = T(s3 + WT(c_data[c_step1*3]) * beta);
                 }
             }
 
@@ -293,7 +293,7 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
             if (a_buf) {
                 for (k = 0; k < n; k++) {
-                    a_buf[k] = _a_data[a_step1 * k];
+                    a_buf[k] = _a_data[a_step1*k];
                 }
                 a_data = a_buf;
             }
@@ -307,13 +307,13 @@ GEMMSingleMul(const T* a_data, size_t a_step,
 
                 for (j = 0; j <= m - 4; j += 4) {
                     WT t0 = d_buf[j] + WT(b_data[j]) * al;
-                    WT t1 = d_buf[j + 1] + WT(b_data[j + 1]) * al;
+                    WT t1 = d_buf[j+1] + WT(b_data[j+1]) * al;
                     d_buf[j] = t0;
-                    d_buf[j + 1] = t1;
-                    t0 = d_buf[j + 2] + WT(b_data[j + 2]) * al;
-                    t1 = d_buf[j + 3] + WT(b_data[j + 3]) * al;
-                    d_buf[j + 2] = t0;
-                    d_buf[j + 3] = t1;
+                    d_buf[j+1] = t1;
+                    t0 = d_buf[j+2] + WT(b_data[j+2]) * al;
+                    t1 = d_buf[j+3] + WT(b_data[j+3]) * al;
+                    d_buf[j+2] = t0;
+                    d_buf[j+3] = t1;
                 }
 
                 for (; j < m; j++) {
@@ -366,7 +366,7 @@ GEMMBlockMul(const T* a_data, size_t a_step,
 
             if (a_buf) {
                 for (k = 0; k < n; k++) {
-                    a_buf[k] = a_data[a_step1 * k];
+                    a_buf[k] = a_data[a_step1*k];
                 }
                 a_data = a_buf;
             }
@@ -375,7 +375,7 @@ GEMMBlockMul(const T* a_data, size_t a_step,
                 WT s0 = do_acc ? d_data[j] : WT(0), s1(0);
                 for (k = 0; k <= n - 2; k += 2) {
                     s0 += WT(a_data[k]) * WT(b_data[k]);
-                    s1 += WT(a_data[k + 1]) * WT(b_data[k + 1]);
+                    s1 += WT(a_data[k+1]) * WT(b_data[k+1]);
                 }
 
                 for (; k < n; k++) {
@@ -391,7 +391,7 @@ GEMMBlockMul(const T* a_data, size_t a_step,
 
             if (a_buf) {
                 for (k = 0; k < n; k++) {
-                    a_buf[k] = a_data[a_step1 * k];
+                    a_buf[k] = a_data[a_step1*k];
                 }
                 a_data = a_buf;
             }
@@ -401,8 +401,8 @@ GEMMBlockMul(const T* a_data, size_t a_step,
                 const T* b = b_data + j;
 
                 if (do_acc) {
-                    s0 = d_data[j]; s1 = d_data[j + 1];
-                    s2 = d_data[j + 2]; s3 = d_data[j + 3];
+                    s0 = d_data[j]; s1 = d_data[j+1];
+                    s2 = d_data[j+2]; s3 = d_data[j+3];
                 } else {
                     s0 = s1 = s2 = s3 = WT(0);
                 }
@@ -413,8 +413,8 @@ GEMMBlockMul(const T* a_data, size_t a_step,
                     s2 += a * WT(b[2]); s3 += a * WT(b[3]);
                 }
 
-                d_data[j] = s0; d_data[j + 1] = s1;
-                d_data[j + 2] = s2; d_data[j + 3] = s3;
+                d_data[j] = s0; d_data[j+1] = s1;
+                d_data[j+2] = s2; d_data[j+3] = s3;
             }
 
             for (; j < m; j++) {
@@ -458,17 +458,17 @@ GEMMStore(const T* c_data, size_t c_step,
             c_data = _c_data;
             for (j = 0; j <= d_size.width - 4; j += 4, c_data += 4 * c_step1) {
                 WT t0 = alpha * d_buf[j];
-                WT t1 = alpha * d_buf[j + 1];
+                WT t1 = alpha * d_buf[j+1];
                 t0 += beta * WT(c_data[0]);
                 t1 += beta * WT(c_data[c_step1]);
                 d_data[j] = T(t0);
-                d_data[j + 1] = T(t1);
-                t0 = alpha * d_buf[j + 2];
-                t1 = alpha * d_buf[j + 3];
-                t0 += beta * WT(c_data[c_step1 * 2]);
-                t1 += beta * WT(c_data[c_step1 * 3]);
-                d_data[j + 2] = T(t0);
-                d_data[j + 3] = T(t1);
+                d_data[j+1] = T(t1);
+                t0 = alpha * d_buf[j+2];
+                t1 = alpha * d_buf[j+3];
+                t0 += beta * WT(c_data[c_step1*2]);
+                t1 += beta * WT(c_data[c_step1*3]);
+                d_data[j+2] = T(t0);
+                d_data[j+3] = T(t1);
             }
             for (; j < d_size.width; j++, c_data += c_step1) {
                 WT t0 = alpha * d_buf[j];
@@ -477,13 +477,13 @@ GEMMStore(const T* c_data, size_t c_step,
         } else {
             for (j = 0; j <= d_size.width - 4; j += 4) {
                 WT t0 = alpha * d_buf[j];
-                WT t1 = alpha * d_buf[j + 1];
+                WT t1 = alpha * d_buf[j+1];
                 d_data[j] = T(t0);
-                d_data[j + 1] = T(t1);
-                t0 = alpha * d_buf[j + 2];
-                t1 = alpha * d_buf[j + 3];
-                d_data[j + 2] = T(t0);
-                d_data[j + 3] = T(t1);
+                d_data[j+1] = T(t1);
+                t0 = alpha * d_buf[j+2];
+                t1 = alpha * d_buf[j+3];
+                d_data[j+2] = T(t0);
+                d_data[j+3] = T(t1);
             }
             for (; j < d_size.width; j++) {
                 d_data[j] = T(alpha * d_buf[j]);
@@ -685,7 +685,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
                         float t0 = a[0] * b[0] + a[1] * b[b_step];
-                        float t1 = a[0] * b[1] + a[1] * b[b_step + 1];
+                        float t1 = a[0] * b[1] + a[1] * b[b_step+1];
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[1] = (float)(t1 * alpha + c[1] * beta);
                     }
@@ -698,7 +698,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
                         float t0 = a[0] * b[0] + a[1] * b[b_step];
-                        float t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step];
+                        float t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step];
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[d_step] = (float)(t1 * alpha + c[c_step] * beta);
                     }
@@ -709,9 +709,9 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
             case 3:
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
-                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2];
-                        float t1 = a[0] * b[1] + a[1] * b[b_step + 1] + a[2] * b[b_step * 2 + 1];
-                        float t2 = a[0] * b[2] + a[1] * b[b_step + 2] + a[2] * b[b_step * 2 + 2];
+                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2];
+                        float t1 = a[0] * b[1] + a[1] * b[b_step+1] + a[2] * b[b_step*2+1];
+                        float t2 = a[0] * b[2] + a[1] * b[b_step+2] + a[2] * b[b_step*2+2];
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[1] = (float)(t1 * alpha + c[1] * beta);
                         d[2] = (float)(t2 * alpha + c[2] * beta);
@@ -724,13 +724,13 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                     }
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
-                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2];
-                        float t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step] + a[a_step + 2] * b[b_step * 2];
-                        float t2 = a[a_step * 2] * b[0] + a[a_step * 2 + 1] * b[b_step] + a[a_step * 2 + 2] * b[b_step * 2];
+                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2];
+                        float t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step] + a[a_step+2] * b[b_step*2];
+                        float t2 = a[a_step*2] * b[0] + a[a_step*2+1] * b[b_step] + a[a_step*2+2] * b[b_step*2];
 
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[d_step] = (float)(t1 * alpha + c[c_step] * beta);
-                        d[d_step * 2] = (float)(t2 * alpha + c[c_step * 2] * beta);
+                        d[d_step*2] = (float)(t2 * alpha + c[c_step*2] * beta);
                     }
                 } else {
                     break;
@@ -739,10 +739,10 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
             case 4:
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
-                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2] + a[3] * b[b_step * 3];
-                        float t1 = a[0] * b[1] + a[1] * b[b_step + 1] + a[2] * b[b_step * 2 + 1] + a[3] * b[b_step * 3 + 1];
-                        float t2 = a[0] * b[2] + a[1] * b[b_step + 2] + a[2] * b[b_step * 2 + 2] + a[3] * b[b_step * 3 + 2];
-                        float t3 = a[0] * b[3] + a[1] * b[b_step + 3] + a[2] * b[b_step * 2 + 3] + a[3] * b[b_step * 3 + 3];
+                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2] + a[3] * b[b_step*3];
+                        float t1 = a[0] * b[1] + a[1] * b[b_step+1] + a[2] * b[b_step*2+1] + a[3] * b[b_step*3+1];
+                        float t2 = a[0] * b[2] + a[1] * b[b_step+2] + a[2] * b[b_step*2+2] + a[3] * b[b_step*3+2];
+                        float t3 = a[0] * b[3] + a[1] * b[b_step+3] + a[2] * b[b_step*2+3] + a[3] * b[b_step*3+3];
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[1] = (float)(t1 * alpha + c[1] * beta);
                         d[2] = (float)(t2 * alpha + c[2] * beta);
@@ -756,17 +756,17 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                     }
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
-                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2] + a[3] * b[b_step * 3];
-                        float t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step] +
-                                   a[a_step + 2] * b[b_step * 2] + a[a_step + 3] * b[b_step * 3];
-                        float t2 = a[a_step * 2] * b[0] + a[a_step * 2 + 1] * b[b_step] +
-                                   a[a_step * 2 + 2] * b[b_step * 2] + a[a_step * 2 + 3] * b[b_step * 3];
-                        float t3 = a[a_step * 3] * b[0] + a[a_step * 3 + 1] * b[b_step] +
-                                   a[a_step * 3 + 2] * b[b_step * 2] + a[a_step * 3 + 3] * b[b_step * 3];
+                        float t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2] + a[3] * b[b_step*3];
+                        float t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step] +
+                                   a[a_step+2] * b[b_step*2] + a[a_step+3] * b[b_step*3];
+                        float t2 = a[a_step*2] * b[0] + a[a_step*2+1] * b[b_step] +
+                                   a[a_step*2+2] * b[b_step*2] + a[a_step*2+3] * b[b_step*3];
+                        float t3 = a[a_step*3] * b[0] + a[a_step*3+1] * b[b_step] +
+                                   a[a_step*3+2] * b[b_step*2] + a[a_step*3+3] * b[b_step*3];
                         d[0] = (float)(t0 * alpha + c[0] * beta);
                         d[d_step] = (float)(t1 * alpha + c[c_step] * beta);
-                        d[d_step * 2] = (float)(t2 * alpha + c[c_step * 2] * beta);
-                        d[d_step * 3] = (float)(t3 * alpha + c[c_step * 3] * beta);
+                        d[d_step*2] = (float)(t2 * alpha + c[c_step*2] * beta);
+                        d[d_step*3] = (float)(t3 * alpha + c[c_step*3] * beta);
                     }
                 } else {
                     break;
@@ -793,7 +793,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
                         double t0 = a[0] * b[0] + a[1] * b[b_step];
-                        double t1 = a[0] * b[1] + a[1] * b[b_step + 1];
+                        double t1 = a[0] * b[1] + a[1] * b[b_step+1];
                         d[0] = t0 * alpha + c[0] * beta;
                         d[1] = t1 * alpha + c[1] * beta;
                     }
@@ -806,7 +806,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
                         double t0 = a[0] * b[0] + a[1] * b[b_step];
-                        double t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step];
+                        double t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step];
                         d[0] = t0 * alpha + c[0] * beta;
                         d[d_step] = t1 * alpha + c[c_step] * beta;
                     }
@@ -817,9 +817,9 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
             case 3:
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
-                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2];
-                        double t1 = a[0] * b[1] + a[1] * b[b_step + 1] + a[2] * b[b_step * 2 + 1];
-                        double t2 = a[0] * b[2] + a[1] * b[b_step + 2] + a[2] * b[b_step * 2 + 2];
+                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2];
+                        double t1 = a[0] * b[1] + a[1] * b[b_step+1] + a[2] * b[b_step*2+1];
+                        double t2 = a[0] * b[2] + a[1] * b[b_step+2] + a[2] * b[b_step*2+2];
                         d[0] = t0 * alpha + c[0] * beta;
                         d[1] = t1 * alpha + c[1] * beta;
                         d[2] = t2 * alpha + c[2] * beta;
@@ -832,13 +832,13 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                     }
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
-                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2];
-                        double t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step] + a[a_step + 2] * b[b_step * 2];
-                        double t2 = a[a_step * 2] * b[0] + a[a_step * 2 + 1] * b[b_step] + a[a_step * 2 + 2] * b[b_step * 2];
+                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2];
+                        double t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step] + a[a_step+2] * b[b_step*2];
+                        double t2 = a[a_step*2] * b[0] + a[a_step*2+1] * b[b_step] + a[a_step*2+2] * b[b_step*2];
 
                         d[0] = t0 * alpha + c[0] * beta;
                         d[d_step] = t1 * alpha + c[c_step] * beta;
-                        d[d_step * 2] = t2 * alpha + c[c_step * 2] * beta;
+                        d[d_step*2] = t2 * alpha + c[c_step*2] * beta;
                     }
                 } else {
                     break;
@@ -847,10 +847,10 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
             case 4:
                 if (len == d_size.width && b != d) {
                     for (i = 0; i < d_size.height; i++, d += d_step, a += a_step, c += c_step) {
-                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2] + a[3] * b[b_step * 3];
-                        double t1 = a[0] * b[1] + a[1] * b[b_step + 1] + a[2] * b[b_step * 2 + 1] + a[3] * b[b_step * 3 + 1];
-                        double t2 = a[0] * b[2] + a[1] * b[b_step + 2] + a[2] * b[b_step * 2 + 2] + a[3] * b[b_step * 3 + 2];
-                        double t3 = a[0] * b[3] + a[1] * b[b_step + 3] + a[2] * b[b_step * 2 + 3] + a[3] * b[b_step * 3 + 3];
+                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2] + a[3] * b[b_step*3];
+                        double t1 = a[0] * b[1] + a[1] * b[b_step+1] + a[2] * b[b_step*2+1] + a[3] * b[b_step*3+1];
+                        double t2 = a[0] * b[2] + a[1] * b[b_step+2] + a[2] * b[b_step*2+2] + a[3] * b[b_step*3+2];
+                        double t3 = a[0] * b[3] + a[1] * b[b_step+3] + a[2] * b[b_step*2+3] + a[3] * b[b_step*3+3];
                         d[0] = t0 * alpha + c[0] * beta;
                         d[1] = t1 * alpha + c[1] * beta;
                         d[2] = t2 * alpha + c[2] * beta;
@@ -864,17 +864,17 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                     }
 
                     for (i = 0; i < d_size.width; i++, d++, b++, c += c_step0) {
-                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step * 2] + a[3] * b[b_step * 3];
-                        double t1 = a[a_step] * b[0] + a[a_step + 1] * b[b_step] +
-                                    a[a_step + 2] * b[b_step * 2] + a[a_step + 3] * b[b_step * 3];
-                        double t2 = a[a_step * 2] * b[0] + a[a_step * 2 + 1] * b[b_step] +
-                                    a[a_step * 2 + 2] * b[b_step * 2] + a[a_step * 2 + 3] * b[b_step * 3];
-                        double t3 = a[a_step * 3] * b[0] + a[a_step * 3 + 1] * b[b_step] +
-                                    a[a_step * 3 + 2] * b[b_step * 2] + a[a_step * 3 + 3] * b[b_step * 3];
+                        double t0 = a[0] * b[0] + a[1] * b[b_step] + a[2] * b[b_step*2] + a[3] * b[b_step*3];
+                        double t1 = a[a_step] * b[0] + a[a_step+1] * b[b_step] +
+                                    a[a_step+2] * b[b_step*2] + a[a_step+3] * b[b_step*3];
+                        double t2 = a[a_step*2] * b[0] + a[a_step*2+1] * b[b_step] +
+                                    a[a_step*2+2] * b[b_step*2] + a[a_step*2+3] * b[b_step*3];
+                        double t3 = a[a_step*3] * b[0] + a[a_step*3+1] * b[b_step] +
+                                    a[a_step*3+2] * b[b_step*2] + a[a_step*3+3] * b[b_step*3];
                         d[0] = t0 * alpha + c[0] * beta;
                         d[d_step] = t1 * alpha + c[c_step] * beta;
-                        d[d_step * 2] = t2 * alpha + c[c_step * 2] * beta;
-                        d[d_step * 3] = t3 * alpha + c[c_step * 3] * beta;
+                        d[d_step*2] = t2 * alpha + c[c_step*2] * beta;
+                        d[d_step*3] = t3 * alpha + c[c_step*3] * beta;
                     }
                 } else {
                     break;
@@ -1059,7 +1059,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
 
             for (i = 0; i < d_size.height; i += di) {
                 di = dm0;
-                if (i + di >= d_size.height || 8 * (i + di) + di > 8 * d_size.height) {
+                if (i + di >= d_size.height || 8 *(i + di) + di > 8 * d_size.height) {
                     di = d_size.height - i;
                 }
 
@@ -1069,7 +1069,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                     size_t _d_step = matD->step;
                     dj = dn0;
 
-                    if (j + dj >= d_size.width || 8 * (j + dj) + dj > 8 * d_size.width) {
+                    if (j + dj >= d_size.width || 8 *(j + dj) + dj > 8 * d_size.width) {
                         dj = d_size.width - j;
                     }
 
@@ -1087,7 +1087,7 @@ void gemm(const Mat& matA, const Mat& matB, double alpha,
                         Size a_bl_size;
 
                         dk = dk0;
-                        if (k + dk >= len || 8 * (k + dk) + dk > 8 * len) {
+                        if (k + dk >= len || 8 *(k + dk) + dk > 8 * len) {
                             dk = len - k;
                         }
 
@@ -1158,7 +1158,7 @@ transformC1_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         for (k = 0; k < dst_cn; k++, dst++, _m += 2)
             for (x = 0; x < size.width; x++) {
-                dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x] + _m[1]);
+                dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x] + _m[1]);
             }
     }
 }
@@ -1176,17 +1176,17 @@ transformC2_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         if (dst_cn == 2)
             for (x = 0; x < size.width * 2; x += 2) {
-                WT v0 = src[x], v1 = src[x + 1];
+                WT v0 = src[x], v1 = src[x+1];
                 T t0 = saturate_cast<T>(m[0] * v0 + m[1] * v1 + m[2]);
                 T t1 = saturate_cast<T>(m[3] * v0 + m[4] * v1 + m[5]);
-                dst[x] = t0; dst[x + 1] = t1;
+                dst[x] = t0; dst[x+1] = t1;
             }
         else {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 3)
                 for (x = 0; x < size.width; x++)
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 2] +
-                                                       _m[1] * src[x * 2 + 1] + _m[2]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*2] +
+                                                      _m[1] * src[x*2+1] + _m[2]);
         }
     }
 }
@@ -1204,11 +1204,11 @@ transformC3_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         if (dst_cn == 3)
             for (x = 0; x < size.width * 3; x += 3) {
-                WT v0 = src[x], v1 = src[x + 1], v2 = src[x + 2];
+                WT v0 = src[x], v1 = src[x+1], v2 = src[x+2];
                 T t0 = saturate_cast<T>(m[0] * v0 + m[1] * v1 + m[2] * v2 + m[3]);
                 T t1 = saturate_cast<T>(m[4] * v0 + m[5] * v1 + m[6] * v2 + m[7]);
                 T t2 = saturate_cast<T>(m[8] * v0 + m[9] * v1 + m[10] * v2 + m[11]);
-                dst[x] = t0; dst[x + 1] = t1; dst[x + 2] = t2;
+                dst[x] = t0; dst[x+1] = t1; dst[x+2] = t2;
             }
         else if (dst_cn == 1)
             for (x = 0; x < size.width; x++, src += 3) {
@@ -1218,8 +1218,8 @@ transformC3_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 4)
                 for (x = 0; x < size.width; x++)
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 3] +
-                                                       _m[1] * src[x * 3 + 1] + _m[2] * src[x * 3 + 2] + _m[3]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*3] +
+                                                      _m[1] * src[x*3+1] + _m[2] * src[x*3+2] + _m[3]);
         }
     }
 }
@@ -1238,20 +1238,20 @@ transformC4_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         if (dst_cn == 4)
             for (x = 0; x < size.width * 4; x += 4) {
-                WT v0 = src[x], v1 = src[x + 1], v2 = src[x + 2], v3 = src[x + 3];
+                WT v0 = src[x], v1 = src[x+1], v2 = src[x+2], v3 = src[x+3];
                 T t0 = saturate_cast<T>(m[0] * v0 + m[1] * v1 + m[2] * v2 + m[3] * v3 + m[4]);
                 T t1 = saturate_cast<T>(m[5] * v0 + m[6] * v1 + m[7] * v2 + m[8] * v3 + m[9]);
-                dst[x] = t0; dst[x + 1] = t1;
+                dst[x] = t0; dst[x+1] = t1;
                 t0 = saturate_cast<T>(m[10] * v0 + m[11] * v1 + m[12] * v2 + m[13] * v3 + m[14]);
                 t1 = saturate_cast<T>(m[15] * v0 + m[16] * v1 + m[17] * v2 + m[18] * v3 + m[19]);
-                dst[x + 2] = t0; dst[x + 3] = t1;
+                dst[x+2] = t0; dst[x+3] = t1;
             }
         else {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 5)
                 for (x = 0; x < size.width; x++)
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 4] + _m[1] * src[x * 4 + 1] +
-                                                       _m[2] * src[x * 4 + 2] + _m[3] * src[x * 4 + 3] + _m[4]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*4] + _m[1] * src[x*4+1] +
+                                                      _m[2] * src[x*4+2] + _m[3] * src[x*4+3] + _m[4]);
         }
     }
 }
@@ -1389,11 +1389,11 @@ transformC3_<uchar, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             }
 
             for (; x < size.width * 3; x += 3) {
-                int v0 = src[x], v1 = src[x + 1], v2 = src[x + 2];
+                int v0 = src[x], v1 = src[x+1], v2 = src[x+2];
                 uchar t0 = saturate_cast<uchar>((m00 * v0 + m01 * v1 + m02 * v2 + m03) >> BITS);
                 uchar t1 = saturate_cast<uchar>((m10 * v0 + m11 * v1 + m12 * v2 + m13) >> BITS);
                 uchar t2 = saturate_cast<uchar>((m20 * v0 + m21 * v1 + m22 * v2 + m23) >> BITS);
-                dst[x] = t0; dst[x + 1] = t1; dst[x + 2] = t2;
+                dst[x] = t0; dst[x+1] = t1; dst[x+2] = t2;
             }
         }
         return;
@@ -1411,8 +1411,8 @@ transformC3_<uchar, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 4)
                 for (x = 0; x < size.width; x++)
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * CV_8TO32F(src[x * 3]) +
-                                                       _m[1] * CV_8TO32F(src[x * 3 + 1]) + _m[2] * CV_8TO32F(src[x * 3 + 2]) + _m[3]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * CV_8TO32F(src[x*3]) +
+                                                      _m[1] * CV_8TO32F(src[x*3+1]) + _m[2] * CV_8TO32F(src[x*3+2]) + _m[3]);
         }
     }
 }
@@ -1476,11 +1476,11 @@ transformC3_<ushort, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             }
 
             for (; x < size.width * 3; x += 3) {
-                WT v0 = src[x], v1 = src[x + 1], v2 = src[x + 2];
+                WT v0 = src[x], v1 = src[x+1], v2 = src[x+2];
                 T t0 = saturate_cast<T>(m[0] * v0 + m[1] * v1 + m[2] * v2 + m[3]);
                 T t1 = saturate_cast<T>(m[4] * v0 + m[5] * v1 + m[6] * v2 + m[7]);
                 T t2 = saturate_cast<T>(m[8] * v0 + m[9] * v1 + m[10] * v2 + m[11]);
-                dst[x] = t0; dst[x + 1] = t1; dst[x + 2] = t2;
+                dst[x] = t0; dst[x+1] = t1; dst[x+2] = t2;
             }
         }
         return;
@@ -1498,7 +1498,7 @@ transformC3_<ushort, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 4)
                 for (x = 0; x < size.width; x++) {
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 3] + _m[1] * src[x * 3 + 1] + _m[2] * src[x * 3 + 2] + _m[3]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*3] + _m[1] * src[x*3+1] + _m[2] * src[x*3+2] + _m[3]);
                 }
         }
     }
@@ -1533,11 +1533,11 @@ transformC3_<float, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             }
 
             for (; x < size.width * 3; x += 3) {
-                WT v0 = src[x], v1 = src[x + 1], v2 = src[x + 2];
+                WT v0 = src[x], v1 = src[x+1], v2 = src[x+2];
                 T t0 = saturate_cast<T>(m[0] * v0 + m[1] * v1 + m[2] * v2 + m[3]);
                 T t1 = saturate_cast<T>(m[4] * v0 + m[5] * v1 + m[6] * v2 + m[7]);
                 T t2 = saturate_cast<T>(m[8] * v0 + m[9] * v1 + m[10] * v2 + m[11]);
-                dst[x] = t0; dst[x + 1] = t1; dst[x + 2] = t2;
+                dst[x] = t0; dst[x+1] = t1; dst[x+2] = t2;
             }
         }
         return;
@@ -1555,7 +1555,7 @@ transformC3_<float, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
             const WT* _m = m;
             for (k = 0; k < dst_cn; k++, dst++, _m += 4)
                 for (x = 0; x < size.width; x++) {
-                    dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 3] + _m[1] * src[x * 3 + 1] + _m[2] * src[x * 3 + 2] + _m[3]);
+                    dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*3] + _m[1] * src[x*3+1] + _m[2] * src[x*3+2] + _m[3]);
                 }
         }
     }
@@ -1597,8 +1597,8 @@ transformC4_<float, float>(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
         const WT* _m = m;
         for (k = 0; k < dst_cn; k++, dst++, _m += 5)
             for (x = 0; x < size.width; x++)
-                dst[x * dst_cn] = saturate_cast<T>(_m[0] * src[x * 4] + _m[1] * src[x * 4 + 1] +
-                                                   _m[2] * src[x * 4 + 2] + _m[3] * src[x * 4 + 3] + _m[4]);
+                dst[x* dst_cn] = saturate_cast<T>(_m[0] * src[x*4] + _m[1] * src[x*4+1] +
+                                                  _m[2] * src[x*4+2] + _m[3] * src[x*4+3] + _m[4]);
     }
 }
 
@@ -1617,8 +1617,8 @@ diagtransC2_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         for (x = 0; x < size.width * 2; x += 2) {
             T t0 = saturate_cast<T>(m[0] * src[x] + m[2]);
-            T t1 = saturate_cast<T>(m[4] * src[x + 1] + m[5]);
-            dst[x] = t0; dst[x + 1] = t1;
+            T t1 = saturate_cast<T>(m[4] * src[x+1] + m[5]);
+            dst[x] = t0; dst[x+1] = t1;
         }
     }
 }
@@ -1635,9 +1635,9 @@ diagtransC3_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         for (x = 0; x < size.width * 3; x += 3) {
             T t0 = saturate_cast<T>(m[0] * src[x] + m[3]);
-            T t1 = saturate_cast<T>(m[5] * src[x + 1] + m[7]);
-            T t2 = saturate_cast<T>(m[10] * src[x + 2] + m[11]);
-            dst[x] = t0; dst[x + 1] = t1; dst[x + 2] = t2;
+            T t1 = saturate_cast<T>(m[5] * src[x+1] + m[7]);
+            T t2 = saturate_cast<T>(m[10] * src[x+2] + m[11]);
+            dst[x] = t0; dst[x+1] = t1; dst[x+2] = t2;
         }
     }
 }
@@ -1654,11 +1654,11 @@ diagtransC4_(const Mat& srcmat, Mat& dstmat, Mat& tmat) {
 
         for (x = 0; x < size.width * 4; x += 4) {
             T t0 = saturate_cast<T>(m[0] * src[x] + m[4]);
-            T t1 = saturate_cast<T>(m[6] * src[x + 1] + m[9]);
-            dst[x] = t0; dst[x + 1] = t1;
-            t0 = saturate_cast<T>(m[12] * src[x + 2] + m[14]);
-            t1 = saturate_cast<T>(m[18] * src[x + 3] + m[19]);
-            dst[x + 2] = t0; dst[x + 3] = t1;
+            T t1 = saturate_cast<T>(m[6] * src[x+1] + m[9]);
+            dst[x] = t0; dst[x+1] = t1;
+            t0 = saturate_cast<T>(m[12] * src[x+2] + m[14]);
+            t1 = saturate_cast<T>(m[18] * src[x+3] + m[19]);
+            dst[x+2] = t0; dst[x+3] = t1;
         }
     }
 }
@@ -1723,8 +1723,8 @@ void transform(const Mat& src, Mat& dst, const Mat& _m) {
 
         for (i = 0, isDiag = true; isDiag && i < scn; i++) {
             for (j = 0; isDiag && j < scn; j++) {
-                double v = mtype == CV_32F ? ((float*)m.data)[i * (scn + 1) + j] :
-                           ((double*)m.data)[i * (scn + 1) + j];
+                double v = mtype == CV_32F ? ((float*)m.data)[i*(scn+1)+j] :
+                           ((double*)m.data)[i*(scn+1)+j];
                 if (i != j && fabs(v) > eps) {
                     isDiag = false;
                 }
@@ -1737,15 +1737,15 @@ void transform(const Mat& src, Mat& dst, const Mat& _m) {
                 uchar* data = lut.data + i;
                 double val, delta;
                 if (mtype == CV_32F) {
-                    val = ((float*)m.data)[i * (scn + 1) + scn];
-                    delta = ((float*)m.data)[i * (scn + 1) + i];
+                    val = ((float*)m.data)[i*(scn+1) + scn];
+                    delta = ((float*)m.data)[i*(scn+1) + i];
                 } else {
-                    val = ((double*)m.data)[i * (scn + 1) + scn];
-                    delta = ((double*)m.data)[i * (scn + 1) + i];
+                    val = ((double*)m.data)[i*(scn+1) + scn];
+                    delta = ((double*)m.data)[i*(scn+1) + i];
                 }
                 for (j = 0; j < 256; j++, val += delta) {
                     int ival = cvRound(val);
-                    data[j * scn] = CV_CAST_8U(ival);
+                    data[j* scn] = CV_CAST_8U(ival);
                 }
             }
             LUT(src, lut, dst);
@@ -1778,9 +1778,9 @@ perspectiveTransform2_(const Mat& srcmat, Mat& dstmat, const double* mat) {
             if (fabs(w) > FLT_EPSILON) {
                 w = 1. / w;
                 dst[j] = (T)((x * mat[0] + y * mat[1] + mat[2]) * w);
-                dst[j + 1] = (T)((x * mat[3] + y * mat[4] + mat[5]) * w);
+                dst[j+1] = (T)((x * mat[3] + y * mat[4] + mat[5]) * w);
             } else {
-                dst[j] = dst[j + 1] = (T)0;
+                dst[j] = dst[j+1] = (T)0;
             }
         }
     }
@@ -1801,10 +1801,10 @@ perspectiveTransform3_(const Mat& srcmat, Mat& dstmat, const double* mat) {
             if (fabs(w) > FLT_EPSILON) {
                 w = 1. / w;
                 dst[j] = (T)((x * mat[0] + y * mat[1] + z * mat[2] + mat[3]) * w);
-                dst[j + 1] = (T)((x * mat[4] + y * mat[5] + z * mat[6] + mat[7]) * w);
-                dst[j + 2] = (T)((x * mat[8] + y * mat[9] + z * mat[10] + mat[11]) * w);
+                dst[j+1] = (T)((x * mat[4] + y * mat[5] + z * mat[6] + mat[7]) * w);
+                dst[j+2] = (T)((x * mat[8] + y * mat[9] + z * mat[10] + mat[11]) * w);
             } else {
-                dst[j] = dst[j + 1] = dst[j + 2] = (T)0;
+                dst[j] = dst[j+1] = dst[j+2] = (T)0;
             }
         }
     }
@@ -1905,13 +1905,13 @@ void scaleAdd(const Mat& src1, double alpha, const Mat& src2, Mat& dst) {
             int i;
             for (i = 0; i <= size.width - 4; i += 4) {
                 float t0 = s1[i] * a + s2[i];
-                float t1 = s1[i + 1] * a + s2[i + 1];
+                float t1 = s1[i+1] * a + s2[i+1];
                 d[i] = t0;
-                d[i + 1] = t1;
-                t0 = s1[i + 2] * a + s2[i + 2];
-                t1 = s1[i + 3] * a + s2[i + 3];
-                d[i + 2] = t0;
-                d[i + 3] = t1;
+                d[i+1] = t1;
+                t0 = s1[i+2] * a + s2[i+2];
+                t1 = s1[i+3] * a + s2[i+3];
+                d[i+2] = t0;
+                d[i+3] = t1;
             }
 
             for (; i < size.width; i++) {
@@ -1935,13 +1935,13 @@ void scaleAdd(const Mat& src1, double alpha, const Mat& src2, Mat& dst) {
             int i;
             for (i = 0; i <= size.width - 4; i += 4) {
                 double t0 = s1[i] * alpha + s2[i];
-                double t1 = s1[i + 1] * alpha + s2[i + 1];
+                double t1 = s1[i+1] * alpha + s2[i+1];
                 d[i] = t0;
-                d[i + 1] = t1;
-                t0 = s1[i + 2] * alpha + s2[i + 2];
-                t1 = s1[i + 3] * alpha + s2[i + 3];
-                d[i + 2] = t0;
-                d[i + 3] = t1;
+                d[i+1] = t1;
+                t0 = s1[i+2] * alpha + s2[i+2];
+                t1 = s1[i+3] * alpha + s2[i+3];
+                d[i+2] = t0;
+                d[i+3] = t1;
             }
 
             for (; i < size.width; i++) {
@@ -2054,8 +2054,8 @@ double Mahalanobis(const Mat& v1, const Mat& v2, const Mat& icovar) {
         for (i = 0; i < len; i++, mat += matstep) {
             double row_sum = 0;
             for (j = 0; j <= len - 4; j += 4)
-                row_sum += diff[j] * mat[j] + diff[j + 1] * mat[j + 1] +
-                           diff[j + 2] * mat[j + 2] + diff[j + 3] * mat[j + 3];
+                row_sum += diff[j] * mat[j] + diff[j+1] * mat[j+1] +
+                           diff[j+2] * mat[j+2] + diff[j+3] * mat[j+3];
             for (; j < len; j++) {
                 row_sum += diff[j] * mat[j];
             }
@@ -2080,8 +2080,8 @@ double Mahalanobis(const Mat& v1, const Mat& v2, const Mat& icovar) {
         for (i = 0; i < len; i++, mat += matstep) {
             double row_sum = 0;
             for (j = 0; j <= len - 4; j += 4)
-                row_sum += diff[j] * mat[j] + diff[j + 1] * mat[j + 1] +
-                           diff[j + 2] * mat[j + 2] + diff[j + 3] * mat[j + 3];
+                row_sum += diff[j] * mat[j] + diff[j+1] * mat[j+1] +
+                           diff[j+2] * mat[j+2] + diff[j+3] * mat[j+3];
             for (; j < len; j++) {
                 row_sum += diff[j] * mat[j];
             }
@@ -2126,8 +2126,8 @@ MulTransposedR(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
     if (delta && delta_cols < size.width) {
         delta_buf = col_buf + size.height;
         for (i = 0; i < size.height; i++)
-            delta_buf[i * 4] = delta_buf[i * 4 + 1] =
-                                   delta_buf[i * 4 + 2] = delta_buf[i * 4 + 3] = delta[i * deltastep];
+            delta_buf[i*4] = delta_buf[i*4+1] =
+                                 delta_buf[i*4+2] = delta_buf[i*4+3] = delta[i*deltastep];
         delta = delta_buf;
         deltastep = deltastep ? 4 : 0;
     }
@@ -2135,7 +2135,7 @@ MulTransposedR(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
     if (!delta)
         for (i = 0; i < size.width; i++, tdst += dststep) {
             for (k = 0; k < size.height; k++) {
-                col_buf[k] = src[k * srcstep + i];
+                col_buf[k] = src[k*srcstep+i];
             }
 
             for (j = i; j <= size.width - 4; j += 4) {
@@ -2151,9 +2151,9 @@ MulTransposedR(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
                 }
 
                 tdst[j] = (dT)(s0 * scale);
-                tdst[j + 1] = (dT)(s1 * scale);
-                tdst[j + 2] = (dT)(s2 * scale);
-                tdst[j + 3] = (dT)(s3 * scale);
+                tdst[j+1] = (dT)(s1 * scale);
+                tdst[j+2] = (dT)(s2 * scale);
+                tdst[j+3] = (dT)(s3 * scale);
             }
 
             for (; j < size.width; j++) {
@@ -2171,11 +2171,11 @@ MulTransposedR(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
         for (i = 0; i < size.width; i++, tdst += dststep) {
             if (!delta_buf)
                 for (k = 0; k < size.height; k++) {
-                    col_buf[k] = src[k * srcstep + i] - delta[k * deltastep + i];
+                    col_buf[k] = src[k*srcstep+i] - delta[k*deltastep+i];
                 }
             else
                 for (k = 0; k < size.height; k++) {
-                    col_buf[k] = src[k * srcstep + i] - delta_buf[k * deltastep];
+                    col_buf[k] = src[k*srcstep+i] - delta_buf[k*deltastep];
                 }
 
             for (j = i; j <= size.width - 4; j += 4) {
@@ -2192,9 +2192,9 @@ MulTransposedR(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
                 }
 
                 tdst[j] = (dT)(s0 * scale);
-                tdst[j + 1] = (dT)(s1 * scale);
-                tdst[j + 2] = (dT)(s2 * scale);
-                tdst[j + 3] = (dT)(s3 * scale);
+                tdst[j+1] = (dT)(s1 * scale);
+                tdst[j+2] = (dT)(s2 * scale);
+                tdst[j+3] = (dT)(s3 * scale);
             }
 
             for (; j < size.width; j++) {
@@ -2233,8 +2233,8 @@ MulTransposedL(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
                 const sT* tsrc2 = src + j * srcstep;
 
                 for (k = 0; k <= size.width - 4; k += 4)
-                    s += tsrc1[k] * tsrc2[k] + tsrc1[k + 1] * tsrc2[k + 1] +
-                         tsrc1[k + 2] * tsrc2[k + 2] + tsrc1[k + 3] * tsrc2[k + 3];
+                    s += tsrc1[k] * tsrc2[k] + tsrc1[k+1] * tsrc2[k+1] +
+                         tsrc1[k+2] * tsrc2[k+2] + tsrc1[k+3] * tsrc2[k+3];
                 for (; k < size.width; k++) {
                     s += tsrc1[k] * tsrc2[k];
                 }
@@ -2270,9 +2270,9 @@ MulTransposedL(const Mat& srcmat, Mat& dstmat, const Mat& deltamat, double scale
                 }
                 for (k = 0; k <= size.width - 4; k += 4, tdelta2 += delta_shift)
                     s += row_buf[k] * (tsrc2[k] - tdelta2[0]) +
-                         row_buf[k + 1] * (tsrc2[k + 1] - tdelta2[1]) +
-                         row_buf[k + 2] * (tsrc2[k + 2] - tdelta2[2]) +
-                         row_buf[k + 3] * (tsrc2[k + 3] - tdelta2[3]);
+                         row_buf[k+1] * (tsrc2[k+1] - tdelta2[1]) +
+                         row_buf[k+2] * (tsrc2[k+2] - tdelta2[2]) +
+                         row_buf[k+3] * (tsrc2[k+3] - tdelta2[3]);
                 for (; k < size.width; k++, tdelta2++) {
                     s += row_buf[k] * (tsrc2[k] - tdelta2[0]);
                 }
@@ -2408,9 +2408,9 @@ dotprod_(const Mat& srcmat1, const Mat& srcmat2) {
             WT t = 0;
             for (i = 0; i <= size.width - 4; i += 4) {
                 sum += (WT)src1[i] * src2[i] +
-                       (WT)src1[i + 1] * src2[i + 1] +
-                       (WT)src1[i + 2] * src2[i + 2] +
-                       (WT)src1[i + 3] * src2[i + 3];
+                       (WT)src1[i+1] * src2[i+1] +
+                       (WT)src1[i+2] * src2[i+2] +
+                       (WT)src1[i+3] * src2[i+3];
             }
 
             for (; i < size.width; i++) {

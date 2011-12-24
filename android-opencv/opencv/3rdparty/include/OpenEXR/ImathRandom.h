@@ -84,53 +84,53 @@ namespace Imath {
 class Rand32 {
 public:
 
-	//------------
-	// Constructor
-	//------------
+    //------------
+    // Constructor
+    //------------
 
-	Rand32 (unsigned long int seed = 0);
-
-
-	//--------------------------------
-	// Re-initialize with a given seed
-	//--------------------------------
-
-	void		init (unsigned long int seed);
+    Rand32(unsigned long int seed = 0);
 
 
-	//----------------------------------------------------------
-	// Get the next value in the sequence (range: [false, true])
-	//----------------------------------------------------------
+    //--------------------------------
+    // Re-initialize with a given seed
+    //--------------------------------
 
-	bool		nextb ();
-
-
-	//---------------------------------------------------------------
-	// Get the next value in the sequence (range: [0 ... 0xffffffff])
-	//---------------------------------------------------------------
-
-	unsigned long int	nexti ();
+    void		init(unsigned long int seed);
 
 
-	//------------------------------------------------------
-	// Get the next value in the sequence (range: [0 ... 1[)
-	//------------------------------------------------------
+    //----------------------------------------------------------
+    // Get the next value in the sequence (range: [false, true])
+    //----------------------------------------------------------
 
-	float		nextf ();
+    bool		nextb();
 
 
-	//-------------------------------------------------------------------
-	// Get the next value in the sequence (range [rangeMin ... rangeMax[)
-	//-------------------------------------------------------------------
+    //---------------------------------------------------------------
+    // Get the next value in the sequence (range: [0 ... 0xffffffff])
+    //---------------------------------------------------------------
 
-	float		nextf (float rangeMin, float rangeMax);
+    unsigned long int	nexti();
+
+
+    //------------------------------------------------------
+    // Get the next value in the sequence (range: [0 ... 1[)
+    //------------------------------------------------------
+
+    float		nextf();
+
+
+    //-------------------------------------------------------------------
+    // Get the next value in the sequence (range [rangeMin ... rangeMax[)
+    //-------------------------------------------------------------------
+
+    float		nextf(float rangeMin, float rangeMax);
 
 
 private:
 
-	void		next ();
+    void		next();
 
-	unsigned long int	_state;
+    unsigned long int	_state;
 };
 
 
@@ -143,54 +143,54 @@ private:
 class Rand48 {
 public:
 
-	//------------
-	// Constructor
-	//------------
+    //------------
+    // Constructor
+    //------------
 
-	Rand48 (unsigned long int seed = 0);
-
-
-	//--------------------------------
-	// Re-initialize with a given seed
-	//--------------------------------
-
-	void		init (unsigned long int seed);
+    Rand48(unsigned long int seed = 0);
 
 
-	//----------------------------------------------------------
-	// Get the next value in the sequence (range: [false, true])
-	//----------------------------------------------------------
+    //--------------------------------
+    // Re-initialize with a given seed
+    //--------------------------------
 
-	bool		nextb ();
-
-
-	//---------------------------------------------------------------
-	// Get the next value in the sequence (range: [0 ... 0x7fffffff])
-	//---------------------------------------------------------------
-
-	long int		nexti ();
+    void		init(unsigned long int seed);
 
 
-	//------------------------------------------------------
-	// Get the next value in the sequence (range: [0 ... 1[)
-	//------------------------------------------------------
+    //----------------------------------------------------------
+    // Get the next value in the sequence (range: [false, true])
+    //----------------------------------------------------------
 
-	double		nextf ();
+    bool		nextb();
 
 
-	//-------------------------------------------------------------------
-	// Get the next value in the sequence (range [rangeMin ... rangeMax[)
-	//-------------------------------------------------------------------
+    //---------------------------------------------------------------
+    // Get the next value in the sequence (range: [0 ... 0x7fffffff])
+    //---------------------------------------------------------------
 
-	double		nextf (double rangeMin, double rangeMax);
+    long int		nexti();
+
+
+    //------------------------------------------------------
+    // Get the next value in the sequence (range: [0 ... 1[)
+    //------------------------------------------------------
+
+    double		nextf();
+
+
+    //-------------------------------------------------------------------
+    // Get the next value in the sequence (range [rangeMin ... rangeMax[)
+    //-------------------------------------------------------------------
+
+    double		nextf(double rangeMin, double rangeMax);
 
 
 private:
 
-	unsigned short int	_state[3];
+    unsigned short int	_state[3];
 
 #if defined ( _WIN32 ) || defined ( _WIN64 ) || defined ( __MWERKS__ )
-	void    	    	shiftState();
+    void    	    	shiftState();
 #endif
 };
 
@@ -202,7 +202,7 @@ private:
 
 template <class Vec, class Rand>
 Vec
-solidSphereRand (Rand& rand);
+solidSphereRand(Rand& rand);
 
 
 //-------------------------------------------------------------
@@ -212,7 +212,7 @@ solidSphereRand (Rand& rand);
 
 template <class Vec, class Rand>
 Vec
-hollowSphereRand (Rand& rand);
+hollowSphereRand(Rand& rand);
 
 
 //-----------------------------------------------
@@ -222,7 +222,7 @@ hollowSphereRand (Rand& rand);
 
 template <class Rand>
 float
-gaussRand (Rand& rand);
+gaussRand(Rand& rand);
 
 
 //----------------------------------------------------
@@ -233,7 +233,7 @@ gaussRand (Rand& rand);
 
 template <class Vec, class Rand>
 Vec
-gaussSphereRand (Rand& rand);
+gaussSphereRand(Rand& rand);
 
 
 //---------------
@@ -242,64 +242,64 @@ gaussSphereRand (Rand& rand);
 
 
 inline void
-Rand32::init (unsigned long int seed) {
-	_state = (seed * 0xa5a573a5L) ^ 0x5a5a5a5aL;
+Rand32::init(unsigned long int seed) {
+    _state = (seed * 0xa5a573a5L) ^ 0x5a5a5a5aL;
 }
 
 
 inline
-Rand32::Rand32 (unsigned long int seed) {
-	init (seed);
+Rand32::Rand32(unsigned long int seed) {
+    init(seed);
 }
 
 
 inline void
-Rand32::next () {
-	_state = 1664525L * _state + 1013904223L;
+Rand32::next() {
+    _state = 1664525L * _state + 1013904223L;
 }
 
 
 inline bool
-Rand32::nextb () {
-	next ();
-	// Return the 31st (most significant) bit, by and-ing with 2 ^ 31.
-	return !!(_state & 2147483648UL);
+Rand32::nextb() {
+    next();
+    // Return the 31st (most significant) bit, by and-ing with 2 ^ 31.
+    return !!(_state & 2147483648UL);
 }
 
 
 inline unsigned long int
-Rand32::nexti () {
-	next ();
-	return _state & 0xffffffff;
+Rand32::nexti() {
+    next();
+    return _state & 0xffffffff;
 }
 
 
 inline float
-Rand32::nextf () {
-	next ();
-	return ((int) (_state & 0xffffff)) * ((float) (1.0F / 0x1000000));
+Rand32::nextf() {
+    next();
+    return ((int)(_state & 0xffffff)) * ((float)(1.0F / 0x1000000));
 }
 
 
 inline float
-Rand32::nextf (float rangeMin, float rangeMax) {
-	return rangeMin + nextf() * (rangeMax - rangeMin);
+Rand32::nextf(float rangeMin, float rangeMax) {
+    return rangeMin + nextf() * (rangeMax - rangeMin);
 }
 
 
 inline void
-Rand48::init (unsigned long int seed) {
-	seed = (seed * 0xa5a573a5L) ^ 0x5a5a5a5aL;
+Rand48::init(unsigned long int seed) {
+    seed = (seed * 0xa5a573a5L) ^ 0x5a5a5a5aL;
 
-	_state[0] = (unsigned short int) (seed);
-	_state[1] = (unsigned short int) (seed >> 16);
-	_state[2] = (unsigned short int) (seed);
+    _state[0] = (unsigned short int)(seed);
+    _state[1] = (unsigned short int)(seed >> 16);
+    _state[2] = (unsigned short int)(seed);
 }
 
 
 inline
-Rand48::Rand48 (unsigned long int seed) {
-	init (seed);
+Rand48::Rand48(unsigned long int seed) {
+    init(seed);
 }
 
 
@@ -307,126 +307,126 @@ Rand48::Rand48 (unsigned long int seed) {
 
 inline void
 Rand48::shiftState() {
-	unsigned long   accu;
-	unsigned short  temp[2];
+    unsigned long   accu;
+    unsigned short  temp[2];
 
-	accu = 0xe66dUL * ( unsigned long )_state[0] + 0x000bUL;
+    accu = 0xe66dUL * (unsigned long)_state[0] + 0x000bUL;
 
-	temp[0] = ( unsigned short )accu;	/* lower 16 bits */
-	accu >>= sizeof( unsigned short ) * 8;
+    temp[0] = (unsigned short)accu;	/* lower 16 bits */
+    accu >>= sizeof(unsigned short) * 8;
 
-	accu += 0xe66dUL * ( unsigned long )_state[1] +
-			0xdeecUL * ( unsigned long )_state[0];
+    accu += 0xe66dUL * (unsigned long)_state[1] +
+            0xdeecUL * (unsigned long)_state[0];
 
-	temp[1] = ( unsigned short )accu;	/* middle 16 bits */
-	accu >>= sizeof( unsigned short ) * 8;
+    temp[1] = (unsigned short)accu;	/* middle 16 bits */
+    accu >>= sizeof(unsigned short) * 8;
 
-	accu += 0xe66dUL * _state[2] +
-			0xdeecUL * _state[1] +
-			0x0005UL * _state[0];
+    accu += 0xe66dUL * _state[2] +
+            0xdeecUL * _state[1] +
+            0x0005UL * _state[0];
 
-	_state[0] = temp[0];
-	_state[1] = temp[1];
-	_state[2] = ( unsigned short )accu;
+    _state[0] = temp[0];
+    _state[1] = temp[1];
+    _state[2] = (unsigned short)accu;
 }
 
 #endif
 
 inline bool
-Rand48::nextb () {
+Rand48::nextb() {
 #if defined ( _WIN32 ) || defined ( _WIN64 ) || defined ( __MWERKS__ )
-	shiftState();
-	return ( ( long( _state[2] ) << 15 ) + ( long( _state[1] ) >> 1 ) ) & 0x1;
+    shiftState();
+    return ((long(_state[2]) << 15) + (long(_state[1]) >> 1)) & 0x1;
 #else
-	return nrand48 (_state) & 1;
+    return nrand48(_state) & 1;
 #endif
 }
 
 
 inline long int
-Rand48::nexti () {
+Rand48::nexti() {
 #if defined ( _WIN32 ) || defined ( _WIN64 ) || defined ( __MWERKS__ )
-	shiftState();
-	return ( long( _state[2] ) << 15 ) + ( long( _state[1] ) >> 1 );
+    shiftState();
+    return (long(_state[2]) << 15) + (long(_state[1]) >> 1);
 #else
-	return nrand48 (_state);
+    return nrand48(_state);
 #endif
 }
 
 
 inline double
-Rand48::nextf () {
+Rand48::nextf() {
 #if defined ( _WIN32 ) || defined ( _WIN64 ) || defined ( __MWERKS__ )
-	shiftState();
-	return ldexp( double( _state[0] ), -48 ) +
-		   ldexp( double( _state[1] ), -32 ) +
-		   ldexp( double( _state[2] ), -16 );
+    shiftState();
+    return ldexp(double(_state[0]), -48) +
+           ldexp(double(_state[1]), -32) +
+           ldexp(double(_state[2]), -16);
 #else
-	return erand48 (_state);
+    return erand48(_state);
 #endif
 }
 
 
 inline double
-Rand48::nextf (double rangeMin, double rangeMax) {
-	return rangeMin + nextf() * (rangeMax - rangeMin);
+Rand48::nextf(double rangeMin, double rangeMax) {
+    return rangeMin + nextf() * (rangeMax - rangeMin);
 }
 
 
 template <class Vec, class Rand>
 Vec
-solidSphereRand (Rand& rand) {
-	Vec v;
+solidSphereRand(Rand& rand) {
+    Vec v;
 
-	do {
-		for (unsigned int i = 0; i < Vec::dimensions(); i++) {
-			v[i] = (typename Vec::BaseType) rand.nextf (-1, 1);
-		}
-	} while (v.length2() > 1);
+    do {
+        for (unsigned int i = 0; i < Vec::dimensions(); i++) {
+            v[i] = (typename Vec::BaseType) rand.nextf(-1, 1);
+        }
+    } while (v.length2() > 1);
 
-	return v;
+    return v;
 }
 
 
 template <class Vec, class Rand>
 Vec
-hollowSphereRand (Rand& rand) {
-	Vec v;
-	typename Vec::BaseType length;
+hollowSphereRand(Rand& rand) {
+    Vec v;
+    typename Vec::BaseType length;
 
-	do {
-		for (unsigned int i = 0; i < Vec::dimensions(); i++) {
-			v[i] = (typename Vec::BaseType) rand.nextf (-1, 1);
-		}
+    do {
+        for (unsigned int i = 0; i < Vec::dimensions(); i++) {
+            v[i] = (typename Vec::BaseType) rand.nextf(-1, 1);
+        }
 
-		length = v.length();
-	} while (length > 1 || length == 0);
+        length = v.length();
+    } while (length > 1 || length == 0);
 
-	return v / length;
+    return v / length;
 }
 
 
 template <class Rand>
 float
-gaussRand (Rand& rand) {
-	float x;		// Note: to avoid numerical problems with very small
-	float y;		// numbers, we make these variables singe-precision
-	float length2;	// floats, but later we call the double-precision log()
-	// and sqrt() functions instead of logf() and sqrtf().
-	do {
-		x = float (rand.nextf (-1, 1));
-		y = float (rand.nextf (-1, 1));
-		length2 = x * x + y * y;
-	} while (length2 >= 1 || length2 == 0);
+gaussRand(Rand& rand) {
+    float x;		// Note: to avoid numerical problems with very small
+    float y;		// numbers, we make these variables singe-precision
+    float length2;	// floats, but later we call the double-precision log()
+    // and sqrt() functions instead of logf() and sqrtf().
+    do {
+        x = float(rand.nextf(-1, 1));
+        y = float(rand.nextf(-1, 1));
+        length2 = x * x + y * y;
+    } while (length2 >= 1 || length2 == 0);
 
-	return x * sqrt (-2 * log (length2) / length2);
+    return x * sqrt(-2 * log(length2) / length2);
 }
 
 
 template <class Vec, class Rand>
 Vec
-gaussSphereRand (Rand& rand) {
-	return hollowSphereRand <Vec> (rand) * gaussRand (rand);
+gaussSphereRand(Rand& rand) {
+    return hollowSphereRand <Vec> (rand) * gaussRand(rand);
 }
 
 double drand48();

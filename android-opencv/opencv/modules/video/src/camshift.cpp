@@ -58,86 +58,86 @@
 //    Notes:
 //F*/
 CV_IMPL int
-cvMeanShift( const void* imgProb, CvRect windowIn,
-			 CvTermCriteria criteria, CvConnectedComp* comp ) {
-	CvMoments moments;
-	int    i = 0, eps;
-	CvMat  stub, *mat = (CvMat*)imgProb;
-	CvMat  cur_win;
-	CvRect cur_rect = windowIn;
+cvMeanShift(const void* imgProb, CvRect windowIn,
+            CvTermCriteria criteria, CvConnectedComp* comp) {
+    CvMoments moments;
+    int    i = 0, eps;
+    CvMat  stub, *mat = (CvMat*)imgProb;
+    CvMat  cur_win;
+    CvRect cur_rect = windowIn;
 
-	if ( comp ) {
-		comp->rect = windowIn;
-	}
+    if (comp) {
+        comp->rect = windowIn;
+    }
 
-	moments.m00 = moments.m10 = moments.m01 = 0;
+    moments.m00 = moments.m10 = moments.m01 = 0;
 
-	mat = cvGetMat( mat, &stub );
+    mat = cvGetMat(mat, &stub);
 
-	if ( CV_MAT_CN( mat->type ) > 1 ) {
-		CV_Error( CV_BadNumChannels, cvUnsupportedFormat );
-	}
+    if (CV_MAT_CN(mat->type) > 1) {
+        CV_Error(CV_BadNumChannels, cvUnsupportedFormat);
+    }
 
-	if ( windowIn.height <= 0 || windowIn.width <= 0 ) {
-		CV_Error( CV_StsBadArg, "Input window has non-positive sizes" );
-	}
+    if (windowIn.height <= 0 || windowIn.width <= 0) {
+        CV_Error(CV_StsBadArg, "Input window has non-positive sizes");
+    }
 
-	if ( windowIn.x < 0 || windowIn.x + windowIn.width > mat->cols ||
-			windowIn.y < 0 || windowIn.y + windowIn.height > mat->rows ) {
-		CV_Error( CV_StsBadArg, "Initial window is not inside the image ROI" );
-	}
+    if (windowIn.x < 0 || windowIn.x + windowIn.width > mat->cols ||
+            windowIn.y < 0 || windowIn.y + windowIn.height > mat->rows) {
+        CV_Error(CV_StsBadArg, "Initial window is not inside the image ROI");
+    }
 
-	criteria = cvCheckTermCriteria( criteria, 1., 100 );
-	eps = cvRound( criteria.epsilon * criteria.epsilon );
+    criteria = cvCheckTermCriteria(criteria, 1., 100);
+    eps = cvRound(criteria.epsilon * criteria.epsilon);
 
-	for ( i = 0; i < criteria.max_iter; i++ ) {
-		int dx, dy, nx, ny;
-		double inv_m00;
+    for (i = 0; i < criteria.max_iter; i++) {
+        int dx, dy, nx, ny;
+        double inv_m00;
 
-		cvGetSubRect( mat, &cur_win, cur_rect );
-		cvMoments( &cur_win, &moments );
+        cvGetSubRect(mat, &cur_win, cur_rect);
+        cvMoments(&cur_win, &moments);
 
-		/* Calculating center of mass */
-		if ( fabs(moments.m00) < DBL_EPSILON ) {
-			break;
-		}
+        /* Calculating center of mass */
+        if (fabs(moments.m00) < DBL_EPSILON) {
+            break;
+        }
 
-		inv_m00 = moments.inv_sqrt_m00 * moments.inv_sqrt_m00;
-		dx = cvRound( moments.m10 * inv_m00 - windowIn.width * 0.5 );
-		dy = cvRound( moments.m01 * inv_m00 - windowIn.height * 0.5 );
+        inv_m00 = moments.inv_sqrt_m00 * moments.inv_sqrt_m00;
+        dx = cvRound(moments.m10 * inv_m00 - windowIn.width * 0.5);
+        dy = cvRound(moments.m01 * inv_m00 - windowIn.height * 0.5);
 
-		nx = cur_rect.x + dx;
-		ny = cur_rect.y + dy;
+        nx = cur_rect.x + dx;
+        ny = cur_rect.y + dy;
 
-		if ( nx < 0 ) {
-			nx = 0;
-		} else if ( nx + cur_rect.width > mat->cols ) {
-			nx = mat->cols - cur_rect.width;
-		}
+        if (nx < 0) {
+            nx = 0;
+        } else if (nx + cur_rect.width > mat->cols) {
+            nx = mat->cols - cur_rect.width;
+        }
 
-		if ( ny < 0 ) {
-			ny = 0;
-		} else if ( ny + cur_rect.height > mat->rows ) {
-			ny = mat->rows - cur_rect.height;
-		}
+        if (ny < 0) {
+            ny = 0;
+        } else if (ny + cur_rect.height > mat->rows) {
+            ny = mat->rows - cur_rect.height;
+        }
 
-		dx = nx - cur_rect.x;
-		dy = ny - cur_rect.y;
-		cur_rect.x = nx;
-		cur_rect.y = ny;
+        dx = nx - cur_rect.x;
+        dy = ny - cur_rect.y;
+        cur_rect.x = nx;
+        cur_rect.y = ny;
 
-		/* Check for coverage centers mass & window */
-		if ( dx * dx + dy * dy < eps ) {
-			break;
-		}
-	}
+        /* Check for coverage centers mass & window */
+        if (dx * dx + dy * dy < eps) {
+            break;
+        }
+    }
 
-	if ( comp ) {
-		comp->rect = cur_rect;
-		comp->area = (float)moments.m00;
-	}
+    if (comp) {
+        comp->rect = cur_rect;
+        comp->area = (float)moments.m00;
+    }
 
-	return i;
+    return i;
 }
 
 
@@ -160,155 +160,155 @@ cvMeanShift( const void* imgProb, CvRect windowIn,
 //    Notes:
 //F*/
 CV_IMPL int
-cvCamShift( const void* imgProb, CvRect windowIn,
-			CvTermCriteria criteria,
-			CvConnectedComp* _comp,
-			CvBox2D* box ) {
-	const int TOLERANCE = 10;
-	CvMoments moments;
-	double m00 = 0, m10, m01, mu20, mu11, mu02, inv_m00;
-	double a, b, c, xc, yc;
-	double rotate_a, rotate_c;
-	double theta = 0, square;
-	double cs, sn;
-	double length = 0, width = 0;
-	int itersUsed = 0;
-	CvConnectedComp comp;
-	CvMat  cur_win, stub, *mat = (CvMat*)imgProb;
+cvCamShift(const void* imgProb, CvRect windowIn,
+           CvTermCriteria criteria,
+           CvConnectedComp* _comp,
+           CvBox2D* box) {
+    const int TOLERANCE = 10;
+    CvMoments moments;
+    double m00 = 0, m10, m01, mu20, mu11, mu02, inv_m00;
+    double a, b, c, xc, yc;
+    double rotate_a, rotate_c;
+    double theta = 0, square;
+    double cs, sn;
+    double length = 0, width = 0;
+    int itersUsed = 0;
+    CvConnectedComp comp;
+    CvMat  cur_win, stub, *mat = (CvMat*)imgProb;
 
-	comp.rect = windowIn;
+    comp.rect = windowIn;
 
-	mat = cvGetMat( mat, &stub );
+    mat = cvGetMat(mat, &stub);
 
-	itersUsed = cvMeanShift( mat, windowIn, criteria, &comp );
-	windowIn = comp.rect;
+    itersUsed = cvMeanShift(mat, windowIn, criteria, &comp);
+    windowIn = comp.rect;
 
-	windowIn.x -= TOLERANCE;
-	if ( windowIn.x < 0 ) {
-		windowIn.x = 0;
-	}
+    windowIn.x -= TOLERANCE;
+    if (windowIn.x < 0) {
+        windowIn.x = 0;
+    }
 
-	windowIn.y -= TOLERANCE;
-	if ( windowIn.y < 0 ) {
-		windowIn.y = 0;
-	}
+    windowIn.y -= TOLERANCE;
+    if (windowIn.y < 0) {
+        windowIn.y = 0;
+    }
 
-	windowIn.width += 2 * TOLERANCE;
-	if ( windowIn.x + windowIn.width > mat->width ) {
-		windowIn.width = mat->width - windowIn.x;
-	}
+    windowIn.width += 2 * TOLERANCE;
+    if (windowIn.x + windowIn.width > mat->width) {
+        windowIn.width = mat->width - windowIn.x;
+    }
 
-	windowIn.height += 2 * TOLERANCE;
-	if ( windowIn.y + windowIn.height > mat->height ) {
-		windowIn.height = mat->height - windowIn.y;
-	}
+    windowIn.height += 2 * TOLERANCE;
+    if (windowIn.y + windowIn.height > mat->height) {
+        windowIn.height = mat->height - windowIn.y;
+    }
 
-	cvGetSubRect( mat, &cur_win, windowIn );
+    cvGetSubRect(mat, &cur_win, windowIn);
 
-	/* Calculating moments in new center mass */
-	cvMoments( &cur_win, &moments );
+    /* Calculating moments in new center mass */
+    cvMoments(&cur_win, &moments);
 
-	m00 = moments.m00;
-	m10 = moments.m10;
-	m01 = moments.m01;
-	mu11 = moments.mu11;
-	mu20 = moments.mu20;
-	mu02 = moments.mu02;
+    m00 = moments.m00;
+    m10 = moments.m10;
+    m01 = moments.m01;
+    mu11 = moments.mu11;
+    mu20 = moments.mu20;
+    mu02 = moments.mu02;
 
-	if ( fabs(m00) < DBL_EPSILON ) {
-		return -1;
-	}
+    if (fabs(m00) < DBL_EPSILON) {
+        return -1;
+    }
 
-	inv_m00 = 1. / m00;
-	xc = cvRound( m10 * inv_m00 + windowIn.x );
-	yc = cvRound( m01 * inv_m00 + windowIn.y );
-	a = mu20 * inv_m00;
-	b = mu11 * inv_m00;
-	c = mu02 * inv_m00;
+    inv_m00 = 1. / m00;
+    xc = cvRound(m10 * inv_m00 + windowIn.x);
+    yc = cvRound(m01 * inv_m00 + windowIn.y);
+    a = mu20 * inv_m00;
+    b = mu11 * inv_m00;
+    c = mu02 * inv_m00;
 
-	/* Calculating width & height */
-	square = sqrt( 4 * b * b + (a - c) * (a - c) );
+    /* Calculating width & height */
+    square = sqrt(4 * b * b + (a - c) * (a - c));
 
-	/* Calculating orientation */
-	theta = atan2( 2 * b, a - c + square );
+    /* Calculating orientation */
+    theta = atan2(2 * b, a - c + square);
 
-	/* Calculating width & length of figure */
-	cs = cos( theta );
-	sn = sin( theta );
+    /* Calculating width & length of figure */
+    cs = cos(theta);
+    sn = sin(theta);
 
-	rotate_a = cs * cs * mu20 + 2 * cs * sn * mu11 + sn * sn * mu02;
-	rotate_c = sn * sn * mu20 - 2 * cs * sn * mu11 + cs * cs * mu02;
-	length = sqrt( rotate_a * inv_m00 ) * 4;
-	width = sqrt( rotate_c * inv_m00 ) * 4;
+    rotate_a = cs * cs * mu20 + 2 * cs * sn * mu11 + sn * sn * mu02;
+    rotate_c = sn * sn * mu20 - 2 * cs * sn * mu11 + cs * cs * mu02;
+    length = sqrt(rotate_a * inv_m00) * 4;
+    width = sqrt(rotate_c * inv_m00) * 4;
 
-	/* In case, when tetta is 0 or 1.57... the Length & Width may be exchanged */
-	if ( length < width ) {
-		double t;
+    /* In case, when tetta is 0 or 1.57... the Length & Width may be exchanged */
+    if (length < width) {
+        double t;
 
-		CV_SWAP( length, width, t );
-		CV_SWAP( cs, sn, t );
-		theta = CV_PI * 0.5 - theta;
-	}
+        CV_SWAP(length, width, t);
+        CV_SWAP(cs, sn, t);
+        theta = CV_PI * 0.5 - theta;
+    }
 
-	/* Saving results */
-	if ( _comp || box ) {
-		int t0, t1;
-		int _xc = cvRound( xc );
-		int _yc = cvRound( yc );
+    /* Saving results */
+    if (_comp || box) {
+        int t0, t1;
+        int _xc = cvRound(xc);
+        int _yc = cvRound(yc);
 
-		t0 = cvRound( fabs( length * cs ));
-		t1 = cvRound( fabs( width * sn ));
+        t0 = cvRound(fabs(length * cs));
+        t1 = cvRound(fabs(width * sn));
 
-		t0 = MAX( t0, t1 ) + 2;
-		comp.rect.width = MIN( t0, (mat->width - _xc) * 2 );
+        t0 = MAX(t0, t1) + 2;
+        comp.rect.width = MIN(t0, (mat->width - _xc) * 2);
 
-		t0 = cvRound( fabs( length * sn ));
-		t1 = cvRound( fabs( width * cs ));
+        t0 = cvRound(fabs(length * sn));
+        t1 = cvRound(fabs(width * cs));
 
-		t0 = MAX( t0, t1 ) + 2;
-		comp.rect.height = MIN( t0, (mat->height - _yc) * 2 );
+        t0 = MAX(t0, t1) + 2;
+        comp.rect.height = MIN(t0, (mat->height - _yc) * 2);
 
-		comp.rect.x = MAX( 0, _xc - comp.rect.width / 2 );
-		comp.rect.y = MAX( 0, _yc - comp.rect.height / 2 );
+        comp.rect.x = MAX(0, _xc - comp.rect.width / 2);
+        comp.rect.y = MAX(0, _yc - comp.rect.height / 2);
 
-		comp.rect.width = MIN( mat->width - comp.rect.x, comp.rect.width );
-		comp.rect.height = MIN( mat->height - comp.rect.y, comp.rect.height );
-		comp.area = (float) m00;
-	}
+        comp.rect.width = MIN(mat->width - comp.rect.x, comp.rect.width);
+        comp.rect.height = MIN(mat->height - comp.rect.y, comp.rect.height);
+        comp.area = (float) m00;
+    }
 
-	if ( _comp ) {
-		*_comp = comp;
-	}
+    if (_comp) {
+        *_comp = comp;
+    }
 
-	if ( box ) {
-		box->size.height = (float)length;
-		box->size.width = (float)width;
-		box->angle = (float)(theta * 180. / CV_PI);
-		box->center = cvPoint2D32f( comp.rect.x + comp.rect.width * 0.5f,
-									comp.rect.y + comp.rect.height * 0.5f);
-	}
+    if (box) {
+        box->size.height = (float)length;
+        box->size.width = (float)width;
+        box->angle = (float)(theta * 180. / CV_PI);
+        box->center = cvPoint2D32f(comp.rect.x + comp.rect.width * 0.5f,
+                                   comp.rect.y + comp.rect.height * 0.5f);
+    }
 
-	return itersUsed;
+    return itersUsed;
 }
 
 namespace cv {
 
-RotatedRect CamShift( const Mat& probImage, Rect& window,
-					  TermCriteria criteria ) {
-	CvConnectedComp comp;
-	CvBox2D box;
-	CvMat _probImage = probImage;
-	cvCamShift(&_probImage, window, (CvTermCriteria)criteria, &comp, &box);
-	window = comp.rect;
-	return RotatedRect(Point2f(box.center), Size2f(box.size), box.angle);
+RotatedRect CamShift(const Mat& probImage, Rect& window,
+                     TermCriteria criteria) {
+    CvConnectedComp comp;
+    CvBox2D box;
+    CvMat _probImage = probImage;
+    cvCamShift(&_probImage, window, (CvTermCriteria)criteria, &comp, &box);
+    window = comp.rect;
+    return RotatedRect(Point2f(box.center), Size2f(box.size), box.angle);
 }
 
-int meanShift( const Mat& probImage, Rect& window, TermCriteria criteria ) {
-	CvConnectedComp comp;
-	CvMat _probImage = probImage;
-	int iters = cvMeanShift(&_probImage, window, (CvTermCriteria)criteria, &comp );
-	window = comp.rect;
-	return iters;
+int meanShift(const Mat& probImage, Rect& window, TermCriteria criteria) {
+    CvConnectedComp comp;
+    CvMat _probImage = probImage;
+    int iters = cvMeanShift(&_probImage, window, (CvTermCriteria)criteria, &comp);
+    window = comp.rect;
+    return iters;
 }
 
 }

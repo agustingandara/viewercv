@@ -81,10 +81,10 @@ namespace Imf {
 //--------------------------------
 
 enum Envmap {
-	ENVMAP_LATLONG = 0,		// Latitude-longitude environment map
-	ENVMAP_CUBE = 1,		// Cube map
+    ENVMAP_LATLONG = 0,		// Latitude-longitude environment map
+    ENVMAP_CUBE = 1,		// Cube map
 
-	NUM_ENVMAPTYPES		// Number of different environment map types
+    NUM_ENVMAPTYPES		// Number of different environment map types
 };
 
 
@@ -114,7 +114,7 @@ namespace LatLongMap {
 // and longitude.
 //----------------------------------------------------
 
-Imath::V2f		latLong (const Imath::V3f& direction);
+Imath::V2f		latLong(const Imath::V3f& direction);
 
 
 //--------------------------------------------------------
@@ -123,8 +123,8 @@ Imath::V2f		latLong (const Imath::V3f& direction);
 // and longitude.
 //--------------------------------------------------------
 
-Imath::V2f		latLong (const Imath::Box2i& dataWindow,
-						 const Imath::V2f& pixelPosition);
+Imath::V2f		latLong(const Imath::Box2i& dataWindow,
+                        const Imath::V2f& pixelPosition);
 
 
 //-------------------------------------------------------------
@@ -132,8 +132,8 @@ Imath::V2f		latLong (const Imath::Box2i& dataWindow,
 // longitude and latitude, into a corresponding pixel position.
 //-------------------------------------------------------------
 
-Imath::V2f		pixelPosition (const Imath::Box2i& dataWindow,
-							   const Imath::V2f& latLong);
+Imath::V2f		pixelPosition(const Imath::Box2i& dataWindow,
+                              const Imath::V2f& latLong);
 
 
 //-----------------------------------------------------
@@ -142,8 +142,8 @@ Imath::V2f		pixelPosition (const Imath::Box2i& dataWindow,
 // to pixelPosition(dw,latLong(dw,dir)).
 //-----------------------------------------------------
 
-Imath::V2f		pixelPosition (const Imath::Box2i& dataWindow,
-							   const Imath::V3f& direction);
+Imath::V2f		pixelPosition(const Imath::Box2i& dataWindow,
+                              const Imath::V3f& direction);
 
 
 //--------------------------------------------------------
@@ -151,8 +151,8 @@ Imath::V2f		pixelPosition (const Imath::Box2i& dataWindow,
 // map into a corresponding 3D direction.
 //--------------------------------------------------------
 
-Imath::V3f		direction (const Imath::Box2i& dataWindow,
-						   const Imath::V2f& pixelPosition);
+Imath::V3f		direction(const Imath::Box2i& dataWindow,
+                          const Imath::V2f& pixelPosition);
 }
 
 
@@ -243,12 +243,12 @@ Imath::V3f		direction (const Imath::Box2i& dataWindow,
 //------------------------------------
 
 enum CubeMapFace {
-	CUBEFACE_POS_X,	// +X face
-	CUBEFACE_NEG_X,	// -X face
-	CUBEFACE_POS_Y,	// +Y face
-	CUBEFACE_NEG_Y,	// -Y face
-	CUBEFACE_POS_Z,	// +Z face
-	CUBEFACE_NEG_Z,	// -Z face
+    CUBEFACE_POS_X,	// +X face
+    CUBEFACE_NEG_X,	// -X face
+    CUBEFACE_POS_Y,	// +Y face
+    CUBEFACE_NEG_Y,	// -Y face
+    CUBEFACE_POS_Z,	// +Z face
+    CUBEFACE_NEG_Z,	// -Z face
 };
 
 namespace CubeMap {
@@ -256,7 +256,7 @@ namespace CubeMap {
 // Width and height of a cube's face, in pixels
 //---------------------------------------------
 
-int			sizeOfFace (const Imath::Box2i& dataWindow);
+int			sizeOfFace(const Imath::Box2i& dataWindow);
 
 
 //------------------------------------------
@@ -264,8 +264,8 @@ int			sizeOfFace (const Imath::Box2i& dataWindow);
 // that is covered by the specified face.
 //------------------------------------------
 
-Imath::Box2i	dataWindowForFace (CubeMapFace face,
-								   const Imath::Box2i& dataWindow);
+Imath::Box2i	dataWindowForFace(CubeMapFace face,
+                                  const Imath::Box2i& dataWindow);
 
 
 //----------------------------------------------------
@@ -275,9 +275,9 @@ Imath::Box2i	dataWindowForFace (CubeMapFace face,
 // in the environment map.
 //----------------------------------------------------
 
-Imath::V2f		pixelPosition (CubeMapFace face,
-							   const Imath::Box2i& dataWindow,
-							   Imath::V2f positionInFace);
+Imath::V2f		pixelPosition(CubeMapFace face,
+                              const Imath::Box2i& dataWindow,
+                              Imath::V2f positionInFace);
 
 
 //--------------------------------------------------------------
@@ -296,10 +296,10 @@ Imath::V2f		pixelPosition (CubeMapFace face,
 //
 //--------------------------------------------------------------
 
-void		faceAndPixelPosition (const Imath::V3f& direction,
-								  const Imath::Box2i& dataWindow,
-								  CubeMapFace& face,
-								  Imath::V2f& positionInFace);
+void		faceAndPixelPosition(const Imath::V3f& direction,
+                                 const Imath::Box2i& dataWindow,
+                                 CubeMapFace& face,
+                                 Imath::V2f& positionInFace);
 
 
 // --------------------------------------------------------
@@ -307,9 +307,9 @@ void		faceAndPixelPosition (const Imath::V3f& direction,
 // compute the corresponding 3D direction.
 // --------------------------------------------------------
 
-Imath::V3f		direction (CubeMapFace face,
-						   const Imath::Box2i& dataWindow,
-						   const Imath::V2f& positionInFace);
+Imath::V3f		direction(CubeMapFace face,
+                          const Imath::Box2i& dataWindow,
+                          const Imath::V2f& positionInFace);
 }
 
 

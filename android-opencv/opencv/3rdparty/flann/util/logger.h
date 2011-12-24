@@ -42,43 +42,43 @@ using namespace std;
 namespace cvflann {
 
 class Logger {
-	FILE* stream;
-	int logLevel;
+    FILE* stream;
+    int logLevel;
 
 public:
 
-	Logger() : stream(stdout), logLevel(LOG_WARN) {};
+    Logger() : stream(stdout), logLevel(LOG_WARN) {};
 
-	~Logger() {
-		if (stream != NULL && stream != stdout) {
-			fclose(stream);
-		}
-	}
+    ~Logger() {
+        if (stream != NULL && stream != stdout) {
+            fclose(stream);
+        }
+    }
 
-	void setDestination(const char* name) {
-		if (name == NULL) {
-			stream = stdout;
-		} else {
-			stream = fopen(name, "w");
-			if (stream == NULL) {
-				stream = stdout;
-			}
-		}
-	}
+    void setDestination(const char* name) {
+        if (name == NULL) {
+            stream = stdout;
+        } else {
+            stream = fopen(name, "w");
+            if (stream == NULL) {
+                stream = stdout;
+            }
+        }
+    }
 
-	void setLevel(int level) { logLevel = level; }
+    void setLevel(int level) { logLevel = level; }
 
-	int log(int level, const char* fmt, ...);
+    int log(int level, const char* fmt, ...);
 
-	int log(int level, const char* fmt, va_list arglist);
+    int log(int level, const char* fmt, va_list arglist);
 
-	int fatal(const char* fmt, ...);
+    int fatal(const char* fmt, ...);
 
-	int error(const char* fmt, ...);
+    int error(const char* fmt, ...);
 
-	int warn(const char* fmt, ...);
+    int warn(const char* fmt, ...);
 
-	int info(const char* fmt, ...);
+    int info(const char* fmt, ...);
 };
 
 extern Logger logger;

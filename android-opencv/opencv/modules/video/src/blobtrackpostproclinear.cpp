@@ -45,73 +45,73 @@
 class CvBlobTrackPostProcTimeAver: public CvBlobTrackPostProcOne {
 
 protected:
-	CvBlob      m_Blob;
-	CvBlob      m_pBlobs[TIME_WND];
-	float       m_Weights[TIME_WND];
-	int         m_Frame;
+    CvBlob      m_Blob;
+    CvBlob      m_pBlobs[TIME_WND];
+    float       m_Weights[TIME_WND];
+    int         m_Frame;
 
 public:
-	CvBlobTrackPostProcTimeAver( int KernelType = 0) {
-		int i;
-		m_Frame = 0;
-		for (i = 0; i < TIME_WND; ++i) {
-			m_Weights[i] = 1;
-			if (KernelType == 1) {
-				m_Weights[i] = (float)exp((-2.3 * i) / (TIME_WND - 1)); /* last weight is 0.1 of first weight */
-			}
-		}
+    CvBlobTrackPostProcTimeAver(int KernelType = 0) {
+        int i;
+        m_Frame = 0;
+        for (i = 0; i < TIME_WND; ++i) {
+            m_Weights[i] = 1;
+            if (KernelType == 1) {
+                m_Weights[i] = (float)exp((-2.3 * i) / (TIME_WND - 1)); /* last weight is 0.1 of first weight */
+            }
+        }
 
-		SetModuleName("TimeAver");
-	};
+        SetModuleName("TimeAver");
+    };
 
-	~CvBlobTrackPostProcTimeAver() {};
+    ~CvBlobTrackPostProcTimeAver() {};
 
-	CvBlob* Process(CvBlob* pBlob) {
-		float   WSum = 0;
-		int     i;
-		int index = m_Frame % TIME_WND;
-		int size = MIN((m_Frame + 1), TIME_WND);
-		m_pBlobs[index] = pBlob[0];
-		m_Blob.x = m_Blob.y = m_Blob.w = m_Blob.h = 0;
+    CvBlob* Process(CvBlob* pBlob) {
+        float   WSum = 0;
+        int     i;
+        int index = m_Frame % TIME_WND;
+        int size = MIN((m_Frame + 1), TIME_WND);
+        m_pBlobs[index] = pBlob[0];
+        m_Blob.x = m_Blob.y = m_Blob.w = m_Blob.h = 0;
 
-		for (i = 0; i < size; ++i) {
-			float   W = m_Weights[i];
-			int     index  = (m_Frame - i + TIME_WND) % TIME_WND;
-			m_Blob.x += W * m_pBlobs[index].x;
-			m_Blob.y += W * m_pBlobs[index].y;
-			m_Blob.w += W * m_pBlobs[index].w;
-			m_Blob.h += W * m_pBlobs[index].h;
-			WSum += W;
-		}
-		assert(WSum > 0);
+        for (i = 0; i < size; ++i) {
+            float   W = m_Weights[i];
+            int     index  = (m_Frame - i + TIME_WND) % TIME_WND;
+            m_Blob.x += W * m_pBlobs[index].x;
+            m_Blob.y += W * m_pBlobs[index].y;
+            m_Blob.w += W * m_pBlobs[index].w;
+            m_Blob.h += W * m_pBlobs[index].h;
+            WSum += W;
+        }
+        assert(WSum > 0);
 
-		m_Blob.x /= WSum;
-		m_Blob.y /= WSum;
-		m_Blob.w /= WSum;
-		m_Blob.h /= WSum;
+        m_Blob.x /= WSum;
+        m_Blob.y /= WSum;
+        m_Blob.w /= WSum;
+        m_Blob.h /= WSum;
 
-		m_Frame++;
-		return &m_Blob;
-	};
+        m_Frame++;
+        return &m_Blob;
+    };
 
-	void Release() {
-		delete this;
-	}
+    void Release() {
+        delete this;
+    }
 };  /* class CvBlobTrackPostProcTimeAver */
 
 CvBlobTrackPostProcOne* cvCreateModuleBlobTrackPostProcTimeAverRectOne() {
-	return (CvBlobTrackPostProcOne*) new CvBlobTrackPostProcTimeAver(0);
+    return (CvBlobTrackPostProcOne*) new CvBlobTrackPostProcTimeAver(0);
 }
 
 CvBlobTrackPostProcOne* cvCreateModuleBlobTrackPostProcTimeAverExpOne() {
-	return (CvBlobTrackPostProcOne*) new CvBlobTrackPostProcTimeAver(1);
+    return (CvBlobTrackPostProcOne*) new CvBlobTrackPostProcTimeAver(1);
 }
 
 CvBlobTrackPostProc* cvCreateModuleBlobTrackPostProcTimeAverRect() {
-	return cvCreateBlobTrackPostProcList(cvCreateModuleBlobTrackPostProcTimeAverRectOne);
+    return cvCreateBlobTrackPostProcList(cvCreateModuleBlobTrackPostProcTimeAverRectOne);
 }
 
 CvBlobTrackPostProc* cvCreateModuleBlobTrackPostProcTimeAverExp() {
-	return cvCreateBlobTrackPostProcList(cvCreateModuleBlobTrackPostProcTimeAverExpOne);
+    return cvCreateBlobTrackPostProcList(cvCreateModuleBlobTrackPostProcTimeAverExpOne);
 }
 /*======================= KALMAN FILTER =========================*/

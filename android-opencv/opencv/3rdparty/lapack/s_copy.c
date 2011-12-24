@@ -9,34 +9,34 @@
 /* assign strings:  a = b */
 
 void s_copy(register char* a, register char* b, ftnlen la, ftnlen lb) {
-	register char* aend, *bend;
+    register char* aend, *bend;
 
-	aend = a + la;
+    aend = a + la;
 
-	if (la <= lb)
-		if (a <= b || a >= b + la)
-			while (a < aend) {
-				*a++ = *b++;
-			}
-		else
-			for (b += la; a < aend; ) {
-				*--aend = *--b;
-			}
-	else {
-		bend = b + lb;
-		if (a <= b || a >= bend)
-			while (b < bend) {
-				*a++ = *b++;
-			}
-		else {
-			a += lb;
-			while (b < bend) {
-				*--a = *--bend;
-			}
-			a += lb;
-		}
-		while (a < aend) {
-			*a++ = ' ';
-		}
-	}
+    if (la <= lb)
+        if (a <= b || a >= b + la)
+            while (a < aend) {
+                *a++ = *b++;
+            }
+        else
+            for (b += la; a < aend;) {
+                *--aend = *--b;
+            }
+    else {
+        bend = b + lb;
+        if (a <= b || a >= bend)
+            while (b < bend) {
+                *a++ = *b++;
+            }
+        else {
+            a += lb;
+            while (b < bend) {
+                *--a = *--bend;
+            }
+            a += lb;
+        }
+        while (a < aend) {
+            *a++ = ' ';
+        }
+    }
 }

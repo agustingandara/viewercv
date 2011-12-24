@@ -75,9 +75,9 @@ static Scalar sumBlock_(const Mat& srcmat) {
             limit += x;
             for (; x <= limit - 4; x += 4) {
                 s += src[x];
-                s += src[x + 1];
-                s += src[x + 2];
-                s += src[x + 3];
+                s += src[x+1];
+                s += src[x+2];
+                s += src[x+3];
             }
             for (; x < limit; x++) {
                 s += src[x];
@@ -103,9 +103,9 @@ static Scalar sum_(const Mat& srcmat) {
         int x = 0;
         for (; x <= size.width - 4; x += 4) {
             s += src[x];
-            s += src[x + 1];
-            s += src[x + 2];
-            s += src[x + 3];
+            s += src[x+1];
+            s += src[x+2];
+            s += src[x+3];
         }
         for (; x < size.width; x++) {
             s += src[x];
@@ -177,7 +177,7 @@ static int countNonZero_(const Mat& srcmat) {
     for (; size.height--; src += step) {
         int x = 0;
         for (; x <= size.width - 4; x += 4) {
-            nz += (src[x] != 0) + (src[x + 1] != 0) + (src[x + 2] != 0) + (src[x + 3] != 0);
+            nz += (src[x] != 0) + (src[x+1] != 0) + (src[x+2] != 0) + (src[x+3] != 0);
         }
         for (; x < size.width; x++) {
             nz += src[x] != 0;
@@ -668,9 +668,9 @@ static double normBlock_(const Mat& srcmat) {
             limit += x;
             for (; x <= limit - 4; x += 4) {
                 s = update(s, (WT)f(src[x]));
-                s = update(s, (WT)f(src[x + 1]));
-                s = update(s, (WT)f(src[x + 2]));
-                s = update(s, (WT)f(src[x + 3]));
+                s = update(s, (WT)f(src[x+1]));
+                s = update(s, (WT)f(src[x+2]));
+                s = update(s, (WT)f(src[x+3]));
             }
             for (; x < limit; x++) {
                 s = update(s, (WT)f(src[x]));
@@ -701,9 +701,9 @@ static double norm_(const Mat& srcmat) {
         int x = 0;
         for (; x <= size.width - 4; x += 4) {
             s = update(s, (ST)f(src[x]));
-            s = update(s, (ST)f(src[x + 1]));
-            s = update(s, (ST)f(src[x + 2]));
-            s = update(s, (ST)f(src[x + 3]));
+            s = update(s, (ST)f(src[x+1]));
+            s = update(s, (ST)f(src[x+2]));
+            s = update(s, (ST)f(src[x+3]));
         }
         for (; x < size.width; x++) {
             s = update(s, (ST)f(src[x]));
@@ -739,14 +739,14 @@ static double normMaskBlock_(const Mat& srcmat, const Mat& maskmat) {
                 if (mask[x]) {
                     s = update(s, (WT)f(src[x]));
                 }
-                if (mask[x + 1]) {
-                    s = update(s, (WT)f(src[x + 1]));
+                if (mask[x+1]) {
+                    s = update(s, (WT)f(src[x+1]));
                 }
-                if (mask[x + 2]) {
-                    s = update(s, (WT)f(src[x + 2]));
+                if (mask[x+2]) {
+                    s = update(s, (WT)f(src[x+2]));
                 }
-                if (mask[x + 3]) {
-                    s = update(s, (WT)f(src[x + 3]));
+                if (mask[x+3]) {
+                    s = update(s, (WT)f(src[x+3]));
                 }
             }
             for (; x < limit; x++) {
@@ -783,14 +783,14 @@ static double normMask_(const Mat& srcmat, const Mat& maskmat) {
             if (mask[x]) {
                 s = update(s, (ST)f(src[x]));
             }
-            if (mask[x + 1]) {
-                s = update(s, (ST)f(src[x + 1]));
+            if (mask[x+1]) {
+                s = update(s, (ST)f(src[x+1]));
             }
-            if (mask[x + 2]) {
-                s = update(s, (ST)f(src[x + 2]));
+            if (mask[x+2]) {
+                s = update(s, (ST)f(src[x+2]));
             }
-            if (mask[x + 3]) {
-                s = update(s, (ST)f(src[x + 3]));
+            if (mask[x+3]) {
+                s = update(s, (ST)f(src[x+3]));
             }
         }
         for (; x < size.width; x++) {
@@ -826,9 +826,9 @@ static double normDiffBlock_(const Mat& srcmat1, const Mat& srcmat2) {
             limit += x;
             for (; x <= limit - 4; x += 4) {
                 s = update(s, (WT)f(src1[x] - src2[x]));
-                s = update(s, (WT)f(src1[x + 1] - src2[x + 1]));
-                s = update(s, (WT)f(src1[x + 2] - src2[x + 2]));
-                s = update(s, (WT)f(src1[x + 3] - src2[x + 3]));
+                s = update(s, (WT)f(src1[x+1] - src2[x+1]));
+                s = update(s, (WT)f(src1[x+2] - src2[x+2]));
+                s = update(s, (WT)f(src1[x+3] - src2[x+3]));
             }
             for (; x < limit; x++) {
                 s = update(s, (WT)f(src1[x] - src2[x]));
@@ -859,9 +859,9 @@ static double normDiff_(const Mat& srcmat1, const Mat& srcmat2) {
         int x = 0;
         for (; x <= size.width - 4; x += 4) {
             s = update(s, (ST)f(src1[x] - src2[x]));
-            s = update(s, (ST)f(src1[x + 1] - src2[x + 1]));
-            s = update(s, (ST)f(src1[x + 2] - src2[x + 2]));
-            s = update(s, (ST)f(src1[x + 3] - src2[x + 3]));
+            s = update(s, (ST)f(src1[x+1] - src2[x+1]));
+            s = update(s, (ST)f(src1[x+2] - src2[x+2]));
+            s = update(s, (ST)f(src1[x+3] - src2[x+3]));
         }
         for (; x < size.width; x++) {
             s = update(s, (ST)f(src1[x] - src2[x]));
@@ -897,14 +897,14 @@ static double normDiffMaskBlock_(const Mat& srcmat1, const Mat& srcmat2, const M
                 if (mask[x]) {
                     s = update(s, (WT)f(src1[x] - src2[x]));
                 }
-                if (mask[x + 1]) {
-                    s = update(s, (WT)f(src1[x + 1] - src2[x + 1]));
+                if (mask[x+1]) {
+                    s = update(s, (WT)f(src1[x+1] - src2[x+1]));
                 }
-                if (mask[x + 2]) {
-                    s = update(s, (WT)f(src1[x + 2] - src2[x + 2]));
+                if (mask[x+2]) {
+                    s = update(s, (WT)f(src1[x+2] - src2[x+2]));
                 }
-                if (mask[x + 3]) {
-                    s = update(s, (WT)f(src1[x + 3] - src2[x + 3]));
+                if (mask[x+3]) {
+                    s = update(s, (WT)f(src1[x+3] - src2[x+3]));
                 }
             }
             for (; x < limit; x++)
@@ -940,14 +940,14 @@ static double normDiffMask_(const Mat& srcmat1, const Mat& srcmat2, const Mat& m
             if (mask[x]) {
                 s = update(s, (ST)f(src1[x] - src2[x]));
             }
-            if (mask[x + 1]) {
-                s = update(s, (ST)f(src1[x + 1] - src2[x + 1]));
+            if (mask[x+1]) {
+                s = update(s, (ST)f(src1[x+1] - src2[x+1]));
             }
-            if (mask[x + 2]) {
-                s = update(s, (ST)f(src1[x + 2] - src2[x + 2]));
+            if (mask[x+2]) {
+                s = update(s, (ST)f(src1[x+2] - src2[x+2]));
             }
-            if (mask[x + 3]) {
-                s = update(s, (ST)f(src1[x + 3] - src2[x + 3]));
+            if (mask[x+3]) {
+                s = update(s, (ST)f(src1[x+3] - src2[x+3]));
             }
         }
         for (; x < size.width; x++)
@@ -1169,7 +1169,7 @@ CV_IMPL CvScalar cvSum(const CvArr* srcarr) {
         int coi = cvGetImageCOI((IplImage*)srcarr);
         if (coi) {
             CV_Assert(0 < coi && coi <= 4);
-            sum = cv::Scalar(sum[coi - 1]);
+            sum = cv::Scalar(sum[coi-1]);
         }
     }
     return sum;
@@ -1192,7 +1192,7 @@ cvAvg(const void* imgarr, const void* maskarr) {
         int coi = cvGetImageCOI((IplImage*)imgarr);
         if (coi) {
             CV_Assert(0 < coi && coi <= 4);
-            mean = cv::Scalar(mean[coi - 1]);
+            mean = cv::Scalar(mean[coi-1]);
         }
     }
     return mean;
@@ -1214,8 +1214,8 @@ cvAvgSdv(const CvArr* imgarr, CvScalar* _mean, CvScalar* _sdv, const void* maska
         int coi = cvGetImageCOI((IplImage*)imgarr);
         if (coi) {
             CV_Assert(0 < coi && coi <= 4);
-            mean = cv::Scalar(mean[coi - 1]);
-            sdv = cv::Scalar(sdv[coi - 1]);
+            mean = cv::Scalar(mean[coi-1]);
+            sdv = cv::Scalar(sdv[coi-1]);
         }
     }
 

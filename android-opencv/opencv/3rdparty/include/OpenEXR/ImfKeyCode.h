@@ -102,56 +102,56 @@ namespace Imf {
 class KeyCode {
 public:
 
-	//-------------------------------------
-	// Constructors and assignment operator
-	//-------------------------------------
+    //-------------------------------------
+    // Constructors and assignment operator
+    //-------------------------------------
 
-	KeyCode (int filmMfcCode = 0,
-			 int filmType = 0,
-			 int prefix = 0,
-			 int count = 0,
-			 int perfOffset = 0,
-			 int perfsPerFrame = 4,
-			 int perfsPerCount = 64);
+    KeyCode(int filmMfcCode = 0,
+            int filmType = 0,
+            int prefix = 0,
+            int count = 0,
+            int perfOffset = 0,
+            int perfsPerFrame = 4,
+            int perfsPerCount = 64);
 
-	KeyCode (const KeyCode& other);
-	KeyCode& operator = (const KeyCode& other);
+    KeyCode(const KeyCode& other);
+    KeyCode& operator = (const KeyCode& other);
 
 
-	//----------------------------
-	// Access to individual fields
-	//----------------------------
+    //----------------------------
+    // Access to individual fields
+    //----------------------------
 
-	int		filmMfcCode () const;
-	void	setFilmMfcCode (int filmMfcCode);
+    int		filmMfcCode() const;
+    void	setFilmMfcCode(int filmMfcCode);
 
-	int		filmType () const;
-	void	setFilmType (int filmType);
+    int		filmType() const;
+    void	setFilmType(int filmType);
 
-	int		prefix () const;
-	void	setPrefix (int prefix);
+    int		prefix() const;
+    void	setPrefix(int prefix);
 
-	int		count () const;
-	void	setCount (int count);
+    int		count() const;
+    void	setCount(int count);
 
-	int		perfOffset () const;
-	void	setPerfOffset (int perfOffset);
+    int		perfOffset() const;
+    void	setPerfOffset(int perfOffset);
 
-	int		perfsPerFrame () const;
-	void	setPerfsPerFrame (int perfsPerFrame);
+    int		perfsPerFrame() const;
+    void	setPerfsPerFrame(int perfsPerFrame);
 
-	int		perfsPerCount () const;
-	void	setPerfsPerCount (int perfsPerCount);
+    int		perfsPerCount() const;
+    void	setPerfsPerCount(int perfsPerCount);
 
 private:
 
-	int		_filmMfcCode;
-	int		_filmType;
-	int		_prefix;
-	int		_count;
-	int		_perfOffset;
-	int		_perfsPerFrame;
-	int		_perfsPerCount;
+    int		_filmMfcCode;
+    int		_filmType;
+    int		_prefix;
+    int		_count;
+    int		_perfOffset;
+    int		_perfsPerFrame;
+    int		_perfsPerCount;
 };
 
 

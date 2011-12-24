@@ -69,155 +69,155 @@ struct PreviewRgba;
 class RgbaOutputFile {
 public:
 
-	//---------------------------------------------------
-	// Constructor -- header is constructed by the caller
-	//---------------------------------------------------
+    //---------------------------------------------------
+    // Constructor -- header is constructed by the caller
+    //---------------------------------------------------
 
-	RgbaOutputFile (const char name[],
-					const Header& header,
-					RgbaChannels rgbaChannels = WRITE_RGBA,
-					int numThreads = globalThreadCount());
-
-
-	//----------------------------------------------------
-	// Constructor -- header is constructed by the caller,
-	// file is opened by the caller, destructor will not
-	// automatically close the file.
-	//----------------------------------------------------
-
-	RgbaOutputFile (OStream& os,
-					const Header& header,
-					RgbaChannels rgbaChannels = WRITE_RGBA,
-					int numThreads = globalThreadCount());
+    RgbaOutputFile(const char name[],
+                   const Header& header,
+                   RgbaChannels rgbaChannels = WRITE_RGBA,
+                   int numThreads = globalThreadCount());
 
 
-	//----------------------------------------------------------------
-	// Constructor -- header data are explicitly specified as function
-	// call arguments (empty dataWindow means "same as displayWindow")
-	//----------------------------------------------------------------
+    //----------------------------------------------------
+    // Constructor -- header is constructed by the caller,
+    // file is opened by the caller, destructor will not
+    // automatically close the file.
+    //----------------------------------------------------
 
-	RgbaOutputFile (const char name[],
-					const Imath::Box2i& displayWindow,
-					const Imath::Box2i& dataWindow = Imath::Box2i(),
-					RgbaChannels rgbaChannels = WRITE_RGBA,
-					float pixelAspectRatio = 1,
-					const Imath::V2f screenWindowCenter = Imath::V2f (0, 0),
-					float screenWindowWidth = 1,
-					LineOrder lineOrder = INCREASING_Y,
-					Compression compression = PIZ_COMPRESSION,
-					int numThreads = globalThreadCount());
+    RgbaOutputFile(OStream& os,
+                   const Header& header,
+                   RgbaChannels rgbaChannels = WRITE_RGBA,
+                   int numThreads = globalThreadCount());
 
 
-	//-----------------------------------------------
-	// Constructor -- like the previous one, but both
-	// the display window and the data window are
-	// Box2i (V2i (0, 0), V2i (width - 1, height -1))
-	//-----------------------------------------------
+    //----------------------------------------------------------------
+    // Constructor -- header data are explicitly specified as function
+    // call arguments (empty dataWindow means "same as displayWindow")
+    //----------------------------------------------------------------
 
-	RgbaOutputFile (const char name[],
-					int width,
-					int height,
-					RgbaChannels rgbaChannels = WRITE_RGBA,
-					float pixelAspectRatio = 1,
-					const Imath::V2f screenWindowCenter = Imath::V2f (0, 0),
-					float screenWindowWidth = 1,
-					LineOrder lineOrder = INCREASING_Y,
-					Compression compression = PIZ_COMPRESSION,
-					int numThreads = globalThreadCount());
-
-
-	//-----------
-	// Destructor
-	//-----------
-
-	virtual ~RgbaOutputFile ();
+    RgbaOutputFile(const char name[],
+                   const Imath::Box2i& displayWindow,
+                   const Imath::Box2i& dataWindow = Imath::Box2i(),
+                   RgbaChannels rgbaChannels = WRITE_RGBA,
+                   float pixelAspectRatio = 1,
+                   const Imath::V2f screenWindowCenter = Imath::V2f(0, 0),
+                   float screenWindowWidth = 1,
+                   LineOrder lineOrder = INCREASING_Y,
+                   Compression compression = PIZ_COMPRESSION,
+                   int numThreads = globalThreadCount());
 
 
-	//------------------------------------------------
-	// Define a frame buffer as the pixel data source:
-	// Pixel (x, y) is at address
-	//
-	//  base + x * xStride + y * yStride
-	//
-	//------------------------------------------------
+    //-----------------------------------------------
+    // Constructor -- like the previous one, but both
+    // the display window and the data window are
+    // Box2i (V2i (0, 0), V2i (width - 1, height -1))
+    //-----------------------------------------------
 
-	void			setFrameBuffer (const Rgba* base,
-									size_t xStride,
-									size_t yStride);
-
-
-	//---------------------------------------------
-	// Write pixel data (see class Imf::OutputFile)
-	//---------------------------------------------
-
-	void			writePixels (int numScanLines = 1);
-	int				currentScanLine () const;
+    RgbaOutputFile(const char name[],
+                   int width,
+                   int height,
+                   RgbaChannels rgbaChannels = WRITE_RGBA,
+                   float pixelAspectRatio = 1,
+                   const Imath::V2f screenWindowCenter = Imath::V2f(0, 0),
+                   float screenWindowWidth = 1,
+                   LineOrder lineOrder = INCREASING_Y,
+                   Compression compression = PIZ_COMPRESSION,
+                   int numThreads = globalThreadCount());
 
 
-	//--------------------------
-	// Access to the file header
-	//--------------------------
+    //-----------
+    // Destructor
+    //-----------
 
-	const Header& 		header () const;
-	const FrameBuffer& 		frameBuffer () const;
-	const Imath::Box2i& 	displayWindow () const;
-	const Imath::Box2i& 	dataWindow () const;
-	float			pixelAspectRatio () const;
-	const Imath::V2f		screenWindowCenter () const;
-	float			screenWindowWidth () const;
-	LineOrder			lineOrder () const;
-	Compression			compression () const;
-	RgbaChannels		channels () const;
+    virtual ~RgbaOutputFile();
 
 
-	// --------------------------------------------------------------------
-	// Update the preview image (see Imf::OutputFile::updatePreviewImage())
-	// --------------------------------------------------------------------
+    //------------------------------------------------
+    // Define a frame buffer as the pixel data source:
+    // Pixel (x, y) is at address
+    //
+    //  base + x * xStride + y * yStride
+    //
+    //------------------------------------------------
 
-	void			updatePreviewImage (const PreviewRgba[]);
-
-
-	//-----------------------------------------------------------------------
-	// Rounding control for luminance/chroma images:
-	//
-	// If the output file contains luminance and chroma channels (WRITE_YC
-	// or WRITE_YCA), then the the significands of the luminance and
-	// chroma values are rounded to roundY and roundC bits respectively (see
-	// function half::round()).  Rounding improves compression with minimal
-	// image degradation, usually much less than the degradation caused by
-	// chroma subsampling.  By default, roundY is 7, and roundC is 5.
-	//
-	// If the output file contains RGB channels or a luminance channel,
-	// without chroma, then no rounding is performed.
-	//-----------------------------------------------------------------------
-
-	void			setYCRounding (unsigned int roundY,
-								   unsigned int roundC);
+    void			setFrameBuffer(const Rgba* base,
+                                   size_t xStride,
+                                   size_t yStride);
 
 
-	//----------------------------------------------------
-	// Break a scan line -- for testing and debugging only
-	// (see Imf::OutputFile::updatePreviewImage()
-	//
-	// Warning: Calling this function usually results in a
-	// broken image file.  The file or parts of it may not
-	// be readable, or the file may contain bad data.
-	//
-	//----------------------------------------------------
+    //---------------------------------------------
+    // Write pixel data (see class Imf::OutputFile)
+    //---------------------------------------------
 
-	void			breakScanLine  (int y,
-									int offset,
-									int length,
-									char c);
+    void			writePixels(int numScanLines = 1);
+    int				currentScanLine() const;
+
+
+    //--------------------------
+    // Access to the file header
+    //--------------------------
+
+    const Header& 		header() const;
+    const FrameBuffer& 		frameBuffer() const;
+    const Imath::Box2i& 	displayWindow() const;
+    const Imath::Box2i& 	dataWindow() const;
+    float			pixelAspectRatio() const;
+    const Imath::V2f		screenWindowCenter() const;
+    float			screenWindowWidth() const;
+    LineOrder			lineOrder() const;
+    Compression			compression() const;
+    RgbaChannels		channels() const;
+
+
+    // --------------------------------------------------------------------
+    // Update the preview image (see Imf::OutputFile::updatePreviewImage())
+    // --------------------------------------------------------------------
+
+    void			updatePreviewImage(const PreviewRgba[]);
+
+
+    //-----------------------------------------------------------------------
+    // Rounding control for luminance/chroma images:
+    //
+    // If the output file contains luminance and chroma channels (WRITE_YC
+    // or WRITE_YCA), then the the significands of the luminance and
+    // chroma values are rounded to roundY and roundC bits respectively (see
+    // function half::round()).  Rounding improves compression with minimal
+    // image degradation, usually much less than the degradation caused by
+    // chroma subsampling.  By default, roundY is 7, and roundC is 5.
+    //
+    // If the output file contains RGB channels or a luminance channel,
+    // without chroma, then no rounding is performed.
+    //-----------------------------------------------------------------------
+
+    void			setYCRounding(unsigned int roundY,
+                                  unsigned int roundC);
+
+
+    //----------------------------------------------------
+    // Break a scan line -- for testing and debugging only
+    // (see Imf::OutputFile::updatePreviewImage()
+    //
+    // Warning: Calling this function usually results in a
+    // broken image file.  The file or parts of it may not
+    // be readable, or the file may contain bad data.
+    //
+    //----------------------------------------------------
+
+    void			breakScanLine(int y,
+                                  int offset,
+                                  int length,
+                                  char c);
 private:
 
-	RgbaOutputFile (const RgbaOutputFile&);		   // not implemented
-	RgbaOutputFile& operator = (const RgbaOutputFile&);   // not implemented
+    RgbaOutputFile(const RgbaOutputFile&);		    // not implemented
+    RgbaOutputFile& operator = (const RgbaOutputFile&);   // not implemented
 
-	class ToYca;
+    class ToYca;
 
-	OutputFile* 		_outputFile;
-	ToYca* 			_toYca;
+    OutputFile* 		_outputFile;
+    ToYca* 			_toYca;
 };
 
 
@@ -228,83 +228,83 @@ private:
 class RgbaInputFile {
 public:
 
-	//-------------------------------------------------------
-	// Constructor -- opens the file with the specified name,
-	// destructor will automatically close the file.
-	//-------------------------------------------------------
+    //-------------------------------------------------------
+    // Constructor -- opens the file with the specified name,
+    // destructor will automatically close the file.
+    //-------------------------------------------------------
 
-	RgbaInputFile (const char name[], int numThreads = globalThreadCount());
-
-
-	//-----------------------------------------------------------
-	// Constructor -- attaches the new RgbaInputFile object to a
-	// file that has already been opened by the caller.
-	// Destroying the RgbaInputFile object will not automatically
-	// close the file.
-	//-----------------------------------------------------------
-
-	RgbaInputFile (IStream& is, int numThreads = globalThreadCount());
+    RgbaInputFile(const char name[], int numThreads = globalThreadCount());
 
 
-	//-----------
-	// Destructor
-	//-----------
+    //-----------------------------------------------------------
+    // Constructor -- attaches the new RgbaInputFile object to a
+    // file that has already been opened by the caller.
+    // Destroying the RgbaInputFile object will not automatically
+    // close the file.
+    //-----------------------------------------------------------
 
-	virtual ~RgbaInputFile ();
-
-	//-----------------------------------------------------
-	// Define a frame buffer as the pixel data destination:
-	// Pixel (x, y) is at address
-	//
-	//  base + x * xStride + y * yStride
-	//
-	//-----------------------------------------------------
-
-	void			setFrameBuffer (Rgba* base,
-									size_t xStride,
-									size_t yStride);
+    RgbaInputFile(IStream& is, int numThreads = globalThreadCount());
 
 
-	//-------------------------------------------
-	// Read pixel data (see class Imf::InputFile)
-	//-------------------------------------------
+    //-----------
+    // Destructor
+    //-----------
 
-	void			readPixels (int scanLine1, int scanLine2);
-	void			readPixels (int scanLine);
+    virtual ~RgbaInputFile();
+
+    //-----------------------------------------------------
+    // Define a frame buffer as the pixel data destination:
+    // Pixel (x, y) is at address
+    //
+    //  base + x * xStride + y * yStride
+    //
+    //-----------------------------------------------------
+
+    void			setFrameBuffer(Rgba* base,
+                                   size_t xStride,
+                                   size_t yStride);
 
 
-	//--------------------------
-	// Access to the file header
-	//--------------------------
+    //-------------------------------------------
+    // Read pixel data (see class Imf::InputFile)
+    //-------------------------------------------
 
-	const Header& 		header () const;
-	const FrameBuffer& 		frameBuffer () const;
-	const Imath::Box2i& 	displayWindow () const;
-	const Imath::Box2i& 	dataWindow () const;
-	float			pixelAspectRatio () const;
-	const Imath::V2f		screenWindowCenter () const;
-	float			screenWindowWidth () const;
-	LineOrder			lineOrder () const;
-	Compression			compression () const;
-	RgbaChannels		channels () const;
-	const char*                 fileName () const;
-	bool			isComplete () const;
+    void			readPixels(int scanLine1, int scanLine2);
+    void			readPixels(int scanLine);
 
-	//----------------------------------
-	// Access to the file format version
-	//----------------------------------
 
-	int				version () const;
+    //--------------------------
+    // Access to the file header
+    //--------------------------
+
+    const Header& 		header() const;
+    const FrameBuffer& 		frameBuffer() const;
+    const Imath::Box2i& 	displayWindow() const;
+    const Imath::Box2i& 	dataWindow() const;
+    float			pixelAspectRatio() const;
+    const Imath::V2f		screenWindowCenter() const;
+    float			screenWindowWidth() const;
+    LineOrder			lineOrder() const;
+    Compression			compression() const;
+    RgbaChannels		channels() const;
+    const char*                 fileName() const;
+    bool			isComplete() const;
+
+    //----------------------------------
+    // Access to the file format version
+    //----------------------------------
+
+    int				version() const;
 
 private:
 
-	RgbaInputFile (const RgbaInputFile&);		   // not implemented
-	RgbaInputFile& operator = (const RgbaInputFile&);     // not implemented
+    RgbaInputFile(const RgbaInputFile&);		    // not implemented
+    RgbaInputFile& operator = (const RgbaInputFile&);     // not implemented
 
-	class FromYca;
+    class FromYca;
 
-	InputFile* 			_inputFile;
-	FromYca* 			_fromYca;
+    InputFile* 			_inputFile;
+    FromYca* 			_fromYca;
 };
 
 

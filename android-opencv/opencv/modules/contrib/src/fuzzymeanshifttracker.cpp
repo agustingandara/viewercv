@@ -81,10 +81,10 @@ double CvFuzzyCurve::calcValue(double param) {
     int size = (int)points.size();
     double x1, y1, x2, y2, m, y;
     for (int i = 1; i < size; i++) {
-        x1 = points[i - 1].x;
+        x1 = points[i-1].x;
         x2 = points[i].x;
         if (between(param, x1, x2)) {
-            y1 = points[i - 1].y;
+            y1 = points[i-1].y;
             y2 = points[i].y;
             if (x2 == x1) {
                 return y2;

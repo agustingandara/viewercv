@@ -64,21 +64,21 @@
  * between the FFmpeg decoder and its clients.
  */
 struct vdpau_render_state {
-	VdpVideoSurface surface; ///< Used as rendered surface, never changed.
+    VdpVideoSurface surface; ///< Used as rendered surface, never changed.
 
-	int state; ///< Holds FF_VDPAU_STATE_* values.
+    int state; ///< Holds FF_VDPAU_STATE_* values.
 
-	/** picture parameter information for all supported codecs */
-	union VdpPictureInfo {
-		VdpPictureInfoH264     h264;
-		VdpPictureInfoMPEG1Or2 mpeg;
-		VdpPictureInfoVC1       vc1;
-	} info;
+    /** picture parameter information for all supported codecs */
+    union VdpPictureInfo {
+        VdpPictureInfoH264     h264;
+        VdpPictureInfoMPEG1Or2 mpeg;
+        VdpPictureInfoVC1       vc1;
+    } info;
 
-	/** Describe size/location of the compressed video data. */
-	int bitstream_buffers_allocated;
-	int bitstream_buffers_used;
-	VdpBitstreamBuffer* bitstream_buffers;
+    /** Describe size/location of the compressed video data. */
+    int bitstream_buffers_allocated;
+    int bitstream_buffers_used;
+    VdpBitstreamBuffer* bitstream_buffers;
 };
 
 /* @}*/

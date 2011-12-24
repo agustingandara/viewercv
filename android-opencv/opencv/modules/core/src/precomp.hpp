@@ -150,10 +150,10 @@ typedef void (*CopyMaskFunc)(const Mat& src, Mat& dst, const Mat& mask);
 extern CopyMaskFunc g_copyMaskFuncTab[];
 
 static inline CopyMaskFunc getCopyMaskFunc(int esz) {
-	CV_Assert( (unsigned)esz <= 32U );
-	CopyMaskFunc func = g_copyMaskFuncTab[esz];
-	CV_Assert( func != 0 );
-	return func;
+    CV_Assert((unsigned)esz <= 32U);
+    CopyMaskFunc func = g_copyMaskFuncTab[esz];
+    CV_Assert(func != 0);
+    return func;
 }
 
 #if defined WIN32 || defined _WIN32
@@ -163,221 +163,221 @@ void deleteThreadRNGData();
 
 
 template < typename T1, typename T2 = T1, typename T3 = T1 > struct OpAdd {
-	typedef T1 type1;
-	typedef T2 type2;
-	typedef T3 rtype;
-	T3 operator ()(T1 a, T2 b) const { return saturate_cast<T3>(a + b); }
+    typedef T1 type1;
+    typedef T2 type2;
+    typedef T3 rtype;
+    T3 operator()(T1 a, T2 b) const { return saturate_cast<T3>(a + b); }
 };
 
 template < typename T1, typename T2 = T1, typename T3 = T1 > struct OpSub {
-	typedef T1 type1;
-	typedef T2 type2;
-	typedef T3 rtype;
-	T3 operator ()(T1 a, T2 b) const { return saturate_cast<T3>(a - b); }
+    typedef T1 type1;
+    typedef T2 type2;
+    typedef T3 rtype;
+    T3 operator()(T1 a, T2 b) const { return saturate_cast<T3>(a - b); }
 };
 
 template < typename T1, typename T2 = T1, typename T3 = T1 > struct OpRSub {
-	typedef T1 type1;
-	typedef T2 type2;
-	typedef T3 rtype;
-	T3 operator ()(T1 a, T2 b) const { return saturate_cast<T3>(b - a); }
+    typedef T1 type1;
+    typedef T2 type2;
+    typedef T3 rtype;
+    T3 operator()(T1 a, T2 b) const { return saturate_cast<T3>(b - a); }
 };
 
 template < typename T1, typename T2 = T1, typename T3 = T1 > struct OpMul {
-	typedef T1 type1;
-	typedef T2 type2;
-	typedef T3 rtype;
-	T3 operator ()(T1 a, T2 b) const { return saturate_cast<T3>(a * b); }
+    typedef T1 type1;
+    typedef T2 type2;
+    typedef T3 rtype;
+    T3 operator()(T1 a, T2 b) const { return saturate_cast<T3>(a * b); }
 };
 
 template < typename T1, typename T2 = T1, typename T3 = T1 > struct OpDiv {
-	typedef T1 type1;
-	typedef T2 type2;
-	typedef T3 rtype;
-	T3 operator ()(T1 a, T2 b) const { return saturate_cast<T3>(a / b); }
+    typedef T1 type1;
+    typedef T2 type2;
+    typedef T3 rtype;
+    T3 operator()(T1 a, T2 b) const { return saturate_cast<T3>(a / b); }
 };
 
 template<typename T> struct OpMin {
-	typedef T type1;
-	typedef T type2;
-	typedef T rtype;
-	T operator ()(T a, T b) const { return std::min(a, b); }
+    typedef T type1;
+    typedef T type2;
+    typedef T rtype;
+    T operator()(T a, T b) const { return std::min(a, b); }
 };
 
 template<typename T> struct OpMax {
-	typedef T type1;
-	typedef T type2;
-	typedef T rtype;
-	T operator ()(T a, T b) const { return std::max(a, b); }
+    typedef T type1;
+    typedef T type2;
+    typedef T rtype;
+    T operator()(T a, T b) const { return std::max(a, b); }
 };
 
-inline Size getContinuousSize( const Mat& m1, int widthScale = 1 ) {
-	return m1.isContinuous() ? Size(m1.cols * m1.rows * widthScale, 1) :
-		   Size(m1.cols * widthScale, m1.rows);
+inline Size getContinuousSize(const Mat& m1, int widthScale = 1) {
+    return m1.isContinuous() ? Size(m1.cols * m1.rows * widthScale, 1) :
+           Size(m1.cols * widthScale, m1.rows);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2, int widthScale = 1 ) {
-	return (m1.flags & m2.flags & Mat::CONTINUOUS_FLAG) != 0 ?
-		   Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
+inline Size getContinuousSize(const Mat& m1, const Mat& m2, int widthScale = 1) {
+    return (m1.flags & m2.flags & Mat::CONTINUOUS_FLAG) != 0 ?
+           Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-							   const Mat& m3, int widthScale = 1 ) {
-	return (m1.flags & m2.flags & m3.flags & Mat::CONTINUOUS_FLAG) != 0 ?
-		   Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
+inline Size getContinuousSize(const Mat& m1, const Mat& m2,
+                              const Mat& m3, int widthScale = 1) {
+    return (m1.flags & m2.flags & m3.flags & Mat::CONTINUOUS_FLAG) != 0 ?
+           Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-							   const Mat& m3, const Mat& m4,
-							   int widthScale = 1 ) {
-	return (m1.flags & m2.flags & m3.flags & m4.flags & Mat::CONTINUOUS_FLAG) != 0 ?
-		   Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
+inline Size getContinuousSize(const Mat& m1, const Mat& m2,
+                              const Mat& m3, const Mat& m4,
+                              int widthScale = 1) {
+    return (m1.flags & m2.flags & m3.flags & m4.flags & Mat::CONTINUOUS_FLAG) != 0 ?
+           Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-							   const Mat& m3, const Mat& m4,
-							   const Mat& m5, int widthScale = 1 ) {
-	return (m1.flags & m2.flags & m3.flags & m4.flags & m5.flags & Mat::CONTINUOUS_FLAG) != 0 ?
-		   Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
+inline Size getContinuousSize(const Mat& m1, const Mat& m2,
+                              const Mat& m3, const Mat& m4,
+                              const Mat& m5, int widthScale = 1) {
+    return (m1.flags & m2.flags & m3.flags & m4.flags & m5.flags & Mat::CONTINUOUS_FLAG) != 0 ?
+           Size(m1.cols * m1.rows * widthScale, 1) : Size(m1.cols * widthScale, m1.rows);
 }
 
 struct NoVec {
-	int operator()(const void*, const void*, void*, int) const { return 0; }
+    int operator()(const void*, const void*, void*, int) const { return 0; }
 };
 
 
 template<class Op, class VecOp> static void
-binaryOpC1_( const Mat& srcmat1, const Mat& srcmat2, Mat& dstmat ) {
-	Op op; VecOp vecOp;
-	typedef typename Op::type1 T1;
-	typedef typename Op::type2 T2;
-	typedef typename Op::rtype DT;
+binaryOpC1_(const Mat& srcmat1, const Mat& srcmat2, Mat& dstmat) {
+    Op op; VecOp vecOp;
+    typedef typename Op::type1 T1;
+    typedef typename Op::type2 T2;
+    typedef typename Op::rtype DT;
 
-	const T1* src1 = (const T1*)srcmat1.data;
-	const T2* src2 = (const T2*)srcmat2.data;
-	DT* dst = (DT*)dstmat.data;
-	size_t step1 = srcmat1.step / sizeof(src1[0]);
-	size_t step2 = srcmat2.step / sizeof(src2[0]);
-	size_t step = dstmat.step / sizeof(dst[0]);
-	Size size = getContinuousSize( srcmat1, srcmat2, dstmat, dstmat.channels() );
+    const T1* src1 = (const T1*)srcmat1.data;
+    const T2* src2 = (const T2*)srcmat2.data;
+    DT* dst = (DT*)dstmat.data;
+    size_t step1 = srcmat1.step / sizeof(src1[0]);
+    size_t step2 = srcmat2.step / sizeof(src2[0]);
+    size_t step = dstmat.step / sizeof(dst[0]);
+    Size size = getContinuousSize(srcmat1, srcmat2, dstmat, dstmat.channels());
 
-	if ( size.width == 1 ) {
-		for ( ; size.height--; src1 += step1, src2 += step2, dst += step ) {
-			dst[0] = op( src1[0], src2[0] );
-		}
-		return;
-	}
+    if (size.width == 1) {
+        for (; size.height--; src1 += step1, src2 += step2, dst += step) {
+            dst[0] = op(src1[0], src2[0]);
+        }
+        return;
+    }
 
-	for ( ; size.height--; src1 += step1, src2 += step2, dst += step ) {
-		int x = vecOp(src1, src2, dst, size.width);
-		for ( ; x <= size.width - 4; x += 4 ) {
-			DT f0, f1;
-			f0 = op( src1[x], src2[x] );
-			f1 = op( src1[x+1], src2[x+1] );
-			dst[x] = f0;
-			dst[x+1] = f1;
-			f0 = op(src1[x+2], src2[x+2]);
-			f1 = op(src1[x+3], src2[x+3]);
-			dst[x+2] = f0;
-			dst[x+3] = f1;
-		}
+    for (; size.height--; src1 += step1, src2 += step2, dst += step) {
+        int x = vecOp(src1, src2, dst, size.width);
+        for (; x <= size.width - 4; x += 4) {
+            DT f0, f1;
+            f0 = op(src1[x], src2[x]);
+            f1 = op(src1[x+1], src2[x+1]);
+            dst[x] = f0;
+            dst[x+1] = f1;
+            f0 = op(src1[x+2], src2[x+2]);
+            f1 = op(src1[x+3], src2[x+3]);
+            dst[x+2] = f0;
+            dst[x+3] = f1;
+        }
 
-		for ( ; x < size.width; x++ ) {
-			dst[x] = op( src1[x], src2[x] );
-		}
-	}
+        for (; x < size.width; x++) {
+            dst[x] = op(src1[x], src2[x]);
+        }
+    }
 }
 
 typedef void (*BinaryFunc)(const Mat& src1, const Mat& src2, Mat& dst);
 
 template<class Op> static void
-binarySOpCn_( const Mat& srcmat, Mat& dstmat, const Scalar& _scalar ) {
-	Op op;
-	typedef typename Op::type1 T;
-	typedef typename Op::type2 WT;
-	typedef typename Op::rtype DT;
-	const T* src0 = (const T*)srcmat.data;
-	DT* dst0 = (DT*)dstmat.data;
-	size_t step1 = srcmat.step / sizeof(src0[0]);
-	size_t step = dstmat.step / sizeof(dst0[0]);
-	int cn = dstmat.channels();
-	Size size = getContinuousSize( srcmat, dstmat, cn );
-	WT scalar[12];
-	_scalar.convertTo(scalar, cn, 12);
+binarySOpCn_(const Mat& srcmat, Mat& dstmat, const Scalar& _scalar) {
+    Op op;
+    typedef typename Op::type1 T;
+    typedef typename Op::type2 WT;
+    typedef typename Op::rtype DT;
+    const T* src0 = (const T*)srcmat.data;
+    DT* dst0 = (DT*)dstmat.data;
+    size_t step1 = srcmat.step / sizeof(src0[0]);
+    size_t step = dstmat.step / sizeof(dst0[0]);
+    int cn = dstmat.channels();
+    Size size = getContinuousSize(srcmat, dstmat, cn);
+    WT scalar[12];
+    _scalar.convertTo(scalar, cn, 12);
 
-	for ( ; size.height--; src0 += step1, dst0 += step ) {
-		int i, len = size.width;
-		const T* src = src0;
-		T* dst = dst0;
+    for (; size.height--; src0 += step1, dst0 += step) {
+        int i, len = size.width;
+        const T* src = src0;
+        T* dst = dst0;
 
-		for ( ; (len -= 12) >= 0; dst += 12, src += 12 ) {
-			DT t0 = op(src[0], scalar[0]);
-			DT t1 = op(src[1], scalar[1]);
-			dst[0] = t0; dst[1] = t1;
+        for (; (len -= 12) >= 0; dst += 12, src += 12) {
+            DT t0 = op(src[0], scalar[0]);
+            DT t1 = op(src[1], scalar[1]);
+            dst[0] = t0; dst[1] = t1;
 
-			t0 = op(src[2], scalar[2]);
-			t1 = op(src[3], scalar[3]);
-			dst[2] = t0; dst[3] = t1;
+            t0 = op(src[2], scalar[2]);
+            t1 = op(src[3], scalar[3]);
+            dst[2] = t0; dst[3] = t1;
 
-			t0 = op(src[4], scalar[4]);
-			t1 = op(src[5], scalar[5]);
-			dst[4] = t0; dst[5] = t1;
+            t0 = op(src[4], scalar[4]);
+            t1 = op(src[5], scalar[5]);
+            dst[4] = t0; dst[5] = t1;
 
-			t0 = op(src[6], scalar[6]);
-			t1 = op(src[7], scalar[7]);
-			dst[6] = t0; dst[7] = t1;
+            t0 = op(src[6], scalar[6]);
+            t1 = op(src[7], scalar[7]);
+            dst[6] = t0; dst[7] = t1;
 
-			t0 = op(src[8], scalar[8]);
-			t1 = op(src[9], scalar[9]);
-			dst[8] = t0; dst[9] = t1;
+            t0 = op(src[8], scalar[8]);
+            t1 = op(src[9], scalar[9]);
+            dst[8] = t0; dst[9] = t1;
 
-			t0 = op(src[10], scalar[10]);
-			t1 = op(src[11], scalar[11]);
-			dst[10] = t0; dst[11] = t1;
-		}
+            t0 = op(src[10], scalar[10]);
+            t1 = op(src[11], scalar[11]);
+            dst[10] = t0; dst[11] = t1;
+        }
 
-		for ( (len) += 12, i = 0; i < (len); i++ ) {
-			dst[i] = op((WT)src[i], scalar[i]);
-		}
-	}
+        for ((len) += 12, i = 0; i < (len); i++) {
+            dst[i] = op((WT)src[i], scalar[i]);
+        }
+    }
 }
 
 template<class Op> static void
-binarySOpC1_( const Mat& srcmat, Mat& dstmat, double _scalar ) {
-	Op op;
-	typedef typename Op::type1 T;
-	typedef typename Op::type2 WT;
-	typedef typename Op::rtype DT;
-	WT scalar = saturate_cast<WT>(_scalar);
-	const T* src = (const T*)srcmat.data;
-	DT* dst = (DT*)dstmat.data;
-	size_t step1 = srcmat.step / sizeof(src[0]);
-	size_t step = dstmat.step / sizeof(dst[0]);
-	Size size = srcmat.size();
+binarySOpC1_(const Mat& srcmat, Mat& dstmat, double _scalar) {
+    Op op;
+    typedef typename Op::type1 T;
+    typedef typename Op::type2 WT;
+    typedef typename Op::rtype DT;
+    WT scalar = saturate_cast<WT>(_scalar);
+    const T* src = (const T*)srcmat.data;
+    DT* dst = (DT*)dstmat.data;
+    size_t step1 = srcmat.step / sizeof(src[0]);
+    size_t step = dstmat.step / sizeof(dst[0]);
+    Size size = srcmat.size();
 
-	size.width *= srcmat.channels();
-	if ( srcmat.isContinuous() && dstmat.isContinuous() ) {
-		size.width *= size.height;
-		size.height = 1;
-	}
+    size.width *= srcmat.channels();
+    if (srcmat.isContinuous() && dstmat.isContinuous()) {
+        size.width *= size.height;
+        size.height = 1;
+    }
 
-	for ( ; size.height--; src += step1, dst += step ) {
-		int x;
-		for ( x = 0; x <= size.width - 4; x += 4 ) {
-			DT f0 = op( src[x], scalar );
-			DT f1 = op( src[x+1], scalar );
-			dst[x] = f0;
-			dst[x+1] = f1;
-			f0 = op( src[x+2], scalar );
-			f1 = op( src[x+3], scalar );
-			dst[x+2] = f0;
-			dst[x+3] = f1;
-		}
+    for (; size.height--; src += step1, dst += step) {
+        int x;
+        for (x = 0; x <= size.width - 4; x += 4) {
+            DT f0 = op(src[x], scalar);
+            DT f1 = op(src[x+1], scalar);
+            dst[x] = f0;
+            dst[x+1] = f1;
+            f0 = op(src[x+2], scalar);
+            f1 = op(src[x+3], scalar);
+            dst[x+2] = f0;
+            dst[x+3] = f1;
+        }
 
-		for ( ; x < size.width; x++ ) {
-			dst[x] = op( src[x], scalar );
-		}
-	}
+        for (; x < size.width; x++) {
+            dst[x] = op(src[x], scalar);
+        }
+    }
 }
 
 typedef void (*BinarySFuncCn)(const Mat& src1, Mat& dst, const Scalar& scalar);

@@ -53,13 +53,13 @@ namespace Imf {
 typedef TypedAttribute<TimeCode> TimeCodeAttribute;
 
 template <>
-const char* TimeCodeAttribute::staticTypeName ();
+const char* TimeCodeAttribute::staticTypeName();
 
 template <>
-void TimeCodeAttribute::writeValueTo (OStream&, int) const;
+void TimeCodeAttribute::writeValueTo(OStream&, int) const;
 
 template <>
-void TimeCodeAttribute::readValueFrom (IStream&, int, int);
+void TimeCodeAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

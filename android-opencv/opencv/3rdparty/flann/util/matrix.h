@@ -42,108 +42,108 @@ namespace cvflann {
 template <typename T>
 class Matrix {
 
-	/**
-	* Flag showing if the class owns its data storage.
-	*/
-	bool ownData;
+    /**
+    * Flag showing if the class owns its data storage.
+    */
+    bool ownData;
 
-	void shallow_copy(const Matrix& rhs) {
-		data = rhs.data;
-		rows = rhs.rows;
-		cols = rhs.cols;
-		ownData = false;
-	}
+    void shallow_copy(const Matrix& rhs) {
+        data = rhs.data;
+        rows = rhs.rows;
+        cols = rhs.cols;
+        ownData = false;
+    }
 
 public:
-	long rows;
-	long cols;
-	T* data;
+    long rows;
+    long cols;
+    T* data;
 
 
-	Matrix(long rows_, long cols_, T* data_ = NULL) :
-		ownData(false), rows(rows_), cols(cols_), data(data_) {
-		if (data_ == NULL) {
-			data = new T[rows*cols];
-			ownData = true;
-		}
-	}
+    Matrix(long rows_, long cols_, T* data_ = NULL) :
+        ownData(false), rows(rows_), cols(cols_), data(data_) {
+        if (data_ == NULL) {
+            data = new T[rows*cols];
+            ownData = true;
+        }
+    }
 
-	Matrix(const Matrix& d) {
-		shallow_copy(d);
-	}
+    Matrix(const Matrix& d) {
+        shallow_copy(d);
+    }
 
-	const Matrix& operator=(const Matrix& rhs) {
-		if (this != &rhs) {
-			shallow_copy(rhs);
-		}
-		return *this;
-	}
+    const Matrix& operator=(const Matrix& rhs) {
+        if (this != &rhs) {
+            shallow_copy(rhs);
+        }
+        return *this;
+    }
 
-	~Matrix() {
-		if (ownData) {
-			delete[] data;
-		}
-	}
+    ~Matrix() {
+        if (ownData) {
+            delete[] data;
+        }
+    }
 
-	/**
-	* Operator that return a (pointer to a) row of the data.
-	*/
-	T* operator[](long index) {
-		return data + index * cols;
-	}
+    /**
+    * Operator that return a (pointer to a) row of the data.
+    */
+    T* operator[](long index) {
+        return data + index * cols;
+    }
 
-	T* operator[](long index) const {
-		return data + index * cols;
-	}
+    T* operator[](long index) const {
+        return data + index * cols;
+    }
 
 
 
-	Matrix<T>* sample(long size, bool remove = false) {
-		UniqueRandom rand(rows);
-		Matrix<T> *newSet = new Matrix<T>(size, cols);
+    Matrix<T>* sample(long size, bool remove = false) {
+        UniqueRandom rand(rows);
+        Matrix<T> *newSet = new Matrix<T>(size, cols);
 
-		T* src, *dest;
-		for (long i = 0; i < size; ++i) {
-			long r = rand.next();
-			dest = (*newSet)[i];
-			src = (*this)[r];
-			for (long j = 0; j < cols; ++j) {
-				dest[j] = src[j];
-			}
-			if (remove) {
-				dest = (*this)[rows-i-1];
-				src = (*this)[r];
-				for (long j = 0; j < cols; ++j) {
-					swap(*src, *dest);
-					src++;
-					dest++;
-				}
-			}
-		}
+        T* src, *dest;
+        for (long i = 0; i < size; ++i) {
+            long r = rand.next();
+            dest = (*newSet)[i];
+            src = (*this)[r];
+            for (long j = 0; j < cols; ++j) {
+                dest[j] = src[j];
+            }
+            if (remove) {
+                dest = (*this)[rows-i-1];
+                src = (*this)[r];
+                for (long j = 0; j < cols; ++j) {
+                    swap(*src, *dest);
+                    src++;
+                    dest++;
+                }
+            }
+        }
 
-		if (remove) {
-			rows -= size;
-		}
+        if (remove) {
+            rows -= size;
+        }
 
-		return newSet;
-	}
+        return newSet;
+    }
 
-	Matrix<T>* sample(long size) const {
-		UniqueRandom rand(rows);
-		Matrix<T> *newSet = new Matrix<T>(size, cols);
+    Matrix<T>* sample(long size) const {
+        UniqueRandom rand(rows);
+        Matrix<T> *newSet = new Matrix<T>(size, cols);
 
-		T* src, *dest;
-		for (long i = 0; i < size; ++i) {
-			long r = rand.next();
-			dest = (*newSet)[i];
-			src = (*this)[r];
-			for (long j = 0; j < cols; ++j) {
-				dest[j] = src[j];
-			}
-		}
+        T* src, *dest;
+        for (long i = 0; i < size; ++i) {
+            long r = rand.next();
+            dest = (*newSet)[i];
+            src = (*this)[r];
+            for (long j = 0; j < cols; ++j) {
+                dest[j] = src[j];
+            }
+        }
 
-		return newSet;
-	}
+        return newSet;
+    }
 
 };
 

@@ -93,14 +93,14 @@ bool  SunRasterDecoder::readHeader() {
             memset(m_palette, 0, sizeof(m_palette));
 
             if (m_maplength != 0) {
-                uchar buffer[256 * 3];
+                uchar buffer[256*3];
 
                 if (m_strm.getBytes(buffer, m_maplength) == m_maplength) {
                     int i;
                     palSize = m_maplength / 3;
 
                     for (i = 0; i < palSize; i++) {
-                        m_palette[i].b = buffer[i + 2 * palSize];
+                        m_palette[i].b = buffer[i + 2*palSize];
                         m_palette[i].g = buffer[i + palSize];
                         m_palette[i].r = buffer[i];
                         m_palette[i].a = 0;

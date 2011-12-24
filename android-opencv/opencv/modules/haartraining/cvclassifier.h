@@ -93,13 +93,13 @@ else                                                                            
 #define CV_LOGRATIO_THRESHOLD 0.00001F
 
 /* log( val / (1 - val ) ) */
-CV_INLINE float cvLogRatio( float val );
+CV_INLINE float cvLogRatio(float val);
 
-CV_INLINE float cvLogRatio( float val ) {
-	float tval;
+CV_INLINE float cvLogRatio(float val) {
+    float tval;
 
-	tval = MAX(CV_LOGRATIO_THRESHOLD, MIN( 1.0F - CV_LOGRATIO_THRESHOLD, (val) ));
-	return logf( tval / (1.0F - tval) );
+    tval = MAX(CV_LOGRATIO_THRESHOLD, MIN(1.0F - CV_LOGRATIO_THRESHOLD, (val)));
+    return logf(tval / (1.0F - tval));
 }
 
 
@@ -129,12 +129,12 @@ CV_INLINE float cvLogRatio( float val ) {
     void (*release)( struct CvClassifier** );
 
 typedef struct CvClassifier {
-	CV_CLASSIFIER_FIELDS()
+    CV_CLASSIFIER_FIELDS()
 } CvClassifier;
 
 #define CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
 typedef struct CvClassifierTrainParams {
-	CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
+    CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
 } CvClassifierTrainParams;
 
 
@@ -153,114 +153,114 @@ typedef struct CvClassifierTrainParams {
 
  */
 
-typedef CvClassifier* (*CvClassifierConstructor)( CvMat*, int, CvMat*, CvMat*, CvMat*,
-		CvMat*, CvMat*, CvMat*,
-		CvClassifierTrainParams* );
+typedef CvClassifier*(*CvClassifierConstructor)(CvMat*, int, CvMat*, CvMat*, CvMat*,
+        CvMat*, CvMat*, CvMat*,
+        CvClassifierTrainParams*);
 
 typedef enum CvStumpType {
-	CV_CLASSIFICATION       = 0,
-	CV_CLASSIFICATION_CLASS = 1,
-	CV_REGRESSION           = 2
+    CV_CLASSIFICATION       = 0,
+    CV_CLASSIFICATION_CLASS = 1,
+    CV_REGRESSION           = 2
 } CvStumpType;
 
 typedef enum CvStumpError {
-	CV_MISCLASSIFICATION = 0,
-	CV_GINI              = 1,
-	CV_ENTROPY           = 2,
-	CV_SQUARE            = 3
+    CV_MISCLASSIFICATION = 0,
+    CV_GINI              = 1,
+    CV_ENTROPY           = 2,
+    CV_SQUARE            = 3
 } CvStumpError;
 
 
 typedef struct CvStumpTrainParams {
-	CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
-	CvStumpType  type;
-	CvStumpError error;
+    CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
+    CvStumpType  type;
+    CvStumpError error;
 } CvStumpTrainParams;
 
 typedef struct CvMTStumpTrainParams {
-	CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
-	CvStumpType  type;
-	CvStumpError error;
-	int portion; /* number of components calculated in each thread */
-	int numcomp; /* total number of components */
+    CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
+    CvStumpType  type;
+    CvStumpError error;
+    int portion; /* number of components calculated in each thread */
+    int numcomp; /* total number of components */
 
-	/* callback which fills <mat> with components [first, first+num[ */
-	void (*getTrainData)( CvMat* mat, CvMat* sampleIdx, CvMat* compIdx,
-						  int first, int num, void* userdata );
-	CvMat* sortedIdx; /* presorted samples indices */
-	void* userdata; /* passed to callback */
+    /* callback which fills <mat> with components [first, first+num[ */
+    void (*getTrainData)(CvMat* mat, CvMat* sampleIdx, CvMat* compIdx,
+                         int first, int num, void* userdata);
+    CvMat* sortedIdx; /* presorted samples indices */
+    void* userdata; /* passed to callback */
 } CvMTStumpTrainParams;
 
 typedef struct CvStumpClassifier {
-	CV_CLASSIFIER_FIELDS()
-	int compidx;
+    CV_CLASSIFIER_FIELDS()
+    int compidx;
 
-	float lerror; /* impurity of the right node */
-	float rerror; /* impurity of the left  node */
+    float lerror; /* impurity of the right node */
+    float rerror; /* impurity of the left  node */
 
-	float threshold;
-	float left;
-	float right;
+    float threshold;
+    float left;
+    float right;
 } CvStumpClassifier;
 
 typedef struct CvCARTTrainParams {
-	CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
-	/* desired number of internal nodes */
-	int count;
-	CvClassifierTrainParams* stumpTrainParams;
-	CvClassifierConstructor  stumpConstructor;
+    CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
+    /* desired number of internal nodes */
+    int count;
+    CvClassifierTrainParams* stumpTrainParams;
+    CvClassifierConstructor  stumpConstructor;
 
-	/*
-	 * Split sample indices <idx>
-	 * on the "left" indices <left> and "right" indices <right>
-	 * according to samples components <compidx> values and <threshold>.
-	 *
-	 * NOTE: Matrices <left> and <right> must be allocated using cvCreateMat function
-	 *   since they are freed using cvReleaseMat function
-	 *
-	 * If it is NULL then the default implementation which evaluates training
-	 * samples from <trainData> passed to classifier constructor is used
-	 */
-	void (*splitIdx)( int compidx, float threshold,
-					  CvMat* idx, CvMat** left, CvMat** right,
-					  void* userdata );
-	void* userdata;
+    /*
+     * Split sample indices <idx>
+     * on the "left" indices <left> and "right" indices <right>
+     * according to samples components <compidx> values and <threshold>.
+     *
+     * NOTE: Matrices <left> and <right> must be allocated using cvCreateMat function
+     *   since they are freed using cvReleaseMat function
+     *
+     * If it is NULL then the default implementation which evaluates training
+     * samples from <trainData> passed to classifier constructor is used
+     */
+    void (*splitIdx)(int compidx, float threshold,
+                     CvMat* idx, CvMat** left, CvMat** right,
+                     void* userdata);
+    void* userdata;
 } CvCARTTrainParams;
 
 typedef struct CvCARTClassifier {
-	CV_CLASSIFIER_FIELDS()
-	/* number of internal nodes */
-	int count;
+    CV_CLASSIFIER_FIELDS()
+    /* number of internal nodes */
+    int count;
 
-	/* internal nodes (each array of <count> elements) */
-	int* compidx;
-	float* threshold;
-	int* left;
-	int* right;
+    /* internal nodes (each array of <count> elements) */
+    int* compidx;
+    float* threshold;
+    int* left;
+    int* right;
 
-	/* leaves (array of <count>+1 elements) */
-	float* val;
+    /* leaves (array of <count>+1 elements) */
+    float* val;
 } CvCARTClassifier;
 
 CV_BOOST_API
-void cvGetSortedIndices( CvMat* val, CvMat* idx, int sortcols CV_DEFAULT( 0 ) );
+void cvGetSortedIndices(CvMat* val, CvMat* idx, int sortcols CV_DEFAULT(0));
 
 CV_BOOST_API
-void cvReleaseStumpClassifier( CvClassifier** classifier );
+void cvReleaseStumpClassifier(CvClassifier** classifier);
 
 CV_BOOST_API
-float cvEvalStumpClassifier( CvClassifier* classifier, CvMat* sample );
+float cvEvalStumpClassifier(CvClassifier* classifier, CvMat* sample);
 
 CV_BOOST_API
-CvClassifier* cvCreateStumpClassifier( CvMat* trainData,
-									   int flags,
-									   CvMat* trainClasses,
-									   CvMat* typeMask,
-									   CvMat* missedMeasurementsMask CV_DEFAULT(0),
-									   CvMat* compIdx CV_DEFAULT(0),
-									   CvMat* sampleIdx CV_DEFAULT(0),
-									   CvMat* weights CV_DEFAULT(0),
-									   CvClassifierTrainParams* trainParams CV_DEFAULT(0) );
+CvClassifier* cvCreateStumpClassifier(CvMat* trainData,
+                                      int flags,
+                                      CvMat* trainClasses,
+                                      CvMat* typeMask,
+                                      CvMat* missedMeasurementsMask CV_DEFAULT(0),
+                                      CvMat* compIdx CV_DEFAULT(0),
+                                      CvMat* sampleIdx CV_DEFAULT(0),
+                                      CvMat* weights CV_DEFAULT(0),
+                                      CvClassifierTrainParams* trainParams CV_DEFAULT(0));
 
 /*
  * cvCreateMTStumpClassifier
@@ -269,15 +269,15 @@ CvClassifier* cvCreateStumpClassifier( CvMat* trainData,
  * Includes huge train data support through callback function
  */
 CV_BOOST_API
-CvClassifier* cvCreateMTStumpClassifier( CvMat* trainData,
-		int flags,
-		CvMat* trainClasses,
-		CvMat* typeMask,
-		CvMat* missedMeasurementsMask,
-		CvMat* compIdx,
-		CvMat* sampleIdx,
-		CvMat* weights,
-		CvClassifierTrainParams* trainParams );
+CvClassifier* cvCreateMTStumpClassifier(CvMat* trainData,
+                                        int flags,
+                                        CvMat* trainClasses,
+                                        CvMat* typeMask,
+                                        CvMat* missedMeasurementsMask,
+                                        CvMat* compIdx,
+                                        CvMat* sampleIdx,
+                                        CvMat* weights,
+                                        CvClassifierTrainParams* trainParams);
 
 /*
  * cvCreateCARTClassifier
@@ -285,21 +285,21 @@ CvClassifier* cvCreateMTStumpClassifier( CvMat* trainData,
  * CART classifier constructor
  */
 CV_BOOST_API
-CvClassifier* cvCreateCARTClassifier( CvMat* trainData,
-									  int flags,
-									  CvMat* trainClasses,
-									  CvMat* typeMask,
-									  CvMat* missedMeasurementsMask,
-									  CvMat* compIdx,
-									  CvMat* sampleIdx,
-									  CvMat* weights,
-									  CvClassifierTrainParams* trainParams );
+CvClassifier* cvCreateCARTClassifier(CvMat* trainData,
+                                     int flags,
+                                     CvMat* trainClasses,
+                                     CvMat* typeMask,
+                                     CvMat* missedMeasurementsMask,
+                                     CvMat* compIdx,
+                                     CvMat* sampleIdx,
+                                     CvMat* weights,
+                                     CvClassifierTrainParams* trainParams);
 
 CV_BOOST_API
-void cvReleaseCARTClassifier( CvClassifier** classifier );
+void cvReleaseCARTClassifier(CvClassifier** classifier);
 
 CV_BOOST_API
-float cvEvalCARTClassifier( CvClassifier* classifier, CvMat* sample );
+float cvEvalCARTClassifier(CvClassifier* classifier, CvMat* sample);
 
 /****************************************************************************************\
 *                                        Boosting                                        *
@@ -319,15 +319,15 @@ float cvEvalCARTClassifier( CvClassifier* classifier, CvMat* sample );
  *   Least square, least absolute deviation and huber loss.
  */
 typedef enum CvBoostType {
-	CV_DABCLASS = 0, /* 2 class Discrete AdaBoost           */
-	CV_RABCLASS = 1, /* 2 class Real AdaBoost               */
-	CV_LBCLASS  = 2, /* 2 class LogitBoost                  */
-	CV_GABCLASS = 3, /* 2 class Gentle AdaBoost             */
-	CV_L2CLASS  = 4, /* classification (2 class problem)    */
-	CV_LKCLASS  = 5, /* classification (K class problem)    */
-	CV_LSREG    = 6, /* least squares regression            */
-	CV_LADREG   = 7, /* least absolute deviation regression */
-	CV_MREG     = 8, /* M-regression (Huber loss)           */
+    CV_DABCLASS = 0, /* 2 class Discrete AdaBoost           */
+    CV_RABCLASS = 1, /* 2 class Real AdaBoost               */
+    CV_LBCLASS  = 2, /* 2 class LogitBoost                  */
+    CV_GABCLASS = 3, /* 2 class Gentle AdaBoost             */
+    CV_L2CLASS  = 4, /* classification (2 class problem)    */
+    CV_LKCLASS  = 5, /* classification (K class problem)    */
+    CV_LSREG    = 6, /* least squares regression            */
+    CV_LADREG   = 7, /* least absolute deviation regression */
+    CV_MREG     = 8, /* M-regression (Huber loss)           */
 } CvBoostType;
 
 /****************************************************************************************\
@@ -376,11 +376,11 @@ typedef struct CvBoostTrainer CvBoostTrainer;
  *   trainingData is outside of this function.
  */
 CV_BOOST_API
-CvBoostTrainer* cvBoostStartTraining( CvMat* trainClasses,
-									  CvMat* weakTrainVals,
-									  CvMat* weights,
-									  CvMat* sampleIdx,
-									  CvBoostType type );
+CvBoostTrainer* cvBoostStartTraining(CvMat* trainClasses,
+                                     CvMat* weakTrainVals,
+                                     CvMat* weights,
+                                     CvMat* sampleIdx,
+                                     CvBoostType type);
 /*
  * cvBoostNextWeakClassifier
  *
@@ -418,11 +418,11 @@ CvBoostTrainer* cvBoostStartTraining( CvMat* trainClasses,
  *   weakTrainVals, weight, trainingData is outside of this function.
  */
 CV_BOOST_API
-float cvBoostNextWeakClassifier( CvMat* weakEvalVals,
-								 CvMat* trainClasses,
-								 CvMat* weakTrainVals,
-								 CvMat* weights,
-								 CvBoostTrainer* trainer );
+float cvBoostNextWeakClassifier(CvMat* weakEvalVals,
+                                CvMat* trainClasses,
+                                CvMat* weakTrainVals,
+                                CvMat* weights,
+                                CvBoostTrainer* trainer);
 
 /*
  * cvBoostEndTraining
@@ -436,7 +436,7 @@ float cvBoostNextWeakClassifier( CvMat* weakEvalVals,
  *     function call.
  */
 CV_BOOST_API
-void cvBoostEndTraining( CvBoostTrainer** trainer );
+void cvBoostEndTraining(CvBoostTrainer** trainer);
 
 /****************************************************************************************\
 *                                    Boosted tree models                                 *
@@ -483,17 +483,17 @@ void cvBoostEndTraining( CvBoostTrainer** trainer );
  *     Pointer to internal tuning parameters if the model supports tuning.
  */
 typedef struct CvBtClassifier {
-	CV_CLASSIFIER_FIELDS()
+    CV_CLASSIFIER_FIELDS()
 
-	CvBoostType type;
-	int numclasses;
-	int numiter;
-	int numfeatures;
-	union {
-		CvCARTClassifier** trees;
-		CvSeq* seq;
-	};
-	void* trainer;
+    CvBoostType type;
+    int numclasses;
+    int numiter;
+    int numfeatures;
+    union {
+        CvCARTClassifier** trees;
+        CvSeq* seq;
+    };
+    void* trainer;
 } CvBtClassifier;
 
 /*
@@ -524,12 +524,12 @@ typedef struct CvBtClassifier {
  *     Desired number of splits in each tree.
  */
 typedef struct CvBtClassifierTrainParams {
-	CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
+    CV_CLASSIFIER_TRAIN_PARAM_FIELDS()
 
-	CvBoostType type;
-	int numiter;
-	float param[2];
-	int numsplits;
+    CvBoostType type;
+    int numiter;
+    float param[2];
+    int numsplits;
 } CvBtClassifierTrainParams;
 
 /*
@@ -569,15 +569,15 @@ typedef struct CvBtClassifierTrainParams {
  *     tune function call.
  */
 CV_BOOST_API
-CvClassifier* cvCreateBtClassifier( CvMat* trainData,
-									int flags,
-									CvMat* trainClasses,
-									CvMat* typeMask,
-									CvMat* missedMeasurementsMask,
-									CvMat* compIdx,
-									CvMat* sampleIdx,
-									CvMat* weights,
-									CvClassifierTrainParams* trainParams );
+CvClassifier* cvCreateBtClassifier(CvMat* trainData,
+                                   int flags,
+                                   CvMat* trainClasses,
+                                   CvMat* typeMask,
+                                   CvMat* missedMeasurementsMask,
+                                   CvMat* compIdx,
+                                   CvMat* sampleIdx,
+                                   CvMat* weights,
+                                   CvClassifierTrainParams* trainParams);
 
 /*
  * cvCreateBtClassifierFromFile
@@ -593,7 +593,7 @@ CvClassifier* cvCreateBtClassifier( CvMat* trainData,
  *   The restored model does not support tuning.
  */
 CV_BOOST_API
-CvClassifier* cvCreateBtClassifierFromFile( const char* filename );
+CvClassifier* cvCreateBtClassifierFromFile(const char* filename);
 
 /****************************************************************************************\
 *                                    Utility functions                                   *
@@ -621,7 +621,7 @@ CvClassifier* cvCreateBtClassifierFromFile( const char* filename );
  * Remarks
  */
 CV_BOOST_API
-CvMat* cvTrimWeights( CvMat* weights, CvMat* idx, float factor );
+CvMat* cvTrimWeights(CvMat* weights, CvMat* idx, float factor);
 
 /*
  * cvReadTrainData
@@ -662,10 +662,10 @@ CvMat* cvTrimWeights( CvMat* weights, CvMat* idx, float factor );
  *   All values and classes are integer or real numbers.
  */
 CV_BOOST_API
-void cvReadTrainData( const char* filename,
-					  int flags,
-					  CvMat** trainData,
-					  CvMat** trainClasses );
+void cvReadTrainData(const char* filename,
+                     int flags,
+                     CvMat** trainData,
+                     CvMat** trainClasses);
 
 
 /*
@@ -691,11 +691,11 @@ void cvReadTrainData( const char* filename,
  *   See the cvReadTrainData function for file format description.
  */
 CV_BOOST_API
-void cvWriteTrainData( const char* filename,
-					   int flags,
-					   CvMat* trainData,
-					   CvMat* trainClasses,
-					   CvMat* sampleIdx );
+void cvWriteTrainData(const char* filename,
+                      int flags,
+                      CvMat* trainData,
+                      CvMat* trainClasses,
+                      CvMat* sampleIdx);
 
 /*
  * cvRandShuffle
@@ -708,6 +708,6 @@ void cvWriteTrainData( const char* filename,
  *     Must have CV_8UC1, CV_16SC1, CV_32SC1 or CV_32FC1 type.
  */
 CV_BOOST_API
-void cvRandShuffleVec( CvMat* vector );
+void cvRandShuffleVec(CvMat* vector);
 
 #endif /* _CVCLASSIFIER_H_ */

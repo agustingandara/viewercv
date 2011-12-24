@@ -837,15 +837,15 @@ void fjac(int /*i*/, int /*j*/, CvMat* point_params, CvMat* cam_params, CvMat* A
 
     double k = fx / (z * z);
 
-    cvmSet(B, 0, 0, k * (R[0]*z - x * R[6]));
-    cvmSet(B, 0, 1, k * (R[1]*z - x * R[7]));
-    cvmSet(B, 0, 2, k * (R[2]*z - x * R[8]));
+    cvmSet(B, 0, 0, k*(R[0]*z - x * R[6]));
+    cvmSet(B, 0, 1, k*(R[1]*z - x * R[7]));
+    cvmSet(B, 0, 2, k*(R[2]*z - x * R[8]));
 
     k = fy / (z * z);
 
-    cvmSet(B, 1, 0, k * (R[3]*z - y * R[6]));
-    cvmSet(B, 1, 1, k * (R[4]*z - y * R[7]));
-    cvmSet(B, 1, 2, k * (R[5]*z - y * R[8]));
+    cvmSet(B, 1, 0, k*(R[3]*z - y * R[6]));
+    cvmSet(B, 1, 1, k*(R[4]*z - y * R[7]));
+    cvmSet(B, 1, 2, k*(R[5]*z - y * R[8]));
 
 #endif
 
@@ -978,7 +978,7 @@ void LevMarqSparse::bundleAdjust(vector<Point3d>& points,  //positions of points
                 //extract point and put tu vector
                 Point2d p = imagePoints[j][i];
                 ((double*)(X.data))[counter] = p.x;
-                ((double*)(X.data))[counter + 1] = p.y;
+                ((double*)(X.data))[counter+1] = p.y;
                 counter += 2;
             }
         }

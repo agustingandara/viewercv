@@ -116,106 +116,106 @@ namespace Imf {
 class TimeCode {
 public:
 
-	//---------------------
-	// Bit packing variants
-	//---------------------
+    //---------------------
+    // Bit packing variants
+    //---------------------
 
-	enum Packing {
-		TV60_PACKING,		// packing for 60-field television
-		TV50_PACKING,		// packing for 50-field television
-		FILM24_PACKING		// packing for 24-frame film
-	};
-
-
-	//-------------------------------------
-	// Constructors and assignment operator
-	//-------------------------------------
-
-	TimeCode ();  // all fields set to 0 or false
-
-	TimeCode (int hours,
-			  int minutes,
-			  int seconds,
-			  int frame,
-			  bool dropFrame = false,
-			  bool colorFrame = false,
-			  bool fieldPhase = false,
-			  bool bgf0 = false,
-			  bool bgf1 = false,
-			  bool bgf2 = false,
-			  int binaryGroup1 = 0,
-			  int binaryGroup2 = 0,
-			  int binaryGroup3 = 0,
-			  int binaryGroup4 = 0,
-			  int binaryGroup5 = 0,
-			  int binaryGroup6 = 0,
-			  int binaryGroup7 = 0,
-			  int binaryGroup8 = 0);
-
-	TimeCode (unsigned int timeAndFlags,
-			  unsigned int userData = 0,
-			  Packing packing = TV60_PACKING);
-
-	TimeCode (const TimeCode& other);
-
-	TimeCode& operator = (const TimeCode& other);
+    enum Packing {
+        TV60_PACKING,		// packing for 60-field television
+        TV50_PACKING,		// packing for 50-field television
+        FILM24_PACKING		// packing for 24-frame film
+    };
 
 
-	//----------------------------
-	// Access to individual fields
-	//----------------------------
+    //-------------------------------------
+    // Constructors and assignment operator
+    //-------------------------------------
 
-	int		hours () const;
-	void	setHours (int value);
+    TimeCode();   // all fields set to 0 or false
 
-	int		minutes () const;
-	void	setMinutes (int value);
+    TimeCode(int hours,
+             int minutes,
+             int seconds,
+             int frame,
+             bool dropFrame = false,
+             bool colorFrame = false,
+             bool fieldPhase = false,
+             bool bgf0 = false,
+             bool bgf1 = false,
+             bool bgf2 = false,
+             int binaryGroup1 = 0,
+             int binaryGroup2 = 0,
+             int binaryGroup3 = 0,
+             int binaryGroup4 = 0,
+             int binaryGroup5 = 0,
+             int binaryGroup6 = 0,
+             int binaryGroup7 = 0,
+             int binaryGroup8 = 0);
 
-	int		seconds () const;
-	void	setSeconds (int value);
+    TimeCode(unsigned int timeAndFlags,
+             unsigned int userData = 0,
+             Packing packing = TV60_PACKING);
 
-	int		frame () const;
-	void	setFrame (int value);
+    TimeCode(const TimeCode& other);
 
-	bool	dropFrame () const;
-	void	setDropFrame (bool value);
-
-	bool	colorFrame () const;
-	void	setColorFrame (bool value);
-
-	bool	fieldPhase () const;
-	void	setFieldPhase (bool value);
-
-	bool	bgf0 () const;
-	void	setBgf0 (bool value);
-
-	bool	bgf1 () const;
-	void	setBgf1 (bool value);
-
-	bool	bgf2 () const;
-	void	setBgf2 (bool value);
-
-	int		binaryGroup (int group) const; // group must be between 1 and 8
-	void	setBinaryGroup (int group, int value);
+    TimeCode& operator = (const TimeCode& other);
 
 
-	//---------------------------------
-	// Access to packed representations
-	//---------------------------------
+    //----------------------------
+    // Access to individual fields
+    //----------------------------
 
-	unsigned int	timeAndFlags (Packing packing = TV60_PACKING) const;
+    int		hours() const;
+    void	setHours(int value);
 
-	void		setTimeAndFlags (unsigned int value,
-								 Packing packing = TV60_PACKING);
+    int		minutes() const;
+    void	setMinutes(int value);
 
-	unsigned int	userData () const;
+    int		seconds() const;
+    void	setSeconds(int value);
 
-	void		setUserData (unsigned int value);
+    int		frame() const;
+    void	setFrame(int value);
+
+    bool	dropFrame() const;
+    void	setDropFrame(bool value);
+
+    bool	colorFrame() const;
+    void	setColorFrame(bool value);
+
+    bool	fieldPhase() const;
+    void	setFieldPhase(bool value);
+
+    bool	bgf0() const;
+    void	setBgf0(bool value);
+
+    bool	bgf1() const;
+    void	setBgf1(bool value);
+
+    bool	bgf2() const;
+    void	setBgf2(bool value);
+
+    int		binaryGroup(int group) const;  // group must be between 1 and 8
+    void	setBinaryGroup(int group, int value);
+
+
+    //---------------------------------
+    // Access to packed representations
+    //---------------------------------
+
+    unsigned int	timeAndFlags(Packing packing = TV60_PACKING) const;
+
+    void		setTimeAndFlags(unsigned int value,
+                                Packing packing = TV60_PACKING);
+
+    unsigned int	userData() const;
+
+    void		setUserData(unsigned int value);
 
 private:
 
-	unsigned int	_time;
-	unsigned int	_user;
+    unsigned int	_time;
+    unsigned int	_user;
 };
 
 

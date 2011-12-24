@@ -54,7 +54,7 @@ void icvCvt_BGR2Gray_8u_C3C1R(const uchar* rgb, int rgb_step,
     int swap_rb = _swap_rb ? 2 : 0;
     for (; size.height--; gray += gray_step) {
         for (i = 0; i < size.width; i++, rgb += 3) {
-            int t = descale(rgb[swap_rb] * cB + rgb[1] * cG + rgb[swap_rb ^ 2] * cR, SCALE);
+            int t = descale(rgb[swap_rb] * cB + rgb[1] * cG + rgb[swap_rb^2] * cR, SCALE);
             gray[i] = (uchar)t;
         }
 
@@ -70,7 +70,7 @@ void icvCvt_BGR2Gray_16u_C3C1R(const ushort* rgb, int rgb_step,
     int swap_rb = _swap_rb ? 2 : 0;
     for (; size.height--; gray += gray_step) {
         for (i = 0; i < size.width; i++, rgb += 3) {
-            int t = descale(rgb[swap_rb] * cB + rgb[1] * cG + rgb[swap_rb ^ 2] * cR, SCALE);
+            int t = descale(rgb[swap_rb] * cB + rgb[1] * cG + rgb[swap_rb^2] * cR, SCALE);
             gray[i] = (ushort)t;
         }
 
@@ -86,7 +86,7 @@ void icvCvt_BGRA2Gray_8u_C4C1R(const uchar* rgba, int rgba_step,
     int swap_rb = _swap_rb ? 2 : 0;
     for (; size.height--; gray += gray_step) {
         for (i = 0; i < size.width; i++, rgba += 4) {
-            int t = descale(rgba[swap_rb] * cB + rgba[1] * cG + rgba[swap_rb ^ 2] * cR, SCALE);
+            int t = descale(rgba[swap_rb] * cB + rgba[1] * cG + rgba[swap_rb^2] * cR, SCALE);
             gray[i] = (uchar)t;
         }
 
@@ -116,7 +116,7 @@ void icvCvt_BGRA2BGR_8u_C4C3R(const uchar* bgra, int bgra_step,
         for (i = 0; i < size.width; i++, bgr += 3, bgra += 4) {
             uchar t0 = bgra[swap_rb], t1 = bgra[1];
             bgr[0] = t0; bgr[1] = t1;
-            t0 = bgra[swap_rb ^ 2]; bgr[2] = t0;
+            t0 = bgra[swap_rb^2]; bgr[2] = t0;
         }
         bgr += bgr_step - size.width * 3;
         bgra += bgra_step - size.width * 4;

@@ -52,14 +52,14 @@
 
 typedef unsigned short ushort;
 
-CV_INLINE bool operator == (CvSize size1, CvSize size2 );
-CV_INLINE bool operator == (CvSize size1, CvSize size2 ) {
-	return size1.width == size2.width && size1.height == size2.height;
+CV_INLINE bool operator == (CvSize size1, CvSize size2);
+CV_INLINE bool operator == (CvSize size1, CvSize size2) {
+    return size1.width == size2.width && size1.height == size2.height;
 }
 
-CV_INLINE bool operator != (CvSize size1, CvSize size2 );
-CV_INLINE bool operator != (CvSize size1, CvSize size2 ) {
-	return size1.width != size2.width || size1.height != size2.height;
+CV_INLINE bool operator != (CvSize size1, CvSize size2);
+CV_INLINE bool operator != (CvSize size1, CvSize size2) {
+    return size1.width != size2.width || size1.height != size2.height;
 }
 
 #endif /* __CVAUX_H__ */

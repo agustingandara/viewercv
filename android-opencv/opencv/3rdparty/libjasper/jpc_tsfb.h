@@ -97,21 +97,21 @@
 \******************************************************************************/
 
 typedef struct {
-	int xstart;
-	int ystart;
-	int xend;
-	int yend;
-	int orient;
-	int locxstart;
-	int locystart;
-	int locxend;
-	int locyend;
-	jpc_fix_t synenergywt;
+    int xstart;
+    int ystart;
+    int xend;
+    int yend;
+    int orient;
+    int locxstart;
+    int locystart;
+    int locxend;
+    int locyend;
+    jpc_fix_t synenergywt;
 } jpc_tsfb_band_t;
 
 typedef struct {
-	int numlvls;
-	jpc_qmfb2d_t* qmfb;
+    int numlvls;
+    jpc_qmfb2d_t* qmfb;
 } jpc_tsfb_t;
 
 /******************************************************************************\
@@ -132,7 +132,7 @@ int jpc_tsfb_synthesize(jpc_tsfb_t* tsfb, jas_seq2d_t* x);
 
 /* Get band information for a TSFB. */
 int jpc_tsfb_getbands(jpc_tsfb_t* tsfb, uint_fast32_t xstart,
-					  uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend,
-					  jpc_tsfb_band_t* bands);
+                      uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend,
+                      jpc_tsfb_band_t* bands);
 
 #endif

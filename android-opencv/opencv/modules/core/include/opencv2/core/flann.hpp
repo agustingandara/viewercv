@@ -55,159 +55,159 @@ namespace flann {
 
 /* Nearest neighbor index algorithms */
 enum flann_algorithm_t {
-	LINEAR = 0,
-	KDTREE = 1,
-	KMEANS = 2,
-	COMPOSITE = 3,
-	SAVED = 254,
-	AUTOTUNED = 255
+    LINEAR = 0,
+    KDTREE = 1,
+    KMEANS = 2,
+    COMPOSITE = 3,
+    SAVED = 254,
+    AUTOTUNED = 255
 };
 
 enum flann_centers_init_t {
-	CENTERS_RANDOM = 0,
-	CENTERS_GONZALES = 1,
-	CENTERS_KMEANSPP = 2
+    CENTERS_RANDOM = 0,
+    CENTERS_GONZALES = 1,
+    CENTERS_KMEANSPP = 2
 };
 
 
 enum flann_log_level_t {
-	LOG_NONE = 0,
-	LOG_FATAL = 1,
-	LOG_ERROR = 2,
-	LOG_WARN = 3,
-	LOG_INFO = 4
+    LOG_NONE = 0,
+    LOG_FATAL = 1,
+    LOG_ERROR = 2,
+    LOG_WARN = 3,
+    LOG_INFO = 4
 };
 
 enum flann_distance_t {
-	EUCLIDEAN = 1,
-	MANHATTAN = 2,
-	MINKOWSKI = 3
+    EUCLIDEAN = 1,
+    MANHATTAN = 2,
+    MINKOWSKI = 3
 };
 
 class CV_EXPORTS IndexFactory {
 public:
-	virtual ~IndexFactory() {}
-	virtual ::cvflann::Index* createIndex(const Mat& dataset) const = 0;
+    virtual ~IndexFactory() {}
+    virtual ::cvflann::Index* createIndex(const Mat& dataset) const = 0;
 };
 
 struct CV_EXPORTS IndexParams : public IndexFactory {
 protected:
-	IndexParams() {};
+    IndexParams() {};
 
 };
 
 struct CV_EXPORTS LinearIndexParams : public IndexParams {
-	LinearIndexParams() {};
+    LinearIndexParams() {};
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 
 
 struct CV_EXPORTS KDTreeIndexParams : public IndexParams {
-	KDTreeIndexParams(int trees_ = 4) : trees(trees_) {};
+    KDTreeIndexParams(int trees_ = 4) : trees(trees_) {};
 
-	int trees;                 // number of randomized trees to use (for kdtree)
+    int trees;                 // number of randomized trees to use (for kdtree)
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 struct CV_EXPORTS KMeansIndexParams : public IndexParams {
-	KMeansIndexParams(int branching_ = 32, int iterations_ = 11,
-					  flann_centers_init_t centers_init_ = CENTERS_RANDOM, float cb_index_ = 0.2 ) :
-		branching(branching_),
-		iterations(iterations_),
-		centers_init(centers_init_),
-		cb_index(cb_index_) {};
+    KMeansIndexParams(int branching_ = 32, int iterations_ = 11,
+                      flann_centers_init_t centers_init_ = CENTERS_RANDOM, float cb_index_ = 0.2) :
+        branching(branching_),
+        iterations(iterations_),
+        centers_init(centers_init_),
+        cb_index(cb_index_) {};
 
-	int branching;             // branching factor (for kmeans tree)
-	int iterations;            // max iterations to perform in one kmeans clustering (kmeans tree)
-	flann_centers_init_t centers_init;          // algorithm used for picking the initial cluster centers for kmeans tree
-	float cb_index;            // cluster boundary index. Used when searching the kmeans tree
+    int branching;             // branching factor (for kmeans tree)
+    int iterations;            // max iterations to perform in one kmeans clustering (kmeans tree)
+    flann_centers_init_t centers_init;          // algorithm used for picking the initial cluster centers for kmeans tree
+    float cb_index;            // cluster boundary index. Used when searching the kmeans tree
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 
 struct CV_EXPORTS CompositeIndexParams : public IndexParams {
-	CompositeIndexParams(int trees_ = 4, int branching_ = 32, int iterations_ = 11,
-						 flann_centers_init_t centers_init_ = CENTERS_RANDOM, float cb_index_ = 0.2 ) :
-		trees(trees_),
-		branching(branching_),
-		iterations(iterations_),
-		centers_init(centers_init_),
-		cb_index(cb_index_) {};
+    CompositeIndexParams(int trees_ = 4, int branching_ = 32, int iterations_ = 11,
+                         flann_centers_init_t centers_init_ = CENTERS_RANDOM, float cb_index_ = 0.2) :
+        trees(trees_),
+        branching(branching_),
+        iterations(iterations_),
+        centers_init(centers_init_),
+        cb_index(cb_index_) {};
 
-	int trees;                 // number of randomized trees to use (for kdtree)
-	int branching;             // branching factor (for kmeans tree)
-	int iterations;            // max iterations to perform in one kmeans clustering (kmeans tree)
-	flann_centers_init_t centers_init;          // algorithm used for picking the initial cluster centers for kmeans tree
-	float cb_index;            // cluster boundary index. Used when searching the kmeans tree
+    int trees;                 // number of randomized trees to use (for kdtree)
+    int branching;             // branching factor (for kmeans tree)
+    int iterations;            // max iterations to perform in one kmeans clustering (kmeans tree)
+    flann_centers_init_t centers_init;          // algorithm used for picking the initial cluster centers for kmeans tree
+    float cb_index;            // cluster boundary index. Used when searching the kmeans tree
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 
 struct CV_EXPORTS AutotunedIndexParams : public IndexParams {
-	AutotunedIndexParams( float target_precision_ = 0.9, float build_weight_ = 0.01,
-						  float memory_weight_ = 0, float sample_fraction_ = 0.1) :
-		target_precision(target_precision_),
-		build_weight(build_weight_),
-		memory_weight(memory_weight_),
-		sample_fraction(sample_fraction_) {};
+    AutotunedIndexParams(float target_precision_ = 0.9, float build_weight_ = 0.01,
+                         float memory_weight_ = 0, float sample_fraction_ = 0.1) :
+        target_precision(target_precision_),
+        build_weight(build_weight_),
+        memory_weight(memory_weight_),
+        sample_fraction(sample_fraction_) {};
 
-	float target_precision;    // precision desired (used for autotuning, -1 otherwise)
-	float build_weight;        // build tree time weighting factor
-	float memory_weight;       // index memory weighting factor
-	float sample_fraction;     // what fraction of the dataset to use for autotuning
+    float target_precision;    // precision desired (used for autotuning, -1 otherwise)
+    float build_weight;        // build tree time weighting factor
+    float memory_weight;       // index memory weighting factor
+    float sample_fraction;     // what fraction of the dataset to use for autotuning
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 
 struct CV_EXPORTS SavedIndexParams : public IndexParams {
-	SavedIndexParams() {}
-	SavedIndexParams(std::string filename_) : filename(filename_) {}
+    SavedIndexParams() {}
+    SavedIndexParams(std::string filename_) : filename(filename_) {}
 
-	std::string filename;		// filename of the stored index
+    std::string filename;		// filename of the stored index
 
-	::cvflann::Index* createIndex(const Mat& dataset) const;
+    ::cvflann::Index* createIndex(const Mat& dataset) const;
 };
 
 
 struct CV_EXPORTS SearchParams {
-	SearchParams(int checks_ = 32) :
-		checks(checks_) {};
+    SearchParams(int checks_ = 32) :
+        checks(checks_) {};
 
-	int checks;
+    int checks;
 };
 
 
 
 class CV_EXPORTS Index {
-	::cvflann::Index* nnIndex;
+    ::cvflann::Index* nnIndex;
 
 public:
-	Index(const Mat& features, const IndexParams& params);
+    Index(const Mat& features, const IndexParams& params);
 
-	~Index();
+    ~Index();
 
-	void knnSearch(const vector<float>& queries, vector<int>& indices, vector<float>& dists, int knn, const SearchParams& params);
-	void knnSearch(const Mat& queries, Mat& indices, Mat& dists, int knn, const SearchParams& params);
+    void knnSearch(const vector<float>& queries, vector<int>& indices, vector<float>& dists, int knn, const SearchParams& params);
+    void knnSearch(const Mat& queries, Mat& indices, Mat& dists, int knn, const SearchParams& params);
 
-	int radiusSearch(const vector<float>& query, vector<int>& indices, vector<float>& dists, float radius, const SearchParams& params);
-	int radiusSearch(const Mat& query, Mat& indices, Mat& dists, float radius, const SearchParams& params);
+    int radiusSearch(const vector<float>& query, vector<int>& indices, vector<float>& dists, float radius, const SearchParams& params);
+    int radiusSearch(const Mat& query, Mat& indices, Mat& dists, float radius, const SearchParams& params);
 
-	void save(std::string filename);
+    void save(std::string filename);
 
-	int veclen() const;
+    int veclen() const;
 
-	int size() const;
+    int size() const;
 };
 
 
 CV_EXPORTS int hierarchicalClustering(const Mat& features, Mat& centers,
-									  const KMeansIndexParams& params);
+                                      const KMeansIndexParams& params);
 
 }
 

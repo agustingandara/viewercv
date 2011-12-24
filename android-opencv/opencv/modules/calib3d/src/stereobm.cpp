@@ -120,7 +120,7 @@ static void prefilterNorm(const Mat& src, Mat& dst, int winsize, int ftzero, uch
 
     for (y = 1; y < wsz2; y++) {
         for (x = 0; x < size.width; x++) {
-            vsum[x] = (ushort)(vsum[x] + sptr[srcstep * y + x]);
+            vsum[x] = (ushort)(vsum[x] + sptr[srcstep*y + x]);
         }
     }
 
@@ -138,8 +138,8 @@ static void prefilterNorm(const Mat& src, Mat& dst, int winsize, int ftzero, uch
         }
 
         for (x = 0; x <= wsz2; x++) {
-            vsum[-x - 1] = vsum[0];
-            vsum[size.width + x] = vsum[size.width - 1];
+            vsum[-x-1] = vsum[0];
+            vsum[size.width+x] = vsum[size.width-1];
         }
 
         int sum = vsum[0] * (wsz2 + 1);
@@ -151,13 +151,13 @@ static void prefilterNorm(const Mat& src, Mat& dst, int winsize, int ftzero, uch
         dptr[0] = tab[val + OFS];
 
         for (x = 1; x < size.width - 1; x++) {
-            sum += vsum[x + wsz2] - vsum[x - wsz2 - 1];
-            val = ((curr[x] * 4 + curr[x - 1] + curr[x + 1] + prev[x] + next[x]) * scale_g - sum * scale_s) >> 10;
+            sum += vsum[x+wsz2] - vsum[x-wsz2-1];
+            val = ((curr[x] * 4 + curr[x-1] + curr[x+1] + prev[x] + next[x]) * scale_g - sum * scale_s) >> 10;
             dptr[x] = tab[val + OFS];
         }
 
-        sum += vsum[x + wsz2] - vsum[x - wsz2 - 1];
-        val = ((curr[x] * 5 + curr[x - 1] + prev[x] + next[x]) * scale_g - sum * scale_s) >> 10;
+        sum += vsum[x+wsz2] - vsum[x-wsz2-1];
+        val = ((curr[x] * 5 + curr[x-1] + prev[x] + next[x]) * scale_g - sum * scale_s) >> 10;
         dptr[x] = tab[val + OFS];
     }
 }
@@ -187,7 +187,7 @@ prefilterXSobel(const Mat& src, Mat& dst, int ftzero) {
         uchar* dptr0 = dst.ptr<uchar>(y);
         uchar* dptr1 = dptr0 + dst.step;
 
-        dptr0[0] = dptr0[size.width - 1] = dptr1[0] = dptr1[size.width - 1] = val0;
+        dptr0[0] = dptr0[size.width-1] = dptr1[0] = dptr1[size.width-1] = val0;
         x = 1;
 
 #if CV_SSE2
@@ -223,10 +223,10 @@ prefilterXSobel(const Mat& src, Mat& dst, int ftzero) {
 #endif
 
         for (; x < size.width - 1; x++) {
-            int d0 = srow0[x + 1] - srow0[x - 1], d1 = srow1[x + 1] - srow1[x - 1],
-                d2 = srow2[x + 1] - srow2[x - 1], d3 = srow3[x + 1] - srow3[x - 1];
-            int v0 = tab[d0 + d1 * 2 + d2 + OFS];
-            int v1 = tab[d1 + d2 * 2 + d3 + OFS];
+            int d0 = srow0[x+1] - srow0[x-1], d1 = srow1[x+1] - srow1[x-1],
+                d2 = srow2[x+1] - srow2[x-1], d3 = srow3[x+1] - srow3[x-1];
+            int v0 = tab[d0 + d1*2 + d2 + OFS];
+            int v1 = tab[d1 + d2*2 + d3 + OFS];
             dptr0[x] = (uchar)v0;
             dptr1[x] = (uchar)v1;
         }
@@ -317,10 +317,10 @@ static void findStereoCorrespondenceBM_SSE2(const Mat& left, const Mat& right,
     // initialize the left and right borders of the disparity map
     for (y = 0; y < height; y++) {
         for (x = 0; x < lofs; x++) {
-            dptr[y * dstep + x] = FILTERED;
+            dptr[y* dstep + x] = FILTERED;
         }
         for (x = lofs + width1; x < width; x++) {
-            dptr[y * dstep + x] = FILTERED;
+            dptr[y* dstep + x] = FILTERED;
         }
     }
     dptr += lofs;
@@ -358,7 +358,7 @@ static void findStereoCorrespondenceBM_SSE2(const Mat& left, const Mat& right,
 
         // fill borders
         for (y = dy1; y <= wsz2; y++) {
-            htext[height + y] = htext[height + dy1 - 1];
+            htext[height+y] = htext[height+dy1-1];
         }
         for (y = -wsz2 - 1; y < -dy0; y++) {
             htext[y] = htext[-dy0];
@@ -366,7 +366,7 @@ static void findStereoCorrespondenceBM_SSE2(const Mat& left, const Mat& right,
 
         // initialize sums
         for (d = 0; d < ndisp; d++) {
-            sad[d] = (ushort)(hsad0[d - ndisp * dy0] * (wsz2 + 2 - dy0));
+            sad[d] = (ushort)(hsad0[d-ndisp*dy0] * (wsz2 + 2 - dy0));
         }
 
         hsad = hsad0 + (1 - dy0) * ndisp;
@@ -426,7 +426,7 @@ static void findStereoCorrespondenceBM_SSE2(const Mat& left, const Mat& right,
 
             tsum += htext[y + wsz2] - htext[y - wsz2 - 1];
             if (tsum < textureThreshold) {
-                dptr[y * dstep] = FILTERED;
+                dptr[y* dstep] = FILTERED;
                 continue;
             }
 
@@ -476,18 +476,18 @@ static void findStereoCorrespondenceBM_SSE2(const Mat& left, const Mat& right,
                     }
                 }
                 if (d < ndisp) {
-                    dptr[y * dstep] = FILTERED;
+                    dptr[y* dstep] = FILTERED;
                     continue;
                 }
             }
 
             if (0 < mind && mind < ndisp - 1) {
-                int p = sad[mind + 1], n = sad[mind - 1], d = p + n - 2 * sad[mind] + std::abs(p - n);
-                dptr[y * dstep] = (short)(((ndisp - mind - 1 + mindisp) * 256 + (d != 0 ? (p - n) * 256 / d : 0) + 15) >> 4);
+                int p = sad[mind+1], n = sad[mind-1], d = p + n - 2 * sad[mind] + std::abs(p - n);
+                dptr[y* dstep] = (short)(((ndisp - mind - 1 + mindisp) * 256 + (d != 0 ? (p - n) * 256 / d : 0) + 15) >> 4);
             } else {
-                dptr[y * dstep] = (short)((ndisp - mind - 1 + mindisp) * 16);
+                dptr[y* dstep] = (short)((ndisp - mind - 1 + mindisp) * 16);
             }
-            costptr[y * coststep] = sad[mind];
+            costptr[y* coststep] = sad[mind];
         }
     }
 }
@@ -558,10 +558,10 @@ findStereoCorrespondenceBM(const Mat& left, const Mat& right,
     // initialize the left and right borders of the disparity map
     for (y = 0; y < height; y++) {
         for (x = 0; x < lofs; x++) {
-            dptr[y * dstep + x] = FILTERED;
+            dptr[y* dstep + x] = FILTERED;
         }
         for (x = lofs + width1; x < width; x++) {
-            dptr[y * dstep + x] = FILTERED;
+            dptr[y* dstep + x] = FILTERED;
         }
     }
     dptr += lofs;
@@ -589,7 +589,7 @@ findStereoCorrespondenceBM(const Mat& left, const Mat& right,
 
         // fill borders
         for (y = dy1; y <= wsz2; y++) {
-            htext[height + y] = htext[height + dy1 - 1];
+            htext[height+y] = htext[height+dy1-1];
         }
         for (y = -wsz2 - 1; y < -dy0; y++) {
             htext[y] = htext[-dy0];
@@ -597,7 +597,7 @@ findStereoCorrespondenceBM(const Mat& left, const Mat& right,
 
         // initialize sums
         for (d = 0; d < ndisp; d++) {
-            sad[d] = (int)(hsad0[d - ndisp * dy0] * (wsz2 + 2 - dy0));
+            sad[d] = (int)(hsad0[d-ndisp*dy0] * (wsz2 + 2 - dy0));
         }
 
         hsad = hsad0 + (1 - dy0) * ndisp;
@@ -626,7 +626,7 @@ findStereoCorrespondenceBM(const Mat& left, const Mat& right,
             }
             tsum += htext[y + wsz2] - htext[y - wsz2 - 1];
             if (tsum < textureThreshold) {
-                dptr[y * dstep] = FILTERED;
+                dptr[y* dstep] = FILTERED;
                 continue;
             }
 
@@ -638,17 +638,17 @@ findStereoCorrespondenceBM(const Mat& left, const Mat& right,
                     }
                 }
                 if (d < ndisp) {
-                    dptr[y * dstep] = FILTERED;
+                    dptr[y* dstep] = FILTERED;
                     continue;
                 }
             }
 
             {
                 sad[-1] = sad[1];
-                sad[ndisp] = sad[ndisp - 2];
-                int p = sad[mind + 1], n = sad[mind - 1], d = p + n - 2 * sad[mind] + std::abs(p - n);
-                dptr[y * dstep] = (short)(((ndisp - mind - 1 + mindisp) * 256 + (d != 0 ? (p - n) * 256 / d : 0) + 15) >> 4);
-                costptr[y * coststep] = sad[mind];
+                sad[ndisp] = sad[ndisp-2];
+                int p = sad[mind+1], n = sad[mind-1], d = p + n - 2 * sad[mind] + std::abs(p - n);
+                dptr[y* dstep] = (short)(((ndisp - mind - 1 + mindisp) * 256 + (d != 0 ? (p - n) * 256 / d : 0) + 15) >> 4);
+                costptr[y* coststep] = sad[mind];
             }
         }
     }

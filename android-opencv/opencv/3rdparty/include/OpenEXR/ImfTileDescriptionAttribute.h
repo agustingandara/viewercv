@@ -52,15 +52,15 @@ typedef TypedAttribute<TileDescription> TileDescriptionAttribute;
 
 template <>
 const char *
-TileDescriptionAttribute::staticTypeName ();
+TileDescriptionAttribute::staticTypeName();
 
 template <>
 void
-TileDescriptionAttribute::writeValueTo (OStream&, int) const;
+TileDescriptionAttribute::writeValueTo(OStream&, int) const;
 
 template <>
 void
-TileDescriptionAttribute::readValueFrom (IStream&, int, int);
+TileDescriptionAttribute::readValueFrom(IStream&, int, int);
 
 
 } // namespace Imf

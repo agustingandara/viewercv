@@ -812,7 +812,7 @@ void ellipse2Poly(Point center, Size axes, int angle,
             angle += 360;
         }
 
-        x = size_a * SinTable[450 - angle];
+        x = size_a * SinTable[450-angle];
         y = size_b * SinTable[angle];
         Point pt;
         pt.x = cvRound(cx + x * alpha - y * beta);
@@ -1029,7 +1029,7 @@ static void
 CollectPolyEdges(Mat& img, const Point* v, int count, vector<PolyEdge>& edges,
                  const void* color, int line_type, int shift, Point offset) {
     int i, delta = offset.y + (shift ? 1 << (shift - 1) : 0);
-    Point pt0 = v[count - 1], pt1;
+    Point pt0 = v[count-1], pt1;
     pt0.x = (pt0.x + offset.x) << (XY_SHIFT - shift);
     pt0.y = (pt0.y + delta) >> shift;
 
@@ -1552,10 +1552,10 @@ void ellipse(Mat& img, const RotatedRect& box, const Scalar& color,
     scalarToRawData(color, buf, img.type(), 0);
 
     int _angle = cvRound(box.angle);
-    Point center(cvRound(box.center.x * (1 << XY_SHIFT)),
-                 cvRound(box.center.y * (1 << XY_SHIFT)));
-    Size axes(cvRound(box.size.width * (1 << (XY_SHIFT - 1))),
-              cvRound(box.size.height * (1 << (XY_SHIFT - 1))));
+    Point center(cvRound(box.center.x*(1 << XY_SHIFT)),
+                 cvRound(box.center.y*(1 << XY_SHIFT)));
+    Size axes(cvRound(box.size.width*(1 << (XY_SHIFT - 1))),
+              cvRound(box.size.height*(1 << (XY_SHIFT - 1))));
     EllipseEx(img, center, axes, _angle, 0, 360, buf, thickness, lineType);
 }
 
@@ -1835,7 +1835,7 @@ void putText(Mat& img, const string& text, Point org,
             c = '?';
         }
 
-        const char* ptr = faces[ascii[(c - ' ') + 1]];
+        const char* ptr = faces[ascii[(c-' ')+1]];
         p.x = (uchar)ptr[0] - 'R';
         p.y = (uchar)ptr[1] - 'R';
         int dx = p.y * hscale;
@@ -1880,7 +1880,7 @@ Size getTextSize(const string& text, int fontFace, double fontScale, int thickne
             c = '?';
         }
 
-        const char* ptr = faces[ascii[(c - ' ') + 1]];
+        const char* ptr = faces[ascii[(c-' ')+1]];
         p.x = (uchar)ptr[0] - 'R';
         p.y = (uchar)ptr[1] - 'R';
         view_x += (p.y - p.x) * fontScale;
@@ -1903,9 +1903,9 @@ static const int CodeDeltas[8][2] =
 
 CV_IMPL void
 cvDrawContours(void* _img, CvSeq* contour,
-               CvScalar _externalColor, CvScalar _holeColor,
-               int  maxLevel, int thickness,
-               int line_type, CvPoint _offset) {
+CvScalar _externalColor, CvScalar _holeColor,
+int  maxLevel, int thickness,
+int line_type, CvPoint _offset) {
     CvSeq* contour0 = contour, *h_next = 0;
     CvTreeNodeIterator iterator;
     cv::vector<cv::PolyEdge> edges;
@@ -1976,11 +1976,11 @@ cvDrawContours(void* _img, CvSeq* contour,
 
             if (thickness >= 0)
                 cv::ThickLine(img, prev_pt,
-                              cv::Point(((CvChain*)contour)->origin) + offset,
-                              clr, thickness, line_type, 2, 0);
+                cv::Point(((CvChain*)contour)->origin) + offset,
+                clr, thickness, line_type, 2, 0);
             else
                 cv::CollectPolyEdges(img, &pts[0], (int)pts.size(),
-                                     edges, ext_buf, line_type, 0, offset);
+                edges, ext_buf, line_type, 0, offset);
         } else if (CV_IS_SEQ_POLYLINE(contour)) {
             CV_Assert(elem_type == CV_32SC2);
             cv::Point pt1, pt2;
@@ -2005,7 +2005,7 @@ cvDrawContours(void* _img, CvSeq* contour,
             }
             if (thickness < 0)
                 cv::CollectPolyEdges(img, &pts[0], (int)pts.size(),
-                                     edges, ext_buf, line_type, 0, cv::Point());
+                edges, ext_buf, line_type, 0, cv::Point());
         }
     }
 
@@ -2027,7 +2027,7 @@ cvClipLine(CvSize size, CvPoint* pt1, CvPoint* pt2) {
 
 CV_IMPL int
 cvEllipse2Poly(CvPoint center, CvSize axes, int angle,
-               int arc_start, int arc_end, CvPoint* _pts, int delta) {
+int arc_start, int arc_end, CvPoint* _pts, int delta) {
     cv::vector<cv::Point> pts;
     cv::ellipse2Poly(center, axes, angle, arc_start, arc_end, delta, pts);
     memcpy(_pts, &pts[0], pts.size()*sizeof(_pts[0]));
@@ -2077,7 +2077,7 @@ cvColorToScalar(double packed_color, int type) {
             break;
         default:
             scalar.val[0] = scalar.val[1] =
-                                scalar.val[2] = scalar.val[3] = packed_color;
+            scalar.val[2] = scalar.val[3] = packed_color;
             break;
         }
     }
@@ -2087,8 +2087,8 @@ cvColorToScalar(double packed_color, int type) {
 
 CV_IMPL int
 cvInitLineIterator(const CvArr* img, CvPoint pt1, CvPoint pt2,
-                   CvLineIterator* iterator, int connectivity,
-                   int left_to_right) {
+CvLineIterator* iterator, int connectivity,
+int left_to_right) {
     CV_Assert(iterator != 0);
     cv::LineIterator li(cv::cvarrToMat(img), pt1, pt2, connectivity, left_to_right != 0);
 
@@ -2104,54 +2104,54 @@ cvInitLineIterator(const CvArr* img, CvPoint pt1, CvPoint pt2,
 
 CV_IMPL void
 cvLine(CvArr* _img, CvPoint pt1, CvPoint pt2, CvScalar color,
-       int thickness, int line_type, int shift) {
+int thickness, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::line(img, pt1, pt2, color, thickness, line_type, shift);
 }
 
 CV_IMPL void
 cvRectangle(CvArr* _img, CvPoint pt1, CvPoint pt2,
-            CvScalar color, int thickness,
-            int line_type, int shift) {
+CvScalar color, int thickness,
+int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::rectangle(img, pt1, pt2, color, thickness, line_type, shift);
 }
 
 CV_IMPL void
 cvRectangleR(CvArr* _img, CvRect rec,
-             CvScalar color, int thickness,
-             int line_type, int shift) {
+CvScalar color, int thickness,
+int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::rectangle(img, rec, color, thickness, line_type, shift);
 }
 
 CV_IMPL void
 cvCircle(CvArr* _img, CvPoint center, int radius,
-         CvScalar color, int thickness, int line_type, int shift) {
+CvScalar color, int thickness, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::circle(img, center, radius, color, thickness, line_type, shift);
 }
 
 CV_IMPL void
 cvEllipse(CvArr* _img, CvPoint center, CvSize axes,
-          double angle, double start_angle, double end_angle,
-          CvScalar color, int thickness, int line_type, int shift) {
+double angle, double start_angle, double end_angle,
+CvScalar color, int thickness, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::ellipse(img, center, axes, angle, start_angle, end_angle,
-                color, thickness, line_type, shift);
+    color, thickness, line_type, shift);
 }
 
 CV_IMPL void
 cvFillConvexPoly(CvArr* _img, const CvPoint* pts, int npts,
-                 CvScalar color, int line_type, int shift) {
+CvScalar color, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
     cv::fillConvexPoly(img, (const cv::Point*)pts, npts,
-                       color, line_type, shift);
+    color, line_type, shift);
 }
 
 CV_IMPL void
 cvFillPoly(CvArr* _img, CvPoint** pts, const int* npts, int ncontours,
-           CvScalar color, int line_type, int shift) {
+CvScalar color, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
 
     cv::fillPoly(img, (const cv::Point**)pts, npts, ncontours, color, line_type, shift);
@@ -2159,12 +2159,12 @@ cvFillPoly(CvArr* _img, CvPoint** pts, const int* npts, int ncontours,
 
 CV_IMPL void
 cvPolyLine(CvArr* _img, CvPoint** pts, const int* npts,
-           int ncontours, int closed, CvScalar color,
-           int thickness, int line_type, int shift) {
+int ncontours, int closed, CvScalar color,
+int thickness, int line_type, int shift) {
     cv::Mat img = cv::cvarrToMat(_img);
 
     cv::polylines(img, (const cv::Point**)pts, npts, ncontours,
-                  closed != 0, color, thickness, line_type, shift);
+    closed != 0, color, thickness, line_type, shift);
 }
 
 CV_IMPL void
@@ -2172,14 +2172,14 @@ cvPutText(CvArr* _img, const char* text, CvPoint org, const CvFont* _font, CvSca
     cv::Mat img = cv::cvarrToMat(_img);
     CV_Assert(text != 0 && _font != 0);
     cv::putText(img, text, org, _font->font_face, (_font->hscale + _font->vscale) * 0.5,
-                color, _font->thickness, _font->line_type,
-                CV_IS_IMAGE(_img) && ((IplImage*)_img)->origin != 0);
+    color, _font->thickness, _font->line_type,
+    CV_IS_IMAGE(_img) && ((IplImage*)_img)->origin != 0);
 }
 
 
 CV_IMPL void
 cvInitFont(CvFont* font, int font_face, double hscale, double vscale,
-           double shear, int thickness, int line_type) {
+double shear, int thickness, int line_type) {
     CV_Assert(font != 0 && hscale > 0 && vscale > 0 && thickness >= 0);
 
     font->ascii = cv::getFontData(font_face);
@@ -2196,7 +2196,7 @@ CV_IMPL void
 cvGetTextSize(const char* text, const CvFont* _font, CvSize* _size, int* _base_line) {
     CV_Assert(text != 0 && _font != 0);
     cv::Size size = cv::getTextSize(text, _font->font_face, (_font->hscale + _font->vscale) * 0.5,
-                                    _font->thickness, _base_line);
+    _font->thickness, _base_line);
     if (_size) {
         *_size = size;
     }

@@ -80,7 +80,7 @@ int icvMkDir(const char* filename) {
             p[pos] = '\0';
 
 #ifdef _WIN32
-            if (p[pos - 1] != ':') {
+            if (p[pos-1] != ':') {
                 if (_stat(path, &st) != 0) {
                     if (_mkdir(path) != 0) { return 0; }
                 }

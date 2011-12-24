@@ -549,7 +549,7 @@ static int icvSeekRatioAVI_XINE(CvCaptureAVI_XINE* capture, double ratio) {
         fprintf(stderr, "ratio on GetProperty(): %d\n", pos_l);
 
         /// use xinelib's seek functionality
-        if (xine_play(capture->stream, (int)(ratio * (float)length), 0)) {
+        if (xine_play(capture->stream, (int)(ratio*(float)length), 0)) {
             capture->frame_number = (int)(ratio * length / capture->frame_duration);
         } else {
 #ifndef NDEBUG

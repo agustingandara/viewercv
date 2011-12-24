@@ -202,8 +202,8 @@ void PatchGenerator::warpWholeImage(const Mat& image, Mat& matT, Mat& buf,
     int dx = border - roi.x;
     int dy = border - roi.y;
 
-    if ((roi.width + border * 2) * (roi.height + border * 2) > buf.cols) {
-        buf.create(1, (roi.width + border * 2) * (roi.height + border * 2), image.type());
+    if ((roi.width + border * 2)*(roi.height + border * 2) > buf.cols) {
+        buf.create(1, (roi.width + border * 2)*(roi.height + border * 2), image.type());
     }
 
     warped = Mat(roi.height + border * 2, roi.width + border * 2,
@@ -261,17 +261,17 @@ static void getDiscreteCircle(int R, vector<Point>& circle, vector<int>& filledH
 
     for (i = 0; i < n8; i++) {
         Point p = circle[i];
-        circle[i + n4] = Point(-p.y, p.x);
-        circle[i + n4 * 2] = Point(-p.x, -p.y);
-        circle[i + n4 * 3] = Point(p.y, -p.x);
+        circle[i+n4] = Point(-p.y, p.x);
+        circle[i+n4*2] = Point(-p.x, -p.y);
+        circle[i+n4*3] = Point(p.y, -p.x);
     }
 
     for (i = n8; i < n4; i++) {
         Point p = circle[n4 - i], q = Point(p.y, p.x);
         circle[i] = q;
-        circle[i + n4] = Point(-q.y, q.x);
-        circle[i + n4 * 2] = Point(-q.x, -q.y);
-        circle[i + n4 * 3] = Point(q.y, -q.x);
+        circle[i+n4] = Point(-q.y, q.x);
+        circle[i+n4*2] = Point(-q.x, -q.y);
+        circle[i+n4*3] = Point(q.y, -q.x);
     }
 
     // the filled upper half of the circle is encoded as sequence of integers,
@@ -354,7 +354,7 @@ void LDetector::getMostStable2D(const Mat& image, vector<KeyPoint>& keypoints,
                     continue;
                 }
                 double dx = kpt.pt.x - kpt0.pt.x, dy = kpt.pt.y - kpt0.pt.y;
-                if (dx* dx + dy* dy <= d2 * (1 << kpt.octave * 2)) {
+                if (dx* dx + dy* dy <= d2*(1 << kpt.octave * 2)) {
                     keypoints[k] = KeyPoint((kpt.pt.x * kpt.response + kpt0.pt.x) / (kpt.response + 1),
                                             (kpt.pt.y * kpt.response + kpt0.pt.y) / (kpt.response + 1),
                                             kpt.size, -1.f, kpt.response + 1, kpt.octave);
@@ -445,7 +445,7 @@ void LDetector::operator()(const vector<Mat>& pyr, vector<KeyPoint>& keypoints, 
         int csize = (int)circle0.size(), csize2 = csize / 2;
         circle.resize(csize * 3);
         for (i = 0; i < csize; i++) {
-            circle[i] = circle[i + csize] = circle[i + csize * 2] = (int)((-circle0[i].y) * pyrLayer.step + circle0[i].x);
+            circle[i] = circle[i+csize] = circle[i+csize*2] = (int)((-circle0[i].y) * pyrLayer.step + circle0[i].x);
         }
         fcircle.clear();
         fcircle_s.clear();
@@ -520,8 +520,8 @@ void LDetector::operator()(const vector<Mat>& pyr, vector<KeyPoint>& keypoints, 
             for (x = radius + 1; x < layerSize.width - radius - 1; x++, img++, scores++, mask++) {
                 int val0 = *scores;
                 if (!*mask || std::abs(val0) < lthreshold ||
-                        (mask[-1] + mask[1] + mask[-mstep - 1] + mask[-mstep] + mask[-mstep + 1] +
-                         mask[mstep - 1] + mask[mstep] + mask[mstep + 1] < 3)) {
+                        (mask[-1] + mask[1] + mask[-mstep-1] + mask[-mstep] + mask[-mstep+1] +
+                         mask[mstep-1] + mask[mstep] + mask[mstep+1] < 3)) {
                     continue;
                 }
                 bool recomputeZeroScores = radius * 2 < y && y < layerSize.height - radius * 2 &&
@@ -554,8 +554,8 @@ void LDetector::operator()(const vector<Mat>& pyr, vector<KeyPoint>& keypoints, 
                 float fval[9], fvaln = 0;
                 for (int i1 = -1; i1 <= 1; i1++)
                     for (int j1 = -1; j1 <= 1; j1++) {
-                        fval[(i1 + 1) * 3 + j1 + 1] = (float)(scores[sstep * i1 + j1] ? scores[sstep * i1 + j1] :
-                                                              computeLResponse(img + pyrLayer.step * i1 + j1, cdata, csize));
+                        fval[(i1+1)*3 + j1 + 1] = (float)(scores[sstep*i1+j1] ? scores[sstep*i1+j1] :
+                                                          computeLResponse(img + pyrLayer.step * i1 + j1, cdata, csize));
                     }
                 Point2f pt = adjustCorner(fval, fvaln);
                 pt.x += x;
@@ -893,7 +893,7 @@ void FernClassifier::trainFromSingleView(const Mat& image,
                 pyrbuf[j].create(1, size.width * size.height, image.type());
             }
             pyr[j] = Mat(size, image.type(), pyrbuf[j].data);
-            pyrDown(pyr[j - 1], pyr[j]);
+            pyrDown(pyr[j-1], pyr[j]);
         }
 
         if (patchGenerator.noiseRange > 0) {
@@ -956,14 +956,14 @@ int FernClassifier::operator()(const Mat& patch, vector<float>& signature) const
 
     for (i = 0; i < nstructs; i++) {
         int lf = getLeaf(i, patch);
-        const float* ldata = &posteriors[lf * signatureSize];
+        const float* ldata = &posteriors[lf*signatureSize];
         for (j = 0; j <= sz - 4; j += 4) {
             float t0 = s[j] + ldata[j];
-            float t1 = s[j + 1] + ldata[j + 1];
-            s[j] = t0; s[j + 1] = t1;
-            t0 = s[j + 2] + ldata[j + 2];
-            t1 = s[j + 3] + ldata[j + 3];
-            s[j + 2] = t0; s[j + 3] = t1;
+            float t1 = s[j+1] + ldata[j+1];
+            s[j] = t0; s[j+1] = t1;
+            t0 = s[j+2] + ldata[j+2];
+            t1 = s[j+3] + ldata[j+3];
+            s[j+2] = t0; s[j+3] = t1;
         }
         for (; j < sz; j++) {
             s[j] += ldata[j];
@@ -993,7 +993,7 @@ void FernClassifier::finalize(RNG&) {
 
     for (i = 0; i < nstructs; i++) {
         for (j = 0; j < leavesPerStruct; j++) {
-            float* P = &posteriors[(i * leavesPerStruct + j) * nclasses];
+            float* P = &posteriors[(i*leavesPerStruct + j)*nclasses];
             double sum = 0;
             for (k = 0; k < n; k++) {
                 sum += P[k] * invClassCounters[k];
@@ -1034,8 +1034,8 @@ void FernClassifier::finalize(RNG&) {
             }
 
             float scale = 1.f / (S * (m < n ? std::sqrt((float)m) : 1.f));
-            const int* leaf = (const int*)&posteriors[i * n];
-            float* out_leaf = (float*)&posteriors[i * m];
+            const int* leaf = (const int*)&posteriors[i*n];
+            float* out_leaf = (float*)&posteriors[i*m];
 
             for (j = 0; j < m; j++) {
                 float val = 0;

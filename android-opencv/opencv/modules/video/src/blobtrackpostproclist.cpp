@@ -42,82 +42,82 @@
 
 /*======================= FILTER LIST SHELL =====================*/
 typedef struct DefBlobFilter {
-	CvBlob                  blob;
-	CvBlobTrackPostProcOne* pFilter;
-	int                     m_LastFrame;
+    CvBlob                  blob;
+    CvBlobTrackPostProcOne* pFilter;
+    int                     m_LastFrame;
 } DefBlobFilter;
 
 class CvBlobTrackPostProcList : public CvBlobTrackPostProc {
 protected:
-	CvBlobTrackPostProcOne* (*m_CreatePostProc)();
-	CvBlobSeq               m_BlobFilterList;
-	int                     m_Frame;
+    CvBlobTrackPostProcOne*(*m_CreatePostProc)();
+    CvBlobSeq               m_BlobFilterList;
+    int                     m_Frame;
 
 public:
-	CvBlobTrackPostProcList(CvBlobTrackPostProcOne* (*create)()): m_BlobFilterList(sizeof(DefBlobFilter)) {
-		m_Frame = 0;
-		m_CreatePostProc = create;
-		CvBlobTrackPostProcOne* pM = create();
-		TransferParamsFromChild(pM, NULL);
-		pM->Release();
-		SetModuleName("List");
-	}
+    CvBlobTrackPostProcList(CvBlobTrackPostProcOne*(*create)()): m_BlobFilterList(sizeof(DefBlobFilter)) {
+        m_Frame = 0;
+        m_CreatePostProc = create;
+        CvBlobTrackPostProcOne* pM = create();
+        TransferParamsFromChild(pM, NULL);
+        pM->Release();
+        SetModuleName("List");
+    }
 
-	~CvBlobTrackPostProcList() {
-		int i;
-		for (i = m_BlobFilterList.GetBlobNum(); i > 0; --i) {
-			DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlob(i - 1);
-			pF->pFilter->Release();
-		}
-	};
+    ~CvBlobTrackPostProcList() {
+        int i;
+        for (i = m_BlobFilterList.GetBlobNum(); i > 0; --i) {
+            DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlob(i - 1);
+            pF->pFilter->Release();
+        }
+    };
 
-	virtual void    AddBlob(CvBlob* pBlob) {
-		DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlobByID(CV_BLOB_ID(pBlob));
-		if (pF == NULL) {
-			/* Create new filter: */
-			DefBlobFilter F;
-			F.blob = pBlob[0];
-			F.m_LastFrame = m_Frame;
-			F.pFilter = m_CreatePostProc();
-			TransferParamsToChild(F.pFilter, NULL);
-			m_BlobFilterList.AddBlob((CvBlob*)&F);
-			pF = (DefBlobFilter*)m_BlobFilterList.GetBlobByID(CV_BLOB_ID(pBlob));
-		}
+    virtual void    AddBlob(CvBlob* pBlob) {
+        DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlobByID(CV_BLOB_ID(pBlob));
+        if (pF == NULL) {
+            /* Create new filter: */
+            DefBlobFilter F;
+            F.blob = pBlob[0];
+            F.m_LastFrame = m_Frame;
+            F.pFilter = m_CreatePostProc();
+            TransferParamsToChild(F.pFilter, NULL);
+            m_BlobFilterList.AddBlob((CvBlob*)&F);
+            pF = (DefBlobFilter*)m_BlobFilterList.GetBlobByID(CV_BLOB_ID(pBlob));
+        }
 
-		assert(pF);
-		pF->blob = pBlob[0];
-		pF->m_LastFrame = m_Frame;
-	};
+        assert(pF);
+        pF->blob = pBlob[0];
+        pF->m_LastFrame = m_Frame;
+    };
 
-	virtual void    Process() {
-		int i;
-		for (i = m_BlobFilterList.GetBlobNum(); i > 0; --i) {
-			DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlob(i - 1);
+    virtual void    Process() {
+        int i;
+        for (i = m_BlobFilterList.GetBlobNum(); i > 0; --i) {
+            DefBlobFilter* pF = (DefBlobFilter*)m_BlobFilterList.GetBlob(i - 1);
 
-			if (pF->m_LastFrame == m_Frame) {
-				/* Process: */
-				int ID = CV_BLOB_ID(pF);
-				pF->blob = *(pF->pFilter->Process(&(pF->blob)));
-				CV_BLOB_ID(pF) = ID;
-			} else {
-				/* Delete blob filter: */
-				pF->pFilter->Release();
-				m_BlobFilterList.DelBlob(i - 1);
-			}
-		}   /* Next blob. */
-		m_Frame++;
-	};
+            if (pF->m_LastFrame == m_Frame) {
+                /* Process: */
+                int ID = CV_BLOB_ID(pF);
+                pF->blob = *(pF->pFilter->Process(&(pF->blob)));
+                CV_BLOB_ID(pF) = ID;
+            } else {
+                /* Delete blob filter: */
+                pF->pFilter->Release();
+                m_BlobFilterList.DelBlob(i - 1);
+            }
+        }   /* Next blob. */
+        m_Frame++;
+    };
 
-	int     GetBlobNum() {return m_BlobFilterList.GetBlobNum();};
-	CvBlob* GetBlob(int index) {return m_BlobFilterList.GetBlob(index);};
-	void    Release() {delete this;};
+    int     GetBlobNum() {return m_BlobFilterList.GetBlobNum();};
+    CvBlob* GetBlob(int index) {return m_BlobFilterList.GetBlob(index);};
+    void    Release() {delete this;};
 
-	/* Additional functionality: */
-	CvBlob* GetBlobByID(int BlobID) {return m_BlobFilterList.GetBlobByID(BlobID);}
+    /* Additional functionality: */
+    CvBlob* GetBlobByID(int BlobID) {return m_BlobFilterList.GetBlobByID(BlobID);}
 
 };  /* CvBlobTrackPostProcList */
 
-CvBlobTrackPostProc* cvCreateBlobTrackPostProcList(CvBlobTrackPostProcOne* (*create)()) {
-	return (CvBlobTrackPostProc*) new CvBlobTrackPostProcList(create);
+CvBlobTrackPostProc* cvCreateBlobTrackPostProcList(CvBlobTrackPostProcOne*(*create)()) {
+    return (CvBlobTrackPostProc*) new CvBlobTrackPostProcList(create);
 }
 /*======================= FILTER LIST SHELL =====================*/

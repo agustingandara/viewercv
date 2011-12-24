@@ -103,7 +103,7 @@ void cvGetPerspectiveTransform(CvSize src_size, double quad[4][2],
         b[i] = 0;
     }
     for (i = 4; i < 8; ++i) {
-        a[i][3] = quad[i - 4][0]; a[i][4] = quad[i - 4][1]; a[i][5] = 1;
+        a[i][3] = quad[i-4][0]; a[i][4] = quad[i-4][1]; a[i][5] = 1;
         a[i][0] = a[i][1] = a[i][2] = a[i][6] = a[i][7] = 0;
         b[i] = 0;
     }
@@ -220,28 +220,28 @@ void cvWarpPerspective(CvArr* src, CvArr* dst, double quad[4][2]) {
        into <q> */
     if (direction > 0) {
         for (i = left; i < 4; ++i) {
-            q[i - left][0] = quad[i][0];
-            q[i - left][1] = quad[i][1];
+            q[i-left][0] = quad[i][0];
+            q[i-left][1] = quad[i][1];
         }
         for (i = 0; i < left; ++i) {
-            q[4 - left + i][0] = quad[i][0];
-            q[4 - left + i][1] = quad[i][1];
+            q[4-left+i][0] = quad[i][0];
+            q[4-left+i][1] = quad[i][1];
         }
     } else {
         for (i = left; i >= 0; --i) {
-            q[left - i][0] = quad[i][0];
-            q[left - i][1] = quad[i][1];
+            q[left-i][0] = quad[i][0];
+            q[left-i][1] = quad[i][1];
         }
         for (i = 3; i > left; --i) {
-            q[4 + left - i][0] = quad[i][0];
-            q[4 + left - i][1] = quad[i][1];
+            q[4+left-i][0] = quad[i][0];
+            q[4+left-i][1] = quad[i][1];
         }
     }
 
     left = right = 0;
     /* if there are two topmost points, <right> is the index of the rightmost one
        otherwise <right> */
-    if (q[left][1] == q[left + 1][1]) {
+    if (q[left][1] == q[left+1][1]) {
         right = 1;
     }
 
@@ -316,7 +316,7 @@ void cvWarpPerspective(CvArr* src, CvArr* dst, double quad[4][2]) {
                 }
                 if (isrc_x >= -1 && isrc_x < src_size.width &&
                         isrc_y >= -1 && isrc_y < src_size.height) {
-                    i11 = s[src_step + 1];
+                    i11 = s[src_step+1];
                 }
 
                 double i0 = i00 + (i10 - i00) * delta_x;

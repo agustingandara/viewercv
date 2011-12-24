@@ -84,29 +84,29 @@
 extern "C" {
 #endif
 
-	/******************************************************************************\
-	* Macros
-	\******************************************************************************/
+    /******************************************************************************\
+    * Macros
+    \******************************************************************************/
 
-	/* Compute the absolute value. */
+    /* Compute the absolute value. */
 #define	JAS_ABS(x) \
 	(((x) >= 0) ? (x) : (-(x)))
 
-	/* Compute the minimum of two values. */
+    /* Compute the minimum of two values. */
 #define	JAS_MIN(x, y) \
 	(((x) < (y)) ? (x) : (y))
 
-	/* Compute the maximum of two values. */
+    /* Compute the maximum of two values. */
 #define	JAS_MAX(x, y) \
 	(((x) > (y)) ? (x) : (y))
 
-	/* Compute the remainder from division (where division is defined such
-	  that the remainder is always nonnegative). */
+    /* Compute the remainder from division (where division is defined such
+      that the remainder is always nonnegative). */
 #define	JAS_MOD(x, y) \
 	(((x) < 0) ? (((-x) % (y)) ? ((y) - ((-(x)) % (y))) : (0)) : ((x) % (y)))
 
-	/* Compute the integer with the specified number of least significant bits
-	  set to one. */
+    /* Compute the integer with the specified number of least significant bits
+      set to one. */
 #define	JAS_ONES(n) \
   ((1 << (n)) - 1)
 

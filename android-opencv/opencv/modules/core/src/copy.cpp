@@ -66,14 +66,14 @@ copyMask_(const Mat& srcmat, Mat& dstmat, const Mat& maskmat) {
             if (mask[x]) {
                 dst[x] = src[x];
             }
-            if (mask[x + 1]) {
-                dst[x + 1] = src[x + 1];
+            if (mask[x+1]) {
+                dst[x+1] = src[x+1];
             }
-            if (mask[x + 2]) {
-                dst[x + 2] = src[x + 2];
+            if (mask[x+2]) {
+                dst[x+2] = src[x+2];
             }
-            if (mask[x + 3]) {
-                dst[x + 3] = src[x + 3];
+            if (mask[x+3]) {
+                dst[x+3] = src[x+3];
             }
         }
         for (; x < size.width; x++)
@@ -103,14 +103,14 @@ setMask_(const void* _scalar, Mat& dstmat, const Mat& maskmat) {
             if (mask[x]) {
                 dst[x] = scalar;
             }
-            if (mask[x + 1]) {
-                dst[x + 1] = scalar;
+            if (mask[x+1]) {
+                dst[x+1] = scalar;
             }
-            if (mask[x + 2]) {
-                dst[x + 2] = scalar;
+            if (mask[x+2]) {
+                dst[x+2] = scalar;
             }
-            if (mask[x + 3]) {
-                dst[x + 3] = scalar;
+            if (mask[x+3]) {
+                dst[x+3] = scalar;
             }
         }
         for (; x < size.width; x++)

@@ -70,8 +70,8 @@ namespace Imf {
 //
 //---------------------------------------------------------
 
-unsigned int	halfToUint (half h);
-unsigned int	floatToUint (float f);
+unsigned int	halfToUint(half h);
+unsigned int	floatToUint(float f);
 
 
 //---------------------------------------------------------
@@ -95,8 +95,8 @@ unsigned int	floatToUint (float f);
 //
 //---------------------------------------------------------
 
-half		uintToHalf (unsigned int ui);
-half		floatToHalf (float f);
+half		uintToHalf(unsigned int ui);
+half		floatToHalf(float f);
 
 
 } // namespace Imf

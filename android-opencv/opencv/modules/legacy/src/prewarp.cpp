@@ -44,26 +44,26 @@
 /* Valery Mosyagin */
 
 static CvStatus
-icvFindRuns( int numLines,      /* number of scanlines      */
-			 uchar* prewarp_1,  /* prewarp image 1          */
-			 uchar* prewarp_2,  /* prewarp image 2          */
-			 int* line_lens_1,  /* line lengths 1           */
-			 int* line_lens_2,  /* line lengths 2           */
-			 int* runs_1,       /* result runs  1           */
-			 int* runs_2,       /* result runs  2           */
-			 int* num_runs_1,   /* numbers of first runs    */
-			 int* num_runs_2 ) {
-	CvStatus err;
+icvFindRuns(int numLines,       /* number of scanlines      */
+            uchar* prewarp_1,  /* prewarp image 1          */
+            uchar* prewarp_2,  /* prewarp image 2          */
+            int* line_lens_1,  /* line lengths 1           */
+            int* line_lens_2,  /* line lengths 2           */
+            int* runs_1,       /* result runs  1           */
+            int* runs_2,       /* result runs  2           */
+            int* num_runs_1,   /* numbers of first runs    */
+            int* num_runs_2) {
+    CvStatus err;
 
-	err = icvFindRunsInOneImage( numLines, prewarp_1, line_lens_1, runs_1, num_runs_1 );
+    err = icvFindRunsInOneImage(numLines, prewarp_1, line_lens_1, runs_1, num_runs_1);
 
-	if ( err != CV_NO_ERR ) {
-		return err;
-	}
+    if (err != CV_NO_ERR) {
+        return err;
+    }
 
-	err = icvFindRunsInOneImage( numLines, prewarp_2, line_lens_2, runs_2, num_runs_2 );
+    err = icvFindRunsInOneImage(numLines, prewarp_2, line_lens_2, runs_2, num_runs_2);
 
-	return err;
+    return err;
 
 }
 
@@ -71,87 +71,87 @@ icvFindRuns( int numLines,      /* number of scanlines      */
 /*======================================================================================*/
 
 CV_INLINE int
-icvGetColor( uchar* valueRGB ) {
-	int R = *valueRGB;
-	int G = *(valueRGB + 1);
-	int B = *(valueRGB + 2);
+icvGetColor(uchar* valueRGB) {
+    int R = *valueRGB;
+    int G = *(valueRGB + 1);
+    int B = *(valueRGB + 2);
 
-	return ( ((R + G + B) >> 3) & 0xFFFC );
+    return (((R + G + B) >> 3) & 0xFFFC);
 }                               /* vm_GetColor */
 
 
 /*======================================================================================*/
 
 CvStatus
-icvFindRunsInOneImage( int numLines,    /* number of scanlines      */
-					   uchar* prewarp,  /* prewarp image            */
-					   int* line_lens,  /* line lengths in pixels   */
-					   int* runs,       /* result runs              */
-					   int* num_runs ) {
-	int epiLine;
-	int run_index;
-	int curr_color;
-	int index;
-	int color;
-	uchar* curr_point;
-	int num;
+icvFindRunsInOneImage(int numLines,     /* number of scanlines      */
+                      uchar* prewarp,  /* prewarp image            */
+                      int* line_lens,  /* line lengths in pixels   */
+                      int* runs,       /* result runs              */
+                      int* num_runs) {
+    int epiLine;
+    int run_index;
+    int curr_color;
+    int index;
+    int color;
+    uchar* curr_point;
+    int num;
 
 
-	run_index = 0;
+    run_index = 0;
 
-	curr_point = prewarp;
+    curr_point = prewarp;
 
-	for ( epiLine = 0; epiLine < numLines; epiLine++ ) {
+    for (epiLine = 0; epiLine < numLines; epiLine++) {
 
-		curr_color = icvGetColor( curr_point );
+        curr_color = icvGetColor(curr_point);
 
-		runs[run_index++] = 0;
-		runs[run_index++] = curr_color;
+        runs[run_index++] = 0;
+        runs[run_index++] = curr_color;
 
-		curr_point += 3;
+        curr_point += 3;
 
-		num = 1;
-		for ( index = 1; index < line_lens[epiLine]; index++ ) {
+        num = 1;
+        for (index = 1; index < line_lens[epiLine]; index++) {
 
-			color = icvGetColor( curr_point );
+            color = icvGetColor(curr_point);
 
-			if ( color != curr_color ) {
-				runs[run_index++] = index;
-				runs[run_index++] = color;
-				curr_color = color;
-				num++;
-			}
+            if (color != curr_color) {
+                runs[run_index++] = index;
+                runs[run_index++] = color;
+                curr_color = color;
+                num++;
+            }
 
-			curr_point += 3;
-		}
+            curr_point += 3;
+        }
 
-		runs[run_index++] = index;
-		num_runs[epiLine] = num;
-	}
+        runs[run_index++] = index;
+        num_runs[epiLine] = num;
+    }
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 
 /*======================================================================================*/
 
 CV_IMPL void
-cvFindRuns( int numLines,       /* number of scanlines   */
-			uchar* prewarp_1,   /* prewarp image 1       */
-			uchar* prewarp_2,   /* prewarp image 2       */
-			int* line_lens_1,   /* line lengths 1        */
-			int* line_lens_2,   /* line lengths 2        */
-			int* runs_1,        /* result runs  1        */
-			int* runs_2,        /* result runs  2        */
-			int* num_runs_1,    /* numbers of first runs */
-			int* num_runs_2 ) {
-	IPPI_CALL( icvFindRuns( numLines,   /* number of scanlines   */
-							prewarp_1,  /* prewarp image 1       */
-							prewarp_2,  /* prewarp image 2       */
-							line_lens_1,        /* line lengths 1        */
-							line_lens_2,        /* line lengths 2        */
-							runs_1,     /* result runs  1        */
-							runs_2,     /* result runs  2        */
-							num_runs_1, /* numbers of first runs */
-							num_runs_2 ));
+cvFindRuns(int numLines,        /* number of scanlines   */
+           uchar* prewarp_1,   /* prewarp image 1       */
+           uchar* prewarp_2,   /* prewarp image 2       */
+           int* line_lens_1,   /* line lengths 1        */
+           int* line_lens_2,   /* line lengths 2        */
+           int* runs_1,        /* result runs  1        */
+           int* runs_2,        /* result runs  2        */
+           int* num_runs_1,    /* numbers of first runs */
+           int* num_runs_2) {
+    IPPI_CALL(icvFindRuns(numLines,     /* number of scanlines   */
+                          prewarp_1,  /* prewarp image 1       */
+                          prewarp_2,  /* prewarp image 2       */
+                          line_lens_1,        /* line lengths 1        */
+                          line_lens_2,        /* line lengths 2        */
+                          runs_1,     /* result runs  1        */
+                          runs_2,     /* result runs  2        */
+                          num_runs_1, /* numbers of first runs */
+                          num_runs_2));
 }

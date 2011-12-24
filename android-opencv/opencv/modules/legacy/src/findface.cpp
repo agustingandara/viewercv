@@ -46,21 +46,21 @@
 #include "_facedetection.h"
 
 CvSeq* cvFindFace(IplImage* Image, CvMemStorage* lpStorage) {
-	FaceDetection FD;
-	FD.SetBoosting(false);
-	FD.FindFace(Image);
-	CvSeq* lpSeq = cvCreateSeq(0, sizeof(*lpSeq), sizeof(CvFace), lpStorage);
-	FD.CreateResults(lpSeq);
-	return lpSeq;
+    FaceDetection FD;
+    FD.SetBoosting(false);
+    FD.FindFace(Image);
+    CvSeq* lpSeq = cvCreateSeq(0, sizeof(*lpSeq), sizeof(CvFace), lpStorage);
+    FD.CreateResults(lpSeq);
+    return lpSeq;
 }//cvFindFace(IplImage * Image)
 
 CvSeq* cvPostBoostingFindFace(IplImage* Image, CvMemStorage* lpStorage) {
-	FaceDetection FD;
-	FD.SetBoosting(true);
-	FD.FindFace(Image);
-	CvSeq* lpSeq = cvCreateSeq(0, sizeof(*lpSeq), sizeof(CvFace), lpStorage);
-	FD.CreateResults(lpSeq);
+    FaceDetection FD;
+    FD.SetBoosting(true);
+    FD.FindFace(Image);
+    CvSeq* lpSeq = cvCreateSeq(0, sizeof(*lpSeq), sizeof(CvFace), lpStorage);
+    FD.CreateResults(lpSeq);
 
-	return lpSeq;
+    return lpSeq;
 }//cvPostBoostingFindFace(IplImage * Image)
 

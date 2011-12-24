@@ -82,103 +82,103 @@ typedef short  idx_type;
 #define CV_THRESHOLD_EPS (0.00001F)
 
 typedef struct CvTHaarFeature {
-	char desc[CV_HAAR_FEATURE_DESC_MAX];
-	int  tilted;
-	struct {
-		CvRect r;
-		float weight;
-	} rect[CV_HAAR_FEATURE_MAX];
+    char desc[CV_HAAR_FEATURE_DESC_MAX];
+    int  tilted;
+    struct {
+        CvRect r;
+        float weight;
+    } rect[CV_HAAR_FEATURE_MAX];
 } CvTHaarFeature;
 
 typedef struct CvFastHaarFeature {
-	int tilted;
-	struct {
-		int p0, p1, p2, p3;
-		float weight;
-	} rect[CV_HAAR_FEATURE_MAX];
+    int tilted;
+    struct {
+        int p0, p1, p2, p3;
+        float weight;
+    } rect[CV_HAAR_FEATURE_MAX];
 } CvFastHaarFeature;
 
 typedef struct CvIntHaarFeatures {
-	CvSize winsize;
-	int count;
-	CvTHaarFeature* feature;
-	CvFastHaarFeature* fastfeature;
+    CvSize winsize;
+    int count;
+    CvTHaarFeature* feature;
+    CvFastHaarFeature* fastfeature;
 } CvIntHaarFeatures;
 
-CV_INLINE CvTHaarFeature cvHaarFeature( const char* desc,
-										int x0, int y0, int w0, int h0, float wt0,
-										int x1, int y1, int w1, int h1, float wt1,
-										int x2 CV_DEFAULT( 0 ), int y2 CV_DEFAULT( 0 ),
-										int w2 CV_DEFAULT( 0 ), int h2 CV_DEFAULT( 0 ),
-										float wt2 CV_DEFAULT( 0.0F ) );
+CV_INLINE CvTHaarFeature cvHaarFeature(const char* desc,
+                                       int x0, int y0, int w0, int h0, float wt0,
+                                       int x1, int y1, int w1, int h1, float wt1,
+                                       int x2 CV_DEFAULT(0), int y2 CV_DEFAULT(0),
+                                       int w2 CV_DEFAULT(0), int h2 CV_DEFAULT(0),
+                                       float wt2 CV_DEFAULT(0.0F));
 
-CV_INLINE CvTHaarFeature cvHaarFeature( const char* desc,
-										int x0, int y0, int w0, int h0, float wt0,
-										int x1, int y1, int w1, int h1, float wt1,
-										int x2, int y2, int w2, int h2, float wt2 ) {
-	CvTHaarFeature hf;
+CV_INLINE CvTHaarFeature cvHaarFeature(const char* desc,
+                                       int x0, int y0, int w0, int h0, float wt0,
+                                       int x1, int y1, int w1, int h1, float wt1,
+                                       int x2, int y2, int w2, int h2, float wt2) {
+    CvTHaarFeature hf;
 
-	assert( CV_HAAR_FEATURE_MAX >= 3 );
-	assert( strlen( desc ) < CV_HAAR_FEATURE_DESC_MAX );
+    assert(CV_HAAR_FEATURE_MAX >= 3);
+    assert(strlen(desc) < CV_HAAR_FEATURE_DESC_MAX);
 
-	strcpy( &(hf.desc[0]), desc );
-	hf.tilted = ( hf.desc[0] == 't' );
+    strcpy(&(hf.desc[0]), desc);
+    hf.tilted = (hf.desc[0] == 't');
 
-	hf.rect[0].r.x = x0;
-	hf.rect[0].r.y = y0;
-	hf.rect[0].r.width  = w0;
-	hf.rect[0].r.height = h0;
-	hf.rect[0].weight   = wt0;
+    hf.rect[0].r.x = x0;
+    hf.rect[0].r.y = y0;
+    hf.rect[0].r.width  = w0;
+    hf.rect[0].r.height = h0;
+    hf.rect[0].weight   = wt0;
 
-	hf.rect[1].r.x = x1;
-	hf.rect[1].r.y = y1;
-	hf.rect[1].r.width  = w1;
-	hf.rect[1].r.height = h1;
-	hf.rect[1].weight   = wt1;
+    hf.rect[1].r.x = x1;
+    hf.rect[1].r.y = y1;
+    hf.rect[1].r.width  = w1;
+    hf.rect[1].r.height = h1;
+    hf.rect[1].weight   = wt1;
 
-	hf.rect[2].r.x = x2;
-	hf.rect[2].r.y = y2;
-	hf.rect[2].r.width  = w2;
-	hf.rect[2].r.height = h2;
-	hf.rect[2].weight   = wt2;
+    hf.rect[2].r.x = x2;
+    hf.rect[2].r.y = y2;
+    hf.rect[2].r.width  = w2;
+    hf.rect[2].r.height = h2;
+    hf.rect[2].weight   = wt2;
 
-	return hf;
+    return hf;
 }
 
 /* Prepared for training samples */
 typedef struct CvHaarTrainingData {
-	CvSize winsize;     /* training image size */
-	int    maxnum;      /* maximum number of samples */
-	CvMat  sum;         /* sum images (each row represents image) */
-	CvMat  tilted;      /* tilted sum images (each row represents image) */
-	CvMat  normfactor;  /* normalization factor */
-	CvMat  cls;         /* classes. 1.0 - object, 0.0 - background */
-	CvMat  weights;     /* weights */
+    CvSize winsize;     /* training image size */
+    int    maxnum;      /* maximum number of samples */
+    CvMat  sum;         /* sum images (each row represents image) */
+    CvMat  tilted;      /* tilted sum images (each row represents image) */
+    CvMat  normfactor;  /* normalization factor */
+    CvMat  cls;         /* classes. 1.0 - object, 0.0 - background */
+    CvMat  weights;     /* weights */
 
-	CvMat* valcache;    /* precalculated feature values (CV_32FC1) */
-	CvMat* idxcache;    /* presorted indices (CV_IDX_MAT_TYPE) */
+    CvMat* valcache;    /* precalculated feature values (CV_32FC1) */
+    CvMat* idxcache;    /* presorted indices (CV_IDX_MAT_TYPE) */
 } CvHaarTrainigData;
 
 
 /* Passed to callback functions */
 typedef struct CvUserdata {
-	CvHaarTrainingData* trainingData;
-	CvIntHaarFeatures* haarFeatures;
+    CvHaarTrainingData* trainingData;
+    CvIntHaarFeatures* haarFeatures;
 } CvUserdata;
 
 CV_INLINE
-CvUserdata cvUserdata( CvHaarTrainingData* trainingData,
-					   CvIntHaarFeatures* haarFeatures );
+CvUserdata cvUserdata(CvHaarTrainingData* trainingData,
+                      CvIntHaarFeatures* haarFeatures);
 
 CV_INLINE
-CvUserdata cvUserdata( CvHaarTrainingData* trainingData,
-					   CvIntHaarFeatures* haarFeatures ) {
-	CvUserdata userdata;
+CvUserdata cvUserdata(CvHaarTrainingData* trainingData,
+                      CvIntHaarFeatures* haarFeatures) {
+    CvUserdata userdata;
 
-	userdata.trainingData = trainingData;
-	userdata.haarFeatures = haarFeatures;
+    userdata.trainingData = trainingData;
+    userdata.haarFeatures = haarFeatures;
 
-	return userdata;
+    return userdata;
 }
 
 
@@ -189,96 +189,96 @@ CvUserdata cvUserdata( CvHaarTrainingData* trainingData,
 
 /* internal weak classifier*/
 typedef struct CvIntHaarClassifier {
-	CV_INT_HAAR_CLASSIFIER_FIELDS()
+    CV_INT_HAAR_CLASSIFIER_FIELDS()
 } CvIntHaarClassifier;
 
 /*
  * CART classifier
  */
 typedef struct CvCARTHaarClassifier {
-	CV_INT_HAAR_CLASSIFIER_FIELDS()
+    CV_INT_HAAR_CLASSIFIER_FIELDS()
 
-	int count;
-	int* compidx;
-	CvTHaarFeature* feature;
-	CvFastHaarFeature* fastfeature;
-	float* threshold;
-	int* left;
-	int* right;
-	float* val;
+    int count;
+    int* compidx;
+    CvTHaarFeature* feature;
+    CvFastHaarFeature* fastfeature;
+    float* threshold;
+    int* left;
+    int* right;
+    float* val;
 } CvCARTHaarClassifier;
 
 /* internal stage classifier */
 typedef struct CvStageHaarClassifier {
-	CV_INT_HAAR_CLASSIFIER_FIELDS()
+    CV_INT_HAAR_CLASSIFIER_FIELDS()
 
-	int count;
-	float threshold;
-	CvIntHaarClassifier** classifier;
+    int count;
+    float threshold;
+    CvIntHaarClassifier** classifier;
 } CvStageHaarClassifier;
 
 /* internal cascade classifier */
 typedef struct CvCascadeHaarClassifier {
-	CV_INT_HAAR_CLASSIFIER_FIELDS()
+    CV_INT_HAAR_CLASSIFIER_FIELDS()
 
-	int count;
-	CvIntHaarClassifier** classifier;
+    int count;
+    CvIntHaarClassifier** classifier;
 } CvCascadeHaarClassifier;
 
 
 /* internal tree cascade classifier node */
 typedef struct CvTreeCascadeNode {
-	CvStageHaarClassifier* stage;
+    CvStageHaarClassifier* stage;
 
-	struct CvTreeCascadeNode* next;
-	struct CvTreeCascadeNode* child;
-	struct CvTreeCascadeNode* parent;
+    struct CvTreeCascadeNode* next;
+    struct CvTreeCascadeNode* child;
+    struct CvTreeCascadeNode* parent;
 
-	struct CvTreeCascadeNode* next_same_level;
-	struct CvTreeCascadeNode* child_eval;
-	int idx;
-	int leaf;
+    struct CvTreeCascadeNode* next_same_level;
+    struct CvTreeCascadeNode* child_eval;
+    int idx;
+    int leaf;
 } CvTreeCascadeNode;
 
 /* internal tree cascade classifier */
 typedef struct CvTreeCascadeClassifier {
-	CV_INT_HAAR_CLASSIFIER_FIELDS()
+    CV_INT_HAAR_CLASSIFIER_FIELDS()
 
-	CvTreeCascadeNode* root;      /* root of the tree */
-	CvTreeCascadeNode* root_eval; /* root node for the filtering */
+    CvTreeCascadeNode* root;      /* root of the tree */
+    CvTreeCascadeNode* root_eval; /* root node for the filtering */
 
-	int next_idx;
+    int next_idx;
 } CvTreeCascadeClassifier;
 
 
-CV_INLINE float cvEvalFastHaarFeature( const CvFastHaarFeature* feature,
-									   const sum_type* sum, const sum_type* tilted ) {
-	const sum_type* img = feature->tilted ? tilted : sum;
-	float ret = feature->rect[0].weight *
-				(img[feature->rect[0].p0] - img[feature->rect[0].p1] -
-				 img[feature->rect[0].p2] + img[feature->rect[0].p3]) +
-				feature->rect[1].weight *
-				(img[feature->rect[1].p0] - img[feature->rect[1].p1] -
-				 img[feature->rect[1].p2] + img[feature->rect[1].p3]);
+CV_INLINE float cvEvalFastHaarFeature(const CvFastHaarFeature* feature,
+                                      const sum_type* sum, const sum_type* tilted) {
+    const sum_type* img = feature->tilted ? tilted : sum;
+    float ret = feature->rect[0].weight *
+                (img[feature->rect[0].p0] - img[feature->rect[0].p1] -
+                 img[feature->rect[0].p2] + img[feature->rect[0].p3]) +
+                feature->rect[1].weight *
+                (img[feature->rect[1].p0] - img[feature->rect[1].p1] -
+                 img[feature->rect[1].p2] + img[feature->rect[1].p3]);
 
-	if ( feature->rect[2].weight != 0.0f )
-		ret += feature->rect[2].weight *
-			   ( img[feature->rect[2].p0] - img[feature->rect[2].p1] -
-				 img[feature->rect[2].p2] + img[feature->rect[2].p3] );
-	return ret;
+    if (feature->rect[2].weight != 0.0f)
+        ret += feature->rect[2].weight *
+               (img[feature->rect[2].p0] - img[feature->rect[2].p1] -
+                img[feature->rect[2].p2] + img[feature->rect[2].p3]);
+    return ret;
 }
 
 
 typedef struct CvSampleDistortionData {
-	IplImage* src;
-	IplImage* erode;
-	IplImage* dilate;
-	IplImage* mask;
-	IplImage* img;
-	IplImage* maskimg;
-	int dx;
-	int dy;
-	int bgcolor;
+    IplImage* src;
+    IplImage* erode;
+    IplImage* dilate;
+    IplImage* mask;
+    IplImage* img;
+    IplImage* maskimg;
+    int dx;
+    int dy;
+    int bgcolor;
 } CvSampleDistortionData;
 
 /*
@@ -291,34 +291,34 @@ typedef struct CvSampleDistortionData {
  * size            - size of arrays
  * step            - row step for the integral image
  */
-void icvConvertToFastHaarFeature( CvTHaarFeature* haarFeature,
-								  CvFastHaarFeature* fastHaarFeature,
-								  int size, int step );
+void icvConvertToFastHaarFeature(CvTHaarFeature* haarFeature,
+                                 CvFastHaarFeature* fastHaarFeature,
+                                 int size, int step);
 
 
-void icvWriteVecHeader( FILE* file, int count, int width, int height );
-void icvWriteVecSample( FILE* file, CvArr* sample );
-void icvPlaceDistortedSample( CvArr* background,
-							  int inverse, int maxintensitydev,
-							  double maxxangle, double maxyangle, double maxzangle,
-							  int inscribe, double maxshiftf, double maxscalef,
-							  CvSampleDistortionData* data );
-void icvEndSampleDistortion( CvSampleDistortionData* data );
+void icvWriteVecHeader(FILE* file, int count, int width, int height);
+void icvWriteVecSample(FILE* file, CvArr* sample);
+void icvPlaceDistortedSample(CvArr* background,
+                             int inverse, int maxintensitydev,
+                             double maxxangle, double maxyangle, double maxzangle,
+                             int inscribe, double maxshiftf, double maxscalef,
+                             CvSampleDistortionData* data);
+void icvEndSampleDistortion(CvSampleDistortionData* data);
 
-int icvStartSampleDistortion( const char* imgfilename, int bgcolor, int bgthreshold,
-							  CvSampleDistortionData* data );
+int icvStartSampleDistortion(const char* imgfilename, int bgcolor, int bgthreshold,
+                             CvSampleDistortionData* data);
 
-typedef int (*CvGetHaarTrainingDataCallback)( CvMat* img, void* userdata );
+typedef int (*CvGetHaarTrainingDataCallback)(CvMat* img, void* userdata);
 
 typedef struct CvVecFile {
-	FILE*  input;
-	int    count;
-	int    vecsize;
-	int    last;
-	short* vector;
+    FILE*  input;
+    int    count;
+    int    vecsize;
+    int    last;
+    short* vector;
 } CvVecFile;
 
-int icvGetHaarTraininDataFromVecCallback( CvMat* img, void* userdata );
+int icvGetHaarTraininDataFromVecCallback(CvMat* img, void* userdata);
 
 /*
  * icvGetHaarTrainingDataFromVec
@@ -330,67 +330,67 @@ int icvGetHaarTrainingDataFromVec( CvHaarTrainingData* data, int first, int coun
                                    int* consumed );
  */
 
-CvIntHaarClassifier* icvCreateCARTHaarClassifier( int count );
+CvIntHaarClassifier* icvCreateCARTHaarClassifier(int count);
 
-void icvReleaseHaarClassifier( CvIntHaarClassifier** classifier );
+void icvReleaseHaarClassifier(CvIntHaarClassifier** classifier);
 
-void icvInitCARTHaarClassifier( CvCARTHaarClassifier* carthaar, CvCARTClassifier* cart,
-								CvIntHaarFeatures* intHaarFeatures );
+void icvInitCARTHaarClassifier(CvCARTHaarClassifier* carthaar, CvCARTClassifier* cart,
+                               CvIntHaarFeatures* intHaarFeatures);
 
-float icvEvalCARTHaarClassifier( CvIntHaarClassifier* classifier,
-								 sum_type* sum, sum_type* tilted, float normfactor );
+float icvEvalCARTHaarClassifier(CvIntHaarClassifier* classifier,
+                                sum_type* sum, sum_type* tilted, float normfactor);
 
-CvIntHaarClassifier* icvCreateStageHaarClassifier( int count, float threshold );
+CvIntHaarClassifier* icvCreateStageHaarClassifier(int count, float threshold);
 
-void icvReleaseStageHaarClassifier( CvIntHaarClassifier** classifier );
+void icvReleaseStageHaarClassifier(CvIntHaarClassifier** classifier);
 
-float icvEvalStageHaarClassifier( CvIntHaarClassifier* classifier,
-								  sum_type* sum, sum_type* tilted, float normfactor );
+float icvEvalStageHaarClassifier(CvIntHaarClassifier* classifier,
+                                 sum_type* sum, sum_type* tilted, float normfactor);
 
-CvIntHaarClassifier* icvCreateCascadeHaarClassifier( int count );
+CvIntHaarClassifier* icvCreateCascadeHaarClassifier(int count);
 
-void icvReleaseCascadeHaarClassifier( CvIntHaarClassifier** classifier );
+void icvReleaseCascadeHaarClassifier(CvIntHaarClassifier** classifier);
 
-float icvEvalCascadeHaarClassifier( CvIntHaarClassifier* classifier,
-									sum_type* sum, sum_type* tilted, float normfactor );
+float icvEvalCascadeHaarClassifier(CvIntHaarClassifier* classifier,
+                                   sum_type* sum, sum_type* tilted, float normfactor);
 
-void icvSaveHaarFeature( CvTHaarFeature* feature, FILE* file );
+void icvSaveHaarFeature(CvTHaarFeature* feature, FILE* file);
 
-void icvLoadHaarFeature( CvTHaarFeature* feature, FILE* file );
+void icvLoadHaarFeature(CvTHaarFeature* feature, FILE* file);
 
-void icvSaveCARTHaarClassifier( CvIntHaarClassifier* classifier, FILE* file );
+void icvSaveCARTHaarClassifier(CvIntHaarClassifier* classifier, FILE* file);
 
-CvIntHaarClassifier* icvLoadCARTHaarClassifier( FILE* file, int step );
+CvIntHaarClassifier* icvLoadCARTHaarClassifier(FILE* file, int step);
 
-void icvSaveStageHaarClassifier( CvIntHaarClassifier* classifier, FILE* file );
+void icvSaveStageHaarClassifier(CvIntHaarClassifier* classifier, FILE* file);
 
-CvIntHaarClassifier* icvLoadCARTStageHaarClassifier( const char* filename, int step );
+CvIntHaarClassifier* icvLoadCARTStageHaarClassifier(const char* filename, int step);
 
 
 /* tree cascade classifier */
 
-float icvEvalTreeCascadeClassifier( CvIntHaarClassifier* classifier,
-									sum_type* sum, sum_type* tilted, float normfactor );
+float icvEvalTreeCascadeClassifier(CvIntHaarClassifier* classifier,
+                                   sum_type* sum, sum_type* tilted, float normfactor);
 
-void icvSetLeafNode( CvTreeCascadeClassifier* tree, CvTreeCascadeNode* leaf );
+void icvSetLeafNode(CvTreeCascadeClassifier* tree, CvTreeCascadeNode* leaf);
 
-float icvEvalTreeCascadeClassifierFilter( CvIntHaarClassifier* classifier, sum_type* sum,
-		sum_type* tilted, float normfactor );
+float icvEvalTreeCascadeClassifierFilter(CvIntHaarClassifier* classifier, sum_type* sum,
+        sum_type* tilted, float normfactor);
 
 CvTreeCascadeNode* icvCreateTreeCascadeNode();
 
-void icvReleaseTreeCascadeNodes( CvTreeCascadeNode** node );
+void icvReleaseTreeCascadeNodes(CvTreeCascadeNode** node);
 
-void icvReleaseTreeCascadeClassifier( CvIntHaarClassifier** classifier );
+void icvReleaseTreeCascadeClassifier(CvIntHaarClassifier** classifier);
 
 /* Prints out current tree structure to <stdout> */
-void icvPrintTreeCascade( CvTreeCascadeNode* root );
+void icvPrintTreeCascade(CvTreeCascadeNode* root);
 
 /* Loads tree cascade classifier */
-CvIntHaarClassifier* icvLoadTreeCascadeClassifier( const char* filename, int step,
-		int* splits );
+CvIntHaarClassifier* icvLoadTreeCascadeClassifier(const char* filename, int step,
+        int* splits);
 
 /* Finds leaves belonging to maximal level and connects them via leaf->next_same_level */
-CvTreeCascadeNode* icvFindDeepestLeaves( CvTreeCascadeClassifier* tree );
+CvTreeCascadeNode* icvFindDeepestLeaves(CvTreeCascadeClassifier* tree);
 
 #endif /* __CVHAARTRAINING_H_ */

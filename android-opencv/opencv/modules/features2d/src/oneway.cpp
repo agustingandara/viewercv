@@ -264,8 +264,8 @@ void GenerateAffineTransformFromPose(CvSize size, CvAffinePose pose, CvMat* tran
     cvmSet(temp, 0, 1, 0.0f);
     cvmSet(temp, 1, 0, 0.0f);
     cvmSet(temp, 1, 1, pose.lambda2);
-    cvmSet(temp, 0, 2, size.width / 2 * (1 - pose.lambda1));
-    cvmSet(temp, 1, 2, size.height / 2 * (1 - pose.lambda2));
+    cvmSet(temp, 0, 2, size.width / 2 *(1 - pose.lambda1));
+    cvmSet(temp, 1, 2, size.height / 2 *(1 - pose.lambda2));
     cvMatMul(temp, final, final);
 
     cv2DRotationMatrix(cvPoint2D32f(size.width / 2, size.height / 2), pose.theta - pose.phi, 1.0, &rotation);
@@ -899,9 +899,9 @@ void FindOneWayDescriptor(int desc_count, const OneWayDescriptor* descriptors, I
         for (int j = 0; j < n; j++) {
             if (_distance < distances[j]) {
                 for (int k = (n - 1); k > j; k--) {
-                    desc_idxs[k] = desc_idxs[k - 1];
-                    pose_idxs[k] = pose_idxs[k - 1];
-                    distances[k] = distances[k - 1];
+                    desc_idxs[k] = desc_idxs[k-1];
+                    pose_idxs[k] = pose_idxs[k-1];
+                    distances[k] = distances[k-1];
                 }
                 desc_idxs[j] = i;
                 pose_idxs[j] = _pose_idx;
@@ -1069,13 +1069,13 @@ CvMat* ConvertImageToMatrix(IplImage* patch) {
     if (patch->depth == 32) {
         for (int y = 0; y < roi.height; y++) {
             for (int x = 0; x < roi.width; x++) {
-                mat->data.fl[y * roi.width + x] = *((float*)(patch->imageData + (y + roi.y) * patch->widthStep) + x + roi.x);
+                mat->data.fl[y* roi.width + x] = *((float*)(patch->imageData + (y + roi.y) * patch->widthStep) + x + roi.x);
             }
         }
     } else if (patch->depth == 8) {
         for (int y = 0; y < roi.height; y++) {
             for (int x = 0; x < roi.width; x++) {
-                mat->data.fl[y * roi.width + x] = (float)(unsigned char)patch->imageData[(y + roi.y) * patch->widthStep + x + roi.x];
+                mat->data.fl[y* roi.width + x] = (float)(unsigned char)patch->imageData[(y + roi.y)*patch->widthStep + x + roi.x];
             }
         }
     } else {
@@ -1780,7 +1780,7 @@ void OneWayDescriptorBase::ConvertDescriptorsArrayToTree() {
         CvMat** pca_coeffs = m_descriptors[i].GetPCACoeffs();
         for (int j = 0; j < m_pose_count; j++) {
             for (int k = 0; k < pca_dim_low; k++) {
-                m_pca_descriptors_matrix->data.fl[(i * m_pose_count + j)*m_pca_dim_low + k] = pca_coeffs[j]->data.fl[k];
+                m_pca_descriptors_matrix->data.fl[(i*m_pose_count+j)*m_pca_dim_low + k] = pca_coeffs[j]->data.fl[k];
             }
         }
     }

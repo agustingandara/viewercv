@@ -43,22 +43,22 @@
  */
 struct URLContext {
 #if LIBAVFORMAT_VERSION_MAJOR >= 53
-	const AVClass* av_class; ///< information for av_log(). Set by url_open().
+    const AVClass* av_class; ///< information for av_log(). Set by url_open().
 #endif
-	struct URLProtocol* prot;
-	int flags;
-	int is_streamed;  /**< true if streamed (no seek possible), default = false */
-	int max_packet_size;  /**< if non zero, the stream is packetized with this max packet size */
-	void* priv_data;
-	char* filename; /**< specified filename */
+    struct URLProtocol* prot;
+    int flags;
+    int is_streamed;  /**< true if streamed (no seek possible), default = false */
+    int max_packet_size;  /**< if non zero, the stream is packetized with this max packet size */
+    void* priv_data;
+    char* filename; /**< specified filename */
 };
 
 typedef struct URLContext URLContext;
 
 typedef struct URLPollEntry {
-	URLContext* handle;
-	int events;
-	int revents;
+    URLContext* handle;
+    int events;
+    int revents;
 } URLPollEntry;
 
 #define URL_RDONLY 0
@@ -67,8 +67,8 @@ typedef struct URLPollEntry {
 
 typedef int URLInterruptCB(void);
 
-int url_open_protocol (URLContext** puc, struct URLProtocol* up,
-					   const char* filename, int flags);
+int url_open_protocol(URLContext** puc, struct URLProtocol* up,
+                      const char* filename, int flags);
 int url_open(URLContext** h, const char* filename, int flags);
 int url_read(URLContext* h, unsigned char* buf, int size);
 int url_write(URLContext* h, unsigned char* buf, int size);
@@ -124,7 +124,7 @@ int av_url_read_pause(URLContext* h, int pause);
  * @see AVInputFormat::read_seek
  */
 int64_t av_url_read_seek(URLContext* h, int stream_index,
-						 int64_t timestamp, int flags);
+                         int64_t timestamp, int flags);
 
 /**
  * Passing this as the "whence" parameter to a seek function causes it to
@@ -134,16 +134,16 @@ int64_t av_url_read_seek(URLContext* h, int stream_index,
 #define AVSEEK_SIZE 0x10000
 
 typedef struct URLProtocol {
-	const char* name;
-	int (*url_open)(URLContext* h, const char* filename, int flags);
-	int (*url_read)(URLContext* h, unsigned char* buf, int size);
-	int (*url_write)(URLContext* h, unsigned char* buf, int size);
-	int64_t (*url_seek)(URLContext* h, int64_t pos, int whence);
-	int (*url_close)(URLContext* h);
-	struct URLProtocol* next;
-	int (*url_read_pause)(URLContext* h, int pause);
-	int64_t (*url_read_seek)(URLContext* h, int stream_index,
-							 int64_t timestamp, int flags);
+    const char* name;
+    int (*url_open)(URLContext* h, const char* filename, int flags);
+    int (*url_read)(URLContext* h, unsigned char* buf, int size);
+    int (*url_write)(URLContext* h, unsigned char* buf, int size);
+    int64_t (*url_seek)(URLContext* h, int64_t pos, int whence);
+    int (*url_close)(URLContext* h);
+    struct URLProtocol* next;
+    int (*url_read_pause)(URLContext* h, int pause);
+    int64_t (*url_read_seek)(URLContext* h, int stream_index,
+                             int64_t timestamp, int flags);
 } URLProtocol;
 
 #if LIBAVFORMAT_VERSION_MAJOR < 53
@@ -176,44 +176,44 @@ int av_register_protocol(URLProtocol* protocol);
  * sizeof(ByteIOContext) must not be used outside libav*.
  */
 typedef struct {
-	unsigned char* buffer;
-	int buffer_size;
-	unsigned char* buf_ptr, *buf_end;
-	void* opaque;
-	int (*read_packet)(void* opaque, uint8_t* buf, int buf_size);
-	int (*write_packet)(void* opaque, uint8_t* buf, int buf_size);
-	int64_t (*seek)(void* opaque, int64_t offset, int whence);
-	int64_t pos; /**< position in the file of the current buffer */
-	int must_flush; /**< true if the next seek should flush */
-	int eof_reached; /**< true if eof reached */
-	int write_flag;  /**< true if open for writing */
-	int is_streamed;
-	int max_packet_size;
-	unsigned long checksum;
-	unsigned char* checksum_ptr;
-	unsigned long (*update_checksum)(unsigned long checksum, const uint8_t* buf, unsigned int size);
-	int error;         ///< contains the error code or 0 if no error happened
-	int (*read_pause)(void* opaque, int pause);
-	int64_t (*read_seek)(void* opaque, int stream_index,
-						 int64_t timestamp, int flags);
+    unsigned char* buffer;
+    int buffer_size;
+    unsigned char* buf_ptr, *buf_end;
+    void* opaque;
+    int (*read_packet)(void* opaque, uint8_t* buf, int buf_size);
+    int (*write_packet)(void* opaque, uint8_t* buf, int buf_size);
+    int64_t (*seek)(void* opaque, int64_t offset, int whence);
+    int64_t pos; /**< position in the file of the current buffer */
+    int must_flush; /**< true if the next seek should flush */
+    int eof_reached; /**< true if eof reached */
+    int write_flag;  /**< true if open for writing */
+    int is_streamed;
+    int max_packet_size;
+    unsigned long checksum;
+    unsigned char* checksum_ptr;
+    unsigned long(*update_checksum)(unsigned long checksum, const uint8_t* buf, unsigned int size);
+    int error;         ///< contains the error code or 0 if no error happened
+    int (*read_pause)(void* opaque, int pause);
+    int64_t (*read_seek)(void* opaque, int stream_index,
+                         int64_t timestamp, int flags);
 } ByteIOContext;
 
 int init_put_byte(ByteIOContext* s,
-				  unsigned char* buffer,
-				  int buffer_size,
-				  int write_flag,
-				  void* opaque,
-				  int (*read_packet)(void* opaque, uint8_t* buf, int buf_size),
-				  int (*write_packet)(void* opaque, uint8_t* buf, int buf_size),
-				  int64_t (*seek)(void* opaque, int64_t offset, int whence));
+                  unsigned char* buffer,
+                  int buffer_size,
+                  int write_flag,
+                  void* opaque,
+                  int (*read_packet)(void* opaque, uint8_t* buf, int buf_size),
+                  int (*write_packet)(void* opaque, uint8_t* buf, int buf_size),
+                  int64_t (*seek)(void* opaque, int64_t offset, int whence));
 ByteIOContext* av_alloc_put_byte(
-	unsigned char* buffer,
-	int buffer_size,
-	int write_flag,
-	void* opaque,
-	int (*read_packet)(void* opaque, uint8_t* buf, int buf_size),
-	int (*write_packet)(void* opaque, uint8_t* buf, int buf_size),
-	int64_t (*seek)(void* opaque, int64_t offset, int whence));
+    unsigned char* buffer,
+    int buffer_size,
+    int write_flag,
+    void* opaque,
+    int (*read_packet)(void* opaque, uint8_t* buf, int buf_size),
+    int (*write_packet)(void* opaque, uint8_t* buf, int buf_size),
+    int64_t (*seek)(void* opaque, int64_t offset, int whence));
 
 void put_byte(ByteIOContext* s, int b);
 void put_buffer(ByteIOContext* s, const unsigned char* buf, int size);
@@ -263,7 +263,7 @@ int url_ferror(ByteIOContext* s);
 
 int av_url_read_fpause(ByteIOContext* h, int pause);
 int64_t av_url_read_fseek(ByteIOContext* h, int stream_index,
-						  int64_t timestamp, int flags);
+                          int64_t timestamp, int flags);
 
 #define URL_EOF (-1)
 /** @note return URL_EOF (-1) if EOF */
@@ -271,7 +271,7 @@ int url_fgetc(ByteIOContext* s);
 
 /** @warning currently size is limited */
 #ifdef __GNUC__
-int url_fprintf(ByteIOContext* s, const char* fmt, ...) __attribute__ ((__format__ (__printf__, 2, 3)));
+int url_fprintf(ByteIOContext* s, const char* fmt, ...) __attribute__((__format__(__printf__, 2, 3)));
 #else
 int url_fprintf(ByteIOContext* s, const char* fmt, ...);
 #endif
@@ -314,7 +314,7 @@ uint64_t get_be64(ByteIOContext* s);
 uint64_t ff_get_v(ByteIOContext* bc);
 
 static inline int url_is_streamed(ByteIOContext* s) {
-	return s->is_streamed;
+    return s->is_streamed;
 }
 
 /** @note when opened as read/write, the buffers are only used for
@@ -379,11 +379,11 @@ int url_open_dyn_packet_buf(ByteIOContext** s, int max_packet_size);
 int url_close_dyn_buf(ByteIOContext* s, uint8_t** pbuffer);
 
 unsigned long ff_crc04C11DB7_update(unsigned long checksum, const uint8_t* buf,
-									unsigned int len);
+                                    unsigned int len);
 unsigned long get_checksum(ByteIOContext* s);
 void init_checksum(ByteIOContext* s,
-				   unsigned long (*update_checksum)(unsigned long c, const uint8_t* p, unsigned int len),
-				   unsigned long checksum);
+                   unsigned long(*update_checksum)(unsigned long c, const uint8_t* p, unsigned int len),
+                   unsigned long checksum);
 
 /* udp.c */
 int udp_set_remote_url(URLContext* h, const char* uri);

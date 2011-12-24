@@ -31,44 +31,44 @@
 #include "avcodec.h"
 
 enum AVOptionType {
-	FF_OPT_TYPE_FLAGS,
-	FF_OPT_TYPE_INT,
-	FF_OPT_TYPE_INT64,
-	FF_OPT_TYPE_DOUBLE,
-	FF_OPT_TYPE_FLOAT,
-	FF_OPT_TYPE_STRING,
-	FF_OPT_TYPE_RATIONAL,
-	FF_OPT_TYPE_BINARY,  ///< offset must point to a pointer immediately followed by an int for the length
-	FF_OPT_TYPE_CONST = 128,
+    FF_OPT_TYPE_FLAGS,
+    FF_OPT_TYPE_INT,
+    FF_OPT_TYPE_INT64,
+    FF_OPT_TYPE_DOUBLE,
+    FF_OPT_TYPE_FLOAT,
+    FF_OPT_TYPE_STRING,
+    FF_OPT_TYPE_RATIONAL,
+    FF_OPT_TYPE_BINARY,  ///< offset must point to a pointer immediately followed by an int for the length
+    FF_OPT_TYPE_CONST = 128,
 };
 
 /**
  * AVOption
  */
 typedef struct AVOption {
-	const char* name;
+    const char* name;
 
-	/**
-	 * short English help text
-	 * @todo What about other languages?
-	 */
-	const char* help;
+    /**
+     * short English help text
+     * @todo What about other languages?
+     */
+    const char* help;
 
-	/**
-	 * The offset relative to the context structure where the option
-	 * value is stored. It should be 0 for named constants.
-	 */
-	int offset;
-	enum AVOptionType type;
+    /**
+     * The offset relative to the context structure where the option
+     * value is stored. It should be 0 for named constants.
+     */
+    int offset;
+    enum AVOptionType type;
 
-	/**
-	 * the default value for scalar options
-	 */
-	double default_val;
-	double min;                 ///< minimum valid value for the option
-	double max;                 ///< maximum valid value for the option
+    /**
+     * the default value for scalar options
+     */
+    double default_val;
+    double min;                 ///< minimum valid value for the option
+    double max;                 ///< maximum valid value for the option
 
-	int flags;
+    int flags;
 #define AV_OPT_FLAG_ENCODING_PARAM  1   ///< a generic parameter which can be set by the user for muxing or encoding
 #define AV_OPT_FLAG_DECODING_PARAM  2   ///< a generic parameter which can be set by the user for demuxing or decoding
 #define AV_OPT_FLAG_METADATA        4   ///< some data extracted or inserted into the file like title, comment, ...
@@ -77,12 +77,12 @@ typedef struct AVOption {
 #define AV_OPT_FLAG_SUBTITLE_PARAM  32
 //FIXME think about enc-audio, ... style flags
 
-	/**
-	 * The logical unit to which the option belongs. Non-constant
-	 * options and corresponding named constants share the same
-	 * unit. May be NULL.
-	 */
-	const char* unit;
+    /**
+     * The logical unit to which the option belongs. Non-constant
+     * options and corresponding named constants share the same
+     * unit. May be NULL.
+     */
+    const char* unit;
 } AVOption;
 
 

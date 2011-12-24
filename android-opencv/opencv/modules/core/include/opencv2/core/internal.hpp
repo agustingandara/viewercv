@@ -99,8 +99,8 @@
 #include "ipp.h"
 
 CV_INLINE IppiSize ippiSize(int width, int height) {
-	IppiSize size = { width, height };
-	return size;
+    IppiSize size = { width, height };
+    return size;
 }
 #endif
 
@@ -140,20 +140,20 @@ namespace cv {
 typedef tbb::blocked_range<int> BlockedRange;
 
 template<typename Body> static inline
-void parallel_for( const BlockedRange& range, const Body& body ) {
-	tbb::parallel_for(range, body);
+void parallel_for(const BlockedRange& range, const Body& body) {
+    tbb::parallel_for(range, body);
 }
 
 template<typename Iterator, typename Body> static inline
-void parallel_do( Iterator first, Iterator last, const Body& body ) {
-	tbb::parallel_do(first, last, body);
+void parallel_do(Iterator first, Iterator last, const Body& body) {
+    tbb::parallel_do(first, last, body);
 }
 
 typedef tbb::split Split;
 
 template<typename Body> static inline
-void parallel_reduce( const BlockedRange& range, Body& body ) {
-	tbb::parallel_reduce(range, body);
+void parallel_reduce(const BlockedRange& range, Body& body) {
+    tbb::parallel_reduce(range, body);
 }
 
 typedef tbb::concurrent_vector<Rect> ConcurrentRectVector;
@@ -162,33 +162,33 @@ typedef tbb::concurrent_vector<Rect> ConcurrentRectVector;
 namespace cv {
 class BlockedRange {
 public:
-	BlockedRange() : _begin(0), _end(0), _grainsize(0) {}
-	BlockedRange(int b, int e, int g = 1) : _begin(b), _end(e), _grainsize(g) {}
-	int begin() const { return _begin; }
-	int end() const { return _end; }
-	int grainsize() const { return _grainsize; }
+    BlockedRange() : _begin(0), _end(0), _grainsize(0) {}
+    BlockedRange(int b, int e, int g = 1) : _begin(b), _end(e), _grainsize(g) {}
+    int begin() const { return _begin; }
+    int end() const { return _end; }
+    int grainsize() const { return _grainsize; }
 
 protected:
-	int _begin, _end, _grainsize;
+    int _begin, _end, _grainsize;
 };
 
 template<typename Body> static inline
-void parallel_for( const BlockedRange& range, const Body& body ) {
-	body(range);
+void parallel_for(const BlockedRange& range, const Body& body) {
+    body(range);
 }
 
 template<typename Iterator, typename Body> static inline
-void parallel_do( Iterator first, Iterator last, const Body& body ) {
-	for ( ; first != last; ++first ) {
-		body(*first);
-	}
+void parallel_do(Iterator first, Iterator last, const Body& body) {
+    for (; first != last; ++first) {
+        body(*first);
+    }
 }
 
 class Split {};
 
 template<typename Body> static inline
-void parallel_reduce( const BlockedRange& range, Body& body ) {
-	body(range);
+void parallel_reduce(const BlockedRange& range, Body& body) {
+    body(range);
 }
 
 typedef std::vector<Rect> ConcurrentRectVector;
@@ -348,21 +348,21 @@ typedef std::vector<Rect> ConcurrentRectVector;
 
 #define  cvUnsupportedFormat "Unsupported format"
 
-CV_INLINE void* cvAlignPtr( const void* ptr, int align CV_DEFAULT(32) ) {
-	assert( (align & (align - 1)) == 0 );
-	return (void*)( ((size_t)ptr + align - 1) & ~(size_t)(align - 1) );
+CV_INLINE void* cvAlignPtr(const void* ptr, int align CV_DEFAULT(32)) {
+    assert((align & (align - 1)) == 0);
+    return (void*)(((size_t)ptr + align - 1) & ~(size_t)(align - 1));
 }
 
-CV_INLINE int cvAlign( int size, int align ) {
-	assert( (align & (align - 1)) == 0 && size < INT_MAX );
-	return (size + align - 1) & -align;
+CV_INLINE int cvAlign(int size, int align) {
+    assert((align & (align - 1)) == 0 && size < INT_MAX);
+    return (size + align - 1) & -align;
 }
 
-CV_INLINE  CvSize  cvGetMatSize( const CvMat* mat ) {
-	CvSize size;
-	size.width = mat->cols;
-	size.height = mat->rows;
-	return size;
+CV_INLINE  CvSize  cvGetMatSize(const CvMat* mat) {
+    CvSize size;
+    size.width = mat->cols;
+    size.height = mat->rows;
+    return size;
 }
 
 #define  CV_DESCALE(x,n)     (((x) + (1 << ((n)-1))) >> (n))
@@ -603,52 +603,52 @@ void func_name( T *array, size_t total, user_data_type aux )                    
 
 /* IPP-compatible return codes */
 typedef enum CvStatus {
-	CV_BADMEMBLOCK_ERR          = -113,
-	CV_INPLACE_NOT_SUPPORTED_ERR = -112,
-	CV_UNMATCHED_ROI_ERR        = -111,
-	CV_NOTFOUND_ERR             = -110,
-	CV_BADCONVERGENCE_ERR       = -109,
+    CV_BADMEMBLOCK_ERR          = -113,
+    CV_INPLACE_NOT_SUPPORTED_ERR = -112,
+    CV_UNMATCHED_ROI_ERR        = -111,
+    CV_NOTFOUND_ERR             = -110,
+    CV_BADCONVERGENCE_ERR       = -109,
 
-	CV_BADDEPTH_ERR             = -107,
-	CV_BADROI_ERR               = -106,
-	CV_BADHEADER_ERR            = -105,
-	CV_UNMATCHED_FORMATS_ERR    = -104,
-	CV_UNSUPPORTED_COI_ERR      = -103,
-	CV_UNSUPPORTED_CHANNELS_ERR = -102,
-	CV_UNSUPPORTED_DEPTH_ERR    = -101,
-	CV_UNSUPPORTED_FORMAT_ERR   = -100,
+    CV_BADDEPTH_ERR             = -107,
+    CV_BADROI_ERR               = -106,
+    CV_BADHEADER_ERR            = -105,
+    CV_UNMATCHED_FORMATS_ERR    = -104,
+    CV_UNSUPPORTED_COI_ERR      = -103,
+    CV_UNSUPPORTED_CHANNELS_ERR = -102,
+    CV_UNSUPPORTED_DEPTH_ERR    = -101,
+    CV_UNSUPPORTED_FORMAT_ERR   = -100,
 
-	CV_BADARG_ERR      = -49,  //ipp comp
-	CV_NOTDEFINED_ERR  = -48,  //ipp comp
+    CV_BADARG_ERR      = -49,  //ipp comp
+    CV_NOTDEFINED_ERR  = -48,  //ipp comp
 
-	CV_BADCHANNELS_ERR = -47,  //ipp comp
-	CV_BADRANGE_ERR    = -44,  //ipp comp
-	CV_BADSTEP_ERR     = -29,  //ipp comp
+    CV_BADCHANNELS_ERR = -47,  //ipp comp
+    CV_BADRANGE_ERR    = -44,  //ipp comp
+    CV_BADSTEP_ERR     = -29,  //ipp comp
 
-	CV_BADFLAG_ERR     =  -12,
-	CV_DIV_BY_ZERO_ERR =  -11, //ipp comp
-	CV_BADCOEF_ERR     =  -10,
+    CV_BADFLAG_ERR     =  -12,
+    CV_DIV_BY_ZERO_ERR =  -11, //ipp comp
+    CV_BADCOEF_ERR     =  -10,
 
-	CV_BADFACTOR_ERR   =  -7,
-	CV_BADPOINT_ERR    =  -6,
-	CV_BADSCALE_ERR    =  -4,
-	CV_OUTOFMEM_ERR    =  -3,
-	CV_NULLPTR_ERR     =  -2,
-	CV_BADSIZE_ERR     =  -1,
-	CV_NO_ERR          =   0,
-	CV_OK              =   CV_NO_ERR
+    CV_BADFACTOR_ERR   =  -7,
+    CV_BADPOINT_ERR    =  -6,
+    CV_BADSCALE_ERR    =  -4,
+    CV_OUTOFMEM_ERR    =  -3,
+    CV_NULLPTR_ERR     =  -2,
+    CV_BADSIZE_ERR     =  -1,
+    CV_NO_ERR          =   0,
+    CV_OK              =   CV_NO_ERR
 }
 CvStatus;
 
 #define CV_NOTHROW throw()
 
 typedef struct CvFuncTable {
-	void*   fn_2d[CV_DEPTH_MAX];
+    void*   fn_2d[CV_DEPTH_MAX];
 }
 CvFuncTable;
 
 typedef struct CvBigFuncTable {
-	void*   fn_2d[CV_DEPTH_MAX* CV_CN_MAX];
+    void*   fn_2d[CV_DEPTH_MAX* CV_CN_MAX];
 }
 CvBigFuncTable;
 

@@ -76,45 +76,45 @@ template <class T>
 class Array {
 public:
 
-	//-----------------------------
-	// Constructors and destructors
-	//-----------------------------
+    //-----------------------------
+    // Constructors and destructors
+    //-----------------------------
 
-	Array ()				{_data = 0;}
-	Array (long size)			{_data = new T[size];}
-	~Array ()				{delete [] _data;}
-
-
-	//-----------------------------
-	// Access to the array elements
-	//-----------------------------
-
-	operator T * ()			{return _data;}
-	operator const T * () const		{return _data;}
+    Array()				{_data = 0;}
+    Array(long size)			{_data = new T[size];}
+    ~Array()				{delete [] _data;}
 
 
-	//------------------------------------------------------
-	// Resize and clear the array (the contents of the array
-	// are not preserved across the resize operation).
-	//
-	// resizeEraseUnsafe() is more memory efficient than
-	// resizeErase() because it deletes the old memory block
-	// before allocating a new one, but if allocating the
-	// new block throws an exception, resizeEraseUnsafe()
-	// leaves the array in an unusable state.
-	//
-	//------------------------------------------------------
+    //-----------------------------
+    // Access to the array elements
+    //-----------------------------
 
-	void resizeErase (long size);
-	void resizeEraseUnsafe (long size);
+    operator T *()			{return _data;}
+    operator const T *() const		{return _data;}
+
+
+    //------------------------------------------------------
+    // Resize and clear the array (the contents of the array
+    // are not preserved across the resize operation).
+    //
+    // resizeEraseUnsafe() is more memory efficient than
+    // resizeErase() because it deletes the old memory block
+    // before allocating a new one, but if allocating the
+    // new block throws an exception, resizeEraseUnsafe()
+    // leaves the array in an unusable state.
+    //
+    //------------------------------------------------------
+
+    void resizeErase(long size);
+    void resizeEraseUnsafe(long size);
 
 
 private:
 
-	Array (const Array&);		// Copying and assignment
-	Array& operator = (const Array&);	// are not implemented
+    Array(const Array&);		// Copying and assignment
+    Array& operator = (const Array&);	// are not implemented
 
-	T* _data;
+    T* _data;
 };
 
 
@@ -122,46 +122,46 @@ template <class T>
 class Array2D {
 public:
 
-	//-----------------------------
-	// Constructors and destructors
-	//-----------------------------
+    //-----------------------------
+    // Constructors and destructors
+    //-----------------------------
 
-	Array2D ();			// empty array, 0 by 0 elements
-	Array2D (long sizeX, long sizeY);	// sizeX by sizeY elements
-	~Array2D ();
-
-
-	//-----------------------------
-	// Access to the array elements
-	//-----------------------------
-
-	T* 		operator [] (long x);
-	const T* 	operator [] (long x) const;
+    Array2D();			// empty array, 0 by 0 elements
+    Array2D(long sizeX, long sizeY);	// sizeX by sizeY elements
+    ~Array2D();
 
 
-	//------------------------------------------------------
-	// Resize and clear the array (the contents of the array
-	// are not preserved across the resize operation).
-	//
-	// resizeEraseUnsafe() is more memory efficient than
-	// resizeErase() because it deletes the old memory block
-	// before allocating a new one, but if allocating the
-	// new block throws an exception, resizeEraseUnsafe()
-	// leaves the array in an unusable state.
-	//
-	//------------------------------------------------------
+    //-----------------------------
+    // Access to the array elements
+    //-----------------------------
 
-	void resizeErase (long sizeX, long sizeY);
-	void resizeEraseUnsafe (long sizeX, long sizeY);
+    T* 		operator [](long x);
+    const T* 	operator [](long x) const;
+
+
+    //------------------------------------------------------
+    // Resize and clear the array (the contents of the array
+    // are not preserved across the resize operation).
+    //
+    // resizeEraseUnsafe() is more memory efficient than
+    // resizeErase() because it deletes the old memory block
+    // before allocating a new one, but if allocating the
+    // new block throws an exception, resizeEraseUnsafe()
+    // leaves the array in an unusable state.
+    //
+    //------------------------------------------------------
+
+    void resizeErase(long sizeX, long sizeY);
+    void resizeEraseUnsafe(long sizeX, long sizeY);
 
 
 private:
 
-	Array2D (const Array2D&);			// Copying and assignment
-	Array2D& operator = (const Array2D&);	// are not implemented
+    Array2D(const Array2D&);			// Copying and assignment
+    Array2D& operator = (const Array2D&);	// are not implemented
 
-	long	_sizeY;
-	T* 		_data;
+    long	_sizeY;
+    T* 		_data;
 };
 
 
@@ -171,77 +171,77 @@ private:
 
 template <class T>
 inline void
-Array<T>::resizeErase (long size) {
-	T* tmp = new T[size];
-	delete [] _data;
-	_data = tmp;
+Array<T>::resizeErase(long size) {
+    T* tmp = new T[size];
+    delete [] _data;
+    _data = tmp;
 }
 
 
 template <class T>
 inline void
-Array<T>::resizeEraseUnsafe (long size) {
-	delete [] _data;
-	_data = 0;
-	_data = new T[size];
+Array<T>::resizeEraseUnsafe(long size) {
+    delete [] _data;
+    _data = 0;
+    _data = new T[size];
 }
 
 
 template <class T>
 inline
-Array2D<T>::Array2D ():
-	_sizeY (0), _data (0) {
-	// emtpy
+Array2D<T>::Array2D():
+    _sizeY(0), _data(0) {
+    // emtpy
 }
 
 
 template <class T>
 inline
-Array2D<T>::Array2D (long sizeX, long sizeY):
-	_sizeY (sizeY), _data (new T[sizeX* sizeY]) {
-	// emtpy
+Array2D<T>::Array2D(long sizeX, long sizeY):
+    _sizeY(sizeY), _data(new T[sizeX* sizeY]) {
+    // emtpy
 }
 
 
 template <class T>
 inline
-Array2D<T>::~Array2D () {
-	delete [] _data;
+Array2D<T>::~Array2D() {
+    delete [] _data;
 }
 
 
 template <class T>
 inline T *
-Array2D<T>::operator [] (long x) {
-	return _data + x * _sizeY;
+Array2D<T>::operator [](long x) {
+    return _data + x * _sizeY;
 }
 
 
 template <class T>
 inline const T *
-Array2D<T>::operator [] (long x) const {
-	return _data + x * _sizeY;
+Array2D<T>::operator [](long x) const {
+    return _data + x * _sizeY;
 }
 
 
 template <class T>
 inline void
-Array2D<T>::resizeErase (long sizeX, long sizeY) {
-	T* tmp = new T[sizeX * sizeY];
-	delete [] _data;
-	_sizeY = sizeY;
-	_data = tmp;
+Array2D<T>::resizeErase(long sizeX, long sizeY) {
+    T* tmp = new T[sizeX * sizeY];
+    delete [] _data;
+    _sizeY = sizeY;
+    _data = tmp;
 }
 
 
 template <class T>
 inline void
-Array2D<T>::resizeEraseUnsafe (long sizeX, long sizeY) {
-	delete [] _data;
-	_data = 0;
-	_sizeY = 0;
-	_data = new T[sizeX * sizeY];
-	_sizeY = sizeY;
+Array2D<T>::resizeEraseUnsafe(long sizeX, long sizeY) {
+    delete [] _data;
+    _data = 0;
+    _sizeY = 0;
+    _data = new T[sizeX * sizeY];
+    _sizeY = sizeY;
 }
 
 

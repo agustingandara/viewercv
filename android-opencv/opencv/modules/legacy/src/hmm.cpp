@@ -66,38 +66,38 @@
 //
 //    Notes:
 //F*/
-static CvStatus CV_STDCALL icvCreateObsInfo(  CvImgObsInfo** obs_info,
-		CvSize num_obs, int obs_size ) {
-	int total = num_obs.height * num_obs.width;
+static CvStatus CV_STDCALL icvCreateObsInfo(CvImgObsInfo** obs_info,
+        CvSize num_obs, int obs_size) {
+    int total = num_obs.height * num_obs.width;
 
-	CvImgObsInfo* obs = (CvImgObsInfo*)cvAlloc( sizeof( CvImgObsInfo) );
+    CvImgObsInfo* obs = (CvImgObsInfo*)cvAlloc(sizeof(CvImgObsInfo));
 
-	obs->obs_x = num_obs.width;
-	obs->obs_y = num_obs.height;
+    obs->obs_x = num_obs.width;
+    obs->obs_y = num_obs.height;
 
-	obs->obs = (float*)cvAlloc( total * obs_size * sizeof(float) );
+    obs->obs = (float*)cvAlloc(total * obs_size * sizeof(float));
 
-	obs->state = (int*)cvAlloc( 2 * total * sizeof(int) );
-	obs->mix = (int*)cvAlloc( total * sizeof(int) );
+    obs->state = (int*)cvAlloc(2 * total * sizeof(int));
+    obs->mix = (int*)cvAlloc(total * sizeof(int));
 
-	obs->obs_size = obs_size;
+    obs->obs_size = obs_size;
 
-	obs_info[0] = obs;
+    obs_info[0] = obs;
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
-static CvStatus CV_STDCALL icvReleaseObsInfo( CvImgObsInfo** p_obs_info ) {
-	CvImgObsInfo* obs_info = p_obs_info[0];
+static CvStatus CV_STDCALL icvReleaseObsInfo(CvImgObsInfo** p_obs_info) {
+    CvImgObsInfo* obs_info = p_obs_info[0];
 
-	cvFree( &(obs_info->obs) );
-	cvFree( &(obs_info->mix) );
-	cvFree( &(obs_info->state) );
-	cvFree( &(obs_info) );
+    cvFree(&(obs_info->obs));
+    cvFree(&(obs_info->mix));
+    cvFree(&(obs_info->state));
+    cvFree(&(obs_info));
 
-	p_obs_info[0] = NULL;
+    p_obs_info[0] = NULL;
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 
@@ -121,214 +121,214 @@ static CvStatus CV_STDCALL icvReleaseObsInfo( CvImgObsInfo** p_obs_info ) {
 //                                         length of num_mix array = 3+6+6+6+3 = 24//
 //
 //F*/
-static CvStatus CV_STDCALL icvCreate2DHMM( CvEHMM** this_hmm,
-		int* state_number, int* num_mix, int obs_size ) {
-	int i;
-	int real_states = 0;
+static CvStatus CV_STDCALL icvCreate2DHMM(CvEHMM** this_hmm,
+        int* state_number, int* num_mix, int obs_size) {
+    int i;
+    int real_states = 0;
 
-	CvEHMMState* all_states;
-	CvEHMM* hmm;
-	int total_mix = 0;
-	float* pointers;
+    CvEHMMState* all_states;
+    CvEHMM* hmm;
+    int total_mix = 0;
+    float* pointers;
 
-	//compute total number of states of all level in 2d EHMM
-	for ( i = 1; i <= state_number[0]; i++ ) {
-		real_states += state_number[i];
-	}
+    //compute total number of states of all level in 2d EHMM
+    for (i = 1; i <= state_number[0]; i++) {
+        real_states += state_number[i];
+    }
 
-	/* allocate memory for all hmms (from all levels) */
-	hmm = (CvEHMM*)cvAlloc( (state_number[0] + 1) * sizeof(CvEHMM) );
+    /* allocate memory for all hmms (from all levels) */
+    hmm = (CvEHMM*)cvAlloc((state_number[0] + 1) * sizeof(CvEHMM));
 
-	/* set number of superstates */
-	hmm[0].num_states = state_number[0];
-	hmm[0].level = 1;
+    /* set number of superstates */
+    hmm[0].num_states = state_number[0];
+    hmm[0].level = 1;
 
-	/* allocate memory for all states */
-	all_states = (CvEHMMState*)cvAlloc( real_states * sizeof( CvEHMMState ) );
+    /* allocate memory for all states */
+    all_states = (CvEHMMState*)cvAlloc(real_states * sizeof(CvEHMMState));
 
-	/* assign number of mixtures */
-	for ( i = 0; i < real_states; i++ ) {
-		all_states[i].num_mix = num_mix[i];
-	}
+    /* assign number of mixtures */
+    for (i = 0; i < real_states; i++) {
+        all_states[i].num_mix = num_mix[i];
+    }
 
-	/* compute size of inner of all real states */
-	for ( i = 0; i < real_states; i++ ) {
-		total_mix += num_mix[i];
-	}
-	/* allocate memory for states stuff */
-	pointers = (float*)cvAlloc( total_mix * (2/*for mu invvar */ * obs_size +
-								2/*for weight and log_var_val*/ ) * sizeof( float) );
+    /* compute size of inner of all real states */
+    for (i = 0; i < real_states; i++) {
+        total_mix += num_mix[i];
+    }
+    /* allocate memory for states stuff */
+    pointers = (float*)cvAlloc(total_mix * (2/*for mu invvar */ * obs_size +
+                                            2/*for weight and log_var_val*/) * sizeof(float));
 
-	/* organize memory */
-	for ( i = 0; i < real_states; i++ ) {
-		all_states[i].mu      = pointers; pointers += num_mix[i] * obs_size;
-		all_states[i].inv_var = pointers; pointers += num_mix[i] * obs_size;
+    /* organize memory */
+    for (i = 0; i < real_states; i++) {
+        all_states[i].mu      = pointers; pointers += num_mix[i] * obs_size;
+        all_states[i].inv_var = pointers; pointers += num_mix[i] * obs_size;
 
-		all_states[i].log_var_val = pointers; pointers += num_mix[i];
-		all_states[i].weight      = pointers; pointers += num_mix[i];
-	}
+        all_states[i].log_var_val = pointers; pointers += num_mix[i];
+        all_states[i].weight      = pointers; pointers += num_mix[i];
+    }
 
-	/* set pointer to embedded hmm array */
-	hmm->u.ehmm = hmm + 1;
+    /* set pointer to embedded hmm array */
+    hmm->u.ehmm = hmm + 1;
 
-	for ( i = 0; i < hmm[0].num_states; i++ ) {
-		hmm[i+1].u.state = all_states;
-		all_states += state_number[i+1];
-		hmm[i+1].num_states = state_number[i+1];
-	}
+    for (i = 0; i < hmm[0].num_states; i++) {
+        hmm[i+1].u.state = all_states;
+        all_states += state_number[i+1];
+        hmm[i+1].num_states = state_number[i+1];
+    }
 
-	for ( i = 0; i <= state_number[0]; i++ ) {
-		hmm[i].transP = icvCreateMatrix_32f( hmm[i].num_states, hmm[i].num_states );
-		hmm[i].obsProb = NULL;
-		hmm[i].level = i ? 0 : 1;
-	}
+    for (i = 0; i <= state_number[0]; i++) {
+        hmm[i].transP = icvCreateMatrix_32f(hmm[i].num_states, hmm[i].num_states);
+        hmm[i].obsProb = NULL;
+        hmm[i].level = i ? 0 : 1;
+    }
 
-	/* if all ok - return pointer */
-	*this_hmm = hmm;
-	return CV_NO_ERR;
+    /* if all ok - return pointer */
+    *this_hmm = hmm;
+    return CV_NO_ERR;
 }
 
-static CvStatus CV_STDCALL icvRelease2DHMM( CvEHMM** phmm ) {
-	CvEHMM* hmm = phmm[0];
-	int i;
-	for ( i = 0; i < hmm[0].num_states + 1; i++ ) {
-		icvDeleteMatrix( hmm[i].transP );
-	}
+static CvStatus CV_STDCALL icvRelease2DHMM(CvEHMM** phmm) {
+    CvEHMM* hmm = phmm[0];
+    int i;
+    for (i = 0; i < hmm[0].num_states + 1; i++) {
+        icvDeleteMatrix(hmm[i].transP);
+    }
 
-	if (hmm->obsProb != NULL) {
-		int* tmp = ((int*)(hmm->obsProb)) - 3;
-		cvFree( &(tmp)  );
-	}
+    if (hmm->obsProb != NULL) {
+        int* tmp = ((int*)(hmm->obsProb)) - 3;
+        cvFree(&(tmp));
+    }
 
-	cvFree( &(hmm->u.ehmm->u.state->mu) );
-	cvFree( &(hmm->u.ehmm->u.state) );
+    cvFree(&(hmm->u.ehmm->u.state->mu));
+    cvFree(&(hmm->u.ehmm->u.state));
 
 
-	/* free hmm structures */
-	cvFree( phmm );
+    /* free hmm structures */
+    cvFree(phmm);
 
-	phmm[0] = NULL;
+    phmm[0] = NULL;
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 /* distance between 2 vectors */
-static float icvSquareDistance( CvVect32f v1, CvVect32f v2, int len ) {
-	int i;
-	double dist0 = 0;
-	double dist1 = 0;
+static float icvSquareDistance(CvVect32f v1, CvVect32f v2, int len) {
+    int i;
+    double dist0 = 0;
+    double dist1 = 0;
 
-	for ( i = 0; i <= len - 4; i += 4 ) {
-		double t0 = v1[i] - v2[i];
-		double t1 = v1[i+1] - v2[i+1];
-		dist0 += t0 * t0;
-		dist1 += t1 * t1;
+    for (i = 0; i <= len - 4; i += 4) {
+        double t0 = v1[i] - v2[i];
+        double t1 = v1[i+1] - v2[i+1];
+        dist0 += t0 * t0;
+        dist1 += t1 * t1;
 
-		t0 = v1[i+2] - v2[i+2];
-		t1 = v1[i+3] - v2[i+3];
-		dist0 += t0 * t0;
-		dist1 += t1 * t1;
-	}
+        t0 = v1[i+2] - v2[i+2];
+        t1 = v1[i+3] - v2[i+3];
+        dist0 += t0 * t0;
+        dist1 += t1 * t1;
+    }
 
-	for ( ; i < len; i++ ) {
-		double t0 = v1[i] - v2[i];
-		dist0 += t0 * t0;
-	}
+    for (; i < len; i++) {
+        double t0 = v1[i] - v2[i];
+        dist0 += t0 * t0;
+    }
 
-	return (float)(dist0 + dist1);
+    return (float)(dist0 + dist1);
 }
 
 /*can be used in CHMM & DHMM */
 static CvStatus CV_STDCALL
-icvUniformImgSegm(  CvImgObsInfo* obs_info, CvEHMM* hmm ) {
+icvUniformImgSegm(CvImgObsInfo* obs_info, CvEHMM* hmm) {
 #if 1
-	/* implementation is very bad */
-	int  i, j, counter = 0;
-	CvEHMMState* first_state;
-	float inv_x = 1.f / obs_info->obs_x;
-	float inv_y = 1.f / obs_info->obs_y;
+    /* implementation is very bad */
+    int  i, j, counter = 0;
+    CvEHMMState* first_state;
+    float inv_x = 1.f / obs_info->obs_x;
+    float inv_y = 1.f / obs_info->obs_y;
 
-	/* check arguments */
-	if ( !obs_info || !hmm ) { return CV_NULLPTR_ERR; }
+    /* check arguments */
+    if (!obs_info || !hmm) { return CV_NULLPTR_ERR; }
 
-	first_state = hmm->u.ehmm->u.state;
+    first_state = hmm->u.ehmm->u.state;
 
-	for (i = 0; i < obs_info->obs_y; i++) {
-		//bad line (division )
-		int superstate = (int)((i * hmm->num_states) * inv_y); /* /obs_info->obs_y; */
+    for (i = 0; i < obs_info->obs_y; i++) {
+        //bad line (division )
+        int superstate = (int)((i * hmm->num_states) * inv_y); /* /obs_info->obs_y; */
 
-		int index = (int)(hmm->u.ehmm[superstate].u.state - first_state);
+        int index = (int)(hmm->u.ehmm[superstate].u.state - first_state);
 
-		for (j = 0; j < obs_info->obs_x; j++, counter++) {
-			int state = (int)((j * hmm->u.ehmm[superstate].num_states) * inv_x); /* / obs_info->obs_x; */
+        for (j = 0; j < obs_info->obs_x; j++, counter++) {
+            int state = (int)((j * hmm->u.ehmm[superstate].num_states) * inv_x); /* / obs_info->obs_x; */
 
-			obs_info->state[2 * counter] = superstate;
-			obs_info->state[2 * counter + 1] = state + index;
-		}
-	}
+            obs_info->state[2 * counter] = superstate;
+            obs_info->state[2 * counter + 1] = state + index;
+        }
+    }
 #else
-	//this is not ready yet
+    //this is not ready yet
 
-	int i, j, k, m;
-	CvEHMMState* first_state = hmm->u.ehmm->u.state;
+    int i, j, k, m;
+    CvEHMMState* first_state = hmm->u.ehmm->u.state;
 
-	/* check bad arguments */
-	if ( hmm->num_states > obs_info->obs_y ) { return CV_BADSIZE_ERR; }
+    /* check bad arguments */
+    if (hmm->num_states > obs_info->obs_y) { return CV_BADSIZE_ERR; }
 
-	//compute vertical subdivision
-	float row_per_state = (float)obs_info->obs_y / hmm->num_states;
-	float col_per_state[1024]; /* maximum 1024 superstates */
+    //compute vertical subdivision
+    float row_per_state = (float)obs_info->obs_y / hmm->num_states;
+    float col_per_state[1024]; /* maximum 1024 superstates */
 
-	//for every horizontal band compute subdivision
-	for ( i = 0; i < hmm->num_states; i++ ) {
-		CvEHMM* ehmm = &(hmm->u.ehmm[i]);
-		col_per_state[i] = (float)obs_info->obs_x / ehmm->num_states;
-	}
+    //for every horizontal band compute subdivision
+    for (i = 0; i < hmm->num_states; i++) {
+        CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+        col_per_state[i] = (float)obs_info->obs_x / ehmm->num_states;
+    }
 
-	//compute state bounds
-	int ss_bound[1024];
-	for ( i = 0; i < hmm->num_states - 1; i++ ) {
-		ss_bound[i] = floor( row_per_state * ( i + 1 ) );
-	}
-	ss_bound[hmm->num_states - 1] = obs_info->obs_y;
+    //compute state bounds
+    int ss_bound[1024];
+    for (i = 0; i < hmm->num_states - 1; i++) {
+        ss_bound[i] = floor(row_per_state * (i + 1));
+    }
+    ss_bound[hmm->num_states - 1] = obs_info->obs_y;
 
-	//work inside every superstate
+    //work inside every superstate
 
-	int row = 0;
+    int row = 0;
 
-	for ( i = 0; i < hmm->num_states; i++ ) {
-		CvEHMM* ehmm = &(hmm->u.ehmm[i]);
-		int index = ehmm->u.state - first_state;
+    for (i = 0; i < hmm->num_states; i++) {
+        CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+        int index = ehmm->u.state - first_state;
 
-		//calc distribution in superstate
-		int es_bound[1024];
-		for ( j = 0; j < ehmm->num_states - 1; j++ ) {
-			es_bound[j] = floor( col_per_state[i] * ( j + 1 ) );
-		}
-		es_bound[ehmm->num_states - 1] = obs_info->obs_x;
+        //calc distribution in superstate
+        int es_bound[1024];
+        for (j = 0; j < ehmm->num_states - 1; j++) {
+            es_bound[j] = floor(col_per_state[i] * (j + 1));
+        }
+        es_bound[ehmm->num_states - 1] = obs_info->obs_x;
 
-		//assign states to first row of superstate
-		int col = 0;
-		for ( j = 0; j < ehmm->num_states; j++ ) {
-			for ( k = col; k < es_bound[j]; k++, col++ ) {
-				obs_info->state[row* obs_info->obs_x + 2 * k] = i;
-				obs_info->state[row* obs_info->obs_x + 2 * k + 1] = j + index;
-			}
-			col = es_bound[j];
-		}
+        //assign states to first row of superstate
+        int col = 0;
+        for (j = 0; j < ehmm->num_states; j++) {
+            for (k = col; k < es_bound[j]; k++, col++) {
+                obs_info->state[row* obs_info->obs_x + 2 * k] = i;
+                obs_info->state[row* obs_info->obs_x + 2 * k + 1] = j + index;
+            }
+            col = es_bound[j];
+        }
 
-		//copy the same to other rows of superstate
-		for ( m = row; m < ss_bound[i]; m++ ) {
-			memcpy( &(obs_info->state[m * obs_info->obs_x * 2]),
-					&(obs_info->state[row * obs_info->obs_x * 2]), obs_info->obs_x * 2 * sizeof(int) );
-		}
+        //copy the same to other rows of superstate
+        for (m = row; m < ss_bound[i]; m++) {
+            memcpy(&(obs_info->state[m * obs_info->obs_x * 2]),
+                   &(obs_info->state[row * obs_info->obs_x * 2]), obs_info->obs_x * 2 * sizeof(int));
+        }
 
-		row = ss_bound[i];
-	}
+        row = ss_bound[i];
+    }
 
 #endif
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 
@@ -348,116 +348,116 @@ icvUniformImgSegm(  CvImgObsInfo* obs_info, CvEHMM* hmm ) {
 //    Notes:
 //F*/
 static CvStatus CV_STDCALL
-icvInitMixSegm( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	int  k, i, j;
-	int* num_samples; /* number of observations in every state */
-	int* counter;     /* array of counters for every state */
+icvInitMixSegm(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    int  k, i, j;
+    int* num_samples; /* number of observations in every state */
+    int* counter;     /* array of counters for every state */
 
-	int**  a_class;   /* for every state - characteristic array */
+    int**  a_class;   /* for every state - characteristic array */
 
-	CvVect32f** samples; /* for every state - pointer to observation vectors */
-	int** *  samples_mix;  /* for every state - array of pointers to vectors mixtures */
+    CvVect32f** samples; /* for every state - pointer to observation vectors */
+    int** *  samples_mix;  /* for every state - array of pointers to vectors mixtures */
 
-	CvTermCriteria criteria = cvTermCriteria( CV_TERMCRIT_EPS | CV_TERMCRIT_ITER,
-							  1000,    /* iter */
-							  0.01f ); /* eps  */
+    CvTermCriteria criteria = cvTermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER,
+                              1000,    /* iter */
+                              0.01f);  /* eps  */
 
-	int total = 0;
+    int total = 0;
 
-	CvEHMMState* first_state = hmm->u.ehmm->u.state;
+    CvEHMMState* first_state = hmm->u.ehmm->u.state;
 
-	for ( i = 0 ; i < hmm->num_states; i++ ) {
-		total += hmm->u.ehmm[i].num_states;
-	}
+    for (i = 0 ; i < hmm->num_states; i++) {
+        total += hmm->u.ehmm[i].num_states;
+    }
 
-	/* for every state integer is allocated - number of vectors in state */
-	num_samples = (int*)cvAlloc( total * sizeof(int) );
+    /* for every state integer is allocated - number of vectors in state */
+    num_samples = (int*)cvAlloc(total * sizeof(int));
 
-	/* integer counter is allocated for every state */
-	counter = (int*)cvAlloc( total * sizeof(int) );
+    /* integer counter is allocated for every state */
+    counter = (int*)cvAlloc(total * sizeof(int));
 
-	samples = (CvVect32f**)cvAlloc( total * sizeof(CvVect32f*) );
-	samples_mix = (int***)cvAlloc( total * sizeof(int**) );
+    samples = (CvVect32f**)cvAlloc(total * sizeof(CvVect32f*));
+    samples_mix = (int***)cvAlloc(total * sizeof(int**));
 
-	/* clear */
-	memset( num_samples, 0 , total * sizeof(int) );
-	memset( counter, 0 , total * sizeof(int) );
+    /* clear */
+    memset(num_samples, 0 , total * sizeof(int));
+    memset(counter, 0 , total * sizeof(int));
 
 
-	/* for every state the number of vectors which belong to it is computed (smth. like histogram) */
-	for (k = 0; k < num_img; k++) {
-		CvImgObsInfo* obs = obs_info_array[k];
-		int count = 0;
+    /* for every state the number of vectors which belong to it is computed (smth. like histogram) */
+    for (k = 0; k < num_img; k++) {
+        CvImgObsInfo* obs = obs_info_array[k];
+        int count = 0;
 
-		for (i = 0; i < obs->obs_y; i++) {
-			for (j = 0; j < obs->obs_x; j++, count++) {
-				int state = obs->state[ 2 * count + 1];
-				num_samples[state] += 1;
-			}
-		}
-	}
+        for (i = 0; i < obs->obs_y; i++) {
+            for (j = 0; j < obs->obs_x; j++, count++) {
+                int state = obs->state[ 2 * count + 1];
+                num_samples[state] += 1;
+            }
+        }
+    }
 
-	/* for every state int* is allocated */
-	a_class = (int**)cvAlloc( total * sizeof(int*) );
+    /* for every state int* is allocated */
+    a_class = (int**)cvAlloc(total * sizeof(int*));
 
-	for (i = 0; i < total; i++) {
-		a_class[i] = (int*)cvAlloc( num_samples[i] * sizeof(int) );
-		samples[i] = (CvVect32f*)cvAlloc( num_samples[i] * sizeof(CvVect32f) );
-		samples_mix[i] = (int**)cvAlloc( num_samples[i] * sizeof(int*) );
-	}
+    for (i = 0; i < total; i++) {
+        a_class[i] = (int*)cvAlloc(num_samples[i] * sizeof(int));
+        samples[i] = (CvVect32f*)cvAlloc(num_samples[i] * sizeof(CvVect32f));
+        samples_mix[i] = (int**)cvAlloc(num_samples[i] * sizeof(int*));
+    }
 
-	/* for every state vectors which belong to state are gathered */
-	for (k = 0; k < num_img; k++) {
-		CvImgObsInfo* obs = obs_info_array[k];
-		int num_obs = ( obs->obs_x ) * ( obs->obs_y );
-		float* vector = obs->obs;
+    /* for every state vectors which belong to state are gathered */
+    for (k = 0; k < num_img; k++) {
+        CvImgObsInfo* obs = obs_info_array[k];
+        int num_obs = (obs->obs_x) * (obs->obs_y);
+        float* vector = obs->obs;
 
-		for (i = 0; i < num_obs; i++, vector += obs->obs_size ) {
-			int state = obs->state[2*i+1];
+        for (i = 0; i < num_obs; i++, vector += obs->obs_size) {
+            int state = obs->state[2*i+1];
 
-			samples[state][counter[state]] = vector;
-			samples_mix[state][counter[state]] = &(obs->mix[i]);
-			counter[state]++;
-		}
-	}
+            samples[state][counter[state]] = vector;
+            samples_mix[state][counter[state]] = &(obs->mix[i]);
+            counter[state]++;
+        }
+    }
 
-	/* clear counters */
-	memset( counter, 0, total * sizeof(int) );
+    /* clear counters */
+    memset(counter, 0, total * sizeof(int));
 
-	/* do the actual clustering using the K Means algorithm */
-	for (i = 0; i < total; i++) {
-		if ( first_state[i].num_mix == 1) {
-			for (k = 0; k < num_samples[i]; k++) {
-				/* all vectors belong to one mixture */
-				a_class[i][k] = 0;
-			}
-		} else if ( num_samples[i] ) {
-			/* clusterize vectors  */
-			cvKMeans( first_state[i].num_mix, samples[i], num_samples[i],
-					  obs_info_array[0]->obs_size, criteria, a_class[i] );
-		}
-	}
+    /* do the actual clustering using the K Means algorithm */
+    for (i = 0; i < total; i++) {
+        if (first_state[i].num_mix == 1) {
+            for (k = 0; k < num_samples[i]; k++) {
+                /* all vectors belong to one mixture */
+                a_class[i][k] = 0;
+            }
+        } else if (num_samples[i]) {
+            /* clusterize vectors  */
+            cvKMeans(first_state[i].num_mix, samples[i], num_samples[i],
+                     obs_info_array[0]->obs_size, criteria, a_class[i]);
+        }
+    }
 
-	/* for every vector number of mixture is assigned */
-	for ( i = 0; i < total; i++ ) {
-		for (j = 0; j < num_samples[i]; j++) {
-			samples_mix[i][j][0] = a_class[i][j];
-		}
-	}
+    /* for every vector number of mixture is assigned */
+    for (i = 0; i < total; i++) {
+        for (j = 0; j < num_samples[i]; j++) {
+            samples_mix[i][j][0] = a_class[i][j];
+        }
+    }
 
-	for (i = 0; i < total; i++) {
-		cvFree( &(a_class[i]) );
-		cvFree( &(samples[i]) );
-		cvFree( &(samples_mix[i]) );
-	}
+    for (i = 0; i < total; i++) {
+        cvFree(&(a_class[i]));
+        cvFree(&(samples[i]));
+        cvFree(&(samples_mix[i]));
+    }
 
-	cvFree( &a_class );
-	cvFree( &samples );
-	cvFree( &samples_mix );
-	cvFree( &counter );
-	cvFree( &num_samples );
+    cvFree(&a_class);
+    cvFree(&samples);
+    cvFree(&samples_mix);
+    cvFree(&counter);
+    cvFree(&num_samples);
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 /*F///////////////////////////////////////////////////////////////////////////////////////
@@ -556,244 +556,244 @@ icvComputeGaussMixture( CvVect32f vect, float* mu,
 //
 //    Notes:
 //F*/
-static CvStatus CV_STDCALL icvEstimateObsProb( CvImgObsInfo* obs_info, CvEHMM* hmm ) {
-	int i, j;
-	int total_states = 0;
+static CvStatus CV_STDCALL icvEstimateObsProb(CvImgObsInfo* obs_info, CvEHMM* hmm) {
+    int i, j;
+    int total_states = 0;
 
-	/* check if matrix exist and check current size
-	   if not sufficient - realloc */
-	int status = 0; /* 1 - not allocated, 2 - allocated but small size,
+    /* check if matrix exist and check current size
+       if not sufficient - realloc */
+    int status = 0; /* 1 - not allocated, 2 - allocated but small size,
                        3 - size is enough, but distribution is bad, 0 - all ok */
 
-	for ( j = 0; j < hmm->num_states; j++ ) {
-		total_states += hmm->u.ehmm[j].num_states;
-	}
+    for (j = 0; j < hmm->num_states; j++) {
+        total_states += hmm->u.ehmm[j].num_states;
+    }
 
-	if ( hmm->obsProb == NULL ) {
-		/* allocare memory */
-		int need_size = ( obs_info->obs_x * obs_info->obs_y * total_states * sizeof(float) +
-						  obs_info->obs_y * hmm->num_states * sizeof( CvMatr32f) );
+    if (hmm->obsProb == NULL) {
+        /* allocare memory */
+        int need_size = (obs_info->obs_x * obs_info->obs_y * total_states * sizeof(float) +
+                         obs_info->obs_y * hmm->num_states * sizeof(CvMatr32f));
 
-		int* buffer = (int*)cvAlloc( need_size + 3 * sizeof(int) );
-		buffer[0] = need_size;
-		buffer[1] = obs_info->obs_y;
-		buffer[2] = obs_info->obs_x;
-		hmm->obsProb = (float**) (buffer + 3);
-		status = 3;
+        int* buffer = (int*)cvAlloc(need_size + 3 * sizeof(int));
+        buffer[0] = need_size;
+        buffer[1] = obs_info->obs_y;
+        buffer[2] = obs_info->obs_x;
+        hmm->obsProb = (float**)(buffer + 3);
+        status = 3;
 
-	} else {
-		/* check current size */
-		int* total = (int*)(((int*)(hmm->obsProb)) - 3);
-		int need_size = ( obs_info->obs_x * obs_info->obs_y * total_states * sizeof(float) +
-						  obs_info->obs_y * hmm->num_states * sizeof( CvMatr32f/*(float*)*/ ) );
+    } else {
+        /* check current size */
+        int* total = (int*)(((int*)(hmm->obsProb)) - 3);
+        int need_size = (obs_info->obs_x * obs_info->obs_y * total_states * sizeof(float) +
+                         obs_info->obs_y * hmm->num_states * sizeof(CvMatr32f/*(float*)*/));
 
-		assert( sizeof(float*) == sizeof(int) );
+        assert(sizeof(float*) == sizeof(int));
 
-		if ( need_size > (*total) ) {
-			int* buffer = ((int*)(hmm->obsProb)) - 3;
-			cvFree( &buffer);
-			buffer = (int*)cvAlloc( need_size + 3 * sizeof(int));
-			buffer[0] = need_size;
-			buffer[1] = obs_info->obs_y;
-			buffer[2] = obs_info->obs_x;
+        if (need_size > (*total)) {
+            int* buffer = ((int*)(hmm->obsProb)) - 3;
+            cvFree(&buffer);
+            buffer = (int*)cvAlloc(need_size + 3 * sizeof(int));
+            buffer[0] = need_size;
+            buffer[1] = obs_info->obs_y;
+            buffer[2] = obs_info->obs_x;
 
-			hmm->obsProb = (float**)(buffer + 3);
+            hmm->obsProb = (float**)(buffer + 3);
 
-			status = 3;
-		}
-	}
-	if (!status) {
-		int* obsx = ((int*)(hmm->obsProb)) - 1;
-		int* obsy = ((int*)(hmm->obsProb)) - 2;
+            status = 3;
+        }
+    }
+    if (!status) {
+        int* obsx = ((int*)(hmm->obsProb)) - 1;
+        int* obsy = ((int*)(hmm->obsProb)) - 2;
 
-		assert( (*obsx > 0) && (*obsy > 0) );
+        assert((*obsx > 0) && (*obsy > 0));
 
-		/* is good distribution? */
-		if ( (obs_info->obs_x > (*obsx) ) || (obs_info->obs_y > (*obsy) ) ) {
-			status = 3;
-		}
-	}
+        /* is good distribution? */
+        if ((obs_info->obs_x > (*obsx)) || (obs_info->obs_y > (*obsy))) {
+            status = 3;
+        }
+    }
 
-	/* if bad status - do reallocation actions */
-	assert( (status == 0) || (status == 3) );
+    /* if bad status - do reallocation actions */
+    assert((status == 0) || (status == 3));
 
-	if ( status ) {
-		float** tmp = hmm->obsProb;
-		float*  tmpf;
+    if (status) {
+        float** tmp = hmm->obsProb;
+        float*  tmpf;
 
-		/* distribute pointers of ehmm->obsProb */
-		for ( i = 0; i < hmm->num_states; i++ ) {
-			hmm->u.ehmm[i].obsProb = tmp;
-			tmp += obs_info->obs_y;
-		}
+        /* distribute pointers of ehmm->obsProb */
+        for (i = 0; i < hmm->num_states; i++) {
+            hmm->u.ehmm[i].obsProb = tmp;
+            tmp += obs_info->obs_y;
+        }
 
-		tmpf = (float*)tmp;
+        tmpf = (float*)tmp;
 
-		/* distribute pointers of ehmm->obsProb[j] */
-		for ( i = 0; i < hmm->num_states; i++ ) {
-			CvEHMM* ehmm = &( hmm->u.ehmm[i] );
+        /* distribute pointers of ehmm->obsProb[j] */
+        for (i = 0; i < hmm->num_states; i++) {
+            CvEHMM* ehmm = &(hmm->u.ehmm[i]);
 
-			for ( j = 0; j < obs_info->obs_y; j++ ) {
-				ehmm->obsProb[j] = tmpf;
-				tmpf += ehmm->num_states * obs_info->obs_x;
-			}
-		}
-	}/* end of pointer distribution */
+            for (j = 0; j < obs_info->obs_y; j++) {
+                ehmm->obsProb[j] = tmpf;
+                tmpf += ehmm->num_states * obs_info->obs_x;
+            }
+        }
+    }/* end of pointer distribution */
 
 #if 1
-	{
+    {
 #define MAX_BUF_SIZE  1200
-		float  local_log_mix_prob[MAX_BUF_SIZE];
-		double local_mix_prob[MAX_BUF_SIZE];
-		int    vect_size = obs_info->obs_size;
-		CvStatus res = CV_NO_ERR;
+        float  local_log_mix_prob[MAX_BUF_SIZE];
+        double local_mix_prob[MAX_BUF_SIZE];
+        int    vect_size = obs_info->obs_size;
+        CvStatus res = CV_NO_ERR;
 
-		float*  log_mix_prob = local_log_mix_prob;
-		double* mix_prob = local_mix_prob;
+        float*  log_mix_prob = local_log_mix_prob;
+        double* mix_prob = local_mix_prob;
 
-		int  max_size = 0;
-		int  obs_x = obs_info->obs_x;
+        int  max_size = 0;
+        int  obs_x = obs_info->obs_x;
 
-		/* calculate temporary buffer size */
-		for ( i = 0; i < hmm->num_states; i++ ) {
-			CvEHMM* ehmm = &(hmm->u.ehmm[i]);
-			CvEHMMState* state = ehmm->u.state;
+        /* calculate temporary buffer size */
+        for (i = 0; i < hmm->num_states; i++) {
+            CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+            CvEHMMState* state = ehmm->u.state;
 
-			int max_mix = 0;
-			for ( j = 0; j < ehmm->num_states; j++ ) {
-				int t = state[j].num_mix;
-				if ( max_mix < t ) { max_mix = t; }
-			}
-			max_mix *= ehmm->num_states;
-			if ( max_size < max_mix ) { max_size = max_mix; }
-		}
+            int max_mix = 0;
+            for (j = 0; j < ehmm->num_states; j++) {
+                int t = state[j].num_mix;
+                if (max_mix < t) { max_mix = t; }
+            }
+            max_mix *= ehmm->num_states;
+            if (max_size < max_mix) { max_size = max_mix; }
+        }
 
-		max_size *= obs_x * vect_size;
+        max_size *= obs_x * vect_size;
 
-		/* allocate buffer */
-		if ( max_size > MAX_BUF_SIZE ) {
-			log_mix_prob = (float*)cvAlloc( max_size * (sizeof(float) + sizeof(double)));
-			if ( !log_mix_prob ) { return CV_OUTOFMEM_ERR; }
-			mix_prob = (double*)(log_mix_prob + max_size);
-		}
+        /* allocate buffer */
+        if (max_size > MAX_BUF_SIZE) {
+            log_mix_prob = (float*)cvAlloc(max_size * (sizeof(float) + sizeof(double)));
+            if (!log_mix_prob) { return CV_OUTOFMEM_ERR; }
+            mix_prob = (double*)(log_mix_prob + max_size);
+        }
 
-		memset( log_mix_prob, 0, max_size * sizeof(float));
+        memset(log_mix_prob, 0, max_size * sizeof(float));
 
-		/*****************computing probabilities***********************/
+        /*****************computing probabilities***********************/
 
-		/* loop through external states */
-		for ( i = 0; i < hmm->num_states; i++ ) {
-			CvEHMM* ehmm = &(hmm->u.ehmm[i]);
-			CvEHMMState* state = ehmm->u.state;
+        /* loop through external states */
+        for (i = 0; i < hmm->num_states; i++) {
+            CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+            CvEHMMState* state = ehmm->u.state;
 
-			int max_mix = 0;
-			int n_states = ehmm->num_states;
+            int max_mix = 0;
+            int n_states = ehmm->num_states;
 
-			/* determine maximal number of mixtures (again) */
-			for ( j = 0; j < ehmm->num_states; j++ ) {
-				int t = state[j].num_mix;
-				if ( max_mix < t ) { max_mix = t; }
-			}
+            /* determine maximal number of mixtures (again) */
+            for (j = 0; j < ehmm->num_states; j++) {
+                int t = state[j].num_mix;
+                if (max_mix < t) { max_mix = t; }
+            }
 
-			/* loop through rows of the observation matrix */
-			for ( j = 0; j < obs_info->obs_y; j++ ) {
-				int  m, n;
+            /* loop through rows of the observation matrix */
+            for (j = 0; j < obs_info->obs_y; j++) {
+                int  m, n;
 
-				float* obs = obs_info->obs + j * obs_x * vect_size;
-				float* log_mp = max_mix > 1 ? log_mix_prob : ehmm->obsProb[j];
-				double* mp = mix_prob;
+                float* obs = obs_info->obs + j * obs_x * vect_size;
+                float* log_mp = max_mix > 1 ? log_mix_prob : ehmm->obsProb[j];
+                double* mp = mix_prob;
 
-				/* several passes are done below */
+                /* several passes are done below */
 
-				/* 1. calculate logarithms of probabilities for each mixture */
+                /* 1. calculate logarithms of probabilities for each mixture */
 
-				/* loop through mixtures */
-				for ( m = 0; m < max_mix; m++ ) {
-					/* set pointer to first observation in the line */
-					float* vect = obs;
+                /* loop through mixtures */
+                for (m = 0; m < max_mix; m++) {
+                    /* set pointer to first observation in the line */
+                    float* vect = obs;
 
-					/* cycles through obseravtions in the line */
-					for ( n = 0; n < obs_x; n++, vect += vect_size, log_mp += n_states ) {
-						int k, l;
-						for ( l = 0; l < n_states; l++ ) {
-							if ( state[l].num_mix > m ) {
-								float* mu = state[l].mu + m * vect_size;
-								float* inv_var = state[l].inv_var + m * vect_size;
-								double prob = -state[l].log_var_val[m];
-								for ( k = 0; k < vect_size; k++ ) {
-									double t = (vect[k] - mu[k]) * inv_var[k];
-									prob -= t * t;
-								}
-								log_mp[l] = MAX( (float)prob, -500 );
-							}
-						}
-					}
-				}
+                    /* cycles through obseravtions in the line */
+                    for (n = 0; n < obs_x; n++, vect += vect_size, log_mp += n_states) {
+                        int k, l;
+                        for (l = 0; l < n_states; l++) {
+                            if (state[l].num_mix > m) {
+                                float* mu = state[l].mu + m * vect_size;
+                                float* inv_var = state[l].inv_var + m * vect_size;
+                                double prob = -state[l].log_var_val[m];
+                                for (k = 0; k < vect_size; k++) {
+                                    double t = (vect[k] - mu[k]) * inv_var[k];
+                                    prob -= t * t;
+                                }
+                                log_mp[l] = MAX((float)prob, -500);
+                            }
+                        }
+                    }
+                }
 
-				/* skip the rest if there is a single mixture */
-				if ( max_mix == 1 ) { continue; }
+                /* skip the rest if there is a single mixture */
+                if (max_mix == 1) { continue; }
 
-				/* 2. calculate exponent of log_mix_prob
-				      (i.e. probability for each mixture) */
-				cvbFastExp( log_mix_prob, mix_prob, max_mix * obs_x * n_states );
+                /* 2. calculate exponent of log_mix_prob
+                      (i.e. probability for each mixture) */
+                cvbFastExp(log_mix_prob, mix_prob, max_mix * obs_x * n_states);
 
-				/* 3. sum all mixtures with weights */
-				/* 3a. first mixture - simply scale by weight */
-				for ( n = 0; n < obs_x; n++, mp += n_states ) {
-					int l;
-					for ( l = 0; l < n_states; l++ ) {
-						mp[l] *= state[l].weight[0];
-					}
-				}
+                /* 3. sum all mixtures with weights */
+                /* 3a. first mixture - simply scale by weight */
+                for (n = 0; n < obs_x; n++, mp += n_states) {
+                    int l;
+                    for (l = 0; l < n_states; l++) {
+                        mp[l] *= state[l].weight[0];
+                    }
+                }
 
-				/* 3b. add other mixtures */
-				for ( m = 1; m < max_mix; m++ ) {
-					int ofs = -m * obs_x * n_states;
-					for ( n = 0; n < obs_x; n++, mp += n_states ) {
-						int l;
-						for ( l = 0; l < n_states; l++ ) {
-							if ( m < state[l].num_mix ) {
-								mp[l + ofs] += mp[l] * state[l].weight[m];
-							}
-						}
-					}
-				}
+                /* 3b. add other mixtures */
+                for (m = 1; m < max_mix; m++) {
+                    int ofs = -m * obs_x * n_states;
+                    for (n = 0; n < obs_x; n++, mp += n_states) {
+                        int l;
+                        for (l = 0; l < n_states; l++) {
+                            if (m < state[l].num_mix) {
+                                mp[l + ofs] += mp[l] * state[l].weight[m];
+                            }
+                        }
+                    }
+                }
 
-				/* 4. Put logarithms of summary probabilities to the destination matrix */
-				cvbFastLog( mix_prob, ehmm->obsProb[j], obs_x * n_states );
-			}
-		}
+                /* 4. Put logarithms of summary probabilities to the destination matrix */
+                cvbFastLog(mix_prob, ehmm->obsProb[j], obs_x * n_states);
+            }
+        }
 
-		if ( log_mix_prob != local_log_mix_prob ) { cvFree( &log_mix_prob ); }
-		return res;
+        if (log_mix_prob != local_log_mix_prob) { cvFree(&log_mix_prob); }
+        return res;
 #undef MAX_BUF_SIZE
-	}
+    }
 #else
-	for ( i = 0; i < hmm->num_states; i++ ) {
-		CvEHMM* ehmm = &(hmm->u.ehmm[i]);
-		CvEHMMState* state = ehmm->u.state;
+    for (i = 0; i < hmm->num_states; i++) {
+        CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+        CvEHMMState* state = ehmm->u.state;
 
-		for ( j = 0; j < obs_info->obs_y; j++ ) {
-			int k, m;
+        for (j = 0; j < obs_info->obs_y; j++) {
+            int k, m;
 
-			int obs_index = j * obs_info->obs_x;
+            int obs_index = j * obs_info->obs_x;
 
-			float* B = ehmm->obsProb[j];
+            float* B = ehmm->obsProb[j];
 
-			/* cycles through obs and states */
-			for ( k = 0; k < obs_info->obs_x; k++ ) {
-				CvVect32f vect = (obs_info->obs) + (obs_index + k) * vect_size;
+            /* cycles through obs and states */
+            for (k = 0; k < obs_info->obs_x; k++) {
+                CvVect32f vect = (obs_info->obs) + (obs_index + k) * vect_size;
 
-				float* matr_line = B + k * ehmm->num_states;
+                float* matr_line = B + k * ehmm->num_states;
 
-				for ( m = 0; m < ehmm->num_states; m++ ) {
-					matr_line[m] = icvComputeGaussMixture( vect, state[m].mu, state[m].inv_var,
-														   state[m].log_var_val, vect_size, state[m].weight,
-														   state[m].num_mix );
-				}
-			}
-		}
-	}
+                for (m = 0; m < ehmm->num_states; m++) {
+                    matr_line[m] = icvComputeGaussMixture(vect, state[m].mu, state[m].inv_var,
+                                                          state[m].log_var_val, vect_size, state[m].weight,
+                                                          state[m].num_mix);
+                }
+            }
+        }
+    }
 #endif
 }
 
@@ -812,93 +812,93 @@ static CvStatus CV_STDCALL icvEstimateObsProb( CvImgObsInfo* obs_info, CvEHMM* h
 //    Notes:
 //F*/
 static CvStatus CV_STDCALL
-icvEstimateTransProb( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	int  i, j, k;
+icvEstimateTransProb(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    int  i, j, k;
 
-	CvEHMMState* first_state = hmm->u.ehmm->u.state;
-	/* as a counter we will use transP matrix */
+    CvEHMMState* first_state = hmm->u.ehmm->u.state;
+    /* as a counter we will use transP matrix */
 
-	/* initialization */
+    /* initialization */
 
-	/* clear transP */
-	icvSetZero_32f( hmm->transP, hmm->num_states, hmm->num_states );
-	for (i = 0; i < hmm->num_states; i++ ) {
-		icvSetZero_32f( hmm->u.ehmm[i].transP , hmm->u.ehmm[i].num_states, hmm->u.ehmm[i].num_states );
-	}
+    /* clear transP */
+    icvSetZero_32f(hmm->transP, hmm->num_states, hmm->num_states);
+    for (i = 0; i < hmm->num_states; i++) {
+        icvSetZero_32f(hmm->u.ehmm[i].transP , hmm->u.ehmm[i].num_states, hmm->u.ehmm[i].num_states);
+    }
 
-	/* compute the counters */
-	for (i = 0; i < num_img; i++) {
-		int counter = 0;
-		CvImgObsInfo* info = obs_info_array[i];
+    /* compute the counters */
+    for (i = 0; i < num_img; i++) {
+        int counter = 0;
+        CvImgObsInfo* info = obs_info_array[i];
 
-		for (j = 0; j < info->obs_y; j++) {
-			for (k = 0; k < info->obs_x; k++, counter++) {
-				/* compute how many transitions from state to state
-				   occured both in horizontal and vertical direction */
-				int superstate, state;
-				int nextsuperstate, nextstate;
-				int begin_ind;
+        for (j = 0; j < info->obs_y; j++) {
+            for (k = 0; k < info->obs_x; k++, counter++) {
+                /* compute how many transitions from state to state
+                   occured both in horizontal and vertical direction */
+                int superstate, state;
+                int nextsuperstate, nextstate;
+                int begin_ind;
 
-				superstate = info->state[2 * counter];
-				begin_ind = (int)(hmm->u.ehmm[superstate].u.state - first_state);
-				state = info->state[ 2 * counter + 1] - begin_ind;
+                superstate = info->state[2 * counter];
+                begin_ind = (int)(hmm->u.ehmm[superstate].u.state - first_state);
+                state = info->state[ 2 * counter + 1] - begin_ind;
 
-				if (j < info->obs_y - 1) {
-					int transP_size = hmm->num_states;
+                if (j < info->obs_y - 1) {
+                    int transP_size = hmm->num_states;
 
-					nextsuperstate = info->state[ 2*(counter + info->obs_x) ];
+                    nextsuperstate = info->state[ 2*(counter + info->obs_x)];
 
-					hmm->transP[superstate* transP_size + nextsuperstate] += 1;
-				}
+                    hmm->transP[superstate* transP_size + nextsuperstate] += 1;
+                }
 
-				if (k < info->obs_x - 1) {
-					int transP_size = hmm->u.ehmm[superstate].num_states;
+                if (k < info->obs_x - 1) {
+                    int transP_size = hmm->u.ehmm[superstate].num_states;
 
-					nextstate = info->state[2*(counter+1) + 1] - begin_ind;
-					hmm->u.ehmm[superstate].transP[ state* transP_size + nextstate] += 1;
-				}
-			}
-		}
-	}
-	/* estimate superstate matrix */
-	for ( i = 0; i < hmm->num_states; i++) {
-		float total = 0;
-		float inv_total;
-		for ( j = 0; j < hmm->num_states; j++) {
-			total += hmm->transP[i * hmm->num_states + j];
-		}
-		//assert( total );
+                    nextstate = info->state[2*(counter+1) + 1] - begin_ind;
+                    hmm->u.ehmm[superstate].transP[ state* transP_size + nextstate] += 1;
+                }
+            }
+        }
+    }
+    /* estimate superstate matrix */
+    for (i = 0; i < hmm->num_states; i++) {
+        float total = 0;
+        float inv_total;
+        for (j = 0; j < hmm->num_states; j++) {
+            total += hmm->transP[i * hmm->num_states + j];
+        }
+        //assert( total );
 
-		inv_total = total ? 1.f / total : 0;
+        inv_total = total ? 1.f / total : 0;
 
-		for ( j = 0; j < hmm->num_states; j++) {
-			hmm->transP[i* hmm->num_states + j] =
-				hmm->transP[i * hmm->num_states + j] ?
-				(float)log( hmm->transP[i * hmm->num_states + j] * inv_total ) : -BIG_FLT;
-		}
-	}
+        for (j = 0; j < hmm->num_states; j++) {
+            hmm->transP[i* hmm->num_states + j] =
+                hmm->transP[i * hmm->num_states + j] ?
+                (float)log(hmm->transP[i * hmm->num_states + j] * inv_total) : -BIG_FLT;
+        }
+    }
 
-	/* estimate other matrices */
-	for ( k = 0; k < hmm->num_states; k++ ) {
-		CvEHMM* ehmm = &(hmm->u.ehmm[k]);
+    /* estimate other matrices */
+    for (k = 0; k < hmm->num_states; k++) {
+        CvEHMM* ehmm = &(hmm->u.ehmm[k]);
 
-		for ( i = 0; i < ehmm->num_states; i++) {
-			float total = 0;
-			float inv_total;
-			for ( j = 0; j < ehmm->num_states; j++) {
-				total += ehmm->transP[i*ehmm->num_states + j];
-			}
-			//assert( total );
-			inv_total = total ? 1.f / total :  0;
+        for (i = 0; i < ehmm->num_states; i++) {
+            float total = 0;
+            float inv_total;
+            for (j = 0; j < ehmm->num_states; j++) {
+                total += ehmm->transP[i*ehmm->num_states + j];
+            }
+            //assert( total );
+            inv_total = total ? 1.f / total :  0;
 
-			for ( j = 0; j < ehmm->num_states; j++) {
-				ehmm->transP[i* ehmm->num_states + j] =
-					(ehmm->transP[i * ehmm->num_states + j]) ?
-					(float)log( ehmm->transP[i * ehmm->num_states + j] * inv_total) : -BIG_FLT ;
-			}
-		}
-	}
-	return CV_NO_ERR;
+            for (j = 0; j < ehmm->num_states; j++) {
+                ehmm->transP[i* ehmm->num_states + j] =
+                    (ehmm->transP[i * ehmm->num_states + j]) ?
+                    (float)log(ehmm->transP[i * ehmm->num_states + j] * inv_total) : -BIG_FLT ;
+            }
+        }
+    }
+    return CV_NO_ERR;
 }
 
 
@@ -917,39 +917,39 @@ icvEstimateTransProb( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) 
 //    Notes:
 //F*/
 static CvStatus CV_STDCALL
-icvMixSegmL2( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	int     k, i, j, m;
+icvMixSegmL2(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    int     k, i, j, m;
 
-	CvEHMMState* state = hmm->u.ehmm[0].u.state;
+    CvEHMMState* state = hmm->u.ehmm[0].u.state;
 
 
-	for (k = 0; k < num_img; k++) {
-		int counter = 0;
-		CvImgObsInfo* info = obs_info_array[k];
+    for (k = 0; k < num_img; k++) {
+        int counter = 0;
+        CvImgObsInfo* info = obs_info_array[k];
 
-		for (i = 0; i < info->obs_y; i++) {
-			for (j = 0; j < info->obs_x; j++, counter++) {
-				int e_state = info->state[2 * counter + 1];
-				float min_dist;
+        for (i = 0; i < info->obs_y; i++) {
+            for (j = 0; j < info->obs_x; j++, counter++) {
+                int e_state = info->state[2 * counter + 1];
+                float min_dist;
 
-				min_dist = icvSquareDistance((info->obs) + (counter * info->obs_size),
-											 state[e_state].mu, info->obs_size);
-				info->mix[counter] = 0;
+                min_dist = icvSquareDistance((info->obs) + (counter * info->obs_size),
+                                             state[e_state].mu, info->obs_size);
+                info->mix[counter] = 0;
 
-				for (m = 1; m < state[e_state].num_mix; m++) {
-					float dist = icvSquareDistance( (info->obs) + (counter * info->obs_size),
-													state[e_state].mu + m * info->obs_size,
-													info->obs_size);
-					if (dist < min_dist) {
-						min_dist = dist;
-						/* assign mixture with smallest distance */
-						info->mix[counter] = m;
-					}
-				}
-			}
-		}
-	}
-	return CV_NO_ERR;
+                for (m = 1; m < state[e_state].num_mix; m++) {
+                    float dist = icvSquareDistance((info->obs) + (counter * info->obs_size),
+                                                   state[e_state].mu + m * info->obs_size,
+                                                   info->obs_size);
+                    if (dist < min_dist) {
+                        min_dist = dist;
+                        /* assign mixture with smallest distance */
+                        info->mix[counter] = m;
+                    }
+                }
+            }
+        }
+    }
+    return CV_NO_ERR;
 }
 
 /*
@@ -999,151 +999,151 @@ CvStatus icvMixSegmProb(CvImgObsInfo* obs_info, int num_img, CvEHMM* hmm )
 }
 */
 static CvStatus CV_STDCALL
-icvViterbiSegmentation( int num_states, int /*num_obs*/, CvMatr32f transP,
-						CvMatr32f B, int start_obs, int prob_type,
-						int** q, int min_num_obs, int max_num_obs,
-						float* prob ) {
-	// memory allocation
-	int i, j, last_obs;
-	int m_HMMType = _CV_ERGODIC; /* _CV_CAUSAL or _CV_ERGODIC */
+icvViterbiSegmentation(int num_states, int /*num_obs*/, CvMatr32f transP,
+                       CvMatr32f B, int start_obs, int prob_type,
+                       int** q, int min_num_obs, int max_num_obs,
+                       float* prob) {
+    // memory allocation
+    int i, j, last_obs;
+    int m_HMMType = _CV_ERGODIC; /* _CV_CAUSAL or _CV_ERGODIC */
 
-	int m_ProbType   = prob_type; /* _CV_LAST_STATE or _CV_BEST_STATE */
+    int m_ProbType   = prob_type; /* _CV_LAST_STATE or _CV_BEST_STATE */
 
-	int m_minNumObs  = min_num_obs; /*??*/
-	int m_maxNumObs  = max_num_obs; /*??*/
+    int m_minNumObs  = min_num_obs; /*??*/
+    int m_maxNumObs  = max_num_obs; /*??*/
 
-	int m_numStates  = num_states;
+    int m_numStates  = num_states;
 
-	float* m_pi = (float*)cvAlloc( num_states * sizeof(float) );
-	CvMatr32f m_a = transP;
+    float* m_pi = (float*)cvAlloc(num_states * sizeof(float));
+    CvMatr32f m_a = transP;
 
-	// offset brobability matrix to starting observation
-	CvMatr32f m_b = B + start_obs * num_states;
-	//so m_xl will not be used more
+    // offset brobability matrix to starting observation
+    CvMatr32f m_b = B + start_obs * num_states;
+    //so m_xl will not be used more
 
-	//m_xl = start_obs;
+    //m_xl = start_obs;
 
-	/*     if (muDur != NULL){
-	m_d = new int[m_numStates];
-	m_l = new double[m_numStates];
-	for (i = 0; i < m_numStates; i++){
-	m_l[i] = muDur[i];
-	}
-	}
-	else{
-	m_d = NULL;
-	m_l = NULL;
-	}
-	*/
+    /*     if (muDur != NULL){
+    m_d = new int[m_numStates];
+    m_l = new double[m_numStates];
+    for (i = 0; i < m_numStates; i++){
+    m_l[i] = muDur[i];
+    }
+    }
+    else{
+    m_d = NULL;
+    m_l = NULL;
+    }
+    */
 
-	CvMatr32f m_Gamma = icvCreateMatrix_32f( num_states, m_maxNumObs );
-	int* m_csi = (int*)cvAlloc( num_states * m_maxNumObs * sizeof(int) );
+    CvMatr32f m_Gamma = icvCreateMatrix_32f(num_states, m_maxNumObs);
+    int* m_csi = (int*)cvAlloc(num_states * m_maxNumObs * sizeof(int));
 
-	//stores maximal result for every ending observation */
-	CvVect32f   m_MaxGamma = prob;
+    //stores maximal result for every ending observation */
+    CvVect32f   m_MaxGamma = prob;
 
 
 //    assert( m_xl + max_num_obs <= num_obs );
 
-	/*??m_q          = new int*[m_maxNumObs - m_minNumObs];
-	  ??for (i = 0; i < m_maxNumObs - m_minNumObs; i++)
-	  ??     m_q[i] = new int[m_minNumObs + i + 1];
-	*/
+    /*??m_q          = new int*[m_maxNumObs - m_minNumObs];
+      ??for (i = 0; i < m_maxNumObs - m_minNumObs; i++)
+      ??     m_q[i] = new int[m_minNumObs + i + 1];
+    */
 
-	/******************************************************************/
-	/*    Viterbi initialization                                      */
-	/* set initial state probabilities, in logarithmic scale */
-	for (i = 0; i < m_numStates; i++) {
-		m_pi[i] = -BIG_FLT;
-	}
-	m_pi[0] = 0.0f;
+    /******************************************************************/
+    /*    Viterbi initialization                                      */
+    /* set initial state probabilities, in logarithmic scale */
+    for (i = 0; i < m_numStates; i++) {
+        m_pi[i] = -BIG_FLT;
+    }
+    m_pi[0] = 0.0f;
 
-	for  (i = 0; i < num_states; i++) {
-		m_Gamma[0 * num_states + i] = m_pi[i] + m_b[0 * num_states + i];
-		m_csi[0 * num_states + i] = 0;
-	}
+    for (i = 0; i < num_states; i++) {
+        m_Gamma[0 * num_states + i] = m_pi[i] + m_b[0 * num_states + i];
+        m_csi[0 * num_states + i] = 0;
+    }
 
-	/******************************************************************/
-	/*    Viterbi recursion                                           */
+    /******************************************************************/
+    /*    Viterbi recursion                                           */
 
-	if ( m_HMMType == _CV_CAUSAL ) { //causal model
-		int t, j;
+    if (m_HMMType == _CV_CAUSAL) {   //causal model
+        int t, j;
 
-		for (t = 1 ; t < m_maxNumObs; t++) {
-			// evaluate self-to-self transition for state 0
-			m_Gamma[t* num_states + 0] = m_Gamma[(t-1) * num_states + 0] + m_a[0];
-			m_csi[t* num_states + 0] = 0;
+        for (t = 1 ; t < m_maxNumObs; t++) {
+            // evaluate self-to-self transition for state 0
+            m_Gamma[t* num_states + 0] = m_Gamma[(t-1) * num_states + 0] + m_a[0];
+            m_csi[t* num_states + 0] = 0;
 
-			for (j = 1; j < num_states; j++) {
-				float self = m_Gamma[ (t-1) * num_states + j] + m_a[ j * num_states + j];
-				float prev = m_Gamma[ (t-1) * num_states +(j-1)] + m_a[ (j-1) * num_states + j];
+            for (j = 1; j < num_states; j++) {
+                float self = m_Gamma[(t-1) * num_states + j] + m_a[ j * num_states + j];
+                float prev = m_Gamma[(t-1) * num_states +(j-1)] + m_a[(j-1) * num_states + j];
 
-				if ( prev > self ) {
-					m_csi[t* num_states + j] = j - 1;
-					m_Gamma[t* num_states + j] = prev;
-				} else {
-					m_csi[t* num_states + j] = j;
-					m_Gamma[t* num_states + j] = self;
-				}
+                if (prev > self) {
+                    m_csi[t* num_states + j] = j - 1;
+                    m_Gamma[t* num_states + j] = prev;
+                } else {
+                    m_csi[t* num_states + j] = j;
+                    m_Gamma[t* num_states + j] = self;
+                }
 
-				m_Gamma[t* num_states + j] = m_Gamma[t * num_states + j] + m_b[t * num_states + j];
-			}
-		}
-	} else if ( m_HMMType == _CV_ERGODIC ) { //ergodic model
-		int t;
-		for (t = 1 ; t < m_maxNumObs; t++) {
-			for (j = 0; j < num_states; j++) {
-				int i;
-				m_Gamma[ t* num_states + j] = m_Gamma[(t-1) * num_states + 0] + m_a[0*num_states+j];
-				m_csi[t* num_states + j] = 0;
+                m_Gamma[t* num_states + j] = m_Gamma[t * num_states + j] + m_b[t * num_states + j];
+            }
+        }
+    } else if (m_HMMType == _CV_ERGODIC) {   //ergodic model
+        int t;
+        for (t = 1 ; t < m_maxNumObs; t++) {
+            for (j = 0; j < num_states; j++) {
+                int i;
+                m_Gamma[ t* num_states + j] = m_Gamma[(t-1) * num_states + 0] + m_a[0*num_states+j];
+                m_csi[t* num_states + j] = 0;
 
-				for (i = 1; i < num_states; i++) {
-					float currGamma = m_Gamma[(t-1) *num_states + i] + m_a[i *num_states + j];
-					if (currGamma > m_Gamma[t *num_states + j]) {
-						m_Gamma[t* num_states + j] = currGamma;
-						m_csi[t* num_states + j] = i;
-					}
-				}
-				m_Gamma[t* num_states + j] = m_Gamma[t *num_states + j] + m_b[t * num_states + j];
-			}
-		}
-	}
+                for (i = 1; i < num_states; i++) {
+                    float currGamma = m_Gamma[(t-1) *num_states + i] + m_a[i *num_states + j];
+                    if (currGamma > m_Gamma[t *num_states + j]) {
+                        m_Gamma[t* num_states + j] = currGamma;
+                        m_csi[t* num_states + j] = i;
+                    }
+                }
+                m_Gamma[t* num_states + j] = m_Gamma[t *num_states + j] + m_b[t * num_states + j];
+            }
+        }
+    }
 
-	for ( last_obs = m_minNumObs - 1, i = 0; last_obs < m_maxNumObs; last_obs++, i++ ) {
-		int t;
+    for (last_obs = m_minNumObs - 1, i = 0; last_obs < m_maxNumObs; last_obs++, i++) {
+        int t;
 
-		/******************************************************************/
-		/*    Viterbi termination                                         */
+        /******************************************************************/
+        /*    Viterbi termination                                         */
 
-		if ( m_ProbType == _CV_LAST_STATE ) {
-			m_MaxGamma[i] = m_Gamma[last_obs * num_states + num_states - 1];
-			q[i][last_obs] = num_states - 1;
-		} else if ( m_ProbType == _CV_BEST_STATE ) {
-			int k;
-			q[i][last_obs] = 0;
-			m_MaxGamma[i] = m_Gamma[last_obs * num_states + 0];
+        if (m_ProbType == _CV_LAST_STATE) {
+            m_MaxGamma[i] = m_Gamma[last_obs * num_states + num_states - 1];
+            q[i][last_obs] = num_states - 1;
+        } else if (m_ProbType == _CV_BEST_STATE) {
+            int k;
+            q[i][last_obs] = 0;
+            m_MaxGamma[i] = m_Gamma[last_obs * num_states + 0];
 
-			for (k = 1; k < num_states; k++) {
-				if ( m_Gamma[last_obs * num_states + k] > m_MaxGamma[i] ) {
-					m_MaxGamma[i] = m_Gamma[last_obs * num_states + k];
-					q[i][last_obs] = k;
-				}
-			}
-		}
+            for (k = 1; k < num_states; k++) {
+                if (m_Gamma[last_obs * num_states + k] > m_MaxGamma[i]) {
+                    m_MaxGamma[i] = m_Gamma[last_obs * num_states + k];
+                    q[i][last_obs] = k;
+                }
+            }
+        }
 
-		/******************************************************************/
-		/*    Viterbi backtracking                                        */
-		for  (t = last_obs - 1; t >= 0; t--) {
-			q[i][t] = m_csi[(t+1) * num_states + q[i][t+1] ];
-		}
-	}
+        /******************************************************************/
+        /*    Viterbi backtracking                                        */
+        for (t = last_obs - 1; t >= 0; t--) {
+            q[i][t] = m_csi[(t+1) * num_states + q[i][t+1] ];
+        }
+    }
 
-	/* memory free */
-	cvFree( &m_pi );
-	cvFree( &m_csi );
-	icvDeleteMatrix( m_Gamma );
+    /* memory free */
+    cvFree(&m_pi);
+    cvFree(&m_csi);
+    icvDeleteMatrix(m_Gamma);
 
-	return CV_NO_ERR;
+    return CV_NO_ERR;
 }
 
 /*F///////////////////////////////////////////////////////////////////////////////////////
@@ -1160,222 +1160,222 @@ icvViterbiSegmentation( int num_states, int /*num_obs*/, CvMatr32f transP,
 //
 //    Notes:
 //F*/
-static float CV_STDCALL icvEViterbi( CvImgObsInfo* obs_info, CvEHMM* hmm ) {
-	int    i, j, counter;
-	float  log_likelihood;
+static float CV_STDCALL icvEViterbi(CvImgObsInfo* obs_info, CvEHMM* hmm) {
+    int    i, j, counter;
+    float  log_likelihood;
 
-	float inv_obs_x = 1.f / obs_info->obs_x;
+    float inv_obs_x = 1.f / obs_info->obs_x;
 
-	CvEHMMState* first_state = hmm->u.ehmm->u.state;
+    CvEHMMState* first_state = hmm->u.ehmm->u.state;
 
-	/* memory allocation for superB */
-	CvMatr32f superB = icvCreateMatrix_32f(hmm->num_states, obs_info->obs_y );
+    /* memory allocation for superB */
+    CvMatr32f superB = icvCreateMatrix_32f(hmm->num_states, obs_info->obs_y);
 
-	/* memory allocation for q */
-	int** * q = (int***)cvAlloc( hmm->num_states * sizeof(int**) );
-	int* super_q = (int*)cvAlloc( obs_info->obs_y * sizeof(int) );
+    /* memory allocation for q */
+    int** * q = (int***)cvAlloc(hmm->num_states * sizeof(int**));
+    int* super_q = (int*)cvAlloc(obs_info->obs_y * sizeof(int));
 
-	for (i = 0; i < hmm->num_states; i++) {
-		q[i] = (int**)cvAlloc( obs_info->obs_y * sizeof(int*) );
+    for (i = 0; i < hmm->num_states; i++) {
+        q[i] = (int**)cvAlloc(obs_info->obs_y * sizeof(int*));
 
-		for (j = 0; j < obs_info->obs_y ; j++) {
-			q[i][j] = (int*)cvAlloc( obs_info->obs_x * sizeof(int) );
-		}
-	}
+        for (j = 0; j < obs_info->obs_y ; j++) {
+            q[i][j] = (int*)cvAlloc(obs_info->obs_x * sizeof(int));
+        }
+    }
 
-	/* start Viterbi segmentation */
-	for (i = 0; i < hmm->num_states; i++) {
-		CvEHMM* ehmm = &(hmm->u.ehmm[i]);
+    /* start Viterbi segmentation */
+    for (i = 0; i < hmm->num_states; i++) {
+        CvEHMM* ehmm = &(hmm->u.ehmm[i]);
 
-		for (j = 0; j < obs_info->obs_y; j++) {
-			float max_gamma;
+        for (j = 0; j < obs_info->obs_y; j++) {
+            float max_gamma;
 
-			/* 1D HMM Viterbi segmentation */
-			icvViterbiSegmentation( ehmm->num_states, obs_info->obs_x,
-									ehmm->transP, ehmm->obsProb[j], 0,
-									_CV_LAST_STATE, &q[i][j], obs_info->obs_x,
-									obs_info->obs_x, &max_gamma);
+            /* 1D HMM Viterbi segmentation */
+            icvViterbiSegmentation(ehmm->num_states, obs_info->obs_x,
+                                   ehmm->transP, ehmm->obsProb[j], 0,
+                                   _CV_LAST_STATE, &q[i][j], obs_info->obs_x,
+                                   obs_info->obs_x, &max_gamma);
 
-			superB[j* hmm->num_states + i] = max_gamma * inv_obs_x;
-		}
-	}
+            superB[j* hmm->num_states + i] = max_gamma * inv_obs_x;
+        }
+    }
 
-	/* perform global Viterbi segmentation (i.e. process higher-level HMM) */
+    /* perform global Viterbi segmentation (i.e. process higher-level HMM) */
 
-	icvViterbiSegmentation( hmm->num_states, obs_info->obs_y,
-							hmm->transP, superB, 0,
-							_CV_LAST_STATE, &super_q, obs_info->obs_y,
-							obs_info->obs_y, &log_likelihood );
+    icvViterbiSegmentation(hmm->num_states, obs_info->obs_y,
+                           hmm->transP, superB, 0,
+                           _CV_LAST_STATE, &super_q, obs_info->obs_y,
+                           obs_info->obs_y, &log_likelihood);
 
-	log_likelihood /= obs_info->obs_y ;
+    log_likelihood /= obs_info->obs_y ;
 
 
-	counter = 0;
-	/* assign new state to observation vectors */
-	for (i = 0; i < obs_info->obs_y; i++) {
-		for (j = 0; j < obs_info->obs_x; j++, counter++) {
-			int superstate = super_q[i];
-			int state = (int)(hmm->u.ehmm[superstate].u.state - first_state);
+    counter = 0;
+    /* assign new state to observation vectors */
+    for (i = 0; i < obs_info->obs_y; i++) {
+        for (j = 0; j < obs_info->obs_x; j++, counter++) {
+            int superstate = super_q[i];
+            int state = (int)(hmm->u.ehmm[superstate].u.state - first_state);
 
-			obs_info->state[2 * counter] = superstate;
-			obs_info->state[2 * counter + 1] = state + q[superstate][i][j];
-		}
-	}
+            obs_info->state[2 * counter] = superstate;
+            obs_info->state[2 * counter + 1] = state + q[superstate][i][j];
+        }
+    }
 
-	/* memory deallocation for superB */
-	icvDeleteMatrix( superB );
+    /* memory deallocation for superB */
+    icvDeleteMatrix(superB);
 
-	/*memory deallocation for q */
-	for (i = 0; i < hmm->num_states; i++) {
-		for (j = 0; j < obs_info->obs_y ; j++) {
-			cvFree( &q[i][j] );
-		}
-		cvFree( &q[i] );
-	}
+    /*memory deallocation for q */
+    for (i = 0; i < hmm->num_states; i++) {
+        for (j = 0; j < obs_info->obs_y ; j++) {
+            cvFree(&q[i][j]);
+        }
+        cvFree(&q[i]);
+    }
 
-	cvFree( &q );
-	cvFree( &super_q );
+    cvFree(&q);
+    cvFree(&super_q);
 
-	return log_likelihood;
+    return log_likelihood;
 }
 
 static CvStatus CV_STDCALL
-icvEstimateHMMStateParams( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	/* compute gamma, weights, means, vars */
-	int k, i, j, m;
-	int total = 0;
-	int vect_len = obs_info_array[0]->obs_size;
+icvEstimateHMMStateParams(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    /* compute gamma, weights, means, vars */
+    int k, i, j, m;
+    int total = 0;
+    int vect_len = obs_info_array[0]->obs_size;
 
-	float start_log_var_val = LN2PI * vect_len;
+    float start_log_var_val = LN2PI * vect_len;
 
-	CvVect32f tmp_vect = icvCreateVector_32f( vect_len );
+    CvVect32f tmp_vect = icvCreateVector_32f(vect_len);
 
-	CvEHMMState* first_state = hmm->u.ehmm[0].u.state;
+    CvEHMMState* first_state = hmm->u.ehmm[0].u.state;
 
-	assert( sizeof(float) == sizeof(int) );
+    assert(sizeof(float) == sizeof(int));
 
-	for (i = 0; i < hmm->num_states; i++ ) {
-		total += hmm->u.ehmm[i].num_states;
-	}
+    for (i = 0; i < hmm->num_states; i++) {
+        total += hmm->u.ehmm[i].num_states;
+    }
 
-	/***************Gamma***********************/
-	/* initialize gamma */
-	for ( i = 0; i < total; i++ ) {
-		for (m = 0; m < first_state[i].num_mix; m++) {
-			((int*)(first_state[i].weight))[m] = 0;
-		}
-	}
+    /***************Gamma***********************/
+    /* initialize gamma */
+    for (i = 0; i < total; i++) {
+        for (m = 0; m < first_state[i].num_mix; m++) {
+            ((int*)(first_state[i].weight))[m] = 0;
+        }
+    }
 
-	/* maybe gamma must be computed in mixsegm process ?? */
+    /* maybe gamma must be computed in mixsegm process ?? */
 
-	/* compute gamma */
-	for (k = 0; k < num_img; k++) {
-		CvImgObsInfo* info = obs_info_array[k];
-		int num_obs = info->obs_y * info->obs_x;
+    /* compute gamma */
+    for (k = 0; k < num_img; k++) {
+        CvImgObsInfo* info = obs_info_array[k];
+        int num_obs = info->obs_y * info->obs_x;
 
-		for (i = 0; i < num_obs; i++) {
-			int state, mixture;
-			state = info->state[2*i + 1];
-			mixture = info->mix[i];
-			/* computes gamma - number of observations corresponding
-			   to every mixture of every state */
-			((int*)(first_state[state].weight))[mixture] += 1;
-		}
-	}
-	/***************Mean and Var***********************/
-	/* compute means and variances of every item */
-	/* initially variance placed to inv_var */
-	/* zero mean and variance */
-	for (i = 0; i < total; i++) {
-		memset( (void*)first_state[i].mu, 0, first_state[i].num_mix * vect_len *
-				sizeof(float) );
-		memset( (void*)first_state[i].inv_var, 0, first_state[i].num_mix * vect_len *
-				sizeof(float) );
-	}
+        for (i = 0; i < num_obs; i++) {
+            int state, mixture;
+            state = info->state[2*i + 1];
+            mixture = info->mix[i];
+            /* computes gamma - number of observations corresponding
+               to every mixture of every state */
+            ((int*)(first_state[state].weight))[mixture] += 1;
+        }
+    }
+    /***************Mean and Var***********************/
+    /* compute means and variances of every item */
+    /* initially variance placed to inv_var */
+    /* zero mean and variance */
+    for (i = 0; i < total; i++) {
+        memset((void*)first_state[i].mu, 0, first_state[i].num_mix * vect_len *
+               sizeof(float));
+        memset((void*)first_state[i].inv_var, 0, first_state[i].num_mix * vect_len *
+               sizeof(float));
+    }
 
-	/* compute sums */
-	for (i = 0; i < num_img; i++) {
-		CvImgObsInfo* info = obs_info_array[i];
-		int total_obs = info->obs_x * info->obs_y;
+    /* compute sums */
+    for (i = 0; i < num_img; i++) {
+        CvImgObsInfo* info = obs_info_array[i];
+        int total_obs = info->obs_x * info->obs_y;
 
-		float* vector = info->obs;
+        float* vector = info->obs;
 
-		for (j = 0; j < total_obs; j++, vector += vect_len ) {
-			int state = info->state[2 * j + 1];
-			int mixture = info->mix[j];
+        for (j = 0; j < total_obs; j++, vector += vect_len) {
+            int state = info->state[2 * j + 1];
+            int mixture = info->mix[j];
 
-			CvVect32f mean  = first_state[state].mu + mixture * vect_len;
-			CvVect32f mean2 = first_state[state].inv_var + mixture * vect_len;
+            CvVect32f mean  = first_state[state].mu + mixture * vect_len;
+            CvVect32f mean2 = first_state[state].inv_var + mixture * vect_len;
 
-			icvAddVector_32f( mean, vector, mean, vect_len );
-			for ( k = 0; k < vect_len; k++ ) {
-				mean2[k] += vector[k] * vector[k];
-			}
-		}
-	}
+            icvAddVector_32f(mean, vector, mean, vect_len);
+            for (k = 0; k < vect_len; k++) {
+                mean2[k] += vector[k] * vector[k];
+            }
+        }
+    }
 
-	/*compute the means and variances */
-	/* assume gamma already computed */
-	for (i = 0; i < total; i++) {
-		CvEHMMState* state = &(first_state[i]);
+    /*compute the means and variances */
+    /* assume gamma already computed */
+    for (i = 0; i < total; i++) {
+        CvEHMMState* state = &(first_state[i]);
 
-		for (m = 0; m < state->num_mix; m++) {
-			int k;
-			CvVect32f mu  = state->mu + m * vect_len;
-			CvVect32f invar = state->inv_var + m * vect_len;
+        for (m = 0; m < state->num_mix; m++) {
+            int k;
+            CvVect32f mu  = state->mu + m * vect_len;
+            CvVect32f invar = state->inv_var + m * vect_len;
 
-			if ( ((int*)state->weight)[m] > 1) {
-				float inv_gamma = 1.f / ((int*)(state->weight))[m];
+            if (((int*)state->weight)[m] > 1) {
+                float inv_gamma = 1.f / ((int*)(state->weight))[m];
 
-				icvScaleVector_32f( mu, mu, vect_len, inv_gamma);
-				icvScaleVector_32f( invar, invar, vect_len, inv_gamma);
-			}
+                icvScaleVector_32f(mu, mu, vect_len, inv_gamma);
+                icvScaleVector_32f(invar, invar, vect_len, inv_gamma);
+            }
 
-			icvMulVectors_32f(mu, mu, tmp_vect, vect_len);
-			icvSubVector_32f( invar, tmp_vect, invar, vect_len);
+            icvMulVectors_32f(mu, mu, tmp_vect, vect_len);
+            icvSubVector_32f(invar, tmp_vect, invar, vect_len);
 
-			/* low bound of variance - 100 (Ara's experimental result) */
-			for ( k = 0; k < vect_len; k++ ) {
-				invar[k] = (invar[k] > 100.f) ? invar[k] : 100.f;
-			}
+            /* low bound of variance - 100 (Ara's experimental result) */
+            for (k = 0; k < vect_len; k++) {
+                invar[k] = (invar[k] > 100.f) ? invar[k] : 100.f;
+            }
 
-			/* compute log_var */
-			state->log_var_val[m] = start_log_var_val;
-			for ( k = 0; k < vect_len; k++ ) {
-				state->log_var_val[m] += (float)log( invar[k] );
-			}
+            /* compute log_var */
+            state->log_var_val[m] = start_log_var_val;
+            for (k = 0; k < vect_len; k++) {
+                state->log_var_val[m] += (float)log(invar[k]);
+            }
 
-			/* SMOLI 27.10.2000 */
-			state->log_var_val[m] *= 0.5;
+            /* SMOLI 27.10.2000 */
+            state->log_var_val[m] *= 0.5;
 
 
-			/* compute inv_var = 1/sqrt(2*variance) */
-			icvScaleVector_32f(invar, invar, vect_len, 2.f );
-			cvbInvSqrt( invar, invar, vect_len );
-		}
-	}
+            /* compute inv_var = 1/sqrt(2*variance) */
+            icvScaleVector_32f(invar, invar, vect_len, 2.f);
+            cvbInvSqrt(invar, invar, vect_len);
+        }
+    }
 
-	/***************Weights***********************/
-	/* normilize gammas - i.e. compute mixture weights */
+    /***************Weights***********************/
+    /* normilize gammas - i.e. compute mixture weights */
 
-	//compute weights
-	for (i = 0; i < total; i++) {
-		int gamma_total = 0;
-		float norm;
+    //compute weights
+    for (i = 0; i < total; i++) {
+        int gamma_total = 0;
+        float norm;
 
-		for (m = 0; m < first_state[i].num_mix; m++) {
-			gamma_total += ((int*)(first_state[i].weight))[m];
-		}
+        for (m = 0; m < first_state[i].num_mix; m++) {
+            gamma_total += ((int*)(first_state[i].weight))[m];
+        }
 
-		norm = gamma_total ? (1.f / (float)gamma_total) : 0.f;
+        norm = gamma_total ? (1.f / (float)gamma_total) : 0.f;
 
-		for (m = 0; m < first_state[i].num_mix; m++) {
-			first_state[i].weight[m] = ((int*)(first_state[i].weight))[m] * norm;
-		}
-	}
+        for (m = 0; m < first_state[i].num_mix; m++) {
+            first_state[i].weight[m] = ((int*)(first_state[i].weight))[m] * norm;
+        }
+    }
 
-	icvDeleteVector( tmp_vect);
-	return CV_NO_ERR;
+    icvDeleteVector(tmp_vect);
+    return CV_NO_ERR;
 }
 
 /*
@@ -1480,71 +1480,71 @@ CvStatus icvLightingCorrection( icvImage* img )
 */
 
 CV_IMPL CvEHMM*
-cvCreate2DHMM( int* state_number, int* num_mix, int obs_size ) {
-	CvEHMM* hmm = 0;
+cvCreate2DHMM(int* state_number, int* num_mix, int obs_size) {
+    CvEHMM* hmm = 0;
 
-	IPPI_CALL( icvCreate2DHMM( &hmm, state_number, num_mix, obs_size ));
+    IPPI_CALL(icvCreate2DHMM(&hmm, state_number, num_mix, obs_size));
 
-	return hmm;
+    return hmm;
 }
 
 CV_IMPL void
-cvRelease2DHMM( CvEHMM** hmm ) {
-	IPPI_CALL( icvRelease2DHMM( hmm ));
+cvRelease2DHMM(CvEHMM** hmm) {
+    IPPI_CALL(icvRelease2DHMM(hmm));
 }
 
 CV_IMPL CvImgObsInfo*
-cvCreateObsInfo( CvSize num_obs, int obs_size ) {
-	CvImgObsInfo* obs_info = 0;
+cvCreateObsInfo(CvSize num_obs, int obs_size) {
+    CvImgObsInfo* obs_info = 0;
 
-	IPPI_CALL( icvCreateObsInfo( &obs_info, num_obs, obs_size ));
+    IPPI_CALL(icvCreateObsInfo(&obs_info, num_obs, obs_size));
 
-	return obs_info;
+    return obs_info;
 }
 
 CV_IMPL void
-cvReleaseObsInfo( CvImgObsInfo** obs_info ) {
-	IPPI_CALL( icvReleaseObsInfo( obs_info ));
+cvReleaseObsInfo(CvImgObsInfo** obs_info) {
+    IPPI_CALL(icvReleaseObsInfo(obs_info));
 }
 
 
 CV_IMPL void
-cvUniformImgSegm( CvImgObsInfo* obs_info, CvEHMM* hmm ) {
-	IPPI_CALL( icvUniformImgSegm( obs_info, hmm ));
+cvUniformImgSegm(CvImgObsInfo* obs_info, CvEHMM* hmm) {
+    IPPI_CALL(icvUniformImgSegm(obs_info, hmm));
 }
 
 CV_IMPL void
-cvInitMixSegm( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	IPPI_CALL( icvInitMixSegm( obs_info_array, num_img, hmm ));
+cvInitMixSegm(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    IPPI_CALL(icvInitMixSegm(obs_info_array, num_img, hmm));
 }
 
 CV_IMPL void
-cvEstimateHMMStateParams( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	IPPI_CALL( icvEstimateHMMStateParams( obs_info_array, num_img, hmm ));
+cvEstimateHMMStateParams(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    IPPI_CALL(icvEstimateHMMStateParams(obs_info_array, num_img, hmm));
 }
 
 CV_IMPL void
-cvEstimateTransProb( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	IPPI_CALL( icvEstimateTransProb( obs_info_array, num_img, hmm ));
+cvEstimateTransProb(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    IPPI_CALL(icvEstimateTransProb(obs_info_array, num_img, hmm));
 }
 
 CV_IMPL void
-cvEstimateObsProb( CvImgObsInfo* obs_info, CvEHMM* hmm ) {
-	IPPI_CALL( icvEstimateObsProb( obs_info, hmm ));
+cvEstimateObsProb(CvImgObsInfo* obs_info, CvEHMM* hmm) {
+    IPPI_CALL(icvEstimateObsProb(obs_info, hmm));
 }
 
 CV_IMPL float
-cvEViterbi( CvImgObsInfo* obs_info, CvEHMM* hmm ) {
-	if ( (obs_info == NULL) || (hmm == NULL) ) {
-		CV_Error( CV_BadDataPtr, "Null pointer." );
-	}
+cvEViterbi(CvImgObsInfo* obs_info, CvEHMM* hmm) {
+    if ((obs_info == NULL) || (hmm == NULL)) {
+        CV_Error(CV_BadDataPtr, "Null pointer.");
+    }
 
-	return icvEViterbi( obs_info, hmm );
+    return icvEViterbi(obs_info, hmm);
 }
 
 CV_IMPL void
-cvMixSegmL2( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm ) {
-	IPPI_CALL( icvMixSegmL2( obs_info_array, num_img, hmm ));
+cvMixSegmL2(CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm) {
+    IPPI_CALL(icvMixSegmL2(obs_info_array, num_img, hmm));
 }
 
 /* End of file */

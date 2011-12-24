@@ -116,7 +116,7 @@ bool  BmpDecoder::readHeader() {
                     if (bluemask == 0x1f && greenmask == 0x3e0 && redmask == 0x7c00) {
                         m_bpp = 15;
                     } else if (bluemask == 0x1f && greenmask == 0x7e0 && redmask == 0xf800)
-                        { ; }
+                        ;
                     else {
                         result = false;
                     }
@@ -134,13 +134,13 @@ bool  BmpDecoder::readHeader() {
                     (m_bpp == 1 || m_bpp == 4 || m_bpp == 8 ||
                      m_bpp == 24 || m_bpp == 32)) {
                 if (m_bpp <= 8) {
-                    uchar buffer[256 * 3];
+                    uchar buffer[256*3];
                     int j, clrused = 1 << m_bpp;
                     m_strm.getBytes(buffer, clrused * 3);
                     for (j = 0; j < clrused; j++) {
-                        m_palette[j].b = buffer[3 * j + 0];
-                        m_palette[j].g = buffer[3 * j + 1];
-                        m_palette[j].r = buffer[3 * j + 2];
+                        m_palette[j].b = buffer[3*j+0];
+                        m_palette[j].g = buffer[3*j+1];
+                        m_palette[j].r = buffer[3*j+2];
                     }
                 }
                 result = true;

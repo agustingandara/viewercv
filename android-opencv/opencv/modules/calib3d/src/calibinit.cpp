@@ -359,7 +359,7 @@ int cvFindChessboardCorners(const void* arr, CvSize pattern_size,
                         CvPoint2D32f pt1, pt2;
                         CvScalar color = CV_RGB(30, 255, 30);
                         pt1 = quads[i].corners[k]->pt;
-                        pt2 = quads[i].corners[(k + 1) % 4]->pt;
+                        pt2 = quads[i].corners[(k+1)%4]->pt;
                         pt2.x = (pt1.x + pt2.x) / 2;
                         pt2.y = (pt1.y + pt2.y) / 2;
                         if (k > 0) {
@@ -417,7 +417,7 @@ int cvFindChessboardCorners(const void* arr, CvSize pattern_size,
                                     color = CV_RGB(255, 30, 30);
                                 }
                                 pt1 = quads[i].corners[k]->pt;
-                                pt2 = quads[i].corners[(k + 1) % 4]->pt;
+                                pt2 = quads[i].corners[(k+1)%4]->pt;
                                 pt2.x = (pt1.x + pt2.x) / 2;
                                 pt2.y = (pt1.y + pt2.y) / 2;
                                 if (k > 0) {
@@ -502,7 +502,7 @@ int cvFindChessboardCorners(const void* arr, CvSize pattern_size,
                 int i, n = pattern_size.width * pattern_size.height;
                 for (i = 0; i < n / 2; i++) {
                     CvPoint2D32f temp;
-                    CV_SWAP(out_corners[i], out_corners[n - i - 1], temp);
+                    CV_SWAP(out_corners[i], out_corners[n-i-1], temp);
                 }
             }
         }
@@ -551,16 +551,16 @@ icvCheckBoardMonotony(CvPoint2D32f* corners, CvSize pattern_size) {
 
     for (k = 0; k < 2; k++) {
         for (i = 0; i < (k == 0 ? pattern_size.height : pattern_size.width); i++) {
-            CvPoint2D32f a = k == 0 ? corners[i * pattern_size.width] : corners[i];
-            CvPoint2D32f b = k == 0 ? corners[(i + 1) * pattern_size.width - 1] :
-                             corners[(pattern_size.height - 1) * pattern_size.width + i];
+            CvPoint2D32f a = k == 0 ? corners[i*pattern_size.width] : corners[i];
+            CvPoint2D32f b = k == 0 ? corners[(i+1)*pattern_size.width-1] :
+                             corners[(pattern_size.height-1)*pattern_size.width + i];
             float prevt = 0, dx0 = b.x - a.x, dy0 = b.y - a.y;
             if (fabs(dx0) + fabs(dy0) < FLT_EPSILON) {
                 return 0;
             }
             for (j = 1; j < (k == 0 ? pattern_size.width : pattern_size.height) - 1; j++) {
-                CvPoint2D32f c = k == 0 ? corners[i * pattern_size.width + j] :
-                                 corners[j * pattern_size.width + i];
+                CvPoint2D32f c = k == 0 ? corners[i*pattern_size.width + j] :
+                                 corners[j*pattern_size.width + i];
                 float t = ((c.x - a.x) * dx0 + (c.y - a.y) * dy0) / (dx0 * dx0 + dy0 * dy0);
                 if (t < prevt || t > 1) {
                     return 0;
@@ -827,7 +827,7 @@ icvAddOuterQuad(CvCBQuad* quad, CvCBQuad** quads, int quad_count,
             float dx = pt.x - quad->corners[j]->pt.x;
             float dy = pt.y - quad->corners[j]->pt.y;
             for (int k = 0; k < 4; k++) {
-                corner = &(*corners)[all_count * 4 + k];
+                corner = &(*corners)[all_count*4+k];
                 pt = quad->corners[k]->pt;
                 memset(corner, 0, sizeof(*corner));
                 corner->pt = pt;
@@ -839,17 +839,17 @@ icvAddOuterQuad(CvCBQuad* quad, CvCBQuad** quads, int quad_count,
             q->corners[j] = quad->corners[i];
 
             // now find other neighbor and add it, if possible
-            if (quad->neighbors[(i + 3) % 4] &&
-                    quad->neighbors[(i + 3) % 4]->ordered &&
-                    quad->neighbors[(i + 3) % 4]->neighbors[i] &&
-                    quad->neighbors[(i + 3) % 4]->neighbors[i]->ordered) {
-                CvCBQuad* qn = quad->neighbors[(i + 3) % 4]->neighbors[i];
+            if (quad->neighbors[(i+3)%4] &&
+                    quad->neighbors[(i+3)%4]->ordered &&
+                    quad->neighbors[(i+3)%4]->neighbors[i] &&
+                    quad->neighbors[(i+3)%4]->neighbors[i]->ordered) {
+                CvCBQuad* qn = quad->neighbors[(i+3)%4]->neighbors[i];
                 q->count = 2;
-                q->neighbors[(j + 1) % 4] = qn;
-                qn->neighbors[(i + 1) % 4] = q;
+                q->neighbors[(j+1)%4] = qn;
+                qn->neighbors[(i+1)%4] = q;
                 qn->count += 1;
                 // have to set exact corner
-                q->corners[(j + 1) % 4] = qn->corners[(i + 1) % 4];
+                q->corners[(j+1)%4] = qn->corners[(i+1)%4];
             }
 
             all_count++;
@@ -963,7 +963,7 @@ icvRemoveQuadFromGroup(CvCBQuad** quads, int count, CvCBQuad* q0) {
     for (i = 0; i < count; i++) {
         CvCBQuad* q = quads[i];
         if (q == q0) {
-            quads[i] = quads[count - 1];
+            quads[i] = quads[count-1];
             break;
         }
     }
@@ -992,8 +992,8 @@ icvOrderQuad(CvCBQuad* quad, CvCBCorner* corner, int common) {
         tempc = quad->corners[3];
         tempq = quad->neighbors[3];
         for (int i = 3; i > 0; i--) {
-            quad->corners[i] = quad->corners[i - 1];
-            quad->neighbors[i] = quad->neighbors[i - 1];
+            quad->corners[i] = quad->corners[i-1];
+            quad->neighbors[i] = quad->neighbors[i-1];
         }
         quad->corners[0] = tempc;
         quad->neighbors[0] = tempq;
@@ -1172,7 +1172,7 @@ icvCheckQuadGroup(CvCBQuad** quad_group, int quad_count,
         for (j = 0; j < 4; j++) {
             //cvLine( debug_img, cvPointFrom32f(q->corners[j]->pt), cvPointFrom32f(q->corners[(j+1)&3]->pt), color, 1, CV_AA, 0 );
             if (q->neighbors[j]) {
-                CvCBCorner* a = q->corners[j], *b = q->corners[(j + 1) & 3];
+                CvCBCorner* a = q->corners[j], *b = q->corners[(j+1)&3];
                 // mark internal corners that belong to:
                 //   - a quad with a single neighbor - with ROW1,
                 //   - a quad with two neighbors     - with ROW2
@@ -1186,7 +1186,7 @@ icvCheckQuadGroup(CvCBQuad** quad_group, int quad_count,
                     a->row = row_flag;
                 }
 
-                if (q->neighbors[(j + 1) & 3]) {
+                if (q->neighbors[(j+1)&3]) {
                     if (a->count >= 4 || b->count >= 4) {
                         goto finalize;
                     }
@@ -1354,24 +1354,24 @@ icvCheckQuadGroup(CvCBQuad** quad_group, int quad_count,
         memcpy(&corners[0], out_corners, corner_count * sizeof(corners[0]));
         for (i = 0; i < height; i++)
             for (j = 0; j < width; j++) {
-                out_corners[i * width + j] = corners[j * height + i];
+                out_corners[i* width + j] = corners[j*height + i];
             }
     }
 
     // check if we need to revert the order in each row
     {
-        CvPoint2D32f p0 = out_corners[0]->pt, p1 = out_corners[pattern_size.width - 1]->pt,
+        CvPoint2D32f p0 = out_corners[0]->pt, p1 = out_corners[pattern_size.width-1]->pt,
                      p2 = out_corners[pattern_size.width]->pt;
-        if ((p1.x - p0.x) * (p2.y - p1.y) - (p1.y - p0.y) * (p2.x - p1.x) < 0) {
+        if ((p1.x - p0.x)*(p2.y - p1.y) - (p1.y - p0.y)*(p2.x - p1.x) < 0) {
             if (width % 2 == 0) {
                 for (i = 0; i < height; i++)
                     for (j = 0; j < width / 2; j++) {
-                        CV_SWAP(out_corners[i * width + j], out_corners[i * width + width - j - 1], c);
+                        CV_SWAP(out_corners[i*width+j], out_corners[i*width+width-j-1], c);
                     }
             } else {
                 for (j = 0; j < width; j++)
                     for (i = 0; i < height / 2; i++) {
-                        CV_SWAP(out_corners[i * width + j], out_corners[(height - i - 1)*width + j], c);
+                        CV_SWAP(out_corners[i*width+j], out_corners[(height - i - 1)*width+j], c);
                     }
             }
         }
@@ -1664,7 +1664,7 @@ icvGenerateQuads(CvCBQuad** out_quads, CvCBCorner** out_corners,
         assert(src_contour->total == 4);
         for (i = 0; i < 4; i++) {
             CvPoint2D32f pt = cvPointTo32f(*(CvPoint*)cvGetSeqElem(src_contour, i));
-            CvCBCorner* corner = &(*out_corners)[quad_count * 4 + i];
+            CvCBCorner* corner = &(*out_corners)[quad_count*4 + i];
 
             memset(corner, 0, sizeof(*corner));
             corner->pt = pt;
@@ -1672,8 +1672,8 @@ icvGenerateQuads(CvCBQuad** out_quads, CvCBCorner** out_corners,
         }
         q->edge_len = FLT_MAX;
         for (i = 0; i < 4; i++) {
-            float dx = q->corners[i]->pt.x - q->corners[(i + 1) & 3]->pt.x;
-            float dy = q->corners[i]->pt.y - q->corners[(i + 1) & 3]->pt.y;
+            float dx = q->corners[i]->pt.x - q->corners[(i+1)&3]->pt.x;
+            float dy = q->corners[i]->pt.y - q->corners[(i+1)&3]->pt.y;
             float d = dx * dx + dy * dy;
             if (q->edge_len > d) {
                 q->edge_len = d;
@@ -1737,9 +1737,9 @@ cvDrawChessboardCorners(CvArr* _image, CvSize pattern_size,
             pt.x = cvRound(corners[i].x * (1 << shift));
             pt.y = cvRound(corners[i].y * (1 << shift));
             cvLine(image, cvPoint(pt.x - r, pt.y - r),
-                   cvPoint(pt.x + r, pt.y + r), color, 1, line_type, shift);
+            cvPoint(pt.x + r, pt.y + r), color, 1, line_type, shift);
             cvLine(image, cvPoint(pt.x - r, pt.y + r),
-                   cvPoint(pt.x + r, pt.y - r), color, 1, line_type, shift);
+            cvPoint(pt.x + r, pt.y - r), color, 1, line_type, shift);
             cvCircle(image, pt, r + (1 << shift), color, 1, line_type, shift);
         }
     } else {

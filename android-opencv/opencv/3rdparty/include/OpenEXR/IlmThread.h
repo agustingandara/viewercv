@@ -110,28 +110,28 @@ namespace IlmThread {
 // threads AND this library was compiled with threading enabled.
 //
 
-bool supportsThreads ();
+bool supportsThreads();
 
 
 class Thread {
 public:
 
-	Thread ();
-	virtual ~Thread ();
+    Thread();
+    virtual ~Thread();
 
-	void		start ();
-	virtual void	run () = 0;
+    void		start();
+    virtual void	run() = 0;
 
 private:
 
 #if defined _WIN32 || defined _WIN64
-	HANDLE _thread;
+    HANDLE _thread;
 #elif HAVE_PTHREAD
-	pthread_t _thread;
+    pthread_t _thread;
 #endif
 
-	void operator = (const Thread& t);	// not implemented
-	Thread (const Thread& t);		// not implemented
+    void operator = (const Thread& t);	// not implemented
+    Thread(const Thread& t);		// not implemented
 };
 
 

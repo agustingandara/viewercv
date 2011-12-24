@@ -132,29 +132,29 @@
 extern const uint8_t ff_log2_tab[256];
 
 static inline av_const int av_log2(unsigned int v) {
-	int n = 0;
-	if (v & 0xffff0000) {
-		v >>= 16;
-		n += 16;
-	}
-	if (v & 0xff00) {
-		v >>= 8;
-		n += 8;
-	}
-	n += ff_log2_tab[v];
+    int n = 0;
+    if (v & 0xffff0000) {
+        v >>= 16;
+        n += 16;
+    }
+    if (v & 0xff00) {
+        v >>= 8;
+        n += 8;
+    }
+    n += ff_log2_tab[v];
 
-	return n;
+    return n;
 }
 
 static inline av_const int av_log2_16bit(unsigned int v) {
-	int n = 0;
-	if (v & 0xff00) {
-		v >>= 8;
-		n += 8;
-	}
-	n += ff_log2_tab[v];
+    int n = 0;
+    if (v & 0xff00) {
+        v >>= 8;
+        n += 8;
+    }
+    n += ff_log2_tab[v];
 
-	return n;
+    return n;
 }
 
 /**
@@ -165,9 +165,9 @@ static inline av_const int av_log2_16bit(unsigned int v) {
  * @return clipped value
  */
 static inline av_const int av_clip(int a, int amin, int amax) {
-	if      (a < amin) { return amin; }
-	else if (a > amax) { return amax; }
-	else { return a; }
+    if (a < amin) { return amin; }
+    else if (a > amax) { return amax; }
+    else { return a; }
 }
 
 /**
@@ -176,8 +176,8 @@ static inline av_const int av_clip(int a, int amin, int amax) {
  * @return clipped value
  */
 static inline av_const uint8_t av_clip_uint8(int a) {
-	if (a&(~255)) { return (-a) >> 31; }
-	else { return a; }
+    if (a&(~255)) { return (-a) >> 31; }
+    else { return a; }
 }
 
 /**
@@ -186,8 +186,8 @@ static inline av_const uint8_t av_clip_uint8(int a) {
  * @return clipped value
  */
 static inline av_const int16_t av_clip_int16(int a) {
-	if ((a + 32768) & ~65535) { return (a >> 31) ^ 32767; }
-	else { return a; }
+    if ((a + 32768) & ~65535) { return (a >> 31) ^ 32767; }
+    else { return a; }
 }
 
 /**
@@ -198,9 +198,9 @@ static inline av_const int16_t av_clip_int16(int a) {
  * @return clipped value
  */
 static inline av_const float av_clipf(float a, float amin, float amax) {
-	if      (a < amin) { return amin; }
-	else if (a > amax) { return amax; }
-	else { return a; }
+    if (a < amin) { return amin; }
+    else if (a > amax) { return amax; }
+    else { return a; }
 }
 
 #define MKTAG(a,b,c,d) (a | (b << 8) | (c << 16) | (d << 24))

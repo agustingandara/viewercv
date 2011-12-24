@@ -1,0 +1,7 @@
+#Fri Dec 23 18:02:37 EST 2011
+eclipse.preferences.version=1
+environment/project/com.android.toolchain.gcc.2119756891/PATH/delimiter=\:
+environment/project/com.android.toolchain.gcc.2119756891/PATH/operation=replace
+environment/project/com.android.toolchain.gcc.2119756891/PATH/value=/home/chris/workspace/android-ndk-r4-crystax\:/home/chris/workspace/android-sdk-linux_x86/tools\:/home/chris/workspace/android-sdk-linux_x86/platform-tools\:/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/local/bin
+environment/project/com.android.toolchain.gcc.2119756891/append=true
+environment/project/com.android.toolchain.gcc.2119756891/appendContributed=true

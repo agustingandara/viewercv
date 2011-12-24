@@ -41,11 +41,11 @@ namespace cvflann {
  * Structure representing the index header.
  */
 struct IndexHeader {
-	char signature[16];
-	int flann_version;
-	flann_algorithm_t index_type;
-	int rows;
-	int cols;
+    char signature[16];
+    int flann_version;
+    flann_algorithm_t index_type;
+    int rows;
+    int cols;
 };
 
 /**
@@ -67,16 +67,16 @@ IndexHeader load_header(FILE* stream);
 
 template<typename T>
 void save_value(FILE* stream, const T& value, int count = 1) {
-	fwrite(&value, sizeof(value), count, stream);
+    fwrite(&value, sizeof(value), count, stream);
 }
 
 
 template<typename T>
 void load_value(FILE* stream, T& value, int count = 1) {
-	int read_cnt = fread(&value, sizeof(value), count, stream);
-	if (read_cnt != count) {
-		throw FLANNException("Cannot read from file");
-	}
+    int read_cnt = fread(&value, sizeof(value), count, stream);
+    if (read_cnt != count) {
+        throw FLANNException("Cannot read from file");
+    }
 }
 }
 

@@ -43,22 +43,22 @@
 #include "IexMathExc.h"
 #include "ImathFun.h"
 
-inline void glVertex    ( const Imath::V3f& v ) { glVertex3f(v.x, v.y, v.z);   }
-inline void glVertex    ( const Imath::V2f& v ) { glVertex2f(v.x, v.y);       }
-inline void glNormal    ( const Imath::V3f& n ) { glNormal3f(n.x, n.y, n.z);   }
-inline void glColor     ( const Imath::V3f& c ) { glColor3f(c.x, c.y, c.z);    }
-inline void glTranslate ( const Imath::V3f& t ) { glTranslatef(t.x, t.y, t.z); }
+inline void glVertex(const Imath::V3f& v) { glVertex3f(v.x, v.y, v.z);   }
+inline void glVertex(const Imath::V2f& v) { glVertex2f(v.x, v.y);       }
+inline void glNormal(const Imath::V3f& n) { glNormal3f(n.x, n.y, n.z);   }
+inline void glColor(const Imath::V3f& c) { glColor3f(c.x, c.y, c.z);    }
+inline void glTranslate(const Imath::V3f& t) { glTranslatef(t.x, t.y, t.z); }
 
-inline void glTexCoord( const Imath::V2f& t ) {
-	glTexCoord2f(t.x, t.y);
+inline void glTexCoord(const Imath::V2f& t) {
+    glTexCoord2f(t.x, t.y);
 }
 
 inline void glDisableTexture() {
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 
-	glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 namespace {
@@ -66,56 +66,56 @@ namespace {
 const float GL_FLOAT_MAX = 1.8e+19; // sqrt (FLT_MAX)
 
 inline bool
-badFloat (float f) {
-	return !Imath::finitef (f) || f < - GL_FLOAT_MAX || f > GL_FLOAT_MAX;
+badFloat(float f) {
+    return !Imath::finitef(f) || f < - GL_FLOAT_MAX || f > GL_FLOAT_MAX;
 }
 
 } // namespace
 
 inline void
-throwBadMatrix (const Imath::M44f& m) {
-	if (badFloat (m[0][0]) ||
-			badFloat (m[0][1]) ||
-			badFloat (m[0][2]) ||
-			badFloat (m[0][3]) ||
-			badFloat (m[1][0]) ||
-			badFloat (m[1][1]) ||
-			badFloat (m[1][2]) ||
-			badFloat (m[1][3]) ||
-			badFloat (m[2][0]) ||
-			badFloat (m[2][1]) ||
-			badFloat (m[2][2]) ||
-			badFloat (m[2][3]) ||
-			badFloat (m[3][0]) ||
-			badFloat (m[3][1]) ||
-			badFloat (m[3][2]) ||
-			badFloat (m[3][3])) {
-		throw Iex::OverflowExc ("GL matrix overflow");
-	}
+throwBadMatrix(const Imath::M44f& m) {
+    if (badFloat(m[0][0]) ||
+            badFloat(m[0][1]) ||
+            badFloat(m[0][2]) ||
+            badFloat(m[0][3]) ||
+            badFloat(m[1][0]) ||
+            badFloat(m[1][1]) ||
+            badFloat(m[1][2]) ||
+            badFloat(m[1][3]) ||
+            badFloat(m[2][0]) ||
+            badFloat(m[2][1]) ||
+            badFloat(m[2][2]) ||
+            badFloat(m[2][3]) ||
+            badFloat(m[3][0]) ||
+            badFloat(m[3][1]) ||
+            badFloat(m[3][2]) ||
+            badFloat(m[3][3])) {
+        throw Iex::OverflowExc("GL matrix overflow");
+    }
 }
 
 inline void
-glMultMatrix( const Imath::M44f& m ) {
-	throwBadMatrix (m);
-	glMultMatrixf( (GLfloat*)m[0] );
+glMultMatrix(const Imath::M44f& m) {
+    throwBadMatrix(m);
+    glMultMatrixf((GLfloat*)m[0]);
 }
 
 inline void
-glMultMatrix( const Imath::M44f* m ) {
-	throwBadMatrix (*m);
-	glMultMatrixf( (GLfloat*)(*m)[0] );
+glMultMatrix(const Imath::M44f* m) {
+    throwBadMatrix(*m);
+    glMultMatrixf((GLfloat*)(*m)[0]);
 }
 
 inline void
-glLoadMatrix( const Imath::M44f& m ) {
-	throwBadMatrix (m);
-	glLoadMatrixf( (GLfloat*)m[0] );
+glLoadMatrix(const Imath::M44f& m) {
+    throwBadMatrix(m);
+    glLoadMatrixf((GLfloat*)m[0]);
 }
 
 inline void
-glLoadMatrix( const Imath::M44f* m ) {
-	throwBadMatrix (*m);
-	glLoadMatrixf( (GLfloat*)(*m)[0] );
+glLoadMatrix(const Imath::M44f* m) {
+    throwBadMatrix(*m);
+    glLoadMatrixf((GLfloat*)(*m)[0]);
 }
 
 
@@ -129,22 +129,22 @@ namespace Imath {
 class GLPushMatrix {
 public:
 
-	GLPushMatrix ()			{ glPushMatrix(); }
-	~GLPushMatrix()			{ glPopMatrix(); }
+    GLPushMatrix()			{ glPushMatrix(); }
+    ~GLPushMatrix()			{ glPopMatrix(); }
 };
 
 class GLPushAttrib {
 public:
 
-	GLPushAttrib (GLbitfield mask)	{ glPushAttrib (mask); }
-	~GLPushAttrib()			{ glPopAttrib(); }
+    GLPushAttrib(GLbitfield mask)	{ glPushAttrib(mask); }
+    ~GLPushAttrib()			{ glPopAttrib(); }
 };
 
 class GLBegin {
 public:
 
-	GLBegin (GLenum mode)		{ glBegin (mode); }
-	~GLBegin()				{ glEnd(); }
+    GLBegin(GLenum mode)		{ glBegin(mode); }
+    ~GLBegin()				{ glEnd(); }
 };
 
 } // namespace Imath

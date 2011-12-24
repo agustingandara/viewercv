@@ -50,7 +50,7 @@ namespace Imf {
 
 
 typedef TypedAttribute<float> FloatAttribute;
-template <> const char* FloatAttribute::staticTypeName ();
+template <> const char* FloatAttribute::staticTypeName();
 
 
 } // namespace Imf

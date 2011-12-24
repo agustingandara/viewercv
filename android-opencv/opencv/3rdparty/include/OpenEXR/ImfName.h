@@ -52,38 +52,38 @@ namespace Imf {
 class Name {
 public:
 
-	//-------------
-	// Constructors
-	//-------------
+    //-------------
+    // Constructors
+    //-------------
 
-	Name ();
-	Name (const char text[]);
-
-
-	//--------------------
-	// Assignment operator
-	//--------------------
-
-	Name& 		operator = (const char text[]);
+    Name();
+    Name(const char text[]);
 
 
-	//---------------------
-	// Access to the string
-	//---------------------
+    //--------------------
+    // Assignment operator
+    //--------------------
 
-	const char* 	text () const		{return _text;}
-	const char* 	operator * () const	{return _text;}
+    Name& 		operator = (const char text[]);
 
-	//---------------
-	// Maximum length
-	//---------------
 
-	static const int	SIZE = 32;
-	static const int	MAX_LENGTH = SIZE - 1;
+    //---------------------
+    // Access to the string
+    //---------------------
+
+    const char* 	text() const		{return _text;}
+    const char* 	operator *() const	{return _text;}
+
+    //---------------
+    // Maximum length
+    //---------------
+
+    static const int	SIZE = 32;
+    static const int	MAX_LENGTH = SIZE - 1;
 
 private:
 
-	char		_text[SIZE];
+    char		_text[SIZE];
 };
 
 
@@ -98,39 +98,39 @@ bool operator < (const Name& x, const Name& y);
 
 inline Name &
 Name::operator = (const char text[]) {
-	strncpy (_text, text, MAX_LENGTH);
-	return *this;
+    strncpy(_text, text, MAX_LENGTH);
+    return *this;
 }
 
 
 inline
-Name::Name () {
-	_text[0] = 0;
+Name::Name() {
+    _text[0] = 0;
 }
 
 
 inline
-Name::Name (const char text[]) {
-	*this = text;
-	_text [MAX_LENGTH] = 0;
+Name::Name(const char text[]) {
+    *this = text;
+    _text [MAX_LENGTH] = 0;
 }
 
 
 inline bool
 operator == (const Name& x, const Name& y) {
-	return strcmp (*x, *y) == 0;
+    return strcmp(*x, *y) == 0;
 }
 
 
 inline bool
 operator != (const Name& x, const Name& y) {
-	return !(x == y);
+    return !(x == y);
 }
 
 
 inline bool
 operator < (const Name& x, const Name& y) {
-	return strcmp (*x, *y) < 0;
+    return strcmp(*x, *y) < 0;
 }
 
 

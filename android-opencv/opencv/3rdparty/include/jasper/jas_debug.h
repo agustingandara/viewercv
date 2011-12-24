@@ -82,12 +82,12 @@
 extern "C" {
 #endif
 
-	/******************************************************************************\
-	* Macros and functions.
-	\******************************************************************************/
+    /******************************************************************************\
+    * Macros and functions.
+    \******************************************************************************/
 
-	/* Output debugging information to standard error provided that the debug
-	  level is set sufficiently high. */
+    /* Output debugging information to standard error provided that the debug
+      level is set sufficiently high. */
 #if defined(DEBUG)
 #define	JAS_DBGLOG(n, x) \
 	((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
@@ -95,17 +95,17 @@ extern "C" {
 #define	JAS_DBGLOG(n, x)
 #endif
 
-	/* Get the library debug level. */
-	int jas_getdbglevel(void);
+    /* Get the library debug level. */
+    int jas_getdbglevel(void);
 
-	/* Set the library debug level. */
-	int jas_setdbglevel(int dbglevel);
+    /* Set the library debug level. */
+    int jas_setdbglevel(int dbglevel);
 
-	/* Perform formatted output to standard error. */
-	int jas_eprintf(const char* fmt, ...);
+    /* Perform formatted output to standard error. */
+    int jas_eprintf(const char* fmt, ...);
 
-	/* Dump memory to a stream. */
-	int jas_memdump(FILE* out, void* data, size_t len);
+    /* Dump memory to a stream. */
+    int jas_memdump(FILE* out, void* data, size_t len);
 
 #ifdef __cplusplus
 }
