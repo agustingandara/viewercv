@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
     private static final int    DIALOG_SETTINGS = 9;
     private static final int    DIALOG_SNAP     = 10;
     private static final int    DIALOG_NEON     = 11;
-    private static final int    DIALOG_VIVID     = 12;
+    private static final int    DIALOG_VIVID    = 12;
 
     private static int          CURR_VIEW       = 1;
 
@@ -81,10 +81,10 @@ public class MainActivity extends Activity {
                     s = s + "Drago -luminance mapping";
                 }
                 if (proc_mode == 1) {
-                    s = s + "Mantiuk -contrast mapping";
+                    s = s + "luminance scaling + lce";
                 }
                 if (proc_mode == 2) {
-                    s = s + "Mantiuk -contrast equalization";
+                    s = s + "Mantiuk -contrast mapping";
                 }
             }
             Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
@@ -223,9 +223,9 @@ public class MainActivity extends Activity {
      * JNI
      */
     final int  set_minmaxexposure = 2; // desired +/- exposure
-    final int  set_extraframes    = 5; // waiting period
+    final int  set_extraframes    = 4; // waiting period
     static int exposure_cnt       = 0; // range: [0-2] for 3 images
-    static int extraframes_cnt    = 5; // start: > 0
+    static int extraframes_cnt    = 4; // start: > 0
 
     class HDRProcessor implements NativeProcessor.PoolCallback {
         @Override

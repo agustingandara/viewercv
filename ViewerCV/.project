@@ -3,6 +3,7 @@
 	<name>ViewerCV</name>
 	<comment></comment>
 	<projects>
+		<project>OpenCV</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -51,7 +52,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
-					<value>V=1</value>
+					<value>V=0</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>
@@ -98,4 +99,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>OpenCV_src</name>
+			<type>2</type>
+			<location>/home/chris/workspace/viewercv/android-opencv/opencv/android/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -27,40 +27,40 @@
 
 class Processor {
 
-	cv::StarFeatureDetector stard;
-	cv::FastFeatureDetector fastd;
-	cv::SurfFeatureDetector surfd;
-	//cv::GoodFeaturesToTrackDetector surfd;
+    cv::StarFeatureDetector stard;
+    cv::FastFeatureDetector fastd;
+    cv::SurfFeatureDetector surfd;
+    //cv::GoodFeaturesToTrackDetector surfd;
 
-	std::vector<cv::KeyPoint> keypoints;
-	vector<vector<Point2f> > imagepoints;
+    std::vector<cv::KeyPoint> keypoints;
+    vector<vector<Point2f> > imagepoints;
 
-	cv::Mat K;
-	cv::Mat distortion;
-	cv::Size imgsize;
-	//image_pool pool;
+    cv::Mat K;
+    cv::Mat distortion;
+    cv::Size imgsize;
+    //image_pool pool;
 
 
 
 
 public:
 
-	Processor();
-	virtual ~Processor();
+    Processor();
+    virtual ~Processor();
 
-	void detectAndDrawFeatures(int idx, image_pool* pool, int feature_type);
+    void detectAndDrawFeatures(int idx, image_pool* pool, int feature_type);
 
-	bool detectAndDrawChessboard(int idx, image_pool* pool);
+    bool detectAndDrawChessboard(int idx, image_pool* pool);
 
-	void resetChess();
+    void resetChess();
 
-	int getNumberDetectedChessboards();
+    int getNumberDetectedChessboards();
 
-	void calibrate(const char* filename);
+    void calibrate(const char* filename);
 
-	void drawText(int idx, image_pool* pool, const char* text);
+    void drawText(int idx, image_pool* pool, const char* text);
 
-	void detectAndDrawContours(int idx, image_pool* pool);
+    void detectAndDrawContours(int idx, image_pool* pool);
 
 };
 

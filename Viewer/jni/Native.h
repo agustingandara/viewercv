@@ -27,56 +27,56 @@ extern "C" {
 
 
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    decodeYUV420SP_native
-	 * Signature: ([BII[I)[I
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_decodeYUV420SP_1native
-	(JNIEnv*, jclass, jbyteArray, jint, jint, jintArray);
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    decodeYUV420SP_native
+     * Signature: ([BII[I)[I
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_decodeYUV420SP_1native
+    (JNIEnv*, jclass, jbyteArray, jint, jint, jintArray);
 
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    cvtRGB2GRAY_native
-	 * Signature:
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_cvtRGB2GRAY_1native
-	(JNIEnv*, jclass, jintArray, jint, jint, jintArray);
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    cvtRGB2GRAY_native
+     * Signature:
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_cvtRGB2GRAY_1native
+    (JNIEnv*, jclass, jintArray, jint, jint, jintArray);
 
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    createHistogram_native
-	 * Signature:
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_createHistogram_1native
-	(JNIEnv*, jclass, jintArray, jint, jintArray);
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    createHistogram_native
+     * Signature:
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_createHistogram_1native
+    (JNIEnv*, jclass, jintArray, jint, jintArray);
 
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    overlayHistogram_native
-	 * Signature:
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_overlayHistogram_1native
-	(JNIEnv*, jclass, jintArray, jint, jint, jintArray);
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    overlayHistogram_native
+     * Signature:
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_overlayHistogram_1native
+    (JNIEnv*, jclass, jintArray, jint, jint, jintArray);
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    sobel_native
-	 * Signature:
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_sobel_1native
-	(JNIEnv*, jclass, jintArray, jint, jint, jintArray, jint);
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    sobel_native
+     * Signature:
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_sobel_1native
+    (JNIEnv*, jclass, jintArray, jint, jint, jintArray, jint);
 
-	/*
-	 * Class:     com_android_viewer_imageprocessing_Native
-	 * Method:    histogramEq_native
-	 * Signature:
-	 */
-	JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_histogramEq_1native
-	(JNIEnv*, jclass, jintArray, jintArray, jint, jint );
+    /*
+     * Class:     com_android_viewer_imageprocessing_Native
+     * Method:    histogramEq_native
+     * Signature:
+     */
+    JNIEXPORT jint JNICALL Java_com_android_viewer_imageprocessing_Native_histogramEq_1native
+    (JNIEnv*, jclass, jintArray, jintArray, jint, jint);
 
 
 

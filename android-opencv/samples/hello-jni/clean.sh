@@ -1,0 +1,1 @@
+ndk-build OPENCV_ROOT=../../opencv clean

@@ -29,151 +29,151 @@ import android.util.Log;
 
 public class ImageProcessingThread extends Thread {
 
-	private static Size mImageSize;
-	private static byte[] mData;
-	private static boolean mDoProcess = true;
-	private static boolean mSendMsg = true;
-	private static final String TAG = "ImProcThread";
-	private static int[] mRGB = null;
+    private static Size mImageSize;
+    private static byte[] mData;
+    private static boolean mDoProcess = true;
+    private static boolean mSendMsg = true;
+    private static final String TAG = "ImProcThread";
+    private static int[] mRGB = null;
 
-	public ImageProcessingThread(Size imageSize, byte[] data, boolean process) {
-		mImageSize = imageSize;
-		mData = data;
-		mDoProcess = process;
-	}
+    public ImageProcessingThread(Size imageSize, byte[] data, boolean process) {
+        mImageSize = imageSize;
+        mData = data;
+        mDoProcess = process;
+    }
 
-	/*
-	 * Main Image Processing Loop
-	 */
-	@Override
-	public void run() {
-		if (Singleton.getApplicationState() != Singleton.STATE_INIT_APP) {
+    /*
+     * Main Image Processing Loop
+     */
+    @Override
+    public void run() {
+        if (Singleton.getApplicationState() != Singleton.STATE_INIT_APP) {
 
-			if (mDoProcess == false) {
-				// turn off processing, only once
-				if (mSendMsg == true) {
-					mSendMsg = false;
-					passThruImg();
-				}
-				return;
-			} else {
-				mSendMsg = true;
-			}
+            if (mDoProcess == false) {
+                // turn off processing, only once
+                if (mSendMsg == true) {
+                    mSendMsg = false;
+                    passThruImg();
+                }
+                return;
+            } else {
+                mSendMsg = true;
+            }
 
-			/*
-			 * Start Timer
-			 */
-			Singleton.resetStateTimer();
+            /*
+             * Start Timer
+             */
+            Singleton.resetStateTimer();
 
-			/*
-			 * !!! ALL IMAGE PROCESSING !!!
-			 */
-			processImage();
+            /*
+             * !!! ALL IMAGE PROCESSING !!!
+             */
+            processImage();
 
-			/*
-			 * End Timer
-			 */
-			Log.w(TAG, " Average  FPS:  " + Singleton.getFPS(1));
+            /*
+             * End Timer
+             */
+            Log.w(TAG, " Average  FPS:  " + Singleton.getFPS(1));
 
-		}
-	}
+        }
+    }
 
-	/*
-	 *
-	 */
-	private void processImage() {
+    /*
+     *
+     */
+    private void processImage() {
 
-		// convert
-		int[] pixels = getRGBPixels();
-		int width = mImageSize.width;
-		int height = mImageSize.height;
+        // convert
+        int[] pixels = getRGBPixels();
+        int width = mImageSize.width;
+        int height = mImageSize.height;
 
-		// display
-		if (Singleton.getApplicationState() == Singleton.STATE_DEFAULT) {
+        // display
+        if (Singleton.getApplicationState() == Singleton.STATE_DEFAULT) {
 
-			// nothing, show rgb
+            // nothing, show rgb
 
-		} else if (Singleton.getApplicationState() == Singleton.STATE_PROC_1) {
+        } else if (Singleton.getApplicationState() == Singleton.STATE_PROC_1) {
 
-			// b&w
-			pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
-			// histogram
-			ProcHistogram hs = ProcessingFactory.getHistogram();
-			int[] hist = hs.getImageHistogram(pixels);
-			// overlay
-			pixels = hs.overlayHistogram(pixels, hist, width, height);
+            // b&w
+            pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
+            // histogram
+            ProcHistogram hs = ProcessingFactory.getHistogram();
+            int[] hist = hs.getImageHistogram(pixels);
+            // overlay
+            pixels = hs.overlayHistogram(pixels, hist, width, height);
 
-		} else if (Singleton.getApplicationState() == Singleton.STATE_PROC_2) {
+        } else if (Singleton.getApplicationState() == Singleton.STATE_PROC_2) {
 
-			// b&w
-			pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
-			// histogram
-			ProcHistogram qs = ProcessingFactory.getHistogram();
-			int[] hist = qs.getImageHistogram(pixels);
-			// histogram equalization
-			pixels = qs.histogramEq(pixels, hist, width, height);
+            // b&w
+            pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
+            // histogram
+            ProcHistogram qs = ProcessingFactory.getHistogram();
+            int[] hist = qs.getImageHistogram(pixels);
+            // histogram equalization
+            pixels = qs.histogramEq(pixels, hist, width, height);
 
-		} else if (Singleton.getApplicationState() == Singleton.STATE_PROC_3) {
+        } else if (Singleton.getApplicationState() == Singleton.STATE_PROC_3) {
 
-			// b&w
-			pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
-			// sobel
-			ProcSobel sb = ProcessingFactory.getSobel();
-			sb.init(width, height);
-			pixels = sb.process_native(pixels, false);
+            // b&w
+            pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
+            // sobel
+            ProcSobel sb = ProcessingFactory.getSobel();
+            sb.init(width, height);
+            pixels = sb.process_native(pixels, false);
 
-		} else if (Singleton.getApplicationState() == Singleton.STATE_PROC_4) {
+        } else if (Singleton.getApplicationState() == Singleton.STATE_PROC_4) {
 
-			// b&w
-			pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
-			// sobel
-			ProcSobel sb = ProcessingFactory.getSobel();
-			sb.init(width, height);
-			pixels = sb.process_native(pixels, true);
+            // b&w
+            pixels = IPUtility.cvtRGB2GRAY(pixels, width, height);
+            // sobel
+            ProcSobel sb = ProcessingFactory.getSobel();
+            sb.init(width, height);
+            pixels = sb.process_native(pixels, true);
 
-		}
+        }
 
-		// display
-		updateImageView(pixels, width, height);
+        // display
+        updateImageView(pixels, width, height);
 
-		// take out the trash
-		pixels = null;
-		System.gc();
-	}
+        // take out the trash
+        pixels = null;
+        System.gc();
+    }
 
-	private int[] getRGBPixels() {
-		if (mRGB == null) {
-			mRGB = new int[mImageSize.width * mImageSize.height];
-			Log.d(TAG, "INIT getRGBPixels" );
-		}
-		IPUtility.decodeYUV420SP(mData, mImageSize.width, mImageSize.height, mRGB);
-		return mRGB;
-	}
+    private int[] getRGBPixels() {
+        if (mRGB == null) {
+            mRGB = new int[mImageSize.width * mImageSize.height];
+            Log.d(TAG, "INIT getRGBPixels");
+        }
+        IPUtility.decodeYUV420SP(mData, mImageSize.width, mImageSize.height, mRGB);
+        return mRGB;
+    }
 
-	/*
-	 * Create and update global bitmap
-	 */
-	private void updateImageView(int[] pixels, int width, int height) {
-		// create and set
-		IPUtility.renderBitmapInPlace(pixels, width, height);
-		// meg live update refresh
-		Message msg = CameraWrapper.mHandler.obtainMessage();
-		msg.arg1 = CameraActivity.DRAW_IMAGE_PROCESSING;
-		CameraWrapper.mHandler.dispatchMessage(msg);
-	}
+    /*
+     * Create and update global bitmap
+     */
+    private void updateImageView(int[] pixels, int width, int height) {
+        // create and set
+        IPUtility.renderBitmapInPlace(pixels, width, height);
+        // meg live update refresh
+        Message msg = CameraWrapper.mHandler.obtainMessage();
+        msg.arg1 = CameraActivity.DRAW_IMAGE_PROCESSING;
+        CameraWrapper.mHandler.dispatchMessage(msg);
+    }
 
-	/*
-	 *
-	 */
-	private void passThruImg() {
-		mData = mData.clone();
-		int[] pixels = getRGBPixels();
-		Bitmap b = IPUtility.renderBitmap(pixels, mImageSize.width, mImageSize.height);
-		Singleton.updateImageView = b;
-		Singleton.setApplicationState(Singleton.STATE_DEFAULT);
-		Message msg = CameraWrapper.mHandler.obtainMessage();
-		msg.arg1 = CameraActivity.DRAW_IMAGE_PROCESSING;
-		CameraWrapper.mHandler.dispatchMessage(msg);
-	}
+    /*
+     *
+     */
+    private void passThruImg() {
+        mData = mData.clone();
+        int[] pixels = getRGBPixels();
+        Bitmap b = IPUtility.renderBitmap(pixels, mImageSize.width, mImageSize.height);
+        Singleton.updateImageView = b;
+        Singleton.setApplicationState(Singleton.STATE_DEFAULT);
+        Message msg = CameraWrapper.mHandler.obtainMessage();
+        msg.arg1 = CameraActivity.DRAW_IMAGE_PROCESSING;
+        CameraWrapper.mHandler.dispatchMessage(msg);
+    }
 
 }

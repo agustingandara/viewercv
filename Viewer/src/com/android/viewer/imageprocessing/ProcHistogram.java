@@ -19,27 +19,27 @@ package com.android.viewer.imageprocessing;
 
 public class ProcHistogram {
 
-	private static int[] mPixelBins;
-	final int numbins = 256;
+    private static int[] mPixelBins;
+    final int numbins = 256;
 
-	public ProcHistogram() {
-		mPixelBins = new int[numbins];
-	}
+    public ProcHistogram() {
+        mPixelBins = new int[numbins];
+    }
 
-	public int[] getImageHistogram(int[] pixels) {
-		Native.createHistogram_native(pixels, pixels.length, mPixelBins);
-		return mPixelBins;
-	}
+    public int[] getImageHistogram(int[] pixels) {
+        Native.createHistogram_native(pixels, pixels.length, mPixelBins);
+        return mPixelBins;
+    }
 
-	public int[] overlayHistogram(int[] imgIn, int[] hist, int imgWidth, int imgHeight) {
-		Native.overlayHistogram_native(imgIn, imgWidth, imgHeight, hist);
-		return imgIn;
-	}
+    public int[] overlayHistogram(int[] imgIn, int[] hist, int imgWidth, int imgHeight) {
+        Native.overlayHistogram_native(imgIn, imgWidth, imgHeight, hist);
+        return imgIn;
+    }
 
-	public int[] histogramEq(int[] img, int[] hist, int width, int height) {
-		Native.histogramEq_native(img, hist, width, height);
-		return img;
-	}
+    public int[] histogramEq(int[] img, int[] hist, int width, int height) {
+        Native.histogramEq_native(img, hist, width, height);
+        return img;
+    }
 
 
 }

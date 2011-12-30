@@ -27,60 +27,60 @@ import android.os.Environment;
 import android.util.Log;
 
 public class IOUtility {
-	private static String mPrependFileName = "IMG_";
-	private static final String TAG = "IOUtility";
+    private static String mPrependFileName = "IMG_";
+    private static final String TAG = "IOUtility";
 
-	public static boolean saveImageToSDCard(Bitmap b, String appendFileName) {
-		if (b != null) {
-			try {
-				File sdCardFile = Environment.getExternalStorageDirectory();
-				if (sdCardFile.canWrite() == true) {
-					File viewerFile = new File(sdCardFile, "Viewer");
-					viewerFile.mkdirs();
-					File imageFile = new File(viewerFile, mPrependFileName + appendFileName + ".png");
-					FileOutputStream fileStream = new FileOutputStream(imageFile);
-					b.compress(CompressFormat.PNG, 100, fileStream);
-					fileStream.close();
-				} else {
-					Log.e(TAG, "IOUtility - Cannot write to SD Card");
-				}
-				return true;
-			} catch (Exception e) {
-				Log.e(TAG, "IOUtility - Error - " + e);
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
+    public static boolean saveImageToSDCard(Bitmap b, String appendFileName) {
+        if (b != null) {
+            try {
+                File sdCardFile = Environment.getExternalStorageDirectory();
+                if (sdCardFile.canWrite() == true) {
+                    File viewerFile = new File(sdCardFile, "Viewer");
+                    viewerFile.mkdirs();
+                    File imageFile = new File(viewerFile, mPrependFileName + appendFileName + ".png");
+                    FileOutputStream fileStream = new FileOutputStream(imageFile);
+                    b.compress(CompressFormat.PNG, 100, fileStream);
+                    fileStream.close();
+                } else {
+                    Log.e(TAG, "IOUtility - Cannot write to SD Card");
+                }
+                return true;
+            } catch (Exception e) {
+                Log.e(TAG, "IOUtility - Error - " + e);
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 
-	public static void setFilePrePend(String fileName) {
-		Log.v(TAG, "IOUtility - Settings the prepended filename to: " + fileName);
-		mPrependFileName = fileName;
-	}
+    public static void setFilePrePend(String fileName) {
+        Log.v(TAG, "IOUtility - Settings the prepended filename to: " + fileName);
+        mPrependFileName = fileName;
+    }
 
-	public static boolean saveTextToSDCard(String content, String appendFileName) {
-		try {
-			File sdCardFile = Environment.getExternalStorageDirectory();
-			if (sdCardFile.canWrite() == true) {
-				File viewerFile = new File(sdCardFile, "Viewer");
-				viewerFile.mkdirs();
-				File textFile = new File(viewerFile, mPrependFileName + appendFileName);
-				FileWriter fileWriter = new FileWriter(textFile);
-				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-				try {
-					bufferedWriter.write(content);
-				} finally {
-					bufferedWriter.close();
-				}
-			} else {
-				Log.e(TAG, "IOUtility - Cannot write to SD Card");
-			}
-			return true;
-		} catch (Exception e) {
-			Log.e(TAG, "IOUtility - Error [String empty string, depends on state] - " + e);
-			e.printStackTrace();
-		}
-		return false;
-	}
+    public static boolean saveTextToSDCard(String content, String appendFileName) {
+        try {
+            File sdCardFile = Environment.getExternalStorageDirectory();
+            if (sdCardFile.canWrite() == true) {
+                File viewerFile = new File(sdCardFile, "Viewer");
+                viewerFile.mkdirs();
+                File textFile = new File(viewerFile, mPrependFileName + appendFileName);
+                FileWriter fileWriter = new FileWriter(textFile);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                try {
+                    bufferedWriter.write(content);
+                } finally {
+                    bufferedWriter.close();
+                }
+            } else {
+                Log.e(TAG, "IOUtility - Cannot write to SD Card");
+            }
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "IOUtility - Error [String empty string, depends on state] - " + e);
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

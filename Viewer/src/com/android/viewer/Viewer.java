@@ -28,58 +28,58 @@ import android.widget.Toast;
 
 public class Viewer extends Activity {
 
-	//private static final String TAG = "Main";
+    //private static final String TAG = "Main";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		initActivity();
-		executeActivity();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initActivity();
+        executeActivity();
+    }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-	}
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-	}
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }
 
-	private void initActivity() {
-		startNextActivity();
-	}
+    private void initActivity() {
+        startNextActivity();
+    }
 
-	public void executeActivity() {
-	}
+    public void executeActivity() {
+    }
 
-	private void startNextActivity() {
-		Toast t = Toast.makeText(getApplicationContext(), "Starting Camera Activity", Toast.LENGTH_LONG);
-		t.show();
-		Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
-		startActivity(intent);
-		finish();
-	}
+    private void startNextActivity() {
+        Toast t = Toast.makeText(getApplicationContext(), "Starting Camera Activity", Toast.LENGTH_LONG);
+        t.show();
+        Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 }

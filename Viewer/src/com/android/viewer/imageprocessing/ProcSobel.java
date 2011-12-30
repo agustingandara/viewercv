@@ -19,28 +19,28 @@ package com.android.viewer.imageprocessing;
 
 public class ProcSobel {
 
-	int[] output;
-	int width;
-	int height;
-	int numPix;
-	static boolean init = false;
+    int[] output;
+    int width;
+    int height;
+    int numPix;
+    static boolean init = false;
 
-	public ProcSobel() {
-	}
+    public ProcSobel() {
+    }
 
-	public void init(int widthIn, int heightIn) {
-		if (init) { return; }
-		init = true;
-		width = widthIn;
-		height = heightIn;
-		numPix = width * height;
-		output = new int[numPix];
-	}
+    public void init(int widthIn, int heightIn) {
+        if (init) { return; }
+        init = true;
+        width = widthIn;
+        height = heightIn;
+        numPix = width * height;
+        output = new int[numPix];
+    }
 
-	public int[] process_native(int[] input, boolean negative) {
-		Native.sobel_native(input, width, height, output, negative ? 1 : 0);
-		return output;
-	}
+    public int[] process_native(int[] input, boolean negative) {
+        Native.sobel_native(input, width, height, output, negative ? 1 : 0);
+        return output;
+    }
 
 
 }

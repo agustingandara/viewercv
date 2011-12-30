@@ -26,7 +26,7 @@
 #define DETECT_HDR      5
 #define DETECT_HISTEQ   6
 #define DETECT_NEON     7
-#define DETECT_VIVID     8
+#define DETECT_VIVID    8
 
 class Processor {
 
@@ -45,6 +45,7 @@ class Processor {
 public:
 
     Processor();
+
     virtual ~Processor();
 
     void detectAndDrawFeatures(int idx, image_pool* pool);

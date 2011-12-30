@@ -99,8 +99,8 @@ float angle(Point pt1, Point pt2, Point pt0) {
     float dx2 = pt2.x - pt0.x;
     float dy2 = pt2.y - pt0.y;
     return (dx1 * dx2 + dy1 * dy2) /
-           sqrt((dx1 * dx1 + dy1 * dy1) *
-                (dx2 * dx2 + dy2 * dy2) + 1e-9);
+           sqrtf((dx1 * dx1 + dy1 * dy1) *
+                 (dx2 * dx2 + dy2 * dy2) + 1e-9);
 }
 
 // returns sequence of squares detected on the image.
@@ -357,7 +357,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
         imgcnt = 0;
 
         Mat hdr = Mat::zeros(img->size(), CV_32FC3);
-#if 1
+#if 2
         // 3 hdr
         makehdr3log(&(imgbuff[0]), &(imgbuff[1]), &(imgbuff[2]), &(hdr));
 #else
@@ -371,7 +371,8 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
         /////////////////////////////////////////////////////////////
         // tonemapping
         /////////////////////////////////////////////////////////////
-        if (_mode > 0) {
+        if (_mode == 2) {
+
             Mat luv(hdr.rows, hdr.cols, CV_32FC3);
             cvtColor(hdr, luv, CV_RGB2YCrCb);
 
@@ -396,7 +397,7 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             float tol = 2e-3;
             int cols = hdr.cols;
             int rows = hdr.rows;
-            float contrast = (_mode == 2) ? -0.20 : 0.20; // contrast control
+            float contrast = (_mode != 2) ? -0.20 : 0.20; // contrast control
             float saturation = 1.1; // color control
             float detail = 2; // texture control
 
@@ -419,6 +420,59 @@ void Processor::runHDR(int input_idx, image_pool* pool, int skip) {
             R.release();
             G.release();
             B.release();
+
+            hdr.convertTo(*img, img->type()); // display hdr
+
+        } else if (_mode == 1) {
+
+            float _exposure = 1.0f;
+            float _tmo_sval = 1.1f * _mode;
+
+            //hdr /= 255.f;
+            //pow(hdr,_exposure, hdr);// * 0.7f + 0.15f;
+            //hdr *= 255.f;
+            cv::exp(hdr, hdr);
+
+            Mat xyz(hdr.rows, hdr.cols, CV_32FC3);
+            cvtColor(hdr, xyz, CV_RGB2XYZ);
+
+            vector<Mat> lplanes;
+            split(xyz, lplanes);
+            Mat X(hdr.rows, hdr.cols, CV_32FC1);
+            Mat Y(hdr.rows, hdr.cols, CV_32FC1);
+            Mat Z(hdr.rows, hdr.cols, CV_32FC1);
+            lplanes[0].convertTo(X, CV_32FC1);
+            lplanes[1].convertTo(Y, CV_32FC1);
+            lplanes[2].convertTo(Z, CV_32FC1);
+            Mat localcontrast(hdr.rows, hdr.cols, CV_32FC1);
+
+            // blur-scale Y channel
+            Mat imgY = Y;
+            Mat blurredY; double sigmaY = 1;
+            bilateralFilter(imgY, blurredY, 0, 0.1 * 255.f, 2);
+            GaussianBlur(blurredY, blurredY, Size(), sigmaY, sigmaY);
+            divide(imgY, blurredY, localcontrast);
+
+            Mat scale(hdr.rows, hdr.cols, CV_32FC1);
+            pow(localcontrast, _tmo_sval, scale);
+            multiply(X, scale, X);
+            multiply(Y, scale, Y);
+            multiply(Z, scale, Z);
+
+            Mat rgb[] = {X, Y, Z};
+            merge(rgb, 3, hdr);
+            cvtColor(hdr, hdr, CV_XYZ2RGB);
+
+            // sharpen image using "unsharp mask" algorithm
+            Mat temp = hdr;
+            Mat blurred; double sigma = 7, threshold = 0, amount = 0.3f;
+            GaussianBlur(temp, blurred, Size(), sigma, sigma);
+            Mat sharpened = temp * (1 + amount) + blurred * (-amount);
+            // Mat lowContrastMask = abs(temp - blurred) < threshold;
+            Mat diff = abs(temp - blurred);
+            Mat lowContrastMask; inRange(diff, -255, -1, lowContrastMask);
+            temp.copyTo(sharpened, lowContrastMask);
+            hdr = sharpened;
 
             hdr.convertTo(*img, img->type()); // display hdr
 
@@ -506,16 +560,74 @@ void Processor::runVivid(int input_idx, image_pool* pool, int var) {
         return;
     }
 
-    Mat temp = *img;
-    Mat blurred; double sigma = 7, threshold = 0, amount = (_mode + 1);
-    GaussianBlur(temp, blurred, Size(), sigma, sigma);
-    Mat sharpened = temp * (1 + amount) + blurred * (-amount);
-    Mat diff = abs(temp - blurred);
-    Mat lowContrastMask; inRange(diff, -255, -1, lowContrastMask);
-    temp.copyTo(sharpened, lowContrastMask);
-    temp = sharpened;
+    if (_mode == 1) {
+        Mat hdr = *img;
 
-    temp.convertTo(*img, img->type());
+        float _exposure = 1.0f;
+        float _tmo_sval = 1.1f * _mode;
+
+        //hdr /= 255.f;
+        //pow(hdr,_exposure, hdr);// * 0.7f + 0.15f;
+        //hdr *= 255.f;
+        //cv::exp(hdr, hdr);
+
+        Mat xyz(hdr.rows, hdr.cols, CV_32FC3);
+        cvtColor(hdr, xyz, CV_RGB2XYZ);
+
+        vector<Mat> lplanes;
+        split(xyz, lplanes);
+        Mat X(hdr.rows, hdr.cols, CV_32FC1);
+        Mat Y(hdr.rows, hdr.cols, CV_32FC1);
+        Mat Z(hdr.rows, hdr.cols, CV_32FC1);
+        lplanes[0].convertTo(X, CV_32FC1);
+        lplanes[1].convertTo(Y, CV_32FC1);
+        lplanes[2].convertTo(Z, CV_32FC1);
+        Mat localcontrast(hdr.rows, hdr.cols, CV_32FC1);
+
+        // blur-scale Y channel
+        Mat imgY = Y;
+        Mat blurredY; double sigmaY = 1;
+        bilateralFilter(imgY, blurredY, 0, 0.1 * 255.f, 2);
+        GaussianBlur(blurredY, blurredY, Size(), sigmaY, sigmaY);
+        divide(imgY, blurredY, localcontrast);
+
+        Mat scale(hdr.rows, hdr.cols, CV_32FC1);
+        pow(localcontrast, _tmo_sval, scale);
+        multiply(X, scale, X);
+        multiply(Y, scale, Y);
+        multiply(Z, scale, Z);
+
+        Mat rgb[] = {X, Y, Z};
+        merge(rgb, 3, hdr);
+        cvtColor(hdr, hdr, CV_XYZ2RGB);
+
+        // sharpen image using "unsharp mask" algorithm
+        Mat temp = hdr;
+        Mat blurred; double sigma = 7, threshold = 0, amount = 0.3f;
+        GaussianBlur(temp, blurred, Size(), sigma, sigma);
+        Mat sharpened = temp * (1 + amount) + blurred * (-amount);
+        // Mat lowContrastMask = abs(temp - blurred) < threshold;
+        Mat diff = abs(temp - blurred);
+        Mat lowContrastMask; inRange(diff, -255, -1, lowContrastMask);
+        temp.copyTo(sharpened, lowContrastMask);
+        hdr = sharpened;
+
+        hdr.convertTo(*img, img->type()); // display hdr
+    } else {
+
+        Mat temp = *img;
+        Mat blurred; double sigma = 7, threshold = 0, amount = (_mode + 1);
+        GaussianBlur(temp, blurred, Size(), sigma, sigma);
+        Mat sharpened = temp * (1 + amount) + blurred * (-amount);
+        Mat diff = abs(temp - blurred);
+        Mat lowContrastMask; inRange(diff, -255, -1, lowContrastMask);
+        temp.copyTo(sharpened, lowContrastMask);
+        temp = sharpened;
+
+        temp.convertTo(*img, img->type());
+
+    }
+
     saveJpg(*img);
 }
 

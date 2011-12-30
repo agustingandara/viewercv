@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/OpenCV"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/chris/workspace/android-ndk-r4-crystax"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="gen">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/chris/workspace/android-ndk-r4-crystax"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="OpenCV_src"/>
-	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/chris/workspace/android-ndk-r4-crystax"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK/OpenCV"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/OpenCV">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/chris/workspace/android-ndk-r4-crystax"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

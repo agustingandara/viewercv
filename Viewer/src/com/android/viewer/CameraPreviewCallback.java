@@ -26,23 +26,23 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 
 public class CameraPreviewCallback implements PreviewCallback {
-	private Size mPreviewSize;
-	private ImageProcessingThread mProcessingThread;
-	private boolean mProcessing = true;
+    private Size mPreviewSize;
+    private ImageProcessingThread mProcessingThread;
+    private boolean mProcessing = true;
 
-	public CameraPreviewCallback(Size previewSize) {
-		mPreviewSize = previewSize;
-	}
+    public CameraPreviewCallback(Size previewSize) {
+        mPreviewSize = previewSize;
+    }
 
-	public void onPreviewFrame(byte[] data, Camera camera) {
-		if (mProcessingThread == null || mProcessingThread.isAlive() == false) {
-			mProcessingThread = new ImageProcessingThread(mPreviewSize, data, mProcessing);
-			mProcessingThread.start();
-		}
-	}
+    public void onPreviewFrame(byte[] data, Camera camera) {
+        if (mProcessingThread == null || mProcessingThread.isAlive() == false) {
+            mProcessingThread = new ImageProcessingThread(mPreviewSize, data, mProcessing);
+            mProcessingThread.start();
+        }
+    }
 
-	public void doProcessing() {
-		mProcessing = !mProcessing;
-	}
+    public void doProcessing() {
+        mProcessing = !mProcessing;
+    }
 
 }

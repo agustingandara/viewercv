@@ -418,7 +418,7 @@ inline float* matrix_alloc(int size) {
     float* m  = (float*)malloc(sizeof(float) * size);
     if (m == NULL) {
         fprintf(stderr, "ERROR: malloc in matrix_alloc() (size:%d)", size);
-        exit(155);
+        exit((int)155);
     }
     return m;
 }
@@ -614,7 +614,7 @@ pyramid_t* pyramid_allocate(int cols, int rows) {
         level = (pyramid_t*) malloc(sizeof(pyramid_t));
         if (level == NULL) {
             fprintf(stderr, "ERROR: malloc in pyramid_alloc() (size:%zu)", sizeof(pyramid_t));
-            exit(155);
+            exit((int)155);
         }
         memset(level, 0, sizeof(pyramid_t));
 
@@ -1357,7 +1357,7 @@ void contrast_equalization(pyramid_t* pp, const float contrastFactor) {
     struct hist_data* hist = (struct hist_data*) malloc(sizeof(struct hist_data) * total_pixels);
     if (hist == NULL) {
         fprintf(stderr, "ERROR: malloc in contrast_equalization() (size:%zu)", sizeof(struct hist_data) * total_pixels);
-        exit(155);
+        exit((int)155);
     }
 
     // Build histogram info
@@ -1588,7 +1588,7 @@ void calculateLuminance(unsigned int width, unsigned int height, const float* Y,
         avLum += log(Y[i] + 1e-4);
         maxLum = (Y[i] > maxLum) ? Y[i] : maxLum ;
     }
-    avLum = exp(avLum / size);
+    avLum = exp((float)(avLum / size));
 }
 
 // Y = in  |  L = out

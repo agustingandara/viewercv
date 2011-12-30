@@ -20,39 +20,39 @@ package com.android.viewer.imageprocessing;
 public class Native {
 
 
-	static {
-		System.loadLibrary("ViewerN");
-	}
+    static {
+        System.loadLibrary("ViewerN");
+    }
 
-	/**
-	 *
-	 */
-	public static native int decodeYUV420SP_native(byte[] yuv420sp, int width, int height, int[] rgb);
+    /**
+     *
+     */
+    public static native int decodeYUV420SP_native(byte[] yuv420sp, int width, int height, int[] rgb);
 
-	/**
-	 *
-	 */
-	public static native int cvtRGB2GRAY_native(int[] input, int width, int height, int[] output);
+    /**
+     *
+     */
+    public static native int cvtRGB2GRAY_native(int[] input, int width, int height, int[] output);
 
-	/**
-	 *
-	 */
-	public static native int createHistogram_native(int[] input, int numpix, int[] output);
+    /**
+     *
+     */
+    public static native int createHistogram_native(int[] input, int numpix, int[] output);
 
-	/**
-	 *
-	 */
-	public static native int overlayHistogram_native(int[] input, int width, int height, int[] hist);
+    /**
+     *
+     */
+    public static native int overlayHistogram_native(int[] input, int width, int height, int[] hist);
 
-	/**
-	 *
-	 */
-	public static native int sobel_native(int[] input, int width, int height, int[] output, int negative);
+    /**
+     *
+     */
+    public static native int sobel_native(int[] input, int width, int height, int[] output, int negative);
 
-	/**
-	 *
-	 */
-	public static native int histogramEq_native(int[] data, int[] hist, int width, int height);
+    /**
+     *
+     */
+    public static native int histogramEq_native(int[] data, int[] hist, int width, int height);
 
 
 

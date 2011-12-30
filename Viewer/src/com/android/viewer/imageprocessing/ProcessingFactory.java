@@ -18,21 +18,21 @@
 package com.android.viewer.imageprocessing;
 
 public class ProcessingFactory {
-	private static ProcHistogram mQuickHist = null;
-	private static ProcSobel mSobel = null;
+    private static ProcHistogram mQuickHist = null;
+    private static ProcSobel mSobel = null;
 
-	public static ProcHistogram getHistogram() {
-		if (mQuickHist == null) {
-			mQuickHist = new ProcHistogram();
-		}
-		return mQuickHist;
-	}
+    public static ProcHistogram getHistogram() {
+        if (mQuickHist == null) {
+            mQuickHist = new ProcHistogram();
+        }
+        return mQuickHist;
+    }
 
-	public static ProcSobel getSobel() {
-		if (mSobel == null) {
-			mSobel = new ProcSobel();
-		}
-		return mSobel;
-	}
+    public static ProcSobel getSobel() {
+        if (mSobel == null) {
+            mSobel = new ProcSobel();
+        }
+        return mSobel;
+    }
 
 }

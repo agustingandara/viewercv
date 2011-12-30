@@ -21,62 +21,62 @@ import android.graphics.Bitmap;
 
 public class Singleton {
 
-	public static Bitmap updateImageView = null;
+    public static Bitmap updateImageView = null;
 
-	public static final int STATE_INIT_APP = 0;
-	public static final int STATE_DEFAULT = 1;
-	public static final int STATE_PROC_1 = 2;
-	public static final int STATE_PROC_2 = 3;
-	public static final int STATE_PROC_3 = 4;
-	public static final int STATE_PROC_4 = 5;
+    public static final int STATE_INIT_APP = 0;
+    public static final int STATE_DEFAULT = 1;
+    public static final int STATE_PROC_1 = 2;
+    public static final int STATE_PROC_2 = 3;
+    public static final int STATE_PROC_3 = 4;
+    public static final int STATE_PROC_4 = 5;
 
-	private static int mApplicationState = STATE_INIT_APP;
-	private static boolean mControlMsgSent = false;
-	private static long mTimeElapse = 0;
-	private static long mStateTimerStart = 0;
-	private static int mProductID = -1;
-	private static float mFPS = 0;
-	private static float _k = 0.20f;
+    private static int mApplicationState = STATE_INIT_APP;
+    private static boolean mControlMsgSent = false;
+    private static long mTimeElapse = 0;
+    private static long mStateTimerStart = 0;
+    private static int mProductID = -1;
+    private static float mFPS = 0;
+    private static float _k = 0.20f;
 
 
-	public static synchronized void setApplicationState(int s) {
-		mApplicationState = s;
-		mControlMsgSent = false;
-	}
+    public static synchronized void setApplicationState(int s) {
+        mApplicationState = s;
+        mControlMsgSent = false;
+    }
 
-	public static float getStatePeriodSecs(long t) {
-		return (float)(t - mStateTimerStart) / 1000000000.0f;
-	}
+    public static float getStatePeriodSecs(long t) {
+        return (float)(t - mStateTimerStart) / 1000000000.0f;
+    }
 
-	public static void resetStateTimer() {
-		mStateTimerStart = System.nanoTime();
-	}
+    public static void resetStateTimer() {
+        mStateTimerStart = System.nanoTime();
+    }
 
-	public static boolean hasVoiceCommandBeenSent() {
-		return mControlMsgSent;
-	}
+    public static boolean hasVoiceCommandBeenSent() {
+        return mControlMsgSent;
+    }
 
-	public static long timeElapsed(long t) {
-		return t - mTimeElapse;
-	}
+    public static long timeElapsed(long t) {
+        return t - mTimeElapse;
+    }
 
-	public static int getApplicationState() {
-		return mApplicationState;
-	}
+    public static int getApplicationState() {
+        return mApplicationState;
+    }
 
-	public static void setProductID(int id) {
-		mProductID = id;
-	}
+    public static void setProductID(int id) {
+        mProductID = id;
+    }
 
-	public static int getProductID() {
-		return mProductID;
-	}
+    public static int getProductID() {
+        return mProductID;
+    }
 
-	public static float getFPS(int frames) {
-		float fps = (float)(frames) / getStatePeriodSecs(System.nanoTime());
-		// moving avg
-		mFPS = (_k) * fps + (1 - _k) * mFPS;
-		return mFPS;
-	}
+    public static float getFPS(int frames) {
+        float fps = (float)(frames) / getStatePeriodSecs(System.nanoTime());
+        // moving avg
+        mFPS = (_k) * fps + (1 - _k) * mFPS;
+        return mFPS;
+    }
 
 }
